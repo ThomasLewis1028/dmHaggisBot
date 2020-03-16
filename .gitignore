@@ -1,4 +1,4 @@
 bin/
 obj/
 /packages/
-/dmHaggisBot/botProperties.json
+/dmHaggisBot/dmHaggisBot.csproj/botProperties.json

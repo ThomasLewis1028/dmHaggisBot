@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using System.Text.Json;
 
 namespace dmHaggisBot
 {
@@ -9,7 +10,7 @@ namespace dmHaggisBot
     {
         static void Main(string[] args)
         {
-            
+            Console
         }
     }
 }

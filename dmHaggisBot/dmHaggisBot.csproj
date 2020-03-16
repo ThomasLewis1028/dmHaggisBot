@@ -7,6 +7,13 @@
 
     <ItemGroup>
       <PackageReference Include="Discord.Net" Version="2.1.1" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.2" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.2" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.2" />
+      <PackageReference Include="Microsoft.Office.Excel" Version="14.0.4760.1000" />
+      <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1000" />
+      <PackageReference Include="SheetToObjects.Adapters.MicrosoftExcel" Version="2.5.0" />
+      <PackageReference Include="System.Data.OleDb" Version="4.7.0" />
     </ItemGroup>
 
 </Project>

@@ -1,60 +1,58 @@
-﻿using System;
-using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
-
-namespace dmHaggisBot
-{
-    public class DiscordBot
-    {
-        private readonly DiscordSocketClient _client;
-        
-        public DiscordBot()
-        {
-            // It is recommended to Dispose of a client when you are finished
-            // using it, at the end of your app's lifetime.
-            _client = new DiscordSocketClient();
-
-            _client.Log += LogAsync;
-            _client.Ready += ReadyAsync;
-            _client.MessageReceived += MessageReceivedAsync;
-        }
-
-        public async Task MainAsync()
-        {
-            // Tokens should be considered secret data, and never hard-coded.
-            await _client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("token"));
-            await _client.StartAsync();
-
-            // Block the program until it is closed.
-            await Task.Delay(-1);
-        }
-
-        private Task LogAsync(LogMessage log)
-        {
-            Console.WriteLine(log.ToString());
-            return Task.CompletedTask;
-        }
-
-        // The Ready event indicates that the client has opened a
-        // connection and it is now safe to access the cache.
-        private Task ReadyAsync()
-        {
-            Console.WriteLine($"{_client.CurrentUser} is connected!");
-
-            return Task.CompletedTask;
-        }
-
-        // This is not the recommended way to write a bot - consider
-        // reading over the Commands Framework sample.
-        private async Task MessageReceivedAsync(SocketMessage message)
-        {
-            // The bot should never respond to itself.
-            if (message.Author.Id == _client.CurrentUser.Id)
-                return;
-
-            if (message.Content == "!ping")
-                await message.Channel.SendMessageAsync("pong!");
-        }
-    }
-}
+﻿// using System;
+// using System.IO;
+// using System.Threading.Tasks;
+// using Microsoft.Extensions.Configuration;
+// using Microsoft.Extensions.Logging;
+// using Microsoft.Extensions.DependencyInjection;
+// using Discord;
+// using Discord.Commands;
+// using Discord.WebSocket;
+// using dmHaggisBot.Services;
+//
+// namespace dmHaggisBot
+// {
+//     class DiscordBot
+//     {
+//         private DiscordSocketClient _client;
+//         private IConfiguration _config;
+//
+//         public async Task MainAsync()
+//         {
+//             _client = new DiscordSocketClient();
+//             _config = BuildConfig();
+//
+//             var services = ConfigureServices();
+//             services.GetRequiredService<LogService>();
+//             await services.GetRequiredService<CommandHandlingService>().InitializeAsync(services);
+//
+//             await _client.LoginAsync(TokenType.Bot, _config["token"]);
+//             await _client.StartAsync();
+//
+//             await Task.Delay(-1);
+//         }
+//
+//         private IServiceProvider ConfigureServices()
+//         {
+//             return new ServiceCollection()
+//                 // Base
+//                 .AddSingleton(_client)
+//                 .AddSingleton<CommandService>()
+//                 .AddSingleton<CommandHandlingService>()
+//                 // Logging
+//                 .AddLogging()
+//                 .AddSingleton<LogService>()
+//                 // Extra
+//                 .AddSingleton(_config)
+//                 // Add additional services here...
+//                 .BuildServiceProvider();
+//         }
+//
+//         private IConfiguration BuildConfig()
+//         {
+//             return new ConfigurationBuilder()
+//                 .SetBasePath(Directory.GetCurrentDirectory())
+//                 .AddJsonFile("properties.json")
+//                 .Build();
+//         }
+//     }
+// }

@@ -9,8 +9,7 @@
         <e p="DiscordBot.cs" t="Include" />
         <e p="dmHaggisBot.csproj" t="IncludeRecursive" />
         <e p="Excel.cs" t="Include" />
-        <e p="firstLastNames.xls" t="Include" />
-        <e p="firstLastNames.xlsx" t="Include" />
+        <e p="Grid.cs" t="Include" />
         <e p="Item.cs" t="Include" />
         <e p="Job.cs" t="Include" />
         <e p="Modules" t="Include">
@@ -24,6 +23,7 @@
           </e>
         </e>
         <e p="Person.cs" t="Include" />
+        <e p="personData.xls" t="Include" />
         <e p="Planet.cs" t="Include" />
         <e p="Program.cs" t="Include" />
         <e p="properties.json" t="Include" />
@@ -31,6 +31,8 @@
           <e p="CommandHandlingServices.cs" t="Include" />
           <e p="LogService.cs" t="Include" />
         </e>
+        <e p="Star.cs" t="Include" />
+        <e p="system.xls" t="Include" />
       </e>
       <e p="dmHaggisBot.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />

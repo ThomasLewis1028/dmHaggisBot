@@ -1,5 +1,7 @@
 ﻿using System;
-using _Excel = Microsoft.Office.Interop.Excel;
+using System.Data;
+using System.IO;
+using ExcelDataReader;
 
 namespace dmHaggisBot
 {
@@ -7,24 +9,27 @@ namespace dmHaggisBot
     {
         private static Random rand = new Random();
         private string path = "";
-        private _Excel._Application excel = new _Excel.Application();
-        private _Excel.Workbook wb;
-        private _Excel.Worksheet ws;
         
-        public Excel(string path)
+        public Excel (string path)
         {
-            this.path = path;
-            wb = excel.Workbooks.Open(path);
+            
         }
-        
-        public void PickSheet(int sheet)
+
+        public DataSet ReaderReturn(string path)
         {
-            ws = (_Excel.Worksheet)wb.Worksheets[sheet];
-        }
-        
-        public string ReadCell()
-        {
-            return ws.Cells[rand.Next(1, ws.Rows.Count), 1].ToString();
+            using (var stream = File.Open(path, FileMode.Open, FileAccess.Read))
+            {
+                // Auto-detect format, supports:
+                //  - Binary Excel files (2.0-2003 format; *.xls)
+                //  - OpenXml Excel files (2007 format; *.xlsx)
+                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                {
+                    var result = reader.AsDataSet();
+                    return result;
+                    // The result of each spreadsheet is in result.Tables
+                }
+            }
         }
     }
 }

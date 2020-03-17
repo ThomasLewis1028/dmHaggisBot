@@ -1,10 +1,12 @@
-﻿namespace dmHaggisBot
+﻿using System.Collections.Generic;
+
+namespace dmHaggisBot
 {
     public class Universe
     {
         private Grid grid;
-        private Stars stars;
-        private People people;
+        private List<Star> stars = new List<Star>();
+        private List<Person> people = new List<Person>();
         // private Jobs jobs;
 
         public Grid Grid
@@ -13,13 +15,13 @@
             set => grid = value;
         }
 
-        public Stars Stars
+        public List<Star> Stars
         {
             get => stars;
             set => stars = value;
         }
 
-        public People People
+        public List<Person> People
         {
             get => people;
             set => people = value;

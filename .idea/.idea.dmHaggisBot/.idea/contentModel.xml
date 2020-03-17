@@ -22,6 +22,7 @@
             </e>
           </e>
         </e>
+        <e p="People.cs" t="Include" />
         <e p="Person.cs" t="Include" />
         <e p="personData.xls" t="Include" />
         <e p="Planet.cs" t="Include" />
@@ -32,7 +33,10 @@
           <e p="LogService.cs" t="Include" />
         </e>
         <e p="Star.cs" t="Include" />
+        <e p="Stars.cs" t="Include" />
         <e p="system.xls" t="Include" />
+        <e p="Universe.cs" t="Include" />
+        <e p="universe.json" t="Include" />
       </e>
       <e p="dmHaggisBot.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />

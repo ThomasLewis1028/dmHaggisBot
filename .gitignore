@@ -2,3 +2,4 @@ bin/
 obj/
 /packages/
 dmHaggisBot/properties.json
+dmHaggisBot/universe.json

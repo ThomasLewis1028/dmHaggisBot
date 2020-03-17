@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace dmHaggisBot
 {
@@ -35,11 +36,6 @@ namespace dmHaggisBot
         {
             get => last;
             set => last = value;
-        }
-        
-        public string Name
-        {
-            get => first + " " + last;
         }
 
         public string HairCol

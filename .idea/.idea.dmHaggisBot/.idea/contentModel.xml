@@ -6,7 +6,9 @@
     <e p="C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot" t="IncludeFlat">
       <e p="dmHaggisBot" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
+        <e p="Character.cs" t="Include" />
         <e p="CharCreation.cs" t="Include" />
+        <e p="City.cs" t="Include" />
         <e p="Creation.cs" t="Include" />
         <e p="DiscordBot.cs" t="Include" />
         <e p="dmHaggisBot.csproj" t="IncludeRecursive" />
@@ -22,16 +24,24 @@
             </e>
           </e>
         </e>
-        <e p="Person.cs" t="Include" />
+        <e p="OtherWorlds.cs" t="Include" />
         <e p="personData.xls" t="Include" />
         <e p="Planet.cs" t="Include" />
+        <e p="pointsOfInterest.json" t="Include" />
         <e p="Program.cs" t="Include" />
         <e p="properties.json" t="Include" />
+        <e p="ReadFromDescriptions" t="Include">
+          <e p="SetDataFromReader.cs" t="Include" />
+          <e p="WorldTags.cs" t="Include" />
+          <e p="worldTemp.json" t="Include" />
+        </e>
         <e p="Star.cs" t="Include" />
         <e p="StarCreation.cs" t="Include" />
         <e p="system.xls" t="Include" />
         <e p="Universe.cs" t="Include" />
         <e p="universe.json" t="Include" />
+        <e p="WorldTag.cs" t="Include" />
+        <e p="worldTags.json" t="Include" />
       </e>
       <e p="dmHaggisBot.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />

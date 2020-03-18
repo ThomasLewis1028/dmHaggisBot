@@ -68,7 +68,7 @@ namespace dmHaggisBot
                 */
 
                 if (sel.ToUpper() == "C")
-                    charCreator.Creation(universe.People);
+                    charCreator.Creation(universe.Characters);
                 else if (sel.ToUpper() == "S")
                     starCreator.Creation(universe.Stars, grid);
                 else if (sel.ToUpper() == "J")

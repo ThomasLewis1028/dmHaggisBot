@@ -10,10 +10,17 @@ namespace dmHaggisBot
     {
         private static Random rand = new Random();
 
+        private static readonly string cwd = @"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\dmHaggisBot\";
+        
         //Properties file
         private static readonly JObject prop =
             JObject.Parse(
                 File.ReadAllText(@"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\dmHaggisBot\properties.json"));
+        
+        //WorldTags file
+        private static readonly JObject worldTags =
+            JObject.Parse(
+                File.ReadAllText(@"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\dmHaggisBot\worldTags.json"));
 
         //Data out of the universe/person json
         private static string starData = (string) prop.GetValue("starData");
@@ -23,11 +30,17 @@ namespace dmHaggisBot
             Excel starExcel = new Excel(starData);
             var starReader = starExcel.ReaderReturn(starData);
 
-            Console.Out.Write("How many Systems would you like to create? > ");
-            int sc = Int32.Parse(Console.ReadLine());
-            Console.Out.Write("What is the maximum number of planets per system? > ");
-            int pc = Int32.Parse(Console.ReadLine());
+            JObject tags =
+                JObject.Parse(
+                    File.ReadAllText(StarCreation.worldTags.ToString()));
 
+            
+            
+            Console.Out.Write("How many Systems would you like to create? ");
+            int sc = Int32.Parse(Console.ReadLine());
+            Console.Out.Write("What is the maximum number of planets per system? ");
+            int pc = Int32.Parse(Console.ReadLine());
+            
             //Set sheet bounds inluding sheet# and row count.
             var starLen = starReader.Tables[0].Rows.Count;
             var planLen = starReader.Tables[1].Rows.Count;
@@ -45,6 +58,7 @@ namespace dmHaggisBot
                 {
                     Planet planet =
                         new Planet(starReader.Tables[1].Rows[rand.Next(0, planLen - 1)].ItemArray[0].ToString());
+                    
 
                     star.Planets.Add(planet);
                     pCount++;

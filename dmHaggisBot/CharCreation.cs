@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Discord.WebSocket;
 using Newtonsoft.Json.Linq;
 
 namespace dmHaggisBot
@@ -18,7 +17,7 @@ namespace dmHaggisBot
         //Data out of the universe/person json
         private static string personData = (string) prop.GetValue("personData");
 
-        public List<Person> Creation(List<Person> people)
+        public List<Character> Creation(List<Character> people)
         {
             Excel personExcel = new Excel(personData);
             var personReader = personExcel.ReaderReturn(personData);
@@ -39,23 +38,23 @@ namespace dmHaggisBot
                 var eyeLen = personReader.Tables[5].Rows.Count;
 
                 //Create the specified object
-                Person person =
-                    new Person(
+                Character character =
+                    new Character(
                         personReader.Tables[sheet].Rows[rand.Next(0, firstLen - 1)].ItemArray[0].ToString(),
                         personReader.Tables[2].Rows[rand.Next(0, lastLen - 1)].ItemArray[0].ToString());
 
-                person.Age = rand.Next(10, 95);
-                person.Gender = (Person.GenderEnum) sheet;
-                person.HairCol = personReader.Tables[3].Rows[rand.Next(0, colLen)].ItemArray[0].ToString();
-                person.HairStyle = personReader.Tables[4].Rows[rand.Next(0, lenLen)].ItemArray[0].ToString();
-                person.EyeCol = personReader.Tables[5].Rows[rand.Next(0, eyeLen)].ItemArray[0].ToString();
+                character.Age = rand.Next(10, 95);
+                character.Gender = (Character.GenderEnum) sheet;
+                character.HairCol = personReader.Tables[3].Rows[rand.Next(0, colLen)].ItemArray[0].ToString();
+                character.HairStyle = personReader.Tables[4].Rows[rand.Next(0, lenLen)].ItemArray[0].ToString();
+                character.EyeCol = personReader.Tables[5].Rows[rand.Next(0, eyeLen)].ItemArray[0].ToString();
 
-                people.Add(person);
+                people.Add(character);
 
                 
-                Console.Out.WriteLine("\t{0}, {1}, {2}, {3} {4}, {5} Eyes", person.First + " " + person.Last,
-                    person.Gender,
-                    person.Age, person.HairCol, person.HairStyle, person.EyeCol);
+                Console.Out.WriteLine("\t{0}, {1}, {2}, {3} {4}, {5} Eyes", character.First + " " + character.Last,
+                    character.Gender,
+                    character.Age, character.HairCol, character.HairStyle, character.EyeCol);
 
                 cCount++;
             }

@@ -6,7 +6,7 @@ namespace dmHaggisBot
     {
         private Grid grid;
         private List<Star> stars = new List<Star>();
-        private List<Person> people = new List<Person>();
+        private List<Character> characters = new List<Character>();
         // private Jobs jobs;
 
         public Grid Grid
@@ -21,10 +21,10 @@ namespace dmHaggisBot
             set => stars = value;
         }
 
-        public List<Person> People
+        public List<Character> Characters
         {
-            get => people;
-            set => people = value;
+            get => characters;
+            set => characters = value;
         }
     }
 }

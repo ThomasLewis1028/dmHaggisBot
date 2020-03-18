@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Threading;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -56,7 +55,7 @@ namespace dmHaggisBot
                 */
 
                 if (sel.ToUpper() == "C")
-                    charCreator.Creation(universe.People);
+                    charCreator.Creation(universe.Characters);
                 else if (sel.ToUpper() == "S")
                     starCreator.Creation(universe.Stars, universe.Grid);
                 else if (sel.ToUpper() == "J")

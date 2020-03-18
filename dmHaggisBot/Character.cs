@@ -3,13 +3,18 @@ using System.Runtime.Serialization;
 
 namespace dmHaggisBot
 {
-    public class Person
+    public class Character
     {
-        public enum GenderEnum{Male, Female}
-        
+        public enum GenderEnum
+        {
+            Male,
+            Female
+        }
+
         private string first;
         private string last;
         private int age;
+        private Planet birthPlace;
         private Planet location;
         private string hairStyle;
         private string hairCol;
@@ -17,15 +22,14 @@ namespace dmHaggisBot
         private string title;
         private GenderEnum gender;
         //private Ship ship;
-        
 
-        public Person(string first, string last)
+
+        public Character(string first, string last)
         {
             this.first = first;
             this.last = last;
         }
 
-        
         public string First
         {
             get => first;
@@ -36,6 +40,11 @@ namespace dmHaggisBot
         {
             get => last;
             set => last = value;
+        }
+
+        public string Name
+        {
+            get => first + " " + last;
         }
 
         public string HairCol

@@ -5,6 +5,6 @@
         private int pay;
         private Planet dest;
         private Item cargo;
-        private Person contact;
+        private Character contact;
     }
 }

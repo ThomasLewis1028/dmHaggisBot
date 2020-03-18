@@ -1,0 +1,64 @@
+{
+  "Grid": {
+    "X": 8,
+    "Y": 10
+  },
+  "Stars": [],
+  "Characters": [
+    {
+      "First": "Braedyn",
+      "Last": "Hobby",
+      "Name": "Braedyn Hobby",
+      "HairCol": "Red",
+      "HairStyle": "Double buns",
+      "EyeCol": "Hazel",
+      "Age": 69,
+      "Location": null,
+      "Gender": 0
+    },
+    {
+      "First": "Hashem",
+      "Last": "Loughman",
+      "Name": "Hashem Loughman",
+      "HairCol": "Red",
+      "HairStyle": "Hi-top fade",
+      "EyeCol": "Hazel",
+      "Age": 10,
+      "Location": null,
+      "Gender": 0
+    },
+    {
+      "First": "Havanna",
+      "Last": "Stanberry",
+      "Name": "Havanna Stanberry",
+      "HairCol": "White",
+      "HairStyle": "Mohawk",
+      "EyeCol": "Hazel",
+      "Age": 79,
+      "Location": null,
+      "Gender": 1
+    },
+    {
+      "First": "Lillyanne",
+      "Last": "Kerr",
+      "Name": "Lillyanne Kerr",
+      "HairCol": "Grey",
+      "HairStyle": "High and tight",
+      "EyeCol": "Hazel",
+      "Age": 79,
+      "Location": null,
+      "Gender": 1
+    },
+    {
+      "First": "Ziah",
+      "Last": "Hinze",
+      "Name": "Ziah Hinze",
+      "HairCol": "Blue",
+      "HairStyle": "Oseledets",
+      "EyeCol": "Hazel",
+      "Age": 13,
+      "Location": null,
+      "Gender": 1
+    }
+  ]
+}

@@ -52,7 +52,6 @@ namespace dmHaggisBot
 
                 characters.Add(character);
 
-
                 Console.Out.WriteLine("\t{0}, {1}, {2}, {3} {4}, {5} Eyes", character.First + " " + character.Last,
                     character.Gender,
                     character.Age, character.HairCol, character.HairStyle, character.EyeCol);

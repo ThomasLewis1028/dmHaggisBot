@@ -20,37 +20,37 @@ namespace dmHaggisBot
 
         static void Main(string[] args)
         {
-            // DiscordBot bot = new DiscordBot();
-            // bot.MainAsync();
-            //
-            // while (true)
-            // {
-            //     
-            // }
+            DiscordBot bot = new DiscordBot();
+            bot.MainAsync();
+            
+            while (true)
+            {
+                
+            }
 
             //Obsolete
             //SetDataFromReader setDataFromReader = new SetDataFromReader();
 
-            while (true)
-            {
-                Console.Out.Write("Are you (C)reating or (L)oading a universe? ");
-                var sel = Console.ReadLine();
-
-                if (sel == "")
-                    return;
-
-                if (sel.ToUpper() == "C")
-                {
-                    Console.Out.Write("Enter a universe name ");
-                    Creation creation = new Creation(Console.ReadLine());
-                }
-
-                if (sel.ToUpper() == "L")
-                {
-                    Console.Out.Write("Enter a universe name ");
-                    Load load = new Load(Console.ReadLine());
-                }
-            }
+            // while (true)
+            // {
+            //     Console.Out.Write("Are you (C)reating or (L)oading a universe? ");
+            //     var sel = Console.ReadLine();
+            //
+            //     if (sel == "")
+            //         return;
+            //
+            //     if (sel.ToUpper() == "C")
+            //     {
+            //         Console.Out.Write("Enter a universe name ");
+            //         Creation creation = new Creation(Console.ReadLine());
+            //     }
+            //
+            //     if (sel.ToUpper() == "L")
+            //     {
+            //         Console.Out.Write("Enter a universe name ");
+            //         Load load = new Load(Console.ReadLine());
+            //     }
+            // }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 
 namespace dmHaggisBot
@@ -51,13 +52,15 @@ namespace dmHaggisBot
 
                 people.Add(character);
 
-                
+
                 Console.Out.WriteLine("\t{0}, {1}, {2}, {3} {4}, {5} Eyes", character.First + " " + character.Last,
                     character.Gender,
                     character.Age, character.HairCol, character.HairStyle, character.EyeCol);
 
                 cCount++;
             }
+
+            people.OrderBy(p => p.First);
 
             return people;
         }

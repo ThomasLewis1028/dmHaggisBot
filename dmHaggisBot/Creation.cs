@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -74,6 +75,8 @@ namespace dmHaggisBot
                 else if (sel.ToUpper() == "J")
                 {}
             }
+
+            universe.Characters = universe.Characters.OrderBy(c => c.First).ToList();
             
             using StreamWriter file =
                 File.CreateText(path.ToString());

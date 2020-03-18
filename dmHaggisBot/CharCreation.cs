@@ -18,7 +18,7 @@ namespace dmHaggisBot
         //Data out of the universe/person json
         private static string personData = (string) prop.GetValue("personData");
 
-        public List<Character> Creation(List<Character> people)
+        public void Creation(List<Character> characters)
         {
             Excel personExcel = new Excel(personData);
             var personReader = personExcel.ReaderReturn(personData);
@@ -50,7 +50,7 @@ namespace dmHaggisBot
                 character.HairStyle = personReader.Tables[4].Rows[rand.Next(0, lenLen)].ItemArray[0].ToString();
                 character.EyeCol = personReader.Tables[5].Rows[rand.Next(0, eyeLen)].ItemArray[0].ToString();
 
-                people.Add(character);
+                characters.Add(character);
 
 
                 Console.Out.WriteLine("\t{0}, {1}, {2}, {3} {4}, {5} Eyes", character.First + " " + character.Last,
@@ -59,10 +59,6 @@ namespace dmHaggisBot
 
                 cCount++;
             }
-
-            people.OrderBy(p => p.First);
-
-            return people;
         }
     }
 }

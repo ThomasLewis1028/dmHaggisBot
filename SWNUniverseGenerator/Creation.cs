@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -48,7 +51,6 @@ namespace SWNUniverseGenerator
             return new Universe(name, grid);
         }
 
-
         public Universe CreateStars(Universe universe, StarDefaultSettings starDefaultSettings)
         {
             universe = new StarCreation().AddStars(universe, starDefaultSettings);
@@ -61,6 +63,136 @@ namespace SWNUniverseGenerator
             universe = new CharCreation().AddCharacter(universe, characterDefaultSettings);
             SerializeData(universe);
             return universe;
+        }
+
+        //TODO: FIX THIS
+        public  List<T> SearchUniverse<T>(Universe universe, SearchDefaultSettings searchDefaultSettings)
+        {
+            var id = string.IsNullOrEmpty(searchDefaultSettings.ID)
+                ? null
+                : searchDefaultSettings.ID.Split(", ");
+
+            var n = string.IsNullOrEmpty(searchDefaultSettings.Name)
+                ? null
+                : searchDefaultSettings.Name.Split(", ");
+
+            var c = string.IsNullOrEmpty(searchDefaultSettings.Count)
+                ? 1
+                : Int32.Parse(searchDefaultSettings.Count);
+
+            var t = string.IsNullOrEmpty(searchDefaultSettings.Tag)
+                ? "ch"
+                : searchDefaultSettings.Tag;
+
+            var results = new List<T>();
+
+            var planets = new List<Planet>();
+            var stars = new List<Star>();
+            var characters = new List<Character>();
+
+            if (t == "p")
+            {
+                if (id != null)
+                    planets = universe.Planets.FindAll(a => id.Contains(a.ID));
+                if (n != null)
+                    planets = universe.Planets.FindAll(a => n.Contains(a.Name));
+
+                // return (T) Convert.ChangeType(planets, typeof(T));
+            }
+            else if (t == "s")
+            {
+                if (id != null)
+                    stars = universe.Stars.FindAll(a => id.Contains(a.ID));
+                if (n != null)
+                    stars = universe.Stars.FindAll(a => n.Contains(a.Name));
+
+                // return (T) Convert.ChangeType(stars, typeof(T));
+            }
+            else
+            {
+                if (id != null)
+                    characters = characters.Concat(universe.Characters.FindAll(a => id.Contains(a.ID))).ToList();
+                if (n != null)
+                    characters = characters.Concat(universe.Characters.FindAll(a =>
+                        n.Contains(a.First) || n.Contains(a.Last) || n.Contains(a.Name))).ToList();
+
+                // return (T) Convert.ChangeType(characters, typeof(T));
+            }
+
+            return null;
+        }
+        
+        public  List<Character> SearchCharacters(Universe universe, SearchDefaultSettings searchDefaultSettings)
+        {
+            var id = string.IsNullOrEmpty(searchDefaultSettings.ID)
+                ? null
+                : searchDefaultSettings.ID.Split(", ");
+
+            var n = string.IsNullOrEmpty(searchDefaultSettings.Name)
+                ? null
+                : searchDefaultSettings.Name.Split(", ");
+
+            var c = string.IsNullOrEmpty(searchDefaultSettings.Count)
+                ? 1
+                : Int32.Parse(searchDefaultSettings.Count);
+
+            var characters = new List<Character>();
+            
+            if (id != null)
+                characters = characters.Concat(universe.Characters.FindAll(a => id.Contains(a.ID))).ToList();
+            if (n != null)
+                characters = characters.Concat(universe.Characters.FindAll(a =>
+                    n.Contains(a.First) || n.Contains(a.Last) || n.Contains(a.Name))).ToList();
+
+            return characters;
+        }
+
+        public  List<Planet> SearchPlanets(Universe universe, SearchDefaultSettings searchDefaultSettings)
+        {
+            var id = string.IsNullOrEmpty(searchDefaultSettings.ID)
+                ? null
+                : searchDefaultSettings.ID.Split(", ");
+
+            var n = string.IsNullOrEmpty(searchDefaultSettings.Name)
+                ? null
+                : searchDefaultSettings.Name.Split(", ");
+
+            var c = string.IsNullOrEmpty(searchDefaultSettings.Count)
+                ? 1
+                : Int32.Parse(searchDefaultSettings.Count);
+
+            var planets = new List<Planet>();
+
+            if (id != null)
+                planets = universe.Planets.FindAll(a => id.Contains(a.ID));
+            if (n != null)
+                planets = universe.Planets.FindAll(a => n.Contains(a.Name));
+
+            return planets;
+        }
+
+        public  List<Star> SearchStars(Universe universe, SearchDefaultSettings searchDefaultSettings)
+        {
+            var id = string.IsNullOrEmpty(searchDefaultSettings.ID)
+                ? null
+                : searchDefaultSettings.ID.Split(", ");
+
+            var n = string.IsNullOrEmpty(searchDefaultSettings.Name)
+                ? null
+                : searchDefaultSettings.Name.Split(", ");
+
+            var c = string.IsNullOrEmpty(searchDefaultSettings.Count)
+                ? 1
+                : Int32.Parse(searchDefaultSettings.Count);
+
+            var stars = new List<Star>();
+
+            if (id != null)
+                stars = universe.Stars.FindAll(a => id.Contains(a.ID));
+            if (n != null)
+                stars = universe.Stars.FindAll(a => n.Contains(a.Name));
+
+            return stars;
         }
 
         public Universe LoadUniverse(string name)
@@ -78,15 +210,13 @@ namespace SWNUniverseGenerator
             return JsonConvert.DeserializeObject<Universe>(univ.ToString());
         }
 
-        public Universe SerializeData(Universe universe)
+        public void SerializeData(Universe universe)
         {
             var path = universePath + "\\" + universe.Name + ".json";
             using var file =
                 File.CreateText(path);
             var serializer = new JsonSerializer();
             serializer.Serialize(file, universe);
-
-            return universe;
         }
     }
 }

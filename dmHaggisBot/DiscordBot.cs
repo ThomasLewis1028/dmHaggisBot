@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -23,10 +24,13 @@ namespace dmHaggisBot
 
         private static readonly string token = (string) prop.GetValue("token");
         private readonly Regex charChreate = new Regex("^charCreate ");
-        private readonly Regex findChar = new Regex("^findChar ");
         private readonly Regex starCreate = new Regex("^starCreate ");
         private readonly Regex univChreate = new Regex("^univCreate ");
         private readonly Regex univLoad = new Regex("^univLoad ");
+        private readonly Regex dataSearch = new Regex("^dataSearch");
+        private readonly Regex charSearch = new Regex("^charSearch");
+        private readonly Regex starSearch = new Regex("^starSearch");
+        private readonly Regex planetSearch = new Regex("^planSearch");
         private DiscordSocketClient _client;
         private IConfiguration _config;
         private Creation creation;
@@ -76,11 +80,20 @@ namespace dmHaggisBot
             if (univLoad.IsMatch(sm.Content))
                 LoadUniv(sm);
 
-            if (findChar.IsMatch(sm.Content))
-                CharFind(sm);
-
             if (starCreate.IsMatch(sm.Content))
                 CreateStar(sm);
+            
+            if(dataSearch.IsMatch(sm.Content))
+                SearchData(sm);
+            
+            if(charSearch.IsMatch(sm.Content))
+                SearchChar(sm);
+            
+            if(starSearch.IsMatch(sm.Content))
+                SearchStar(sm);
+            
+            if(planetSearch.IsMatch(sm.Content))
+                SearchPlanet(sm);
         }
 
         public static async void CreateChar(SocketMessage sm)
@@ -191,11 +204,88 @@ namespace dmHaggisBot
             await Task.Delay(-1);
         }
 
-        public static async void CharFind(SocketMessage sm)
+        public static async void SearchData(SocketMessage sm)
         {
+            var id = ParseCommand("id", sm.Content);
+            var n = ParseCommand("n", sm.Content);
+            var c = ParseCommand("c", sm.Content);
+            var t = ParseCommand("t", sm.Content);
+
+            SearchDefaultSettings searchDef = new SearchDefaultSettings();
+
+            searchDef.ID = id;
+            searchDef.Name = n;
+            searchDef.Count = c;
+            searchDef.Tag = t;
+
+            // List<T> results = _creation.SearchUniverse(_universe, searchDef);
             
+            // if (results[0].GetType() == _universe.Planets.GetType())
+            
+           Console.Out.WriteLine(); 
+
         }
 
+        public static async void SearchChar(SocketMessage sm)
+        {
+            var id = ParseCommand("id", sm.Content);
+            var n = ParseCommand("n", sm.Content);
+            var c = ParseCommand("c", sm.Content);
+            var t = ParseCommand("t", sm.Content);
+
+            SearchDefaultSettings searchDef = new SearchDefaultSettings();
+
+            searchDef.ID = id;
+            searchDef.Name = n;
+            searchDef.Count = c;
+            searchDef.Tag = t;
+
+            List<Character> characters = _creation.SearchCharacters(_universe, searchDef);
+
+            Console.Out.WriteLine("Name: {0}\nID: {1}",characters[0].Name, characters[0].ID);
+        }
+        
+        public static async void SearchStar(SocketMessage sm)
+        {
+            var id = ParseCommand("id", sm.Content);
+            var n = ParseCommand("n", sm.Content);
+            var c = ParseCommand("c", sm.Content);
+            var t = ParseCommand("t", sm.Content);
+
+            SearchDefaultSettings searchDef = new SearchDefaultSettings();
+
+            searchDef.ID = id;
+            searchDef.Name = n;
+            searchDef.Count = c;
+            searchDef.Tag = t;
+
+            List<Star> stars = _creation.SearchStars(_universe, searchDef);
+            
+            Console.Out.WriteLine(); 
+
+        }
+        public static async void SearchPlanet(SocketMessage sm)
+        {
+            var id = ParseCommand("id", sm.Content);
+            var n = ParseCommand("n", sm.Content);
+            var c = ParseCommand("c", sm.Content);
+            var t = ParseCommand("t", sm.Content);
+
+            SearchDefaultSettings searchDef = new SearchDefaultSettings();
+
+            searchDef.ID = id;
+            searchDef.Name = n;
+            searchDef.Count = c;
+            searchDef.Tag = t;
+
+            List<Planet> planets = _creation.SearchPlanets(_universe, searchDef);
+
+            Console.Out.WriteLine(); 
+
+        }
+
+
+        
         private static string ParseCommand(string argName, string argVal)
         {
             var start = argVal.IndexOf(" -" + argName + " ") + 1;

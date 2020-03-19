@@ -1,4 +1,5 @@
 ﻿using System;
+using Json.Net;
 using Newtonsoft.Json;
 
 namespace SWNUniverseGenerator
@@ -30,6 +31,11 @@ namespace SWNUniverseGenerator
         public string EyeCol { get; set; }
         public string Title { get; set; }
         public GenderEnum Gender { get; set; }
+
+        public String GetGender()
+        {
+            return Gender.ToString();
+        }
 
         [JsonIgnore] public string Name => First + " " + Last;
 

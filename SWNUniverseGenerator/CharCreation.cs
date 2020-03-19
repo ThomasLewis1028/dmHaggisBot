@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MarkovSharp.TokenisationStrategies;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -33,6 +34,14 @@ namespace SWNUniverseGenerator
                     : rand.Next(0, 2);
 
                 var firstNameList = gender == 0 ? charData.MaleName : charData.FemaleName;
+                
+                var model = new StringMarkovNames();
+                model.SplitTokens("");
+                model.Learn(firstNameList);
+                
+                
+                Console.WriteLine(model.Walk().First());
+                
                 var firstCount = firstNameList.Count;
                 var lastCount = charData.LastName.Count;
                 var hairColorCount = charData.HairColor.Count;

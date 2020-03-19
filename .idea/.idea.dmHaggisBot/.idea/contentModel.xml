@@ -55,10 +55,12 @@
           <e p="worldTemp.json" t="Include" />
         </e>
         <e p="Readme.md" t="Include" />
+        <e p="SearchDefaultSettings.cs" t="Include" />
         <e p="Star.cs" t="Include" />
         <e p="StarCreation.cs" t="Include" />
         <e p="StarData.cs" t="Include" />
         <e p="StarDefaultSettings.cs" t="Include" />
+        <e p="StringMarkovNames.cs" t="Include" />
         <e p="SWNUniverseGenerator.csproj" t="IncludeRecursive" />
         <e p="Universe.cs" t="Include" />
         <e p="UniverseDefaultSettings.cs" t="Include" />

@@ -8,79 +8,31 @@ namespace dmHaggisBot
         public enum GenderEnum
         {
             Male,
-            Female
+            Female,
+            Undefined
         }
 
-        private string first;
-        private string last;
-        private int age;
-        private Planet birthPlace;
-        private Planet location;
-        private string hairStyle;
-        private string hairCol;
-        private string eyeCol;
-        private string title;
-        private GenderEnum gender;
+        public String First { get; set; }
+        public String Last { get; set; }
+        public Int32 Age { get; set; }
+        public Planet BirthPlace { get; set; }
+        public Planet Location { get; set; }
+        public String HairStyle { get; set; }
+        public String HairCol { get; set; }
+        public String EyeCol { get; set; }
+        public String Title { get; set; }
+        public GenderEnum Gender { get; set; }
         //private Ship ship;
-
 
         public Character(string first, string last)
         {
-            this.first = first;
-            this.last = last;
-        }
-
-        public string First
-        {
-            get => first;
-            set => first = value;
-        }
-
-        public string Last
-        {
-            get => last;
-            set => last = value;
+            First = first;
+            Last = last;
         }
 
         public string Name
         {
-            get => first + " " + last;
-        }
-
-        public string HairCol
-        {
-            get => hairCol;
-            set => hairCol = value;
-        }
-
-        public string HairStyle
-        {
-            get => hairStyle;
-            set => hairStyle = value;
-        }
-
-        public string EyeCol
-        {
-            get => eyeCol;
-            set => eyeCol = value;
-        }
-
-        public int Age
-        {
-            get => age;
-            set => age = value;
-        }
-
-        public Planet Location
-        {
-            get => location;
-            set => location = value;
-        }
-
-        public GenderEnum Gender
-        {
-            get => gender;
-            set => gender = value;
+            get => First + " " + Last;
         }
     }
 }

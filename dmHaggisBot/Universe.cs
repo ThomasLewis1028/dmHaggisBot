@@ -1,30 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace dmHaggisBot
 {
     public class Universe
     {
-        private Grid grid;
-        private List<Star> stars = new List<Star>();
-        private List<Character> characters = new List<Character>();
+        public String Name { get; set; }
+        public Grid Grid { get; set; }
+        public List<Star> Stars { get; set;}
+        public List<Character> Characters { get; set; }
         // private Jobs jobs;
 
-        public Grid Grid
+        public Universe(string name, Grid grid)
         {
-            get => grid;
-            set => grid = value;
-        }
-
-        public List<Star> Stars
-        {
-            get => stars;
-            set => stars = value;
-        }
-
-        public List<Character> Characters
-        {
-            get => characters;
-            set => characters = value;
+            Name = name;
+            Grid = grid;
         }
     }
 }

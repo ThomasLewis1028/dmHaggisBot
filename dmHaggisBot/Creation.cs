@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -9,79 +10,61 @@ namespace dmHaggisBot
     public class Creation
     {
         private static readonly string cwd = @"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\dmHaggisBot\";
-
-        public Creation(string name)
+        private static readonly string univD = cwd + "\\UniverseFiles\\";
+        
+        public Universe CreateUniverse(UniverseDefaultSettings universeDefaultSettings)
         {
-            Directory.SetCurrentDirectory(cwd);
+            Directory.SetCurrentDirectory(univD);
             StringBuilder path = new StringBuilder();
-            path.Append(Directory.GetCurrentDirectory() + "\\" + name + ".json");
-            if(File.Exists(path.ToString()))
+            path.Append(Directory.GetCurrentDirectory() + "\\" + universeDefaultSettings.Name + ".json");
+            
+            if (File.Exists(path.ToString()))
             {
-                Console.Out.Write("{0}.json already exists. Do you wish to overwrite? > ", name);
-                string sel = Console.ReadLine();
-
-                if (sel == "")
-                    return;
-                if (sel.ToUpper() == "Y")
-                {
+                if (universeDefaultSettings.Overwrite.ToUpper() == "Y")
                     File.Delete(path.ToString());
-                    Console.Out.WriteLine("{0} deleted\n", path);
-                }
+                else
+                    throw new FileLoadException(String.Format("{0} already exists. Use -o to overwrite or use loadUni", universeDefaultSettings.Name));
             }
 
             File.Create(path.ToString()).Close();
 
-            Universe universe = new Universe();
-            
-            CharCreation charCreator = new CharCreation();
-            StarCreation starCreator = new StarCreation();
-            
-            //new DiscordBot().MainAsync().GetAwaiter().GetResult();
-            
-            //Set up x/y grid and split the substring into X and Y values
-            Console.Out.WriteLine("Insert your grid parameters (x y) > ");
-            string xyIn = Console.ReadLine();
+            var name = string.IsNullOrEmpty(universeDefaultSettings.Name)
+                ? "Universe"
+                : universeDefaultSettings.Name;
 
-            int x = 15,
-                y = 15;
-            
-            if (xyIn != "")
+            Grid grid;
+            if (string.IsNullOrEmpty(universeDefaultSettings.Grid))
+                grid = new Grid(8, 10);
+            else
             {
-                x = Int32.Parse(xyIn.Split(" ")[0]);
-                y = Int32.Parse(xyIn.Split(" ")[1]);
+                var g = universeDefaultSettings.Grid.Split(" ");
+                grid = new Grid(Int32.Parse(g[0]), Int32.Parse(g[1]));
             }
 
-            Grid grid = new Grid(x, y);
-            universe.Grid = grid;
-            
-            while (true)
-            {
-                Console.Write("Would you like to create a (C)haracter, (S)ystem, or (J)ob? > ");
-                string sel = Console.ReadLine();
-                
-                //Check 
-                if (sel == "")
-                    break;
+            return new Universe(name, grid);
+        }
 
-                /* USE LATER - FROM METHOD
-                var options =  {'c': self.character, 'j': self.job}
-                options[sel]()
-                */
 
-                if (sel.ToUpper() == "C")
-                    charCreator.Creation(universe.Characters);
-                else if (sel.ToUpper() == "S")
-                    starCreator.Creation(universe.Stars, grid);
-                else if (sel.ToUpper() == "J")
-                {}
-            }
+        public Universe CreateStars(Universe universe, StarDefaultSettings starDefaultSettings)
+        {
+            return universe;
+        }
 
+        public Universe CreateCharacter(Universe universe, CharacterDefaultSettings characterDefaultSettings)
+        {
+            return new CharCreation().AddCharacter(universe, characterDefaultSettings);
+        }
+
+        public Universe SerializeData(Universe universe, string path)
+        {
             universe.Characters = universe.Characters.OrderBy(c => c.First).ToList();
-            
+
             using StreamWriter file =
                 File.CreateText(path.ToString());
             JsonSerializer serializer = new JsonSerializer();
             serializer.Serialize(file, universe);
+
+            return universe;
         }
     }
 }

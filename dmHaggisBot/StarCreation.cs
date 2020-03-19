@@ -18,23 +18,24 @@ namespace dmHaggisBot
                 File.ReadAllText(@"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\dmHaggisBot\properties.json"));
         
         //WorldTags file
-        private static readonly JObject worldTags =
-            JObject.Parse(
-                File.ReadAllText(@"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\dmHaggisBot\worldTags.json"));
+        // private static readonly JObject worldTags =
+        //     JObject.Parse(
+        //         File.ReadAllText(@"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\dmHaggisBot\worldTags.json"));
 
         //Data out of the universe/person json
         private static string starData = (string) prop.GetValue("starData");
 
-        public List<Star> Creation(List<Star> stars, Grid grid)
+        public void AddStar(Universe universe, StarDefaultSettings starDefaultSettings)
         {
             Excel starExcel = new Excel(starData);
             var starReader = starExcel.ReaderReturn(starData);
 
+            var path = cwd + "\\worldTags.json";
             JObject tags =
                 JObject.Parse(
-                    File.ReadAllText(StarCreation.worldTags.ToString()));
+                    File.ReadAllText(path.ToString()));
 
-            
+            WorldInfo worldInfo = JsonConvert.DeserializeObject<WorldInfo>(tags.ToString());
             
             Console.Out.Write("How many Systems would you like to create? ");
             int sc = Int32.Parse(Console.ReadLine());
@@ -50,7 +51,7 @@ namespace dmHaggisBot
             {
                 Star star = new Star(
                     starReader.Tables[0].Rows[rand.Next(0, starLen - 1)].ItemArray[0].ToString(),
-                    rand.Next(0, grid.X + 1), rand.Next(0, grid.Y + 1));
+                    rand.Next(0, universe.Grid.X+1), rand.Next(0, universe.Grid.Y + 1));
 
                 int pCount = 0;
                 int pMax = rand.Next(0, pc + 1);
@@ -58,6 +59,15 @@ namespace dmHaggisBot
                 {
                     Planet planet =
                         new Planet(starReader.Tables[1].Rows[rand.Next(0, planLen - 1)].ItemArray[0].ToString());
+                    planet.WorldTag = worldInfo.WorldTags[rand.Next(0, 100)];
+                    planet.Atmosphere = worldInfo.Atmospheres[rand.Next(0, 6) + rand.Next(0, 6)];
+                    planet.Temperature = worldInfo.Temperatures[rand.Next(0, 6) + rand.Next(0, 6)];
+                    planet.Biosphere = worldInfo.Biospheres[rand.Next(0, 6) + rand.Next(0, 6)];
+                    planet.Population = worldInfo.Populations[rand.Next(0, 6) + rand.Next(0, 6)];
+                    planet.TechLevel = worldInfo.TechLevels[rand.Next(0, 6) + rand.Next(0, 6)];
+                    planet.Origin = worldInfo.OWOrigins[rand.Next(0,8)];
+                    planet.Relationship = worldInfo.OWRelationships[rand.Next(0, 8)];
+                    planet.Contact = worldInfo.OWContacts[rand.Next(0, 8)];
                     
 
                     star.Planets.Add(planet);
@@ -71,11 +81,7 @@ namespace dmHaggisBot
                 {
                     Console.Out.WriteLine("\t" + p.Name);
                 }
-
-                stars.Add(star);
             }
-
-            return stars;
         }
     }
 }

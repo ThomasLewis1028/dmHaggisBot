@@ -3040,7 +3040,53 @@
       ]
     }
   ],
-  "Temperature": [
+  "Atmospheres": [
+    {
+      "Type": "Corrosive, damaging to foreign objects",
+      "Description": "Corrosive atmospheres are dangerously hostile to conventional vacc suits and other protective gear. They steadily strip away at a suit’s vent ports, wiring connections, and other weak spots until they eventually break through and flood the suit with a toxic cocktail that usually kills a victim in seconds. Weak atmospheres might require as much as a day to degrade a vacc suit, while strong ones might accomplish the job in an hour. Even forcefield-based environment suits such as a FEP suffer steady damage to their exposed elements. Native vacc suits are usually covered with an ablative layer or spray that can be regularly renewed, and their buildings often rely on a steadily-extruded slurry of neutralizing materials that can be constantly renewed by pores in the building surface itself. This often gives the building a drippy, half-melted look that may be more than cosmetic in the case of those structures that have failing slurry pumps. Advanced tech level 5 equipment may be able to overcome the effects, but even pretech is often taxed by the relentless rigors of this world. Vehicles and shuttles are kept in pressurized garages when not in use, and starships never land for long. Corrosive worlds have a number of intrinsic adventure complications, the largest being the way that every activity outside of a hab building comes with a built-in time limit. Whatever the party chooses to do outside of a building, it has to accomplish before their suit seals fail or the atmosphere corrodes a hole in their vehicle hull. A clever GM can use this problem to add extra tension to an otherwise simple task."
+    },
+    {
+      "Type": "Inert gas, useless for respiration",
+      "Description": "Inert gas atmospheres aren’t hostile or poisonous, but they’re unbreathable by humans. If the planet’s climate is otherwise tolerable, the natives might be able to live and work outdoors without anything more than an air tank and face mask. Some degree of technical sophistication is going to be necessary for humanity to survive, and large supplies of oxygen are going to have to be extracted from some local source. “Air mines” might exist to replace the oxygen lost during human use, or local power plants might need to be kept running full blast in order to crack water molecules into hydrogen and oxygen. On worlds with an unbreathable atmosphere, control of the air supply makes it much harder for locals to rebel against their leaders. Without the equipment and power to generate their own air supplies, would-be rebels are entirely at the mercy of those who control the oxygen. Most rulers pick up on this fact rapidly, and some worlds with unbreathable atmospheres might even make it a crime to own illicit oxygen generation equipment"
+    },
+    {
+      "Type": "Airless or thin to the point of suffocation",
+      "Description": "Airless or thin atmospheres are appropriate to asteroids, rocky planetoids, or barren worlds that have had their atmospheres burnt off by weapons or cosmic caprice. Whatever atmosphere exists is too thin to support human life, if it exists at all, and the world is largely naked to the chill of space and the blaze of stellar heat. Exposure to the planet’s surface without a vacc suit or pressurized building is as lethal as exposure to hard vacuum. Airless worlds are hostile to human life, but they excel at preserving the relics of the past. Provided that the ruins or remains are kept out of the baking heat of the local stellar body and the impact of random meteorites, they can survive for millions of years. Some exceptionally ancient alien ruins might even date back from before the world lost its atmosphere."
+    },
+    {
+      "Type": "Breathable mix",
+      "Description": "Breathable mix atmospheres can support human life without additional equipment or gengineered modification. Any world that has a human population in the millions or more almost certainly has a breathable mix atmosphere. While the air is breathable, almost every world has its own subtle cocktail of inert gases, atmospheric contaminants, and other odoriferous ingredients. For spacers accustomed to the filtered air supply of a starship, the “new world stink” of a fresh planetfall can be maddening, as few linger long enough to get used to the smell of the local air. Attempting to explain the source of this discomfort to the locals rarely results in positive results. Some spaceport bars make a point of their air filtration and composition mixers"
+    },
+    {
+      "Type": "Breathable mix",
+      "Description": "Breathable mix atmospheres can support human life without additional equipment or gengineered modification. Any world that has a human population in the millions or more almost certainly has a breathable mix atmosphere. While the air is breathable, almost every world has its own subtle cocktail of inert gases, atmospheric contaminants, and other odoriferous ingredients. For spacers accustomed to the filtered air supply of a starship, the “new world stink” of a fresh planetfall can be maddening, as few linger long enough to get used to the smell of the local air. Attempting to explain the source of this discomfort to the locals rarely results in positive results. Some spaceport bars make a point of their air filtration and composition mixers"
+    },
+    {
+      "Type": "Breathable mix",
+      "Description": "Breathable mix atmospheres can support human life without additional equipment or gengineered modification. Any world that has a human population in the millions or more almost certainly has a breathable mix atmosphere. While the air is breathable, almost every world has its own subtle cocktail of inert gases, atmospheric contaminants, and other odoriferous ingredients. For spacers accustomed to the filtered air supply of a starship, the “new world stink” of a fresh planetfall can be maddening, as few linger long enough to get used to the smell of the local air. Attempting to explain the source of this discomfort to the locals rarely results in positive results. Some spaceport bars make a point of their air filtration and composition mixers"
+    },
+    {
+      "Type": "Breathable mix",
+      "Description": "Breathable mix atmospheres can support human life without additional equipment or gengineered modification. Any world that has a human population in the millions or more almost certainly has a breathable mix atmosphere. While the air is breathable, almost every world has its own subtle cocktail of inert gases, atmospheric contaminants, and other odoriferous ingredients. For spacers accustomed to the filtered air supply of a starship, the “new world stink” of a fresh planetfall can be maddening, as few linger long enough to get used to the smell of the local air. Attempting to explain the source of this discomfort to the locals rarely results in positive results. Some spaceport bars make a point of their air filtration and composition mixers"
+    },
+    {
+      "Type": "Breathable mix",
+      "Description": "Breathable mix atmospheres can support human life without additional equipment or gengineered modification. Any world that has a human population in the millions or more almost certainly has a breathable mix atmosphere. While the air is breathable, almost every world has its own subtle cocktail of inert gases, atmospheric contaminants, and other odoriferous ingredients. For spacers accustomed to the filtered air supply of a starship, the “new world stink” of a fresh planetfall can be maddening, as few linger long enough to get used to the smell of the local air. Attempting to explain the source of this discomfort to the locals rarely results in positive results. Some spaceport bars make a point of their air filtration and composition mixers"
+    },
+    {
+      "Type": "Thick, but breathable with a pressure mask",
+      "Description": "Thick atmospheres can usually be breathed with the aid of a filter mask, though the mix of contaminants renders it slowly or quickly toxic to humans who attempt to breathe it straight. Separate air supplies are not necessary to supplement the blend, but any society that means to survive on such a world must have sufficient technological expertise to manufacture and maintain large numbers of filter masks. Thick atmospheres are often at least semi-opaque, and some worlds have thick atmospheres that are completely impenetrable to ordinary light. Deep banks of permanent fog might shroud the planet, or natives might have to go about with sophisticated ultraviolet or infrared viewing equipment if they don’t wish to be blind. Some banks of gases might be impenetrable to even these viewing tools, leaving a party vulnerable to moments of complete blindness while out on the surface of the world."
+    },
+    {
+      "Type": "Invasive, penetrating suit seals",
+      "Description": "Invasive toxic atmospheres are composed of a substantial proportion of molecules small enough to infiltrate past the seals of most vacc suits. This infiltration doesn’t harm the suit, but the molecules have to be steadily flushed by the system’s purification sensors before they build up to a debilitating level. This causes a much faster bleed of air as breathable oxygen is jettisoned along with the infiltrating molecules. Most invasive atmospheres cut oxygen supply durations by half, at best. Invasive atmospheres make oxygen an even more important resource than it is on inert gas worlds. Outdoor work is avoided whenever possible, as any failure of a suit’s toxin sensors or flush system can lead to death before the wearer even realizes something is wrong. Steady exposure to low levels of the toxins can also result in unfortunate effects even with a fully-functional suit. Hallucinations, chronic sickness, or worse can follow."
+    },
+    {
+      "Type": "Both corrosive and invasive in its effects",
+      "Description": "Corrosive and invasive atmospheres exist at the very border of what human society can tolerate. Combining all the worst traits of an eroding, corrosive atmosphere and the invasive intrusion of toxic molecules, a planet cursed with an atmosphere like this is far more hostile than any mere airless rock. Advanced pretech filtering and oxygen generation equipment might be able to maintain tolerable pressurized habitats and hydroponic systems uncontaminated by exterior atmosphere. Anything less than this tech level means greater and greater amounts of societal resources devoted simply to the effort of breathing. Entire civilizations can be oriented around overcoming the difficulties of maintaining their structures and their pressurized homes. Whatever provoked the initial inhabitants to settle on this world must have been of overwhelming value or necessity to convince them to consign themselves and their children to such a place. It is highly unlikely that enough ship traffic exists to get any but the most fortunate locals offworld, so the rest are obliged to deal with their harsh existence as best they can."
+    }
+  ],
+  "Temperatures": [
     {
       "Type": "Frozen, locked in perpetual ice",
       "Description": "Frozen worlds are those with so weak a stellar primary or so great a distance that the average temperature is close to absolute zero. Any atmosphere that once existed has long since frozen into drifts of solidified oxygen or lakes of liquid helium. Exposure to these drifts is very dangerous. Vacc suits maintain a tolerable temperature easily because the stellar void is very empty, and there is little conduction of heat between the suit and empty space. Dunking a suit into a lake of thermally-conductive superchilled liquid can force the heating elements into sudden and drastic overload, draining a power cell in minutes or even seconds."
@@ -3086,7 +3132,7 @@
       "Description": "Burning worlds are too hot for a human to survive without equipment similar to a vacc suit in effectiveness. Rivulets of molten lead or copper might bleed from open veins on the hillsides, and many of the same perils that face an explorer on a frozen world have hotter equivalents on a burning one. Ash drifts, pools of molten metal, and superheated liquid vents can bring quick death to an unwary explorer, and the miners who inhabit such worlds must be forever vigilant against the perils of their burning home."
     }
   ],
-  "Biosphere": [
+  "Biospheres": [
     {
       "Type": "Remnant biosphere",
       "Description": "Biosphere remnants are the wreckage of a ruined ecology. Petrified trees, drifts of preserved bones, forests of dead plant life; something killed all the life on this planet in the relatively recent past. It may have been the exercise of a maltech planet-buster weapon, or a mutant microbe introduced by human colonists, or some volcanic eruption or asteroid impact that plunged the world into decades of frozen night. Any local civilization not sophisticated enough to escape the planet likely died when it did. Their ruins and remains might be found throughout the desolate wastes, along with more clues as to the cause of the devastation."
@@ -3132,7 +3178,7 @@
       "Description": "Engineered biospheres are among the rarest, as they require enormous time and effort on the part of a highly advanced civilization. Whatever life exists on this planet has been extensively altered by an alien race or by advanced pretech gengineering methods. Some such worlds are paradise planets, carefully sculpted by some fabulously wealthy predecessor to suit their own tastes. Others are living forges, where foodstuffs and refined minerals are produced as byproducts from the basic organic processes of the world’s biosphere. Such worlds tend to be fragile. Many engineered worlds are dependent upon regular stabilizing work to prevent genetic drift and adaptations that do not serve the creator’s purpose. Without regular pruning and adjustment, engineered biospheres can go badly awry. Some end up leaving nothing but genetic wreckage in their wake, while others go wrong in more subtle ways. Where once the biosphere existed to serve the inhabitants, a creaking engineered biosphere can leave the planet’s population chained to constant repair and maintenance efforts just to prevent a planetary collapse."
     }
   ],
-  "Population": [
+  "Populations": [
     {
       "Type": "Failed colony",
       "Description": "Failed colonies are occasionally found dotting the worlds of human space. Some date back to the First Wave of human colonization more than a thousand years ago, while others are more recent efforts that guttered out under the strains of a colony’s birth. Pirate attacks might have wiped out a young colony, as might a hostile biosphere, alien attack, internal dissension, disease outbreaks, failure of vital colonial equipment, or any one of a hundred other disasters. The ruins of the colony might still have valuable pretech artifacts, however, or colonization deeds authorized by neighboring worlds. A few survivors might even have clung to life in the intervening centuries, maintaining some sort of society in the wreckage of their ancestors’ work."
@@ -3178,7 +3224,7 @@
       "Description": "Alien civilizations are even rarer than massively human-populated planets, but they can be found in some sectors. On these worlds, any human presence is either nonexistent or simply a token contingent of traders and diplomats. The actual number of aliens may range from a few tens of thousands to teeming worlds of billions. Alien civilizations appear to be no more immune to conflict, disaster, and decadence than that of humans, and most alien worlds are isolated planets. Some sectors were known to be dominated by alien empires before the Scream, but most inhabited worlds found by colonial surveyors consisted of indigenous, low-tech sapients who evolved on the world, or else were the decaying remnants of a former empire that had fallen apart into isolated colonial worlds. This fate of growth, expansion, colonization, and collapse appears to be a very common event in the galaxy. Countless alien ruins and lost deep-space artifacts indicate that cycles of growth and decay have been going on for millennia, and there is little way to tell how many alien empires have swept over what is now human space before dwindling to rotting worlds and then empty ruins."
     }
   ],
-  "TechLevel": [
+  "TechLevels": [
     {
       "Type": "TL0",
       "ShortDesc": "Neolithic-level technology",
@@ -3235,36 +3281,34 @@
       "Description": "Tech level 5 is the highest tech level that might merit random placement. A world with this level of technological expertise has somehow managed to hold on to the majority of the pre-Scream technology base, and can produce a wide range of goods that are unknown on less sophisticated worlds. Miniaturized fusion plants, drive-6 rated spike drives, exotic grav weaponry, and even the development of psionics-based “psitech” is possible on such a world. Pretech manufacturing was largely dependent on specially-trained industrial psychics. With the loss of their unique disciplines in the Scream, most worlds that retain this level of tech classification were forced to substitute slower, less precise methods that sharply curtailed their production efficiency. Barring the profoundly unlikely happenstance of this world’s redevelopment of the lost disciplines, their maximum industrial output is sharply limited. Even on worlds such as this, most technology is likely mass-produced postech, with only important goods produced to pretech levels of quality. A world with this level of technology is almost certainly a regional hegemon, one of the most powerful and influential worlds in the sector. Even those worlds that have no imperial ambitions have enormous influence simply through the vast superiority of their starships and military technology."
     }
   ],
-  "OtherWorlds": {
-    "Origin": [
-      "Recent colony from the primary world",
-      "Refuge for exiles from primary",
-      "Founded ages ago by a different group",
-      "Founded long before the primary world",
-      "Lost ancient colony of the primary",
-      "Colony recently torn free of the primary",
-      "Long-standing cooperative colony world",
-      "Recent interstellar colony from elsewhere"
-    ],
-    "Relationship": [
-      "Confirmed hatred of each other",
-      "Active cold war between them",
-      "Old grudges or resentments",
-      "Cultural disgust and avoidance",
-      "Polite interchange and trade",
-      "Cultural admiration for primary",
-      "Long-standing friendship",
-      "Unflinching mutual loyalty"
-    ],
-    "Contact": [
-      "Trade in vital goods",
-      "Shared religion",
-      "Mutual language",
-      "Entertainment content",
-      "Shared research",
-      "Threat to both of them",
-      "Shared elite families",
-      "Exploiting shared resource"
-    ]
-  }
+  "OWOrigins": [
+    "Recent colony from the primary world",
+    "Refuge for exiles from primary",
+    "Founded ages ago by a different group",
+    "Founded long before the primary world",
+    "Lost ancient colony of the primary",
+    "Colony recently torn free of the primary",
+    "Long-standing cooperative colony world",
+    "Recent interstellar colony from elsewhere"
+  ],
+  "OWRelationships": [
+    "Confirmed hatred of each other",
+    "Active cold war between them",
+    "Old grudges or resentments",
+    "Cultural disgust and avoidance",
+    "Polite interchange and trade",
+    "Cultural admiration for primary",
+    "Long-standing friendship",
+    "Unflinching mutual loyalty"
+  ],
+  "OWContacts": [
+    "Trade in vital goods",
+    "Shared religion",
+    "Mutual language",
+    "Entertainment content",
+    "Shared research",
+    "Threat to both of them",
+    "Shared elite families",
+    "Exploiting shared resource"
+  ]
 }

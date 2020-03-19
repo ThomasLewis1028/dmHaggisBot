@@ -54,13 +54,13 @@ namespace dmHaggisBot
                 options[sel]()
                 */
 
-                if (sel.ToUpper() == "C")
-                    charCreator.Creation(universe.Characters);
-                else if (sel.ToUpper() == "S")
-                    starCreator.Creation(universe.Stars, universe.Grid);
-                else if (sel.ToUpper() == "J")
-                {
-                }
+                // if (sel.ToUpper() == "C")
+                //     charCreator.Creation(universe.Characters);
+                // else if (sel.ToUpper() == "S")
+                //     starCreator.Creation(universe.Stars, universe.Grid);
+                // else if (sel.ToUpper() == "J")
+                // {
+                // }
             }
 
             using StreamWriter file =

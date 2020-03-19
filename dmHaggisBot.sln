@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dmHaggisBot", "dmHaggisBot\dmHaggisBot.csproj", "{7B28426E-710F-4C1E-BE8B-833EFC18AEBA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWNUniverseGenerator", "SWNUniverseGenerator\SWNUniverseGenerator.csproj", "{E5DB0444-9A60-4650-9455-6585D691901A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{7B28426E-710F-4C1E-BE8B-833EFC18AEBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B28426E-710F-4C1E-BE8B-833EFC18AEBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B28426E-710F-4C1E-BE8B-833EFC18AEBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5DB0444-9A60-4650-9455-6585D691901A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5DB0444-9A60-4650-9455-6585D691901A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5DB0444-9A60-4650-9455-6585D691901A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5DB0444-9A60-4650-9455-6585D691901A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

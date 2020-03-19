@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace dmHaggisBot
+namespace SWNUniverseGenerator
 {
     /// <summary>
     /// This class holds the default values for a Character class

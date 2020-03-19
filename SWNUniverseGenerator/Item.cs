@@ -1,4 +1,4 @@
-﻿namespace dmHaggisBot
+﻿namespace SWNUniverseGenerator
 {
     public class Item
     {

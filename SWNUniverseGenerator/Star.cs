@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace dmHaggisBot
+namespace SWNUniverseGenerator
 {
     public class Star
     {

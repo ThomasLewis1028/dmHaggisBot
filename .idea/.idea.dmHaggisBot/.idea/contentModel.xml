@@ -6,19 +6,39 @@
     <e p="C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot" t="IncludeFlat">
       <e p="dmHaggisBot" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
+        <e p="DiscordBot.cs" t="Include" />
+        <e p="dmHaggisBot.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.1" t="Include">
+              <e p="dmHaggisBot.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="properties.json" t="Include" />
+        <e p="UniverseFiles" t="Include">
+          <e p="universe.json" t="Include" />
+        </e>
+      </e>
+      <e p="dmHaggisBot.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="SWNUniverseGenerator" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
         <e p="Character.cs" t="Include" />
         <e p="CharacterDefaultSettings.cs" t="Include" />
         <e p="CharCreation.cs" t="Include" />
+        <e p="CharData.cs" t="Include" />
         <e p="City.cs" t="Include" />
         <e p="Creation.cs" t="Include" />
         <e p="Data" t="Include">
+          <e p="characterData.json" t="Include" />
           <e p="personData.xls" t="Include" />
           <e p="pointsOfInterest.json" t="Include" />
+          <e p="StarData.json" t="Include" />
           <e p="system.xls" t="Include" />
           <e p="worldTags.json" t="Include" />
         </e>
-        <e p="DiscordBot.cs" t="Include" />
-        <e p="dmHaggisBot.csproj" t="IncludeRecursive" />
         <e p="Excel.cs" t="Include" />
         <e p="Grid.cs" t="Include" />
         <e p="Item.cs" t="Include" />
@@ -27,13 +47,11 @@
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
-              <e p="dmHaggisBot.AssemblyInfo.cs" t="Include" />
+              <e p="SWNUniverseGenerator.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
         </e>
         <e p="Planet.cs" t="Include" />
-        <e p="Program.cs" t="Include" />
-        <e p="properties.json" t="Include" />
         <e p="ReadFromDescriptions" t="Include">
           <e p="SetDataFromReader.cs" t="Include" />
           <e p="WorldTags.cs" t="Include" />
@@ -41,24 +59,13 @@
         </e>
         <e p="Star.cs" t="Include" />
         <e p="StarCreation.cs" t="Include" />
+        <e p="StarData.cs" t="Include" />
         <e p="StarDefaultSettings.cs" t="Include" />
+        <e p="SWNUniverseGenerator.csproj" t="IncludeRecursive" />
         <e p="Universe.cs" t="Include" />
         <e p="UniverseDefaultSettings.cs" t="Include" />
-        <e p="UniverseFiles" t="Include">
-          <e p="TestUniverse1.json" t="Include" />
-          <e p="TestUniverse2.json" t="Include" />
-          <e p="TestUniverse3.json" t="Include" />
-          <e p="TestUniverse4.json" t="Include" />
-          <e p="TestUniverse5.json" t="Include" />
-          <e p="TestUniverse6.json" t="Include" />
-          <e p="TestUniverse7.json" t="Include" />
-          <e p="TestUniverse8.json" t="Include" />
-          <e p="universe.json" t="Include" />
-        </e>
         <e p="WorldInfo.cs" t="Include" />
       </e>
-      <e p="dmHaggisBot.sln" t="IncludeFlat" />
-      <e p="packages" t="ExcludeRecursive" />
     </e>
   </component>
 </project>

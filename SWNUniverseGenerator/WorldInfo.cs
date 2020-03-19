@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace dmHaggisBot
+namespace SWNUniverseGenerator
 {
     public class WorldInfo
     {

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
-namespace dmHaggisBot
+namespace SWNUniverseGenerator
 {
     public class Character
     {
@@ -30,9 +32,15 @@ namespace dmHaggisBot
             Last = last;
         }
 
+        [JsonIgnore]
         public string Name
         {
             get => First + " " + Last;
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
         }
     }
 }

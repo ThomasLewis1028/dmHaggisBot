@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
  * so I could then transfer it to the worldTags.json file. This can be rewritten for any use.
  */
 
-namespace dmHaggisBot.ReadFromDescripstions
+namespace SWNUniverseGenerator.ReadFromDescripstions
 {
     public class SetDataFromReader
     {

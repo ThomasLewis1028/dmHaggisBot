@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace dmHaggisBot
+namespace SWNUniverseGenerator
 {
     /// <summary>
     /// This is the default creator class for Universe Objects

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace dmHaggisBot.ReadFromDescripstions
+namespace SWNUniverseGenerator.ReadFromDescripstions
 {
     public class WorldTagList
     {

@@ -2,7 +2,7 @@
 
 namespace SWNUniverseGenerator
 {
-    public class CharData
+    internal class CharData
     {
         public List<string> MaleName { get; set; }
         public List<string> FemaleName { get; set; }

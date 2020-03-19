@@ -2,80 +2,29 @@
 {
     public class Planet
     {
-        private string _name;
-        private WorldTag _worldTag;
-        private Temperature _temperature;
-        private Atmosphere _atmosphere;
-        private Biosphere _biosphere;
-        private Population _population;
-        private TechLevel _techLevel;
-        private string _origin;
-        private string _relationship;
-        private string _contact;
-
         public Planet(string name)
         {
-            this._name = name;
+            Name = name;
         }
 
-        public string Name
-        {
-            get => _name;
-            set => _name = value;
-        }
+        public string Name { get; set; }
 
-        public WorldTag WorldTag
-        {
-            get => _worldTag;
-            set => _worldTag = value;
-        }
+        public WorldTag WorldTag { get; set; }
 
-        public Atmosphere Atmosphere
-        {
-            get => _atmosphere;
-            set => _atmosphere = value;
-        }
+        public Atmosphere Atmosphere { get; set; }
 
-        public Temperature Temperature
-        {
-            get => _temperature;
-            set => _temperature = value;
-        }
+        public Temperature Temperature { get; set; }
 
-        public Biosphere Biosphere
-        {
-            get => _biosphere;
-            set => _biosphere = value;
-        }
+        public Biosphere Biosphere { get; set; }
 
-        public Population Population
-        {
-            get => _population;
-            set => _population = value;
-        }
+        public Population Population { get; set; }
 
-        public TechLevel TechLevel
-        {
-            get => _techLevel;
-            set => _techLevel = value;
-        }
+        public TechLevel TechLevel { get; set; }
 
-        public string Origin
-        {
-            get => _origin;
-            set => _origin = value;
-        }
+        public string Origin { get; set; }
 
-        public string Relationship
-        {
-            get => _relationship;
-            set => _relationship = value;
-        }
+        public string Relationship { get; set; }
 
-        public string Contact
-        {
-            get => _contact;
-            set => _contact = value;
-        }
+        public string Contact { get; set; }
     }
 }

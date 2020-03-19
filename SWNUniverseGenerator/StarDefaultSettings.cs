@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace SWNUniverseGenerator
+﻿namespace SWNUniverseGenerator
 {
     public class StarDefaultSettings
     {
-        public String StarCount { get; set; }
+        public string StarCount { get; set; }
 
-        public String[] PlanetRange { get; set; }
+        public string[] PlanetRange { get; set; }
     }
 }

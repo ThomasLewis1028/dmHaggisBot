@@ -1,37 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Discord;
 using Discord.WebSocket;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator;
 
 namespace dmHaggisBot
 {
-    class DiscordBot
+    internal class DiscordBot
     {
-        private DiscordSocketClient _client;
-        private IConfiguration _config;
-        private Creation creation;
-        private Regex charChreate = new Regex("^charCreate ");
-        private Regex univChreate = new Regex("^univCreate ");
-        private Regex univLoad = new Regex("^univLoad ");
-        private Regex findChar = new Regex("^findChar ");
-        private Regex starCreate = new Regex("^starCreate ");
         private static Universe _universe;
         private static Creation _creation;
 
         //Properties file
         private static readonly JObject prop =
             JObject.Parse(
-                File.ReadAllText(@"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\dmHaggisBot\properties.json"));
+                File.ReadAllText(@"properties.json"));
 
-        private static string token = (string) prop.GetValue("token");
+        private static readonly string token = (string) prop.GetValue("token");
+        private readonly Regex charChreate = new Regex("^charCreate ");
+        private readonly Regex findChar = new Regex("^findChar ");
+        private readonly Regex starCreate = new Regex("^starCreate ");
+        private readonly Regex univChreate = new Regex("^univCreate ");
+        private readonly Regex univLoad = new Regex("^univLoad ");
+        private DiscordSocketClient _client;
+        private IConfiguration _config;
+        private Creation creation;
+
+        private static string universePath
+        {
+            get
+            {
+                var codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                var uri = new UriBuilder(codeBase);
+                var path = Uri.UnescapeDataString(uri.Path);
+                if (!Directory.Exists(Path.GetDirectoryName(path) + "\\UniverseFiles\\"))
+                    Directory.CreateDirectory(Path.GetDirectoryName(path) + "\\UniverseFiles\\");
+                return Path.GetDirectoryName(path) + "\\UniverseFiles\\";
+            }
+        }
 
         public async Task MainAsync()
         {
@@ -65,19 +76,19 @@ namespace dmHaggisBot
 
             if (findChar.IsMatch(sm.Content))
                 CharFind(sm);
-            
+
             if (starCreate.IsMatch(sm.Content))
                 CreateStar(sm);
         }
 
-        public async static void CreateChar(SocketMessage sm)
+        public static async void CreateChar(SocketMessage sm)
         {
             var a = ParseCommand("a", sm.Content);
             var ar = string.IsNullOrEmpty(a)
                 ? new[] {"", ""}
-                : (a.Split(" ").Length == 1
+                : a.Split(" ").Length == 1
                     ? new[] {a, a}
-                    : a.Split(" "));
+                    : a.Split(" ");
             var c = ParseCommand("c", sm.Content);
             var g = ParseCommand("g", sm.Content);
             var f = ParseCommand("f", sm.Content);
@@ -88,9 +99,9 @@ namespace dmHaggisBot
             var t = ParseCommand("t", sm.Content);
 
             // await sm.Channel.SendMessageAsync(sb.ToString());
-            CharacterDefaultSettings charDef = new CharacterDefaultSettings();
+            var charDef = new CharacterDefaultSettings();
 
-            charDef.Count = c != "" ? Int32.Parse(c) : 1;
+            charDef.Count = c != "" ? int.Parse(c) : 1;
             charDef.First = f;
             charDef.Last = l;
             charDef.Age = ar;
@@ -112,13 +123,13 @@ namespace dmHaggisBot
             await Task.Delay(-1);
         }
 
-        public async static void CreateUniv(SocketMessage sm)
+        public static async void CreateUniv(SocketMessage sm)
         {
             var g = ParseCommand("g", sm.Content);
             var n = ParseCommand("n", sm.Content);
             var o = ParseCommand("o", sm.Content);
 
-            UniverseDefaultSettings univDef = new UniverseDefaultSettings();
+            var univDef = new UniverseDefaultSettings();
 
             univDef.Name = n;
             univDef.Grid = g;
@@ -126,7 +137,7 @@ namespace dmHaggisBot
 
             try
             {
-                _creation = new Creation();
+                _creation = new Creation(universePath);
                 _universe = _creation.CreateUniverse(univDef);
                 await sm.Channel.SendMessageAsync("Created Universe with the name " + _universe.Name);
             }
@@ -138,17 +149,17 @@ namespace dmHaggisBot
             await Task.Delay(-1);
         }
 
-        public async static void CreateStar(SocketMessage sm)
+        public static async void CreateStar(SocketMessage sm)
         {
             var s = ParseCommand("s", sm.Content);
             var p = ParseCommand("p", sm.Content);
             var pr = string.IsNullOrEmpty(p)
                 ? new[] {"", ""}
-                : (p.Split(" ").Length == 1
+                : p.Split(" ").Length == 1
                     ? new[] {p, p}
-                    : p.Split(" "));
+                    : p.Split(" ");
 
-            StarDefaultSettings starDef = new StarDefaultSettings();
+            var starDef = new StarDefaultSettings();
 
             starDef.StarCount = s;
             starDef.PlanetRange = pr;
@@ -160,13 +171,13 @@ namespace dmHaggisBot
             await Task.Delay(-1);
         }
 
-        public async static void LoadUniv(SocketMessage sm)
+        public static async void LoadUniv(SocketMessage sm)
         {
             var n = ParseCommand("n", sm.Content);
 
             try
             {
-                _creation = new Creation();
+                _creation = new Creation(universePath);
                 _universe = _creation.LoadUniverse(n);
                 await sm.Channel.SendMessageAsync("Loaded Universe with the name " + _universe.Name);
             }
@@ -178,7 +189,7 @@ namespace dmHaggisBot
             await Task.Delay(-1);
         }
 
-        public async static void CharFind(SocketMessage sm)
+        public static async void CharFind(SocketMessage sm)
         {
         }
 

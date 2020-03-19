@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -10,20 +7,24 @@ namespace SWNUniverseGenerator
 {
     public class Creation
     {
-        private static readonly string cwd = @"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\dmHaggisBot\";
-        private static readonly string univD = cwd + "\\UniverseFiles\\";
+        private readonly string universePath;
+
+        public Creation(string path)
+        {
+            universePath = path;
+        }
 
         public Universe CreateUniverse(UniverseDefaultSettings universeDefaultSettings)
         {
-            StringBuilder path = new StringBuilder();
-            path.Append(univD + "\\" + universeDefaultSettings.Name + ".json");
+            var path = new StringBuilder();
+            path.Append(universePath + "\\" + universeDefaultSettings.Name + ".json");
 
             if (File.Exists(path.ToString()))
             {
                 if (universeDefaultSettings.Overwrite.ToUpper() == "Y")
                     File.Delete(path.ToString());
                 else
-                    throw new IOException(String.Format("{0} already exists. Use -o to overwrite or use loadUni",
+                    throw new IOException(string.Format("{0} already exists. Use -o to overwrite or use loadUni",
                         universeDefaultSettings.Name));
             }
 
@@ -39,10 +40,10 @@ namespace SWNUniverseGenerator
             else
             {
                 var g = universeDefaultSettings.Grid.Split(" ");
-                grid = new Grid(Int32.Parse(g[0]), Int32.Parse(g[1]));
+                grid = new Grid(int.Parse(g[0]), int.Parse(g[1]));
             }
 
-            Universe universe = new Universe(name, grid);
+            var universe = new Universe(name, grid);
             SerializeData(universe);
             return new Universe(name, grid);
         }
@@ -64,13 +65,13 @@ namespace SWNUniverseGenerator
 
         public Universe LoadUniverse(string name)
         {
-            StringBuilder path = new StringBuilder();
-            path.Append(univD + "\\" + name + ".json");
-            
+            var path = new StringBuilder();
+            path.Append(universePath + "\\" + name + ".json");
+
             if (!File.Exists(path.ToString()))
                 throw new FileNotFoundException("{0}.json not found.");
 
-            JObject univ =
+            var univ =
                 JObject.Parse(
                     File.ReadAllText(path.ToString()));
 
@@ -79,10 +80,10 @@ namespace SWNUniverseGenerator
 
         public Universe SerializeData(Universe universe)
         {
-            var path = univD + "\\" + universe.Name + ".json";
-            using StreamWriter file =
+            var path = universePath + "\\" + universe.Name + ".json";
+            using var file =
                 File.CreateText(path);
-            JsonSerializer serializer = new JsonSerializer();
+            var serializer = new JsonSerializer();
             serializer.Serialize(file, universe);
 
             return universe;

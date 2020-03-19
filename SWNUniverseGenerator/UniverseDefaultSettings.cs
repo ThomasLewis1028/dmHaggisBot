@@ -1,26 +1,24 @@
-﻿using System;
-
-namespace SWNUniverseGenerator
+﻿namespace SWNUniverseGenerator
 {
     /// <summary>
-    /// This is the default creator class for Universe Objects
+    ///     This is the default creator class for Universe Objects
     /// </summary>
     public class UniverseDefaultSettings
     {
         /// <summary>
-        /// This value should be the name of your universe
+        ///     This value should be the name of your universe
         /// </summary>
-        public String Name { get; set; }
-        
+        public string Name { get; set; }
+
         /// <summary>
-        /// This value should be a string x y that will be your X Y grid
+        ///     This value should be a string x y that will be your X Y grid
         /// </summary>
-        public String Grid { get; set; }
-        
+        public string Grid { get; set; }
+
         /// <summary>
-        /// Flag for overwriting a previous universe file
-        /// Y for yes, N for no
+        ///     Flag for overwriting a previous universe file
+        ///     Y for yes, N for no
         /// </summary>
-        public String Overwrite { get; set; }
+        public string Overwrite { get; set; }
     }
 }

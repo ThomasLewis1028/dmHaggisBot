@@ -4,39 +4,19 @@ namespace SWNUniverseGenerator
 {
     public class Star
     {
-        private string name;
-        private int x, y;
-        private List<Planet> planets = new List<Planet>();
-
         public Star(string name, int x, int y)
         {
-            this.name = name;
-            this.x = x;
-            this.y = y;
+            Name = name;
+            X = x;
+            Y = y;
         }
 
-        public string Name
-        {
-            get => name;
-            set => name = value;
-        }
+        public string Name { get; set; }
 
-        public int X
-        {
-            get => x;
-            set => x = value;
-        }
+        public int X { get; set; }
 
-        public int Y
-        {
-            get => y;
-            set => y = value;
-        }
+        public int Y { get; set; }
 
-        public List<Planet> Planets
-        {
-            get => planets;
-            set => planets = value;
-        }
+        public List<Planet> Planets { get; set; } = new List<Planet>();
     }
 }

@@ -21,4 +21,10 @@
       <ProjectReference Include="..\SWNUniverseGenerator\SWNUniverseGenerator.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="properties.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

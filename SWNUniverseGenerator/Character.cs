@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace SWNUniverseGenerator
 {
@@ -13,17 +10,6 @@ namespace SWNUniverseGenerator
             Female,
             Undefined
         }
-
-        public String First { get; set; }
-        public String Last { get; set; }
-        public Int32 Age { get; set; }
-        public Planet BirthPlace { get; set; }
-        public Planet Location { get; set; }
-        public String HairStyle { get; set; }
-        public String HairCol { get; set; }
-        public String EyeCol { get; set; }
-        public String Title { get; set; }
-        public GenderEnum Gender { get; set; }
         //private Ship ship;
 
         public Character(string first, string last)
@@ -32,11 +18,18 @@ namespace SWNUniverseGenerator
             Last = last;
         }
 
-        [JsonIgnore]
-        public string Name
-        {
-            get => First + " " + Last;
-        }
+        public string First { get; set; }
+        public string Last { get; set; }
+        public int Age { get; set; }
+        public Planet BirthPlace { get; set; }
+        public Planet Location { get; set; }
+        public string HairStyle { get; set; }
+        public string HairCol { get; set; }
+        public string EyeCol { get; set; }
+        public string Title { get; set; }
+        public GenderEnum Gender { get; set; }
+
+        [JsonIgnore] public string Name => First + " " + Last;
 
         public override string ToString()
         {

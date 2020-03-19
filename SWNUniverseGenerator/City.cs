@@ -2,32 +2,16 @@
 {
     public class City
     {
-        private string name;
-        private Planet planet;
-        private int pop;
-
         public City(string name, Planet planet)
         {
             name = name;
-            this.planet = planet;
+            Planet = planet;
         }
 
-        public string Name
-        {
-            get => name;
-            set => name = value;
-        }
+        public string Name { get; set; }
 
-        public Planet Planet
-        {
-            get => planet;
-            set => planet = value;
-        }
+        public Planet Planet { get; set; }
 
-        public int Pop
-        {
-            get => pop;
-            set => pop = value;
-        }
+        public int Pop { get; set; }
     }
 }

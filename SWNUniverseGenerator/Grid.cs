@@ -2,25 +2,14 @@
 {
     public class Grid
     {
-        private int x;
-        private int y;
-
         public Grid(int x, int y)
         {
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
         }
 
-        public int X
-        {
-            get => x;
-            set => x = value;
-        }
+        public int X { get; set; }
 
-        public int Y
-        {
-            get => y;
-            set => y = value;
-        }
+        public int Y { get; set; }
     }
 }

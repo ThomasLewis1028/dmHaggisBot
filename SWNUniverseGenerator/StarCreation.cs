@@ -6,38 +6,38 @@ using Newtonsoft.Json.Linq;
 
 namespace SWNUniverseGenerator
 {
-    public class StarCreation
+    internal class StarCreation
     {
-        private static Random rand = new Random();
+        private static readonly Random rand = new Random();
 
         public Universe AddStars(Universe universe, StarDefaultSettings starDefaultSettings)
         {
             if (universe.Stars == null)
                 universe.Stars = new List<Star>();
-            
+
             var worldInfo = LoadWorldInfo();
             var starData = LoadStarData();
-            
-            //Set sheet bounds inluding sheet# and row count.
+
             var starLen = starData.Stars.Count;
             var planLen = starData.Planets.Count;
-            var starCount = string.IsNullOrEmpty(starDefaultSettings.StarCount) 
+            var starCount = string.IsNullOrEmpty(starDefaultSettings.StarCount)
                 ? Math.Floor(universe.Grid.X * universe.Grid.Y * .2)
-                : Int32.Parse(starDefaultSettings.StarCount);
+                : int.Parse(starDefaultSettings.StarCount);
 
-            int sCount = 0;
+            var sCount = 0;
             while (sCount < starCount)
             {
                 var starName = starData.Stars[rand.Next(0, starLen - 1)];
-                Star star = new Star(
+                var star = new Star(
                     starName,
                     rand.Next(0, universe.Grid.X + 1), rand.Next(0, universe.Grid.Y + 1));
 
-                int pCount = 0;
-                int pMax = rand.Next(Int32.Parse(starDefaultSettings.PlanetRange[0]), Int32.Parse(starDefaultSettings.PlanetRange[1]) + 1);
+                var pCount = 0;
+                var pMax = rand.Next(int.Parse(starDefaultSettings.PlanetRange[0]),
+                    int.Parse(starDefaultSettings.PlanetRange[1]) + 1);
                 while (pCount < pMax)
                 {
-                    Planet planet =
+                    var planet =
                         new Planet(starData.Planets[rand.Next(0, planLen)]);
                     planet.WorldTag = worldInfo.WorldTags[rand.Next(0, 100)];
                     planet.Atmosphere = worldInfo.Atmospheres[rand.Next(0, 6) + rand.Next(0, 6)];
@@ -49,24 +49,21 @@ namespace SWNUniverseGenerator
                     planet.Relationship = worldInfo.OWRelationships[rand.Next(0, 8)];
                     planet.Contact = worldInfo.OWContacts[rand.Next(0, 8)];
 
-
                     star.Planets.Add(planet);
                     pCount++;
                 }
-                
+
                 universe.Stars.Add(star);
 
                 sCount++;
             }
 
-            
-            
             return universe;
         }
 
         private static WorldInfo LoadWorldInfo()
         {
-            JObject tags =
+            var tags =
                 JObject.Parse(
                     File.ReadAllText(@"Data\worldTags.json"));
 
@@ -75,7 +72,7 @@ namespace SWNUniverseGenerator
 
         private StarData LoadStarData()
         {
-            JObject charData =
+            var charData =
                 JObject.Parse(
                     File.ReadAllText(@"Data\StarData.json"));
 

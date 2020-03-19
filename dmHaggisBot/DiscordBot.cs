@@ -196,7 +196,7 @@ namespace dmHaggisBot
 
         private static string ParseCommand(string argName, string argVal)
         {
-            var start = argVal.IndexOf(" -" + argName) + 1;
+            var start = argVal.IndexOf(" -" + argName + " ") + 1;
             if (start == 0)
                 return "";
 

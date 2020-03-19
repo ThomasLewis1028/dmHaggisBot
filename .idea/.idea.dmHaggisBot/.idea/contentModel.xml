@@ -38,6 +38,7 @@
         <e p="Grid.cs" t="Include" />
         <e p="IDGen.cs" t="Include" />
         <e p="IEntity.cs" t="Include" />
+        <e p="ILocation.cs" t="Include" />
         <e p="Item.cs" t="Include" />
         <e p="Job.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">

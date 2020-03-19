@@ -16,6 +16,11 @@ namespace SWNUniverseGenerator
             if (universe.Characters == null)
                 universe.Characters = new List<Character>();
 
+            List<Planet> planets = null;
+            
+            if (universe.Planets != null)
+                 planets = universe.Planets.ToList();
+            
             var charData = LoadCharData();
 
             var cCount = 0;
@@ -33,8 +38,7 @@ namespace SWNUniverseGenerator
                 var hairColorCount = charData.HairColor.Count;
                 var hairStyleCount = charData.HairStyle.Count;
                 var eyeColorCount = charData.EyeColor.Count;
-
-
+                
                 //Create the specified object
                 var first = string.IsNullOrEmpty(characterDefaultSettings.First)
                     ? firstNameList[rand.Next(0, firstCount - 1)]
@@ -45,7 +49,12 @@ namespace SWNUniverseGenerator
                     : characterDefaultSettings.Last;
 
                 var character = new Character(first, last);
-
+                
+                if (universe.Characters.Exists(a => a.Name == character.Name))
+                    continue;
+                
+                IDGen.GenerateID(character);
+                
                 character.Age = characterDefaultSettings.Age == null || characterDefaultSettings.Age.Length == 0 ||
                                 string.IsNullOrEmpty(characterDefaultSettings.Age[0]) ||
                                 string.IsNullOrEmpty(characterDefaultSettings.Age[1])
@@ -64,17 +73,15 @@ namespace SWNUniverseGenerator
                 character.Title = string.IsNullOrEmpty(characterDefaultSettings.Title)
                     ? null
                     : characterDefaultSettings.Title;
-                // character.BirthPlace = (a => universe.Stars[].Planets[])
-
-                if (universe.Characters.Exists(a => a.Name == character.Name))
-                    continue;
+                character.BirthPlanet = planets == null
+                    ? null
+                    : planets[rand.Next(0, planets.Count)].ID;
+                character.CurrentLocation = planets == null
+                    ? null
+                    : planets[rand.Next(0, planets.Count)].ID;
 
                 universe.Characters.Add(character);
-
-                // Console.Out.WriteLine("\t{0}, {1}, {2}, {3} {4}, {5} Eyes", character.First + " " + character.Last,
-                //     character.Gender,
-                //     character.Age, character.HairCol, character.HairStyle, character.EyeCol);
-
+                
                 cCount++;
             }
 

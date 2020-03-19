@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace SWNUniverseGenerator
 {
-    public class Star
+    public class Star : ILocation
     {
         public Star(string name, int x, int y)
         {
@@ -11,12 +11,12 @@ namespace SWNUniverseGenerator
             Y = y;
         }
 
+        public String ID { get; set; }
+
         public string Name { get; set; }
 
         public int X { get; set; }
 
         public int Y { get; set; }
-
-        public List<Planet> Planets { get; set; } = new List<Planet>();
     }
 }

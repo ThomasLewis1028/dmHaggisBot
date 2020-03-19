@@ -14,6 +14,9 @@ namespace SWNUniverseGenerator
         {
             if (universe.Stars == null)
                 universe.Stars = new List<Star>();
+            
+            if (universe.Planets == null)
+                universe.Planets = new List<Planet>();
 
             var worldInfo = LoadWorldInfo();
             var starData = LoadStarData();
@@ -31,6 +34,10 @@ namespace SWNUniverseGenerator
                 var star = new Star(
                     starName,
                     rand.Next(0, universe.Grid.X + 1), rand.Next(0, universe.Grid.Y + 1));
+                IDGen.GenerateID(star);
+                
+                if (universe.Stars.Exists(a => a.Name == star.Name))
+                    continue;
 
                 var pCount = 0;
                 var pMax = rand.Next(int.Parse(starDefaultSettings.PlanetRange[0]),
@@ -39,6 +46,12 @@ namespace SWNUniverseGenerator
                 {
                     var planet =
                         new Planet(starData.Planets[rand.Next(0, planLen)]);
+                    
+                    if (universe.Planets.Exists(a => a.Name == planet.Name))
+                        continue;
+                    
+                    IDGen.GenerateID(planet);
+                    planet.StarID = star.ID;
                     planet.WorldTag = worldInfo.WorldTags[rand.Next(0, 100)];
                     planet.Atmosphere = worldInfo.Atmospheres[rand.Next(0, 6) + rand.Next(0, 6)];
                     planet.Temperature = worldInfo.Temperatures[rand.Next(0, 6) + rand.Next(0, 6)];
@@ -49,7 +62,7 @@ namespace SWNUniverseGenerator
                     planet.Relationship = worldInfo.OWRelationships[rand.Next(0, 8)];
                     planet.Contact = worldInfo.OWContacts[rand.Next(0, 8)];
 
-                    star.Planets.Add(planet);
+                    universe.Planets.Add(planet);
                     pCount++;
                 }
 

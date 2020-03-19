@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace SWNUniverseGenerator
 {
-    public class Character
+    public class Character : IEntity
     {
         public enum GenderEnum
         {
@@ -18,11 +19,12 @@ namespace SWNUniverseGenerator
             Last = last;
         }
 
+        public String ID { get; set; }
         public string First { get; set; }
         public string Last { get; set; }
         public int Age { get; set; }
-        public Planet BirthPlace { get; set; }
-        public Planet Location { get; set; }
+        public String BirthPlanet { get; set; }
+        public String CurrentLocation { get; set; }
         public string HairStyle { get; set; }
         public string HairCol { get; set; }
         public string EyeCol { get; set; }

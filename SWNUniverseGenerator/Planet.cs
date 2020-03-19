@@ -1,11 +1,17 @@
-﻿namespace SWNUniverseGenerator
+﻿using System;
+
+namespace SWNUniverseGenerator
 {
-    public class Planet
+    public class Planet : ILocation
     {
         public Planet(string name)
         {
             Name = name;
         }
+
+        public String ID { get; set; }
+
+        public String StarID { get; set; }
 
         public string Name { get; set; }
 

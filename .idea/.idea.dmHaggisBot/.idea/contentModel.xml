@@ -32,9 +32,12 @@
           <e p="characterData.json" t="Include" />
           <e p="pointsOfInterest.json" t="Include" />
           <e p="StarData.json" t="Include" />
+          <e p="system.xls" t="Include" />
           <e p="worldTags.json" t="Include" />
         </e>
         <e p="Grid.cs" t="Include" />
+        <e p="IDGen.cs" t="Include" />
+        <e p="IEntity.cs" t="Include" />
         <e p="Item.cs" t="Include" />
         <e p="Job.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">

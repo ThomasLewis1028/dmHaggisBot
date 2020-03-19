@@ -191,6 +191,7 @@ namespace dmHaggisBot
 
         public static async void CharFind(SocketMessage sm)
         {
+            
         }
 
         private static string ParseCommand(string argName, string argVal)

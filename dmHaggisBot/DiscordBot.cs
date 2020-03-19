@@ -51,6 +51,8 @@ namespace dmHaggisBot
 
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
+            
+            Console.Out.WriteLine("DiscordBot Connected");
 
             await Task.Delay(-1);
         }

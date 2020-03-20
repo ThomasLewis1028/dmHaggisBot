@@ -53,6 +53,9 @@ namespace SWNUniverseGenerator
 
         public Universe CreateStars(Universe universe, StarDefaultSettings starDefaultSettings)
         {
+            if (universe.Grid == null)
+                throw new FileNotFoundException("No grid has been set for the universe");
+            
             universe = new StarCreation().AddStars(universe, starDefaultSettings);
             SerializeData(universe);
             return universe;
@@ -60,6 +63,9 @@ namespace SWNUniverseGenerator
         
         public Universe CreatePlanets(Universe universe, PlanetDefaultSettings planetDefaultSettings)
         {
+            if (universe.Stars == null)
+                throw new FileNotFoundException("No stars have been created for the universe");
+
             universe = new PlanetCreation().AddPlanets(universe, planetDefaultSettings);
             SerializeData(universe);
             return universe;
@@ -67,6 +73,9 @@ namespace SWNUniverseGenerator
 
         public Universe CreateCharacter(Universe universe, CharacterDefaultSettings characterDefaultSettings)
         {
+            if(universe.Planets == null)
+                throw new FileNotFoundException("No planets have been created for the universe");
+            
             universe = new CharCreation().AddCharacter(universe, characterDefaultSettings);
             SerializeData(universe);
             return universe;

@@ -51,7 +51,6 @@ namespace SWNUniverseGenerator
                 pCount++;
             }
             
-
             return universe;
         }
         

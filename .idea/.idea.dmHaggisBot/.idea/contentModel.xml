@@ -37,6 +37,7 @@
           <e p="system.xls" t="Include" />
           <e p="worldTags.json" t="Include" />
         </e>
+        <e p="DefaultSettings" t="Include" />
         <e p="Grid.cs" t="Include" />
         <e p="IDGen.cs" t="Include" />
         <e p="IEntity.cs" t="Include" />
@@ -53,6 +54,8 @@
           </e>
         </e>
         <e p="Planet.cs" t="Include" />
+        <e p="PlanetCreation.cs" t="Include" />
+        <e p="PlanetDefaultSettings.cs" t="Include" />
         <e p="Problem.cs" t="Include" />
         <e p="ProblemInfo.cs" t="Include" />
         <e p="ReadFromDescriptions" t="Include">

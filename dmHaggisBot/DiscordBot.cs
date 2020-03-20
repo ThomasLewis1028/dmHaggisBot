@@ -20,17 +20,17 @@ namespace dmHaggisBot
         private static Creation _creation;
 
         //Properties file
-        private static readonly JObject prop =
+        private static readonly JObject Prop =
             JObject.Parse(
                 File.ReadAllText(@"properties.json"));
 
-        private static readonly string token = (string) prop.GetValue("token");
-        private readonly Regex charChreate = new Regex("^(charCreate|createChar|cc)($|.*)", RegexOptions.IgnoreCase);
-        private readonly Regex starCreate = new Regex("^(starCreate|createStar|sc|cs)($|.*)", RegexOptions.IgnoreCase);
-        private readonly Regex planCreate = new Regex("^(planetCreate|createPlanet|pc|cp)($|.*)", RegexOptions.IgnoreCase);
-        private readonly Regex univChreate = new Regex("^(univCreate|createUniv|uc|cu)($|.*)", RegexOptions.IgnoreCase);
-        private readonly Regex univLoad = new Regex("^(univLoad|loadUniv|ul|lu)($|.*)", RegexOptions.IgnoreCase);
-        private readonly Regex dataSearch = new Regex("^(dataSearch|searchData|ds|sd)($|.*)", RegexOptions.IgnoreCase);
+        private static readonly string Token = (string) Prop.GetValue("token");
+        private readonly Regex _charChreate = new Regex("^(charCreate|createChar|cc)($|.*)", RegexOptions.IgnoreCase);
+        private readonly Regex _starCreate = new Regex("^(starCreate|createStar|sc|cs)($|.*)", RegexOptions.IgnoreCase);
+        private readonly Regex _planCreate = new Regex("^(planetCreate|createPlanet|pc|cp)($|.*)", RegexOptions.IgnoreCase);
+        private readonly Regex _univChreate = new Regex("^(univCreate|createUniv|uc|cu)($|.*)", RegexOptions.IgnoreCase);
+        private readonly Regex _univLoad = new Regex("^(univLoad|loadUniv|ul|lu)($|.*)", RegexOptions.IgnoreCase);
+        private readonly Regex _dataSearch = new Regex("^(dataSearch|searchData|ds|sd)($|.*)", RegexOptions.IgnoreCase);
         private DiscordSocketClient _client;
         private IConfiguration _config;
         private Creation creation;
@@ -56,7 +56,7 @@ namespace dmHaggisBot
             _client.MessageReceived += MessageReceived;
             _client.ReactionAdded += ReactionAdded;
 
-            await _client.LoginAsync(TokenType.Bot, token);
+            await _client.LoginAsync(TokenType.Bot, Token);
             await _client.StartAsync();
             await _client.SetGameAsync("No Universe Loaded");
 
@@ -70,7 +70,7 @@ namespace dmHaggisBot
             if (sm.Author.IsBot)
                 return;
 
-            if (charChreate.IsMatch(sm.Content))
+            if (_charChreate.IsMatch(sm.Content))
             {
                 if (_universe != null)
                     CreateChar(sm);
@@ -78,13 +78,13 @@ namespace dmHaggisBot
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
 
-            if (univChreate.IsMatch(sm.Content))
+            if (_univChreate.IsMatch(sm.Content))
                 CreateUniv(sm);
 
-            if (univLoad.IsMatch(sm.Content))
+            if (_univLoad.IsMatch(sm.Content))
                 LoadUniv(sm);
 
-            if (starCreate.IsMatch(sm.Content))
+            if (_starCreate.IsMatch(sm.Content))
             {
                 if (_universe != null)
                     CreateStar(sm);
@@ -92,7 +92,7 @@ namespace dmHaggisBot
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
             
-            if (planCreate.IsMatch(sm.Content))
+            if (_planCreate.IsMatch(sm.Content))
             {
                 if (_universe != null)
                     CreatePlanet(sm);
@@ -100,7 +100,7 @@ namespace dmHaggisBot
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
 
-            if (dataSearch.IsMatch(sm.Content))
+            if (_dataSearch.IsMatch(sm.Content))
             {
                 if (_universe != null)
                     SearchData(sm);
@@ -114,7 +114,7 @@ namespace dmHaggisBot
         {
             bool up = true;
 
-            if (!dataSearch.IsMatch(sr.Message.ToString()))
+            if (!_dataSearch.IsMatch(sr.Message.ToString()))
                 return;
             
             if (ComputeSha256Hash(sr.Emote.Name) == "8f9628264c08fdeade2ff56f7ff8fb0d893fc8a6c01328b9aa05aab780f22016")

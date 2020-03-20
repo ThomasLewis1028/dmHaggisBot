@@ -20,6 +20,7 @@ namespace SWNUniverseGenerator
 
             var worldInfo = LoadWorldInfo();
             var starData = LoadStarData();
+            var probData = LoadProblemData();
 
             var starLen = starData.Stars.Count;
             var planLen = starData.Planets.Count;
@@ -68,6 +69,8 @@ namespace SWNUniverseGenerator
                     planet.Origin = worldInfo.OWOrigins[rand.Next(0, 8)];
                     planet.Relationship = worldInfo.OWRelationships[rand.Next(0, 8)];
                     planet.Contact = worldInfo.OWContacts[rand.Next(0, 8)];
+                    
+                    
 
                     universe.Planets.Add(planet);
                     pCount++;
@@ -81,7 +84,7 @@ namespace SWNUniverseGenerator
             return universe;
         }
 
-        private static WorldInfo LoadWorldInfo()
+        private WorldInfo LoadWorldInfo()
         {
             var tags =
                 JObject.Parse(
@@ -97,6 +100,15 @@ namespace SWNUniverseGenerator
                     File.ReadAllText(@"Data\StarData.json"));
 
             return JsonConvert.DeserializeObject<StarData>(charData.ToString());
+        }
+
+        private ProblemInfo LoadProblemData()
+        {
+            var probData =
+                JObject.Parse(
+                    File.ReadAllText(@"Data\problemData.json"));
+
+            return JsonConvert.DeserializeObject<ProblemInfo>(probData.ToString());
         }
     }
 }

@@ -32,6 +32,7 @@
         <e p="Data" t="Include">
           <e p="characterData.json" t="Include" />
           <e p="pointsOfInterest.json" t="Include" />
+          <e p="problemData.json" t="Include" />
           <e p="StarData.json" t="Include" />
           <e p="system.xls" t="Include" />
           <e p="worldTags.json" t="Include" />
@@ -52,6 +53,8 @@
           </e>
         </e>
         <e p="Planet.cs" t="Include" />
+        <e p="Problem.cs" t="Include" />
+        <e p="ProblemInfo.cs" t="Include" />
         <e p="ReadFromDescriptions" t="Include">
           <e p="SetDataFromReader.cs" t="Include" />
           <e p="WorldTags.cs" t="Include" />

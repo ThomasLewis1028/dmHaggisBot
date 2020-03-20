@@ -17,5 +17,6 @@ namespace SWNUniverseGenerator
         public List<Star> Stars { get; set; }
         public List<Planet> Planets { get; set; }
         public List<Character> Characters { get; set; }
+        public List<Problem> Problems { get; set; }
     }
 }

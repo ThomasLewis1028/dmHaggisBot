@@ -17,6 +17,8 @@ namespace SWNUniverseGenerator
                 id = "U-" + id;
             else if (item is City)
                 id = "C-" + id;
+            else if (item is Problem)
+                id = "Q-" + id;
             else
                 id = "Z-" + id;
 

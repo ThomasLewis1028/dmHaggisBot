@@ -57,6 +57,13 @@ namespace SWNUniverseGenerator
             SerializeData(universe);
             return universe;
         }
+        
+        public Universe CreatePlanets(Universe universe, PlanetDefaultSettings planetDefaultSettings)
+        {
+            universe = new PlanetCreation().AddPlanets(universe, planetDefaultSettings);
+            SerializeData(universe);
+            return universe;
+        }
 
         public Universe CreateCharacter(Universe universe, CharacterDefaultSettings characterDefaultSettings)
         {

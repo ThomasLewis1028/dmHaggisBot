@@ -27,6 +27,7 @@ namespace dmHaggisBot
         private static readonly string token = (string) prop.GetValue("token");
         private readonly Regex charChreate = new Regex("^(charCreate|createChar|cc)($|.*)", RegexOptions.IgnoreCase);
         private readonly Regex starCreate = new Regex("^(starCreate|createStar|sc|cs)($|.*)", RegexOptions.IgnoreCase);
+        private readonly Regex planCreate = new Regex("^(planetCreate|createPlanet|pc|cp)($|.*)", RegexOptions.IgnoreCase);
         private readonly Regex univChreate = new Regex("^(univCreate|createUniv|uc|cu)($|.*)", RegexOptions.IgnoreCase);
         private readonly Regex univLoad = new Regex("^(univLoad|loadUniv|ul|lu)($|.*)", RegexOptions.IgnoreCase);
         private readonly Regex dataSearch = new Regex("^(dataSearch|searchData|ds|sd)($|.*)", RegexOptions.IgnoreCase);
@@ -87,6 +88,14 @@ namespace dmHaggisBot
             {
                 if (_universe != null)
                     CreateStar(sm);
+                else
+                    await sm.Channel.SendMessageAsync("No universe file loaded");
+            }
+            
+            if (planCreate.IsMatch(sm.Content))
+            {
+                if (_universe != null)
+                    CreatePlanet(sm);
                 else
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
@@ -230,10 +239,27 @@ namespace dmHaggisBot
             var starDef = new StarDefaultSettings();
 
             starDef.StarCount = s;
-            starDef.PlanetRange = pr;
 
             _universe = _creation.CreateStars(_universe, starDef);
-            await sm.Channel.SendMessageAsync(s + " stars created with varying planets in " + _universe.Name);
+            await sm.Channel.SendMessageAsync(s + " stars created in " + _universe.Name);
+            SetGameStatus();
+        }
+        
+        public async Task CreatePlanet(SocketMessage sm)
+        {
+            var r = ParseCommand("r", sm.Content);
+            var pr = string.IsNullOrEmpty(r)
+                ? new[] {"", ""}
+                : r.Split(" ").Length == 1
+                    ? new[] {r, r}
+                    : r.Split(" ");
+
+            var planDef = new PlanetDefaultSettings();
+
+            planDef.PlanetRange = pr;
+
+            _universe = _creation.CreatePlanets(_universe, planDef);
+            await sm.Channel.SendMessageAsync("Up to " + pr[1] + " planets created for each star" + _universe.Name);
             SetGameStatus();
         }
 

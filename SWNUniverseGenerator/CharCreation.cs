@@ -35,11 +35,11 @@ namespace SWNUniverseGenerator
 
                 var firstNameList = gender == 0 ? charData.MaleName : charData.FemaleName;
                 
-                var model = new StringMarkovNames(1);
-                model.SplitTokens("");
-                model.Learn(firstNameList);
-                
-                Console.WriteLine(model.Walk().First());
+                // var model = new StringMarkovNames(1);
+                // model.SplitTokens("");
+                // model.Learn(firstNameList);
+                //
+                // Console.WriteLine(model.Walk().First());
                 
                 var firstCount = firstNameList.Count;
                 var lastCount = charData.LastName.Count;

@@ -1,11 +1,12 @@
-﻿using Discord;
+﻿using System.Linq;
+using Discord;
 using SWNUniverseGenerator;
 
 namespace dmHaggisBot
 {
     internal class GenerateEmbeds
     {
-        public static Embed CharacterEmbed(Character character)
+        public static Embed CharacterEmbed(Universe universe, Character character)
         {
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.DarkGrey);
@@ -17,8 +18,8 @@ namespace dmHaggisBot
             eb.AddField("Hair Color: ", character.HairCol);
             eb.AddField("Hair Style: ", character.HairStyle);
             eb.AddField("Eye Color: ", character.EyeCol);
-            eb.AddField("Birth Planet ID: ", character.BirthPlanet);
-            eb.AddField("Current Location ID: ", character.CurrentLocation);
+            eb.AddField("Birth Planet: ", character.BirthPlanet + " - " + universe.Planets.Single(a => a.ID == character.BirthPlanet).Name);
+            eb.AddField("Current Location: ", character.CurrentLocation + " - " + universe.Planets.Single(a => a.ID == character.CurrentLocation).Name);
 
             return eb.Build();
         }
@@ -35,7 +36,8 @@ namespace dmHaggisBot
             foreach (Planet p in universe.Planets.FindAll(a => a.StarID == star.ID))
                 planets += (p.ID + " - " + p.Name + "\n");
 
-            eb.AddField("Planets", planets);
+            if (!string.IsNullOrEmpty(planets)) 
+                eb.AddField("Planets", planets);
 
             return eb.Build();
         }
@@ -47,7 +49,7 @@ namespace dmHaggisBot
             eb.Title = planet.ID;
             eb.AddField("Name: ", planet.Name);
             eb.AddField("Star: ", planet.StarID + " - " +
-                                  universe.Stars.Find(a => a.ID == planet.StarID).Name);
+                                  universe.Stars.Single(a => a.ID == planet.StarID).Name);
 
             return eb.Build();
         }

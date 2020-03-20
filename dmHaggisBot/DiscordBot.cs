@@ -67,7 +67,6 @@ namespace dmHaggisBot
 
         public async Task MessageReceived(SocketMessage sm)
         {
-            Console.Out.WriteLine(sm.Content);
             if (sm.Author.IsBot)
                 return;
 
@@ -120,9 +119,10 @@ namespace dmHaggisBot
             var results = ParsePagination(sr.Message.ToString(), up);
             var searchDefaultSettings = results.Item1;
             var message = results.Item2;
-
             
             await SearchData(sr.Channel, message, searchDefaultSettings);
+            
+            sr.Channel.DeleteMessageAsync(sr.Message.Value, RequestOptions.Default);
         }
 
         public static (SearchDefaultSettings, string) ParsePagination(String message, bool up)
@@ -291,7 +291,7 @@ namespace dmHaggisBot
             if (results.Result != null)
             {
                 if (results.Result.GetType() == typeof(Character))
-                    embeds.Add(GenerateEmbeds.CharacterEmbed((Character) results.Result));
+                    embeds.Add(GenerateEmbeds.CharacterEmbed(_universe, (Character) results.Result));
                 else if (results.Result.GetType() == typeof(Planet))
                     embeds.Add(GenerateEmbeds.PlanetEmbed(_universe, (Planet) results.Result));
                 else if (results.Result.GetType() == typeof(Star))

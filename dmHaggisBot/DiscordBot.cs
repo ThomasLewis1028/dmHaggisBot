@@ -52,6 +52,7 @@ namespace dmHaggisBot
         public async Task MainAsync()
         {
             var _config = new DiscordSocketConfig {MessageCacheSize = 100};
+            // _client.Log += message => Console.Out.WriteLine();
             _client = new DiscordSocketClient(_config);
             _client.MessageReceived += MessageReceived;
             _client.ReactionAdded += ReactionAdded;
@@ -125,7 +126,7 @@ namespace dmHaggisBot
             sr.Channel.DeleteMessageAsync(sr.Message.Value, RequestOptions.Default);
         }
 
-        public static (SearchDefaultSettings, string) ParsePagination(String message, bool up)
+        public (SearchDefaultSettings, string) ParsePagination(String message, bool up)
         {
             var id = ParseCommand("id", message);
             var n = ParseCommand("n", message);
@@ -147,7 +148,7 @@ namespace dmHaggisBot
             return (searchDef, message);
         }
 
-        public async void CreateChar(SocketMessage sm)
+        public async Task CreateChar(SocketMessage sm)
         {
             var a = ParseCommand("a", sm.Content);
             var ar = string.IsNullOrEmpty(a)
@@ -187,11 +188,9 @@ namespace dmHaggisBot
 
             await sm.Channel.SendMessageAsync(charDef.Count + " new character(s) created in " + _universe.Name);
             SetGameStatus();
-
-            await Task.Delay(-1);
         }
 
-        public async void CreateUniv(SocketMessage sm)
+        public async Task CreateUniv(SocketMessage sm)
         {
             var g = ParseCommand("g", sm.Content);
             var n = ParseCommand("n", sm.Content);
@@ -218,11 +217,9 @@ namespace dmHaggisBot
             {
                 await sm.Channel.SendMessageAsync(e.ToString());
             }
-
-            await Task.Delay(-1);
         }
 
-        public async void CreateStar(SocketMessage sm)
+        public async Task CreateStar(SocketMessage sm)
         {
             var s = ParseCommand("s", sm.Content);
             var p = ParseCommand("p", sm.Content);
@@ -240,11 +237,9 @@ namespace dmHaggisBot
             _universe = _creation.CreateStars(_universe, starDef);
             await sm.Channel.SendMessageAsync(s + " stars created with varying planets in " + _universe.Name);
             SetGameStatus();
-
-            await Task.Delay(-1);
         }
 
-        public async void LoadUniv(SocketMessage sm)
+        public async Task LoadUniv(SocketMessage sm)
         {
             var n = ParseCommand("n", sm.Content);
 
@@ -259,11 +254,9 @@ namespace dmHaggisBot
             {
                 await sm.Channel.SendMessageAsync(e.ToString());
             }
-
-            await Task.Delay(-1);
         }
 
-        public static async void SearchData(SocketMessage sm)
+        public async Task SearchData(SocketMessage sm)
         {
             var id = ParseCommand("id", sm.Content);
             var n = ParseCommand("n", sm.Content);
@@ -278,11 +271,9 @@ namespace dmHaggisBot
             searchDef.Tag = t;
 
             await SearchData(sm.Channel, sm.Content, searchDef);
-
-            await Task.Delay(-1);
         }
 
-        private static async Task SearchData(ISocketMessageChannel sc, string sm,
+        private async Task SearchData(ISocketMessageChannel sc, string sm,
             SearchDefaultSettings searchDefaultSettings)
         {
             var results = _creation.SearchUniverse(_universe, searchDefaultSettings);
@@ -306,7 +297,7 @@ namespace dmHaggisBot
             }
         }
 
-        private static string ParseCommand(string argName, string argVal)
+        private string ParseCommand(string argName, string argVal)
         {
             var start = argVal.IndexOf(" -" + argName + " ") + 1;
             if (start == 0)
@@ -321,7 +312,7 @@ namespace dmHaggisBot
             return cmd.Trim();
         }
 
-        private async void SetGameStatus()
+        private async Task SetGameStatus()
         {
             await _client.SetGameAsync(_universe.Name + " Loaded - " +
                                        _universe.Stars.Count + " Stars - " +
@@ -329,7 +320,7 @@ namespace dmHaggisBot
                                        _universe.Characters.Count + " Characters");
         }
         
-        static string ComputeSha256Hash(string rawData)
+        string ComputeSha256Hash(string rawData)
         {
             // Create a SHA256   
             using (SHA256 sha256Hash = SHA256.Create())

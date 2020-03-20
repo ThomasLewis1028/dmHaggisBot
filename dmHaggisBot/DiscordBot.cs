@@ -8,8 +8,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using Discord.Commands;
-using Discord.Rest;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator;

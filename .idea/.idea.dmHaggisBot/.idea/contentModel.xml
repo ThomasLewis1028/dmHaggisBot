@@ -42,6 +42,8 @@
         <e p="ILocation.cs" t="Include" />
         <e p="Item.cs" t="Include" />
         <e p="Job.cs" t="Include" />
+        <e p="NameGenerator.cs" t="Include" />
+        <e p="NameGenerator.js" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
@@ -57,6 +59,7 @@
         </e>
         <e p="Readme.md" t="Include" />
         <e p="SearchDefaultSettings.cs" t="Include" />
+        <e p="SearchResult.cs" t="Include" />
         <e p="Star.cs" t="Include" />
         <e p="StarCreation.cs" t="Include" />
         <e p="StarData.cs" t="Include" />

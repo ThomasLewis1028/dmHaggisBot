@@ -35,10 +35,9 @@ namespace SWNUniverseGenerator
 
                 var firstNameList = gender == 0 ? charData.MaleName : charData.FemaleName;
                 
-                var model = new StringMarkovNames();
+                var model = new StringMarkovNames(1);
                 model.SplitTokens("");
                 model.Learn(firstNameList);
-                
                 
                 Console.WriteLine(model.Walk().First());
                 
@@ -67,7 +66,7 @@ namespace SWNUniverseGenerator
                 character.Age = characterDefaultSettings.Age == null || characterDefaultSettings.Age.Length == 0 ||
                                 string.IsNullOrEmpty(characterDefaultSettings.Age[0]) ||
                                 string.IsNullOrEmpty(characterDefaultSettings.Age[1])
-                    ? rand.Next(15, 46) + rand.Next(0, 46)
+                    ? rand.Next(15, 31) + rand.Next(0, 31) + rand.Next(0, 31)
                     : rand.Next(int.Parse(characterDefaultSettings.Age[0]), int.Parse(characterDefaultSettings.Age[1]));
                 character.Gender = (Character.GenderEnum) gender;
                 character.HairCol = string.IsNullOrEmpty(characterDefaultSettings.HairCol)

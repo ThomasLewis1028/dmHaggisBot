@@ -5,6 +5,11 @@ namespace SWNUniverseGenerator
 {
     public class StringMarkovNames : StringMarkov
     {
+        
+        public StringMarkovNames(int level = 2)
+            : base(level)
+        {
+        }
         public override IEnumerable<string> SplitTokens(string input)
         {
             if (input == null)

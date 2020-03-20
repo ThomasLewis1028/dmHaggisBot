@@ -40,7 +40,14 @@ namespace SWNUniverseGenerator
                     continue;
 
                 var pCount = 0;
-                var pMax = rand.Next(int.Parse(starDefaultSettings.PlanetRange[0]),
+                
+                
+                
+                var pMax = starDefaultSettings.PlanetRange == null || starDefaultSettings.PlanetRange.Length == 0 ||
+                           string.IsNullOrEmpty(starDefaultSettings.PlanetRange[0]) ||
+                           string.IsNullOrEmpty(starDefaultSettings.PlanetRange[1])
+                    ? 3
+                    : rand.Next(int.Parse(starDefaultSettings.PlanetRange[0]),
                     int.Parse(starDefaultSettings.PlanetRange[1]) + 1);
                 while (pCount < pMax)
                 {

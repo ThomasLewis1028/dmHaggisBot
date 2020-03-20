@@ -8,6 +8,7 @@ namespace SWNUniverseGenerator
         public static void GenerateID<T>(T item) where T : IEntity
         {
             var id = Guid.NewGuid().ToString().Substring(0, 8);
+            
             if (item is Planet)
                 id = "P-" + id;
             else if (item is Star)

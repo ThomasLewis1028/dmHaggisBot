@@ -7,6 +7,7 @@
 
     <ItemGroup>
       <PackageReference Include="Discord.Net" Version="2.1.1" />
+      <PackageReference Include="Discord.Net.Commands" Version="2.1.1" />
       <PackageReference Include="ExcelDataReader" Version="3.6.0" />
       <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
       <PackageReference Include="Json.Net" Version="1.0.18" />

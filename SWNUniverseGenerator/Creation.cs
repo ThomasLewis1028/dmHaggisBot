@@ -65,8 +65,7 @@ namespace SWNUniverseGenerator
             return universe;
         }
 
-        //TODO: FIX THIS
-        public List<IEntity> SearchUniverse(Universe universe, SearchDefaultSettings searchDefaultSettings)
+        public SearchResult SearchUniverse(Universe universe, SearchDefaultSettings searchDefaultSettings)
         {
             var id = string.IsNullOrEmpty(searchDefaultSettings.ID)
                 ? null
@@ -77,8 +76,8 @@ namespace SWNUniverseGenerator
                 : searchDefaultSettings.Name.Split(", ");
 
             var c = string.IsNullOrEmpty(searchDefaultSettings.Count)
-                ? 1
-                : Int32.Parse(searchDefaultSettings.Count);
+                ? 0
+                : Int32.Parse(searchDefaultSettings.Count) - 1;
 
             var t = string.IsNullOrEmpty(searchDefaultSettings.Tag)
                 ? null
@@ -89,7 +88,6 @@ namespace SWNUniverseGenerator
             var planets = new List<Planet>();
             var stars = new List<Star>();
             var characters = new List<Character>();
-
 
             if (id != null)
             {
@@ -110,86 +108,19 @@ namespace SWNUniverseGenerator
                 ? results.Concat(planets.ToList<IEntity>()).ToList()
                 : results;
             results = string.IsNullOrEmpty(t) || t == "s"
-                ?results.Concat(stars.ToList<IEntity>()).ToList()
+                ? results.Concat(stars.ToList<IEntity>()).ToList()
                 : results;
             results = string.IsNullOrEmpty(t) || t == "ch"
                 ? results.Concat(characters.ToList<IEntity>()).ToList()
                 : results;
 
-            return results.Take(c).ToList();
-        }
-
-        public List<Character> SearchCharacters(Universe universe, SearchDefaultSettings searchDefaultSettings)
-        {
-            var id = string.IsNullOrEmpty(searchDefaultSettings.ID)
-                ? null
-                : searchDefaultSettings.ID.Split(", ");
-
-            var n = string.IsNullOrEmpty(searchDefaultSettings.Name)
-                ? null
-                : searchDefaultSettings.Name.Split(", ");
-
-            var c = string.IsNullOrEmpty(searchDefaultSettings.Count)
-                ? 1
-                : Int32.Parse(searchDefaultSettings.Count);
-
-            var characters = new List<Character>();
-
-            if (id != null)
-                characters = characters.Concat(universe.Characters.FindAll(a => id.Contains(a.ID))).ToList();
-            if (n != null)
-                characters = characters.Concat(universe.Characters.FindAll(a =>
-                    n.Contains(a.First) || n.Contains(a.Last) || n.Contains(a.Name))).ToList();
-
-            return characters;
-        }
-
-        public List<Planet> SearchPlanets(Universe universe, SearchDefaultSettings searchDefaultSettings)
-        {
-            var id = string.IsNullOrEmpty(searchDefaultSettings.ID)
-                ? null
-                : searchDefaultSettings.ID.Split(", ");
-
-            var n = string.IsNullOrEmpty(searchDefaultSettings.Name)
-                ? null
-                : searchDefaultSettings.Name.Split(", ");
-
-            var c = string.IsNullOrEmpty(searchDefaultSettings.Count)
-                ? 1
-                : Int32.Parse(searchDefaultSettings.Count);
-
-            var planets = new List<Planet>();
-
-            if (id != null)
-                planets = universe.Planets.FindAll(a => id.Contains(a.ID));
-            if (n != null)
-                planets = universe.Planets.FindAll(a => n.Contains(a.Name));
-
-            return planets;
-        }
-
-        public List<Star> SearchStars(Universe universe, SearchDefaultSettings searchDefaultSettings)
-        {
-            var id = string.IsNullOrEmpty(searchDefaultSettings.ID)
-                ? null
-                : searchDefaultSettings.ID.Split(", ");
-
-            var n = string.IsNullOrEmpty(searchDefaultSettings.Name)
-                ? null
-                : searchDefaultSettings.Name.Split(", ");
-
-            var c = string.IsNullOrEmpty(searchDefaultSettings.Count)
-                ? 1
-                : Int32.Parse(searchDefaultSettings.Count);
-
-            var stars = new List<Star>();
-
-            if (id != null)
-                stars = universe.Stars.FindAll(a => id.Contains(a.ID));
-            if (n != null)
-                stars = universe.Stars.FindAll(a => n.Contains(a.Name));
-
-            return stars;
+            if (results.Count == 0 || results.Count <= c || results.Count < 0)
+            {
+                return new SearchResult(null, 0, 0);
+            }
+            
+            return new SearchResult(results[c], c + 1, results.Count);
+            
         }
 
         public Universe LoadUniverse(string name)

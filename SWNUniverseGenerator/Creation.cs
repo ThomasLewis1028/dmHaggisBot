@@ -38,12 +38,11 @@ namespace SWNUniverseGenerator
                 : universeDefaultSettings.Name;
 
             Grid grid;
-            if (string.IsNullOrEmpty(universeDefaultSettings.Grid))
+            if (universeDefaultSettings.Grid == null)
                 grid = new Grid(8, 10);
             else
             {
-                var g = universeDefaultSettings.Grid.Split(" ");
-                grid = new Grid(int.Parse(g[0]), int.Parse(g[1]));
+                grid = universeDefaultSettings.Grid;
             }
 
             var universe = new Universe(name, grid);
@@ -63,7 +62,7 @@ namespace SWNUniverseGenerator
         
         public Universe CreatePlanets(Universe universe, PlanetDefaultSettings planetDefaultSettings)
         {
-            if (universe.Stars == null)
+            if (universe.Stars == null || universe.Stars.Count == 0)
                 throw new FileNotFoundException("No stars have been created for the universe");
 
             universe = new PlanetCreation().AddPlanets(universe, planetDefaultSettings);
@@ -73,7 +72,7 @@ namespace SWNUniverseGenerator
 
         public Universe CreateCharacter(Universe universe, CharacterDefaultSettings characterDefaultSettings)
         {
-            if(universe.Planets == null)
+            if(universe.Planets == null || universe.Planets.Count == 0)
                 throw new FileNotFoundException("No planets have been created for the universe");
             
             universe = new CharCreation().AddCharacter(universe, characterDefaultSettings);
@@ -91,9 +90,9 @@ namespace SWNUniverseGenerator
                 ? null
                 : searchDefaultSettings.Name.Split(", ");
 
-            var c = string.IsNullOrEmpty(searchDefaultSettings.Count)
+            var c = searchDefaultSettings.Count == 0
                 ? 0
-                : Int32.Parse(searchDefaultSettings.Count) - 1;
+                : searchDefaultSettings.Count - 1;
 
             var t = string.IsNullOrEmpty(searchDefaultSettings.Tag)
                 ? null

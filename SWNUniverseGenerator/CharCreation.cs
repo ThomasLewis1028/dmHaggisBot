@@ -21,7 +21,7 @@ namespace SWNUniverseGenerator
             
             if (universe.Planets != null)
                  planets = universe.Planets.ToList();
-            
+
             var charData = LoadCharData();
 
             var cCount = 0;
@@ -64,10 +64,10 @@ namespace SWNUniverseGenerator
                 IDGen.GenerateID(character);
                 
                 character.Age = characterDefaultSettings.Age == null || characterDefaultSettings.Age.Length == 0 ||
-                                string.IsNullOrEmpty(characterDefaultSettings.Age[0]) ||
-                                string.IsNullOrEmpty(characterDefaultSettings.Age[1])
+                                characterDefaultSettings.Age[0] == -1 ||
+                                characterDefaultSettings.Age[1] == -1
                     ? rand.Next(15, 31) + rand.Next(0, 31) + rand.Next(0, 31)
-                    : rand.Next(int.Parse(characterDefaultSettings.Age[0]), int.Parse(characterDefaultSettings.Age[1]));
+                    : rand.Next(characterDefaultSettings.Age[0], characterDefaultSettings.Age[1]);
                 character.Gender = (Character.GenderEnum) gender;
                 character.HairCol = string.IsNullOrEmpty(characterDefaultSettings.HairCol)
                     ? charData.HairColor[rand.Next(0, hairColorCount)]

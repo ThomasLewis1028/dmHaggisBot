@@ -8,7 +8,7 @@ namespace SWNUniverseGenerator
         
         public String Name { get; set; }
         
-        public String Count { get; set; }
+        public Int32 Count { get; set; }
         
         public String Tag { get; set; }
     }

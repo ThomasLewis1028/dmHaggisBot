@@ -27,8 +27,13 @@ namespace dmHaggisBot
         private static readonly string Token = (string) Prop.GetValue("token");
         private readonly Regex _charChreate = new Regex("^(charCreate|createChar|cc)($|.*)", RegexOptions.IgnoreCase);
         private readonly Regex _starCreate = new Regex("^(starCreate|createStar|sc|cs)($|.*)", RegexOptions.IgnoreCase);
-        private readonly Regex _planCreate = new Regex("^(planetCreate|createPlanet|pc|cp)($|.*)", RegexOptions.IgnoreCase);
-        private readonly Regex _univChreate = new Regex("^(univCreate|createUniv|uc|cu)($|.*)", RegexOptions.IgnoreCase);
+
+        private readonly Regex _planCreate =
+            new Regex("^(planetCreate|createPlanet|pc|cp)($|.*)", RegexOptions.IgnoreCase);
+
+        private readonly Regex _univChreate =
+            new Regex("^(univCreate|createUniv|uc|cu)($|.*)", RegexOptions.IgnoreCase);
+
         private readonly Regex _univLoad = new Regex("^(univLoad|loadUniv|ul|lu)($|.*)", RegexOptions.IgnoreCase);
         private readonly Regex _dataSearch = new Regex("^(dataSearch|searchData|ds|sd)($|.*)", RegexOptions.IgnoreCase);
         private DiscordSocketClient _client;
@@ -91,7 +96,7 @@ namespace dmHaggisBot
                 else
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
-            
+
             if (_planCreate.IsMatch(sm.Content))
             {
                 if (_universe != null)
@@ -116,7 +121,7 @@ namespace dmHaggisBot
 
             if (!_dataSearch.IsMatch(sr.Message.ToString()))
                 return;
-            
+
             if (ComputeSha256Hash(sr.Emote.Name) == "8f9628264c08fdeade2ff56f7ff8fb0d893fc8a6c01328b9aa05aab780f22016")
                 up = true;
 
@@ -127,74 +132,10 @@ namespace dmHaggisBot
             var results = ParsePagination(sr.Message.ToString(), up);
             var searchDefaultSettings = results.Item1;
             var message = results.Item2;
-            
+
             await SearchData(sr.Channel, message, searchDefaultSettings);
-            
+
             sr.Channel.DeleteMessageAsync(sr.Message.Value, RequestOptions.Default);
-        }
-
-        public (SearchDefaultSettings, string) ParsePagination(String message, bool up)
-        {
-            var id = ParseCommand("id", message);
-            var n = ParseCommand("n", message);
-            var c = ParseCommand("c", message);
-            var t = ParseCommand("t", message);
-
-            Match match = Regex.Match(message, @"\s\-\s\[\d+\,\s\d+\]$");
-            if (match.Success)
-            {
-                var start = match.Index;
-                var cs = message.Substring(start);
-                var cn = message.Substring(start).Replace(" - [", "").Replace("]", "").Split(", ")[0].Trim();
-                c = (Int32.Parse(cn) + (up ? 1 : -1)).ToString();
-                message = message.Replace(cs, "");
-            }
-
-            SearchDefaultSettings searchDef = new SearchDefaultSettings {ID = id, Name = n, Count = c, Tag = t};
-
-            return (searchDef, message);
-        }
-
-        public async Task CreateChar(SocketMessage sm)
-        {
-            var a = ParseCommand("a", sm.Content);
-            var ar = string.IsNullOrEmpty(a)
-                ? new[] {"", ""}
-                : a.Split(" ").Length == 1
-                    ? new[] {a, a}
-                    : a.Split(" ");
-            var c = ParseCommand("c", sm.Content);
-            var g = ParseCommand("g", sm.Content);
-            var f = ParseCommand("f", sm.Content);
-            var l = ParseCommand("l", sm.Content);
-            var h = ParseCommand("h", sm.Content);
-            var hc = ParseCommand("hc", sm.Content);
-            var ec = ParseCommand("ec", sm.Content);
-            var t = ParseCommand("t", sm.Content);
-
-            // await sm.Channel.SendMessageAsync(sb.ToString());
-            var charDef = new CharacterDefaultSettings();
-
-            charDef.Count = c != "" ? int.Parse(c) : 1;
-            charDef.First = f;
-            charDef.Last = l;
-            charDef.Age = ar;
-            charDef.HairStyle = h;
-            charDef.HairCol = hc;
-            charDef.EyeCol = ec;
-            charDef.Title = t;
-
-            if (g == "0")
-                charDef.Gender = Character.GenderEnum.Male;
-            else if (g == "1")
-                charDef.Gender = Character.GenderEnum.Female;
-            else
-                charDef.Gender = Character.GenderEnum.Undefined;
-
-            _universe = _creation.CreateCharacter(_universe, charDef);
-
-            await sm.Channel.SendMessageAsync(charDef.Count + " new character(s) created in " + _universe.Name);
-            SetGameStatus();
         }
 
         public async Task CreateUniv(SocketMessage sm)
@@ -206,7 +147,11 @@ namespace dmHaggisBot
             var univDef = new UniverseDefaultSettings();
 
             univDef.Name = n;
-            univDef.Grid = g;
+            univDef.Grid = string.IsNullOrEmpty(g)
+                ? null
+                : g.Split(" ").Length == 1
+                    ? new Grid(Int32.Parse(g), Int32.Parse(g))
+                    : new Grid(Int32.Parse(g.Split(" ")[0]), Int32.Parse(g.Split(" ")[1]));
             univDef.Overwrite = o;
 
             try
@@ -225,44 +170,7 @@ namespace dmHaggisBot
                 await sm.Channel.SendMessageAsync(e.ToString());
             }
         }
-
-        public async Task CreateStar(SocketMessage sm)
-        {
-            var s = ParseCommand("s", sm.Content);
-            var p = ParseCommand("p", sm.Content);
-            var pr = string.IsNullOrEmpty(p)
-                ? new[] {"", ""}
-                : p.Split(" ").Length == 1
-                    ? new[] {p, p}
-                    : p.Split(" ");
-
-            var starDef = new StarDefaultSettings();
-
-            starDef.StarCount = s;
-
-            _universe = _creation.CreateStars(_universe, starDef);
-            await sm.Channel.SendMessageAsync(s + " stars created in " + _universe.Name);
-            SetGameStatus();
-        }
         
-        public async Task CreatePlanet(SocketMessage sm)
-        {
-            var r = ParseCommand("r", sm.Content);
-            var pr = string.IsNullOrEmpty(r)
-                ? new[] {"", ""}
-                : r.Split(" ").Length == 1
-                    ? new[] {r, r}
-                    : r.Split(" ");
-
-            var planDef = new PlanetDefaultSettings();
-
-            planDef.PlanetRange = pr;
-
-            _universe = _creation.CreatePlanets(_universe, planDef);
-            await sm.Channel.SendMessageAsync("Up to " + pr[1] + " planets created for each star" + _universe.Name);
-            SetGameStatus();
-        }
-
         public async Task LoadUniv(SocketMessage sm)
         {
             var n = ParseCommand("n", sm.Content);
@@ -276,10 +184,106 @@ namespace dmHaggisBot
             }
             catch (FileNotFoundException e)
             {
-                await sm.Channel.SendMessageAsync(e.ToString());
+                await sm.Channel.SendMessageAsync(e.Message);
             }
         }
 
+        public async Task CreateStar(SocketMessage sm)
+        {
+            var s = ParseCommand("s", sm.Content);
+
+            var starDef = new StarDefaultSettings();
+
+            starDef.StarCount = string.IsNullOrEmpty(s)
+                ? 0
+                : Int32.Parse(s);
+
+            try
+            {
+                _universe = _creation.CreateStars(_universe, starDef);
+                await sm.Channel.SendMessageAsync(s + " stars created in " + _universe.Name);
+                SetGameStatus();
+            }
+            catch (FileNotFoundException e)
+            {
+                await sm.Channel.SendMessageAsync(e.Message);
+            }
+        }
+        
+        public async Task CreatePlanet(SocketMessage sm)
+        {
+            var r = ParseCommand("r", sm.Content);
+            var pr = string.IsNullOrEmpty(r)
+                ? new[] {0, 0}
+                : r.Split(" ").Length == 1
+                    ? new[] {Int32.Parse(r), Int32.Parse(r)}
+                    : new[] {Int32.Parse(r.Split(" ")[0]), Int32.Parse(r.Split(" ")[1])};
+
+            var planDef = new PlanetDefaultSettings();
+
+            planDef.PlanetRange = pr;
+
+            try
+            {
+                _universe = _creation.CreatePlanets(_universe, planDef);
+                await sm.Channel.SendMessageAsync("Up to " + pr[1] + " planets created for each star" + _universe.Name);
+                SetGameStatus();
+            }
+            catch (FileNotFoundException e)
+            {
+                await sm.Channel.SendMessageAsync(e.Message);
+            }
+        }
+        
+        public async Task CreateChar(SocketMessage sm)
+        {
+            var a = ParseCommand("a", sm.Content);
+            var ar = string.IsNullOrEmpty(a)
+                ? new[] {-1, -1}
+                : a.Split(" ").Length == 1
+                    ? new[] {Int32.Parse(a), Int32.Parse(a),}
+                    : new[] {Int32.Parse(a.Split(" ")[0]), Int32.Parse(a.Split(" ")[1])};
+            var c = ParseCommand("c", sm.Content);
+            var g = ParseCommand("g", sm.Content);
+            var f = ParseCommand("f", sm.Content);
+            var l = ParseCommand("l", sm.Content);
+            var h = ParseCommand("h", sm.Content);
+            var hc = ParseCommand("hc", sm.Content);
+            var ec = ParseCommand("ec", sm.Content);
+            var t = ParseCommand("t", sm.Content);
+
+            // await sm.Channel.SendMessageAsync(sb.ToString());
+            var charDef = new CharacterDefaultSettings();
+
+            charDef.Count = string.IsNullOrEmpty(c) ? 1 : int.Parse(c);
+            charDef.First = f;
+            charDef.Last = l;
+            charDef.Age = ar;
+            charDef.HairStyle = h;
+            charDef.HairCol = hc;
+            charDef.EyeCol = ec;
+            charDef.Title = t;
+
+            if (g == "0")
+                charDef.Gender = Character.GenderEnum.Male;
+            else if (g == "1")
+                charDef.Gender = Character.GenderEnum.Female;
+            else
+                charDef.Gender = Character.GenderEnum.Undefined;
+
+            try
+            {
+                _universe = _creation.CreateCharacter(_universe, charDef);
+
+                await sm.Channel.SendMessageAsync(charDef.Count + " new character(s) created in " + _universe.Name);
+                SetGameStatus();
+            }
+            catch (FileNotFoundException e)
+            {
+                await sm.Channel.SendMessageAsync(e.Message);
+            }
+        }
+        
         public async Task SearchData(SocketMessage sm)
         {
             var id = ParseCommand("id", sm.Content);
@@ -291,7 +295,9 @@ namespace dmHaggisBot
 
             searchDef.ID = id;
             searchDef.Name = n;
-            searchDef.Count = c;
+            searchDef.Count = string.IsNullOrEmpty(c)
+                ? 0
+                : Int32.Parse(c);
             searchDef.Tag = t;
 
             await SearchData(sm.Channel, sm.Content, searchDef);
@@ -335,7 +341,30 @@ namespace dmHaggisBot
 
             return cmd.Trim();
         }
+        
+        public (SearchDefaultSettings, string) ParsePagination(String message, bool up)
+        {
+            var id = ParseCommand("id", message);
+            var n = ParseCommand("n", message);
+            var c = ParseCommand("c", message);
+            var t = ParseCommand("t", message);
 
+            Match match = Regex.Match(message, @"\s\-\s\[\d+\,\s\d+\]$");
+            if (match.Success)
+            {
+                var start = match.Index;
+                var cs = message.Substring(start);
+                var cn = message.Substring(start).Replace(" - [", "").Replace("]", "").Split(", ")[0].Trim();
+                c = (Int32.Parse(cn) + (up ? 1 : -1)).ToString();
+                message = message.Replace(cs, "");
+            }
+
+            SearchDefaultSettings searchDef = new SearchDefaultSettings
+                {ID = id, Name = n, Count = Int32.Parse(c), Tag = t};
+
+            return (searchDef, message);
+        }
+        
         private async Task SetGameStatus()
         {
             await _client.SetGameAsync(_universe.Name + " Loaded - " +
@@ -343,7 +372,7 @@ namespace dmHaggisBot
                                        _universe.Planets.Count + " Planets - " +
                                        _universe.Characters.Count + " Characters");
         }
-        
+
         string ComputeSha256Hash(string rawData)
         {
             // Create a SHA256   

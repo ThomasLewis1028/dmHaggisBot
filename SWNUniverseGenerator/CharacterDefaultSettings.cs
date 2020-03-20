@@ -1,4 +1,6 @@
-﻿namespace SWNUniverseGenerator
+﻿using System;
+
+namespace SWNUniverseGenerator
 {
     /// <summary>
     ///     This class holds the default values for a Character class
@@ -9,39 +11,39 @@
         /// <summary>
         ///     This value should be a string for a first name
         /// </summary>
-        public string First { get; set; }
+        public String First { get; set; }
 
         /// <summary>
         ///     This value should be a string for the last name
         /// </summary>
-        public string Last { get; set; }
+        public String Last { get; set; }
 
         /// <summary>
         ///     This value should be a range using a string.
         ///     Generally this will be between 15 and 100
         /// </summary>
-        public string[] Age { get; set; }
+        public Int32[] Age { get; set; }
 
         /// <summary>
         ///     This value should be a description of the hairstyle
         /// </summary>
-        public string HairStyle { get; set; }
+        public String HairStyle { get; set; }
 
         /// <summary>
         ///     This value should be a description of the hair color
         /// </summary>
-        public string HairCol { get; set; }
+        public String HairCol { get; set; }
 
         /// <summary>
         ///     This value should be a description of the eye color
         /// </summary>
-        public string EyeCol { get; set; }
+        public String EyeCol { get; set; }
 
         /// <summary>
         ///     This value should be a character's title
         ///     Examples: Captain, Engineer, etc
         /// </summary>
-        public string Title { get; set; }
+        public String Title { get; set; }
 
         /// <summary>
         ///     This will be an ENUM for the gender.
@@ -52,6 +54,6 @@
         /// <summary>
         ///     This value should be the number of times you will create a new character with the given values
         /// </summary>
-        public int Count { get; set; }
+        public Int32 Count { get; set; }
     }
 }

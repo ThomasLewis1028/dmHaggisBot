@@ -1,7 +1,13 @@
-﻿namespace SWNUniverseGenerator
+﻿using System;
+
+namespace SWNUniverseGenerator
 {
     public class StarDefaultSettings
     {
-        public string StarCount { get; set; }
+        public Int32 StarCount { get; set; }
+        
+        public String Name { get; set; }
+        
+        public Grid Grid { get; set;  }
     }
 }

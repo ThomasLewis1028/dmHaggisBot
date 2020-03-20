@@ -17,11 +17,11 @@ namespace SWNUniverseGenerator
             var planLen = starData.Planets.Count;
 
             var pMax = planetDefaultSettings.PlanetRange == null || planetDefaultSettings.PlanetRange.Length == 0 ||
-                       string.IsNullOrEmpty(planetDefaultSettings.PlanetRange[0]) ||
-                       string.IsNullOrEmpty(planetDefaultSettings.PlanetRange[1])
+                       planetDefaultSettings.PlanetRange[0] == 0 ||
+                       planetDefaultSettings.PlanetRange[1] == 0
                 ? 4
-                : rand.Next(int.Parse(planetDefaultSettings.PlanetRange[0]),
-                    int.Parse(planetDefaultSettings.PlanetRange[1]) + 1);
+                : rand.Next(planetDefaultSettings.PlanetRange[0], 
+                    planetDefaultSettings.PlanetRange[1] + 1);
             
             var pCount = 0;
             

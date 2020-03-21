@@ -15,6 +15,7 @@ namespace dmHaggisBot
             eb.AddField("Name: ", character.Name);
             eb.AddField("Gender: ", character.GetGender());
             eb.AddField("Age: ", character.Age);
+            eb.AddField("Title:", character.Title);
             eb.AddField("Hair Color: ", character.HairCol);
             eb.AddField("Hair Style: ", character.HairStyle);
             eb.AddField("Eye Color: ", character.EyeCol);

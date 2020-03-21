@@ -5,7 +5,7 @@ namespace SWNUniverseGenerator
     /// <summary>
     /// This class and method handles the creation of randomly generated ID for each IEntity in the Generator
     /// </summary>
-    public class IDGen
+    internal class IDGen
     {
         /// <summary>
         /// This method receives an generic IEntity item and then creates an ID based on its type and assigns it to

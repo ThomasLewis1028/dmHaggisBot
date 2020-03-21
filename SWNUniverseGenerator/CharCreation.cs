@@ -18,7 +18,7 @@ namespace SWNUniverseGenerator
         /// <param name="universe"></param>
         /// <param name="characterDefaultSettings"></param>
         /// <returns>The newly modified universe</returns>
-        public Universe AddCharacter(Universe universe, CharacterDefaultSettings characterDefaultSettings)
+        public Universe AddCharacters(Universe universe, CharacterDefaultSettings characterDefaultSettings)
         {
             // If no Characters have been created on the Universe then give it an empty list of them.
             if (universe.Characters == null)

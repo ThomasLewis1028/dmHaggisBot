@@ -21,17 +21,6 @@ namespace SWNUniverseGenerator
         //private Ship ship;
 
         /// <summary>
-        /// All Characters should have a first and last name associated with them.
-        /// </summary>
-        /// <param name="first"></param>
-        /// <param name="last"></param>
-        public Character(String first, String last)
-        {
-            First = first;
-            Last = last;
-        }
-
-        /// <summary>
         /// The unique String ID of a Character. This should be randomly generated to assure uniqueness.
         /// </summary>
         public String ID { get; set; }

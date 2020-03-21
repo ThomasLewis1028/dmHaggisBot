@@ -62,11 +62,11 @@ namespace SWNUniverseGenerator
 
                 var character = new Character(first, last);
                 
-                if (universe.Characters.Exists(a => a.Name == character.Name))
-                    continue;
-                
                 IDGen.GenerateID(character);
                 
+                if (universe.Characters.Exists(a => a.ID == character.ID))
+                    continue;
+
                 character.Age = characterDefaultSettings.Age == null || characterDefaultSettings.Age.Length == 0 ||
                                 characterDefaultSettings.Age[0] == -1 ||
                                 characterDefaultSettings.Age[1] == -1

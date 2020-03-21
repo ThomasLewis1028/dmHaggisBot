@@ -34,7 +34,6 @@
           <e p="pointsOfInterest.json" t="Include" />
           <e p="problemData.json" t="Include" />
           <e p="StarData.json" t="Include" />
-          <e p="system.xls" t="Include" />
           <e p="worldTags.json" t="Include" />
         </e>
         <e p="DefaultSettings" t="Include" />
@@ -57,6 +56,8 @@
         <e p="PlanetCreation.cs" t="Include" />
         <e p="PlanetDefaultSettings.cs" t="Include" />
         <e p="Problem.cs" t="Include" />
+        <e p="ProblemCreation.cs" t="Include" />
+        <e p="ProblemDefaultSettings.cs" t="Include" />
         <e p="ProblemInfo.cs" t="Include" />
         <e p="ReadFromDescriptions" t="Include">
           <e p="SetDataFromReader.cs" t="Include" />

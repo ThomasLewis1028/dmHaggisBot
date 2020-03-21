@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MarkovSharp.TokenisationStrategies;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -17,16 +16,17 @@ namespace SWNUniverseGenerator
             if (universe.Characters == null)
                 universe.Characters = new List<Character>();
 
+            var charData = LoadCharData();
+
             var count = characterDefaultSettings.Count < 0
                 ? 1
                 : characterDefaultSettings.Count;
 
-            List<Planet> planets = null;
-            
-            if (universe.Planets != null)
-                 planets = universe.Planets.ToList();
+            // List<Planet> planets = null;
+            //
+            // if (universe.Planets != null)
+            //      planets = universe.Planets.ToList();
 
-            var charData = LoadCharData();
 
             var cCount = 0;
             while (cCount < count)
@@ -85,13 +85,13 @@ namespace SWNUniverseGenerator
                 character.Title = string.IsNullOrEmpty(characterDefaultSettings.Title)
                     ? null
                     : characterDefaultSettings.Title;
-                character.BirthPlanet = planets == null
+                character.BirthPlanet = universe.Planets == null
                     ? null
-                    : planets[rand.Next(0, planets.Count)].ID;
-                character.CurrentLocation = planets == null
+                    : universe.Planets[rand.Next(0, universe.Planets.Count)].ID;
+                character.CurrentLocation = universe.Planets == null
                     ? null
-                    : planets[rand.Next(0, planets.Count)].ID;
-
+                    : universe.Planets[rand.Next(0, universe.Planets.Count)].ID;
+                
                 universe.Characters.Add(character);
                 
                 cCount++;

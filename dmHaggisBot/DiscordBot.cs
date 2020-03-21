@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord;
@@ -26,17 +25,22 @@ namespace dmHaggisBot
                 File.ReadAllText(@"properties.json"));
 
         private static readonly string Token = (string) Prop.GetValue("token");
-        private readonly Regex _charChreate = new Regex("^(charCreate|createChar|cc)($|.*)", RegexOptions.IgnoreCase);
-        private readonly Regex _starCreate = new Regex("^(starCreate|createStar|sc|cs)($|.*)", RegexOptions.IgnoreCase);
+        private readonly Regex _charChreate = new Regex("^(charCreate|createChar|cc)($| .*)", RegexOptions.IgnoreCase);
+        private readonly Regex _starCreate = new Regex("^(starCreate|createStar|sc|cs)($| .*)", RegexOptions.IgnoreCase);
 
         private readonly Regex _planCreate =
-            new Regex("^(planetCreate|createPlanet|pc|cp)($|.*)", RegexOptions.IgnoreCase);
+            new Regex("^(planetCreate|createPlanet|pc|cp)($| .*)", RegexOptions.IgnoreCase);
 
         private readonly Regex _univChreate =
-            new Regex("^(univCreate|createUniv|uc|cu)($|.*)", RegexOptions.IgnoreCase);
+            new Regex("^(univCreate|createUniv|uc|cu)($| .*)", RegexOptions.IgnoreCase);
 
-        private readonly Regex _univLoad = new Regex("^(univLoad|loadUniv|ul|lu)($|.*)", RegexOptions.IgnoreCase);
-        private readonly Regex _dataSearch = new Regex("^(dataSearch|searchData|ds|sd)($|.*)", RegexOptions.IgnoreCase);
+        private readonly Regex _univLoad = new Regex("^(univLoad|loadUniv|ul|lu)($| .*)", RegexOptions.IgnoreCase);
+        private readonly Regex _dataSearch = new Regex("^(dataSearch|searchData|ds|sd)($| .*)", RegexOptions.IgnoreCase);
+        
+        private readonly Regex _probCreate = new Regex("^(probCreate|createProb|prc|cpr)($| .*)", RegexOptions.IgnoreCase);
+        private static Emoji rightArrow = new Emoji("▶️");
+        private static Emoji leftArrow = new Emoji("◀️");
+
         private DiscordSocketClient _client;
         private IConfiguration _config;
         private Creation creation;
@@ -105,6 +109,14 @@ namespace dmHaggisBot
                 else
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
+            
+            if(_probCreate.IsMatch(sm.Content))
+            {
+                if (_universe != null)
+                    CreateProb(sm);
+                else
+                    await sm.Channel.SendMessageAsync("No universe file loaded");
+            }
 
             if (_dataSearch.IsMatch(sm.Content))
             {
@@ -114,9 +126,6 @@ namespace dmHaggisBot
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
         }
-
-        private static Emoji rightArrow = new Emoji("▶️");
-        private static Emoji leftArrow = new Emoji("◀️");
 
         public async Task ReactionAdded(Cacheable<IUserMessage, ulong> cacheable, ISocketMessageChannel sc,
             SocketReaction sr)
@@ -139,10 +148,9 @@ namespace dmHaggisBot
             var results = ParsePagination(sr.Message.ToString(), up);
             var searchDefaultSettings = results.Item1;
             var message = results.Item2;
-            
+
             await sr.Message.Value.RemoveReactionAsync(sr.Emote, user);
             await SearchData(sr.Channel, message, searchDefaultSettings, cacheable.Value);
-
         }
 
         public async Task CreateUniv(SocketMessage sm)
@@ -170,7 +178,7 @@ namespace dmHaggisBot
                 _universe.Planets = new List<Planet>();
 
                 await sm.Channel.SendMessageAsync("Created Universe with the name " + _universe.Name);
-                SetGameStatus();
+                await SetGameStatus();
             }
             catch (IOException e)
             {
@@ -187,7 +195,7 @@ namespace dmHaggisBot
                 _creation = new Creation(universePath);
                 _universe = _creation.LoadUniverse(n);
                 await sm.Channel.SendMessageAsync("Loaded Universe with the name " + _universe.Name);
-                SetGameStatus();
+                await SetGameStatus();
             }
             catch (FileNotFoundException e)
             {
@@ -234,7 +242,7 @@ namespace dmHaggisBot
             {
                 _universe = _creation.CreatePlanets(_universe, planDef);
                 await sm.Channel.SendMessageAsync("Up to " + pr[1] + " planets created for each star" + _universe.Name);
-                SetGameStatus();
+                await SetGameStatus();
             }
             catch (FileNotFoundException e)
             {
@@ -283,7 +291,35 @@ namespace dmHaggisBot
                 _universe = _creation.CreateCharacter(_universe, charDef);
 
                 await sm.Channel.SendMessageAsync(charDef.Count + " new character(s) created in " + _universe.Name);
-                SetGameStatus();
+                await SetGameStatus();
+            }
+            catch (FileNotFoundException e)
+            {
+                await sm.Channel.SendMessageAsync(e.Message);
+            }
+        }
+        
+        public async Task CreateProb(SocketMessage sm)
+        {
+            var c = ParseCommand("c", sm.Content);
+            var a = ParseCommand("a", sm.Content);
+            var id = ParseCommand("id", sm.Content);
+
+            var probDef = new ProblemDefaultSettings();
+
+            probDef.Count = string.IsNullOrEmpty(c)
+                ? -1
+                : Int32.Parse(c);
+            probDef.Additive = a.ToUpper() == "Y";
+            probDef.ID = string.IsNullOrEmpty(id)
+                ? null
+                : id;
+
+            try
+            {
+                _universe = _creation.CreateProblems(_universe, probDef);
+                await sm.Channel.SendMessageAsync(c + " problems created in " + _universe.Name);
+                await SetGameStatus();
             }
             catch (FileNotFoundException e)
             {
@@ -326,7 +362,7 @@ namespace dmHaggisBot
                     embeds.Add(GenerateEmbeds.StarEmbed(_universe, (Star) results.Result));
 
                 var message = sm + " - [" + results.CurrentCount + ", " + results.MaxCount + "]";
-                
+
                 if (userMessage == null)
                 {
                     RestUserMessage rsu = await sc.SendMessageAsync(message, false, embeds[0]);

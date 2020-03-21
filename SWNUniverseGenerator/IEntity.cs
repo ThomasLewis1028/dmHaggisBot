@@ -6,6 +6,6 @@ namespace SWNUniverseGenerator
     {
         public String ID { get; set; }
         
-        public String Name { get; }
+        // public String Name { get; }
     }
 }

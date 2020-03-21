@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
+using System.Text.RegularExpressions;
+using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -10,17 +13,17 @@ namespace SWNUniverseGenerator
 {
     public class Creation
     {
-        private readonly string universePath;
+        private readonly string _universePath;
 
         public Creation(string path)
         {
-            universePath = path;
+            _universePath = path;
         }
 
         public Universe CreateUniverse(UniverseDefaultSettings universeDefaultSettings)
         {
             var path = new StringBuilder();
-            path.Append(universePath + "\\" + universeDefaultSettings.Name + ".json");
+            path.Append(_universePath + "\\" + universeDefaultSettings.Name + ".json");
 
             if (File.Exists(path.ToString()))
             {
@@ -54,12 +57,12 @@ namespace SWNUniverseGenerator
         {
             if (universe.Grid == null)
                 throw new FileNotFoundException("No grid has been set for the universe");
-            
+
             universe = new StarCreation().AddStars(universe, starDefaultSettings);
             SerializeData(universe);
             return universe;
         }
-        
+
         public Universe CreatePlanets(Universe universe, PlanetDefaultSettings planetDefaultSettings)
         {
             if (universe.Stars == null || universe.Stars.Count == 0)
@@ -72,10 +75,20 @@ namespace SWNUniverseGenerator
 
         public Universe CreateCharacter(Universe universe, CharacterDefaultSettings characterDefaultSettings)
         {
-            if(universe.Planets == null || universe.Planets.Count == 0)
+            if (universe.Planets == null || universe.Planets.Count == 0)
                 throw new FileNotFoundException("No planets have been created for the universe");
-            
+
             universe = new CharCreation().AddCharacter(universe, characterDefaultSettings);
+            SerializeData(universe);
+            return universe;
+        }
+
+        public Universe CreateProblems(Universe universe, ProblemDefaultSettings problemDefaultSettings)
+        {
+            if (universe.Planets == null || universe.Planets.Count == 0)
+                throw new FileNotFoundException("No locations have been loaded.");
+
+            universe = new ProblemCreation().AddProblems(universe, problemDefaultSettings);
             SerializeData(universe);
             return universe;
         }
@@ -83,12 +96,21 @@ namespace SWNUniverseGenerator
         public SearchResult SearchUniverse(Universe universe, SearchDefaultSettings searchDefaultSettings)
         {
             var id = string.IsNullOrEmpty(searchDefaultSettings.ID)
-                ? null
+                ? new string[] { }
                 : searchDefaultSettings.ID.Split(", ");
 
             var n = string.IsNullOrEmpty(searchDefaultSettings.Name)
-                ? null
+                ? new string[] { }
                 : searchDefaultSettings.Name.Split(", ");
+
+            var nrgx = "(";
+
+            foreach (var i in n)
+            {
+                nrgx += "" + i + "|";
+            }
+
+            nrgx = nrgx.Substring(0, nrgx.Length - 1) + ")";
 
             var c = searchDefaultSettings.Count == 0
                 ? 0
@@ -98,50 +120,67 @@ namespace SWNUniverseGenerator
                 ? null
                 : searchDefaultSettings.Tag;
 
-            var results = new List<IEntity>();
+            IEntity result = null;
+            bool includePlanets = string.IsNullOrEmpty(t) || t.Contains("p");
+            bool includeChars = string.IsNullOrEmpty(t) || t.Contains("ch");
+            bool includeStars = string.IsNullOrEmpty(t) || t.Contains("s");
 
-            var planets = new List<Planet>();
-            var stars = new List<Star>();
-            var characters = new List<Character>();
+            var maxCount = (from p in universe.Planets
+                        where (Regex.IsMatch(p.Name, nrgx, RegexOptions.IgnoreCase) || id.Contains(p.ID)) &&
+                              includePlanets
+                        select new {p.ID, p.Name})
+                    .Union(from ch in universe.Characters
+                        where (Regex.IsMatch(ch.Name, nrgx, RegexOptions.IgnoreCase) || id.Contains(ch.ID)) &&
+                              includeChars
+                        select new {ch.ID, ch.Name})
+                    .Union(from s in universe.Stars
+                        where (Regex.IsMatch(s.Name, nrgx, RegexOptions.IgnoreCase) || id.Contains(s.ID)) &&
+                              includeStars
+                        select new {s.ID, s.Name})
+                    .Count()
+                ;
 
-            if (id != null)
+            var item = (from p in universe.Planets
+                    where (Regex.IsMatch(p.Name, nrgx, RegexOptions.IgnoreCase) || id.Contains(p.ID)) && includePlanets
+                    select new {p.ID, p.Name, Type = SearchType.Planets})
+                .Union(from ch in universe.Characters
+                    where (Regex.IsMatch(ch.Name, nrgx, RegexOptions.IgnoreCase) || id.Contains(ch.ID)) && includeChars
+                    select new {ch.ID, ch.Name, Type = SearchType.Characters})
+                .Union(from s in universe.Stars
+                    where (Regex.IsMatch(s.Name, nrgx, RegexOptions.IgnoreCase) || id.Contains(s.ID)) && includeStars
+                    select new {s.ID, s.Name, Type = SearchType.Stars})
+                .Skip(c)
+                .Take(1)
+                .SingleOrDefault();
+
+            if (item != null)
             {
-                planets = planets.Concat(universe.Planets.FindAll(a => id.Contains(a.ID))).ToList();
-                stars = stars.Concat(universe.Stars.FindAll(a => id.Contains(a.ID))).ToList();
-                characters = characters.Concat(universe.Characters.FindAll(a => id.Contains(a.ID))).ToList();
+                switch (item.Type)
+                {
+                    case SearchType.Characters:
+                        result = universe.Characters.Single(a => a.ID == item.ID);
+                        break;
+                    case SearchType.Planets:
+                        result = universe.Planets.Single(a => a.ID == item.ID);
+                        break;
+                    case SearchType.Stars:
+                        result = universe.Stars.Single(a => a.ID == item.ID);
+                        break;
+                }
             }
 
-            if (n != null)
-            {
-                planets = planets.Concat(universe.Planets.FindAll(a => n.Contains(a.Name))).ToList();
-                stars = stars.Concat(universe.Stars.FindAll(a => n.Contains(a.Name))).ToList();
-                characters = characters.Concat(universe.Characters.FindAll(a =>
-                    n.Contains(a.First) || n.Contains(a.Last) || n.Contains(a.Name))).ToList();
-            }
-
-            results = string.IsNullOrEmpty(t) || t == "p"
-                ? results.Concat(planets.ToList<IEntity>()).ToList()
-                : results;
-            results = string.IsNullOrEmpty(t) || t == "s"
-                ? results.Concat(stars.ToList<IEntity>()).ToList()
-                : results;
-            results = string.IsNullOrEmpty(t) || t == "ch"
-                ? results.Concat(characters.ToList<IEntity>()).ToList()
-                : results;
-
-            if (results.Count == 0 || results.Count <= c || results.Count < 0)
+            if (maxCount == 0 || maxCount <= c || maxCount < 0 || result == null)
             {
                 return new SearchResult(null, 0, 0);
             }
-            
-            return new SearchResult(results[c], c + 1, results.Count);
-            
+
+            return new SearchResult(result, c + 1, maxCount);
         }
 
         public Universe LoadUniverse(string name)
         {
             var path = new StringBuilder();
-            path.Append(universePath + "\\" + name + ".json");
+            path.Append(_universePath + "\\" + name + ".json");
 
             if (!File.Exists(path.ToString()))
                 throw new FileNotFoundException("{0}.json not found.");
@@ -155,11 +194,18 @@ namespace SWNUniverseGenerator
 
         public void SerializeData(Universe universe)
         {
-            var path = universePath + "\\" + universe.Name + ".json";
+            var path = _universePath + "\\" + universe.Name + ".json";
             using var file =
                 File.CreateText(path);
             var serializer = new JsonSerializer();
             serializer.Serialize(file, universe);
         }
+    }
+
+    public enum SearchType
+    {
+        Planets,
+        Stars,
+        Characters
     }
 }

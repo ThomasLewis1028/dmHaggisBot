@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SWNUniverseGenerator
 {
     internal class CharData
     {
-        public List<string> MaleName { get; set; }
-        public List<string> FemaleName { get; set; }
-        public List<string> LastName { get; set; }
-        public List<string> HairColor { get; set; }
-        public List<string> HairStyle { get; set; }
-        public List<string> EyeColor { get; set; }
+        public List<String> MaleName { get; set; }
+        public List<String> FemaleName { get; set; }
+        public List<String> LastName { get; set; }
+        public List<String> HairColor { get; set; }
+        public List<String> HairStyle { get; set; }
+        public List<String> EyeColor { get; set; }
     }
 }

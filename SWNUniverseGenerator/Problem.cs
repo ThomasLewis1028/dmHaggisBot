@@ -2,7 +2,7 @@
 
 namespace SWNUniverseGenerator
 {
-    public class Problem
+    public class Problem : IEntity
     {
         public String ID { get; set; }
         
@@ -13,5 +13,9 @@ namespace SWNUniverseGenerator
         public String Situation { get; set; }
         
         public String Focus { get; set; }
+        
+        public String Restraint { get; set; }
+        
+        public String Twist { get; set; }
     }
 }

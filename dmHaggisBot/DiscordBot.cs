@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Rest;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
@@ -114,28 +115,34 @@ namespace dmHaggisBot
             }
         }
 
+        private static Emoji rightArrow = new Emoji("▶️");
+        private static Emoji leftArrow = new Emoji("◀️");
+
         public async Task ReactionAdded(Cacheable<IUserMessage, ulong> cacheable, ISocketMessageChannel sc,
             SocketReaction sr)
         {
+            var user = _client.GetUser(sr.UserId);
+            if (user.IsBot)
+                return;
+
             bool up = true;
 
             if (!_dataSearch.IsMatch(sr.Message.ToString()))
                 return;
 
-            if (ComputeSha256Hash(sr.Emote.Name) == "8f9628264c08fdeade2ff56f7ff8fb0d893fc8a6c01328b9aa05aab780f22016")
+            if (sr.Emote.ToString().Equals(rightArrow.ToString()))
                 up = true;
 
-            else if (ComputeSha256Hash(sr.Emote.Name) ==
-                     "b6abcc7620e24f7b17a6b4148deee61b1613c204bfbefe417309f9460ff007e9")
+            else if (sr.Emote.ToString().Equals(leftArrow.ToString()))
                 up = false;
 
             var results = ParsePagination(sr.Message.ToString(), up);
             var searchDefaultSettings = results.Item1;
             var message = results.Item2;
+            
+            await sr.Message.Value.RemoveReactionAsync(sr.Emote, user);
+            await SearchData(sr.Channel, message, searchDefaultSettings, cacheable.Value);
 
-            await SearchData(sr.Channel, message, searchDefaultSettings);
-
-            sr.Channel.DeleteMessageAsync(sr.Message.Value, RequestOptions.Default);
         }
 
         public async Task CreateUniv(SocketMessage sm)
@@ -170,7 +177,7 @@ namespace dmHaggisBot
                 await sm.Channel.SendMessageAsync(e.ToString());
             }
         }
-        
+
         public async Task LoadUniv(SocketMessage sm)
         {
             var n = ParseCommand("n", sm.Content);
@@ -195,7 +202,7 @@ namespace dmHaggisBot
             var starDef = new StarDefaultSettings();
 
             starDef.StarCount = string.IsNullOrEmpty(s)
-                ? 0
+                ? -1
                 : Int32.Parse(s);
 
             try
@@ -209,7 +216,7 @@ namespace dmHaggisBot
                 await sm.Channel.SendMessageAsync(e.Message);
             }
         }
-        
+
         public async Task CreatePlanet(SocketMessage sm)
         {
             var r = ParseCommand("r", sm.Content);
@@ -234,7 +241,7 @@ namespace dmHaggisBot
                 await sm.Channel.SendMessageAsync(e.Message);
             }
         }
-        
+
         public async Task CreateChar(SocketMessage sm)
         {
             var a = ParseCommand("a", sm.Content);
@@ -283,7 +290,7 @@ namespace dmHaggisBot
                 await sm.Channel.SendMessageAsync(e.Message);
             }
         }
-        
+
         public async Task SearchData(SocketMessage sm)
         {
             var id = ParseCommand("id", sm.Content);
@@ -304,7 +311,7 @@ namespace dmHaggisBot
         }
 
         private async Task SearchData(ISocketMessageChannel sc, string sm,
-            SearchDefaultSettings searchDefaultSettings)
+            SearchDefaultSettings searchDefaultSettings, IUserMessage userMessage = null)
         {
             var results = _creation.SearchUniverse(_universe, searchDefaultSettings);
             var embeds = new List<Embed>();
@@ -318,8 +325,19 @@ namespace dmHaggisBot
                 else if (results.Result.GetType() == typeof(Star))
                     embeds.Add(GenerateEmbeds.StarEmbed(_universe, (Star) results.Result));
 
-                await sc.SendMessageAsync(
-                    sm + " - [" + results.CurrentCount + ", " + results.MaxCount + "]", false, embeds[0]);
+                var message = sm + " - [" + results.CurrentCount + ", " + results.MaxCount + "]";
+                
+                if (userMessage == null)
+                {
+                    RestUserMessage rsu = await sc.SendMessageAsync(message, false, embeds[0]);
+                    await rsu.AddReactionAsync(leftArrow);
+                    await rsu.AddReactionAsync(rightArrow);
+                }
+                else
+                {
+                    await userMessage.ModifyAsync(x => x.Content = message);
+                    await userMessage.ModifyAsync(x => x.Embed = embeds[0]);
+                }
             }
             else
             {
@@ -341,7 +359,7 @@ namespace dmHaggisBot
 
             return cmd.Trim();
         }
-        
+
         public (SearchDefaultSettings, string) ParsePagination(String message, bool up)
         {
             var id = ParseCommand("id", message);
@@ -364,32 +382,13 @@ namespace dmHaggisBot
 
             return (searchDef, message);
         }
-        
+
         private async Task SetGameStatus()
         {
             await _client.SetGameAsync(_universe.Name + " Loaded - " +
                                        _universe.Stars.Count + " Stars - " +
                                        _universe.Planets.Count + " Planets - " +
                                        _universe.Characters.Count + " Characters");
-        }
-
-        string ComputeSha256Hash(string rawData)
-        {
-            // Create a SHA256   
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                // ComputeHash - returns byte array  
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-
-                // Convert byte array to a string   
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-
-                return builder.ToString();
-            }
         }
     }
 }

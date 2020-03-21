@@ -17,6 +17,10 @@ namespace SWNUniverseGenerator
             if (universe.Characters == null)
                 universe.Characters = new List<Character>();
 
+            var count = characterDefaultSettings.Count < 0
+                ? 1
+                : characterDefaultSettings.Count;
+
             List<Planet> planets = null;
             
             if (universe.Planets != null)
@@ -25,7 +29,7 @@ namespace SWNUniverseGenerator
             var charData = LoadCharData();
 
             var cCount = 0;
-            while (cCount < characterDefaultSettings.Count)
+            while (cCount < count)
             {
                 //Set sheet bounds including sheet# and row count.
                 //Must be done here to randomly select the sheet

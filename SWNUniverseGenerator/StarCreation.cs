@@ -21,7 +21,7 @@ namespace SWNUniverseGenerator
             var starData = LoadStarData();
 
             var starLen = starData.Stars.Count;
-            var starCount = starDefaultSettings.StarCount == 0
+            var starCount = starDefaultSettings.StarCount < 0
                 ? Math.Floor(universe.Grid.X * universe.Grid.Y * .2)
                 : starDefaultSettings.StarCount;
 

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace SWNUniverseGenerator
 {
     /// <summary>
-    /// Character object that stores 
+    /// Character object that stores all of the necessary information about a Character
     /// </summary>
     public class Character : IEntity
     {

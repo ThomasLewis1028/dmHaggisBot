@@ -2,10 +2,19 @@
 
 namespace SWNUniverseGenerator
 {
+    /// <summary>
+    /// The base interface for a Location that also implements IEntity
+    /// </summary>
     public interface ILocation : IEntity
     {
-        public String ID { get; set; }
+        /// <summary>
+        /// ID from IEntity that all ILocation type objects must implement
+        /// </summary>
+        public new String ID { get; set; }
         
+        /// <summary>
+        /// All ILocation type objects much implement a Name 
+        /// </summary>
         public String Name { get; set; }
     }
 }

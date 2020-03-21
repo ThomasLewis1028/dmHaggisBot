@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -24,7 +23,9 @@ namespace dmHaggisBot
             JObject.Parse(
                 File.ReadAllText(@"properties.json"));
 
+        //Get the token out of the properties folder
         private static readonly string Token = (string) Prop.GetValue("token");
+        
         private readonly Regex _charChreate = new Regex("^(charCreate|createChar|cc)($| .*)", RegexOptions.IgnoreCase);
         private readonly Regex _starCreate = new Regex("^(starCreate|createStar|sc|cs)($| .*)", RegexOptions.IgnoreCase);
 
@@ -57,7 +58,7 @@ namespace dmHaggisBot
                 return Path.GetDirectoryName(path) + "\\UniverseFiles\\";
             }
         }
-
+        
         public async Task MainAsync()
         {
             var _config = new DiscordSocketConfig {MessageCacheSize = 100};

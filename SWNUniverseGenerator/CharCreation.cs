@@ -7,6 +7,9 @@ using Newtonsoft.Json.Linq;
 
 namespace SWNUniverseGenerator
 {
+    /// <summary>
+    /// This class holds the functions for creating Characters and adding them to the Universe.
+    /// </summary>
     internal class CharCreation
     {
         private static readonly Random rand = new Random();

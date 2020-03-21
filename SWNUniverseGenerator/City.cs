@@ -1,10 +1,14 @@
-﻿namespace SWNUniverseGenerator
+﻿using System;
+
+namespace SWNUniverseGenerator
 {
-    public class City
+    public class City : IEntity
     {
+        public String ID { get; set; }
+
         public City(string name, Planet planet)
         {
-            name = name;
+            Name = name;
             Planet = planet;
         }
 
@@ -12,6 +16,6 @@
 
         public Planet Planet { get; set; }
 
-        public int Pop { get; set; }
+        public Int32 Pop { get; set; }
     }
 }

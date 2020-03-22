@@ -30,9 +30,4 @@
       </None>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="CreationTools" />
-      <Folder Include="DefaultSettings" />
-    </ItemGroup>
-
 </Project>

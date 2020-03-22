@@ -7,25 +7,30 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator;
 
 namespace dmHaggisBot
 {
+    /// <summary>
+    /// This bot acts as a front-end to my SWNUniverseGenerator
+    ///
+    /// Otherwise it doesn't do much.
+    /// </summary>
     internal class DiscordBot
     {
         private static Universe _universe;
         private static Creation _creation;
 
-        //Properties file
+        // Properties file
         private static readonly JObject Prop =
             JObject.Parse(
                 File.ReadAllText(@"properties.json"));
 
-        //Get the token out of the properties folder
+        // Get the token out of the properties folder
         private static readonly string Token = (string) Prop.GetValue("token");
 
+        //<editor-fold desc="Regular expressions for commands">
         private readonly Regex _charChreate = new Regex("^(charCreate|createChar|cc)($| .*)", RegexOptions.IgnoreCase);
 
         private readonly Regex _starCreate =
@@ -44,15 +49,18 @@ namespace dmHaggisBot
 
         private readonly Regex _probCreate =
             new Regex("^(probCreate|createProb|prc|cpr)($| .*)", RegexOptions.IgnoreCase);
+        //</editor-fold>
 
-        private static Emoji rightArrow = new Emoji("▶️");
-        private static Emoji leftArrow = new Emoji("◀️");
+        // Set up emoji for pagination
+        private static readonly Emoji RightArrow = new Emoji("▶️");
+        private static readonly Emoji LeftArrow = new Emoji("◀️");
 
+        // Discord config files
         private DiscordSocketClient _client;
-        private IConfiguration _config;
-        private Creation creation;
+        // private IConfiguration _config;
 
-        private static string universePath
+        // Set the path to the Universe files
+        private static string UniversePath
         {
             get
             {
@@ -67,9 +75,9 @@ namespace dmHaggisBot
 
         public async Task MainAsync()
         {
-            var _config = new DiscordSocketConfig {MessageCacheSize = 100};
+            var config = new DiscordSocketConfig {MessageCacheSize = 100};
             // _client.Log += message => Console.Out.WriteLine();
-            _client = new DiscordSocketClient(_config);
+            _client = new DiscordSocketClient(config);
             _client.MessageReceived += MessageReceived;
             _client.ReactionAdded += ReactionAdded;
 
@@ -87,54 +95,67 @@ namespace dmHaggisBot
             if (sm.Author.IsBot)
                 return;
 
+            // Character Creation
             if (_charChreate.IsMatch(sm.Content))
             {
                 if (_universe != null)
-                    CreateChar(sm);
+                    await CreateChar(sm);
                 else
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
 
+            // Universe Creation
             if (_univChreate.IsMatch(sm.Content))
-                CreateUniv(sm);
+                await CreateUniv(sm);
 
+            // Universe Loading
             if (_univLoad.IsMatch(sm.Content))
-                LoadUniv(sm);
+                await LoadUniv(sm);
 
+            // Star Creation
             if (_starCreate.IsMatch(sm.Content))
             {
                 if (_universe != null)
-                    CreateStar(sm);
+                    await CreateStar(sm);
                 else
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
 
+            // Planet Creation
             if (_planCreate.IsMatch(sm.Content))
             {
                 if (_universe != null)
-                    CreatePlanet(sm);
+                    await CreatePlanet(sm);
                 else
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
 
+            // Problem Creation
             if (_probCreate.IsMatch(sm.Content))
             {
                 if (_universe != null)
-                    CreateProb(sm);
+                    await CreateProb(sm);
                 else
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
 
+            // Search Data
             if (_dataSearch.IsMatch(sm.Content))
             {
                 if (_universe != null)
-                    SearchData(sm);
+                    await SearchData(sm);
                 else
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
         }
 
-        public async Task ReactionAdded(Cacheable<IUserMessage, ulong> cacheable, ISocketMessageChannel sc,
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cacheable"></param>
+        /// <param name="sc"></param>
+        /// <param name="sr"></param>
+        private async Task ReactionAdded(Cacheable<IUserMessage, ulong> cacheable, ISocketMessageChannel sc,
             SocketReaction sr)
         {
             var user = _client.GetUser(sr.UserId);
@@ -146,21 +167,19 @@ namespace dmHaggisBot
             if (!_dataSearch.IsMatch(sr.Message.ToString()))
                 return;
 
-            if (sr.Emote.ToString().Equals(rightArrow.ToString()))
+            if (sr.Emote.ToString().Equals(RightArrow.ToString()))
                 up = true;
 
-            else if (sr.Emote.ToString().Equals(leftArrow.ToString()))
+            else if (sr.Emote.ToString().Equals(LeftArrow.ToString()))
                 up = false;
 
-            var results = ParsePagination(sr.Message.ToString(), up);
-            var searchDefaultSettings = results.Item1;
-            var message = results.Item2;
+            var (searchDefaultSettings, message) = ParsePagination(sr.Message.ToString(), up);
 
             await sr.Message.Value.RemoveReactionAsync(sr.Emote, user);
             await SearchData(sr.Channel, message, searchDefaultSettings, cacheable.Value);
         }
 
-        public async Task CreateUniv(SocketMessage sm)
+        private async Task CreateUniv(SocketMessage sm)
         {
             var g = ParseCommand("g", sm.Content);
             var n = ParseCommand("n", sm.Content);
@@ -178,7 +197,7 @@ namespace dmHaggisBot
 
             try
             {
-                _creation = new Creation(universePath);
+                _creation = new Creation(UniversePath);
                 _universe = _creation.CreateUniverse(univDef);
                 _universe.Characters = new List<Character>();
                 _universe.Stars = new List<Star>();
@@ -199,7 +218,7 @@ namespace dmHaggisBot
 
             try
             {
-                _creation = new Creation(universePath);
+                _creation = new Creation(UniversePath);
                 _universe = _creation.LoadUniverse(n);
                 await sm.Channel.SendMessageAsync("Loaded Universe with the name " + _universe.Name);
                 await SetGameStatus();
@@ -379,8 +398,8 @@ namespace dmHaggisBot
                 if (userMessage == null)
                 {
                     RestUserMessage rsu = await sc.SendMessageAsync(message, false, embeds[0]);
-                    await rsu.AddReactionAsync(leftArrow);
-                    await rsu.AddReactionAsync(rightArrow);
+                    await rsu.AddReactionAsync(LeftArrow);
+                    await rsu.AddReactionAsync(RightArrow);
                 }
                 else
                 {
@@ -389,9 +408,7 @@ namespace dmHaggisBot
                 }
             }
             else
-            {
                 await sc.SendMessageAsync("No results found");
-            }
         }
 
         private string ParseCommand(string argName, string argVal)
@@ -439,7 +456,6 @@ namespace dmHaggisBot
             searchDef.Tag = string.IsNullOrEmpty(t)
                 ? new string[] { }
                 : t.Split(" ");
-            
 
             return (searchDef, message);
         }

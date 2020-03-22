@@ -23,12 +23,13 @@
       <e p="packages" t="ExcludeRecursive" />
       <e p="SWNUniverseGenerator" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
-        <e p="Character.cs" t="Include" />
-        <e p="CharCreation.cs" t="Include" />
-        <e p="CharData.cs" t="Include" />
-        <e p="City.cs" t="Include" />
         <e p="Creation.cs" t="Include" />
-        <e p="CreationTools" t="Include" />
+        <e p="CreationTools" t="Include">
+          <e p="CharCreation.cs" t="Include" />
+          <e p="PlanetCreation.cs" t="Include" />
+          <e p="ProblemCreation.cs" t="Include" />
+          <e p="StarCreation.cs" t="Include" />
+        </e>
         <e p="Data" t="Include">
           <e p="characterData.json" t="Include" />
           <e p="pointsOfInterest.json" t="Include" />
@@ -44,12 +45,26 @@
           <e p="StarDefaultSettings.cs" t="Include" />
           <e p="UniverseDefaultSettings.cs" t="Include" />
         </e>
+        <e p="DeserializedObjects" t="Include">
+          <e p="CharData.cs" t="Include" />
+          <e p="ProblemInfo.cs" t="Include" />
+          <e p="StarData.cs" t="Include" />
+          <e p="WorldInfo.cs" t="Include" />
+        </e>
         <e p="Grid.cs" t="Include" />
         <e p="IDGen.cs" t="Include" />
-        <e p="IEntity.cs" t="Include" />
-        <e p="ILocation.cs" t="Include" />
+        <e p="IEntity Objects" t="Include">
+          <e p="Character.cs" t="Include" />
+          <e p="City.cs" t="Include" />
+          <e p="IEntity.cs" t="Include" />
+          <e p="ILocation.cs" t="Include" />
+          <e p="Job.cs" t="Include" />
+          <e p="Planet.cs" t="Include" />
+          <e p="Problem.cs" t="Include" />
+          <e p="Star.cs" t="Include" />
+          <e p="Universe.cs" t="Include" />
+        </e>
         <e p="Item.cs" t="Include" />
-        <e p="Job.cs" t="Include" />
         <e p="NameGenerator.cs" t="Include" />
         <e p="NameGenerator.js" t="Include" />
         <e p="obj" t="ExcludeRecursive">
@@ -59,11 +74,6 @@
             </e>
           </e>
         </e>
-        <e p="Planet.cs" t="Include" />
-        <e p="PlanetCreation.cs" t="Include" />
-        <e p="Problem.cs" t="Include" />
-        <e p="ProblemCreation.cs" t="Include" />
-        <e p="ProblemInfo.cs" t="Include" />
         <e p="ReadFromDescriptions" t="Include">
           <e p="SetDataFromReader.cs" t="Include" />
           <e p="WorldTags.cs" t="Include" />
@@ -71,13 +81,8 @@
         </e>
         <e p="Readme.md" t="Include" />
         <e p="SearchResult.cs" t="Include" />
-        <e p="Star.cs" t="Include" />
-        <e p="StarCreation.cs" t="Include" />
-        <e p="StarData.cs" t="Include" />
         <e p="StringMarkovNames.cs" t="Include" />
         <e p="SWNUniverseGenerator.csproj" t="IncludeRecursive" />
-        <e p="Universe.cs" t="Include" />
-        <e p="WorldInfo.cs" t="Include" />
       </e>
     </e>
   </component>

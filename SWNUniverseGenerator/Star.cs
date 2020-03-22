@@ -2,21 +2,29 @@
 
 namespace SWNUniverseGenerator
 {
+    /// <summary>
+    /// This holds all of the necessary information about a Star
+    /// </summary>
     public class Star : ILocation
     {
-        public Star(string name, int x, int y)
-        {
-            Name = name;
-            X = x;
-            Y = y;
-        }
-
+        /// <summary>
+        /// A unique ID that will be generated when creating a Star
+        /// </summary>
         public String ID { get; set; }
 
-        public string Name { get; set; }
+        /// <summary>
+        /// The string Name of a Star
+        /// </summary>
+        public String Name { get; set; }
 
-        public int X { get; set; }
+        /// <summary>
+        /// A Star's X location on a Grid
+        /// </summary>
+        public Int32 X { get; set; }
 
-        public int Y { get; set; }
+        /// <summary>
+        /// A Star's Y location on a Grid
+        /// </summary>
+        public Int32 Y { get; set; }
     }
 }

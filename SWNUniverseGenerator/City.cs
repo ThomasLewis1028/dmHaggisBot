@@ -2,7 +2,7 @@
 
 namespace SWNUniverseGenerator
 {
-    public class City : IEntity
+    public class City : ILocation
     {
         public String ID { get; set; }
 

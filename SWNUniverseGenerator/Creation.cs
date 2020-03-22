@@ -195,9 +195,9 @@ namespace SWNUniverseGenerator
             nrgx = nrgx.Substring(0, nrgx.Length - 1) + ")";
 
             // Set the count of what result number is requested. Default to 0.
-            var c = searchDefaultSettings.Count == 0
+            var c = searchDefaultSettings.Index == 0
                 ? 0
-                : searchDefaultSettings.Count - 1;
+                : searchDefaultSettings.Index - 1;
 
             // Set the tags for more specific searches.
             var t = string.IsNullOrEmpty(searchDefaultSettings.Tag)

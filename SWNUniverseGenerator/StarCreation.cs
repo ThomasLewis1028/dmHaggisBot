@@ -6,20 +6,32 @@ using Newtonsoft.Json.Linq;
 
 namespace SWNUniverseGenerator
 {
+    /// <summary>
+    /// This class contains the necessary functions for creating a Star
+    /// </summary>
     internal class StarCreation
     {
         private static readonly Random rand = new Random();
 
+        /// <summary>
+        /// This function will receive a Universe and a StarDefaultSettings object and create Stars from the data
+        /// provided
+        /// </summary>
+        /// <param name="universe"></param>
+        /// <param name="starDefaultSettings"></param>
+        /// <returns>
+        /// A newly modified Universe
+        /// </returns>
         public Universe AddStars(Universe universe, StarDefaultSettings starDefaultSettings)
         {
+            // Check if the Stars have been initialized prior
             if (universe.Stars == null)
                 universe.Stars = new List<Star>();
-            
-            if (universe.Planets == null)
-                universe.Planets = new List<Planet>();
 
+            // Load the StarData
             var starData = LoadStarData();
 
+            // Set the number of stars to create. The default is 20% of the number of zones in the grid 
             var starLen = starData.Stars.Count;
             var starCount = starDefaultSettings.StarCount < 0
                 ? Math.Floor(universe.Grid.X * universe.Grid.Y * .2)
@@ -28,16 +40,27 @@ namespace SWNUniverseGenerator
             var sCount = 0;
             while (sCount < starCount)
             {
-                var starName = starData.Stars[rand.Next(0, starLen - 1)];
-                var star = new Star(
-                    starName,
-                    rand.Next(0, universe.Grid.X + 1), rand.Next(0, universe.Grid.Y + 1));
+                var star = new Star();
 
+                // Generate the unique ID for the Star
+                IDGen.GenerateID(star);
+                
+                // If that ID exists roll a new one
+                if (universe.Stars.Exists(a => a.ID == star.ID))
+                    continue;
+                
+                // Pick a random Name for the Star
+                star.Name = starData.Stars[rand.Next(0, starLen - 1)];
+                
+                // If that Name exists roll a new one 
                 if (universe.Stars.Exists(a => a.Name == star.Name))
                     continue;
                 
-                IDGen.GenerateID(star);
+                // Set Grid Location of the Star
+                star.X = rand.Next(0, universe.Grid.X + 1);
+                star.Y = rand.Next(0, universe.Grid.Y + 1);
 
+                // Add the Star to the Universe
                 universe.Stars.Add(star);
 
                 sCount++;
@@ -46,6 +69,13 @@ namespace SWNUniverseGenerator
             return universe;
         }
 
+
+        /// <summary>
+        /// Load the Data needed about Stars into a StarData object
+        /// </summary>
+        /// <returns>
+        /// A StarData object
+        /// </returns>
         private StarData LoadStarData()
         {
             var charData =

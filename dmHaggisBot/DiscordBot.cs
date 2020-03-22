@@ -339,7 +339,7 @@ namespace dmHaggisBot
 
             searchDef.ID = id;
             searchDef.Name = n;
-            searchDef.Count = string.IsNullOrEmpty(c)
+            searchDef.Index = string.IsNullOrEmpty(c)
                 ? 0
                 : Int32.Parse(c);
             searchDef.Tag = t;
@@ -362,7 +362,7 @@ namespace dmHaggisBot
                 else if (results.Result.GetType() == typeof(Star))
                     embeds.Add(GenerateEmbeds.StarEmbed(_universe, (Star) results.Result));
 
-                var message = sm + " - [" + results.CurrentCount + ", " + results.MaxCount + "]";
+                var message = sm + " - [" + results.CurrentIndex + ", " + results.MaxCount + "]";
 
                 if (userMessage == null)
                 {
@@ -415,7 +415,7 @@ namespace dmHaggisBot
             }
 
             SearchDefaultSettings searchDef = new SearchDefaultSettings
-                {ID = id, Name = n, Count = Int32.Parse(c), Tag = t};
+                {ID = id, Name = n, Index = Int32.Parse(c), Tag = t};
 
             return (searchDef, message);
         }

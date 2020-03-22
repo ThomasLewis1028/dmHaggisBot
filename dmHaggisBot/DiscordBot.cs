@@ -336,7 +336,7 @@ namespace dmHaggisBot
             probDef.Count = string.IsNullOrEmpty(c)
                 ? -1
                 : Int32.Parse(c);
-            probDef.Additive = a.ToUpper() == "Y";
+            probDef.Additive = !string.IsNullOrEmpty(a) && a.ToUpper() == "Y";
             probDef.ID = string.IsNullOrEmpty(id)
                 ? null
                 : id;

@@ -68,7 +68,7 @@ namespace SWNUniverseGenerator
                     var probCount = 0;
                     while (probCount < count)
                     {
-                        if (count <= universe.Problems.Count(a => a.LocationID == planet.ID)
+                        if (probCount + count >= universe.Problems.Count(a => a.LocationID == planet.ID)
                             && !add)
                             break;
 

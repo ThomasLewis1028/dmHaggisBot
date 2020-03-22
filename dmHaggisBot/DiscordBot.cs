@@ -25,9 +25,11 @@ namespace dmHaggisBot
 
         //Get the token out of the properties folder
         private static readonly string Token = (string) Prop.GetValue("token");
-        
+
         private readonly Regex _charChreate = new Regex("^(charCreate|createChar|cc)($| .*)", RegexOptions.IgnoreCase);
-        private readonly Regex _starCreate = new Regex("^(starCreate|createStar|sc|cs)($| .*)", RegexOptions.IgnoreCase);
+
+        private readonly Regex _starCreate =
+            new Regex("^(starCreate|createStar|sc|cs)($| .*)", RegexOptions.IgnoreCase);
 
         private readonly Regex _planCreate =
             new Regex("^(planetCreate|createPlanet|pc|cp)($| .*)", RegexOptions.IgnoreCase);
@@ -36,9 +38,13 @@ namespace dmHaggisBot
             new Regex("^(univCreate|createUniv|uc|cu)($| .*)", RegexOptions.IgnoreCase);
 
         private readonly Regex _univLoad = new Regex("^(univLoad|loadUniv|ul|lu)($| .*)", RegexOptions.IgnoreCase);
-        private readonly Regex _dataSearch = new Regex("^(dataSearch|searchData|ds|sd)($| .*)", RegexOptions.IgnoreCase);
-        
-        private readonly Regex _probCreate = new Regex("^(probCreate|createProb|prc|cpr)($| .*)", RegexOptions.IgnoreCase);
+
+        private readonly Regex _dataSearch =
+            new Regex("^(dataSearch|searchData|ds|sd)($| .*)", RegexOptions.IgnoreCase);
+
+        private readonly Regex _probCreate =
+            new Regex("^(probCreate|createProb|prc|cpr)($| .*)", RegexOptions.IgnoreCase);
+
         private static Emoji rightArrow = new Emoji("▶️");
         private static Emoji leftArrow = new Emoji("◀️");
 
@@ -58,7 +64,7 @@ namespace dmHaggisBot
                 return Path.GetDirectoryName(path) + "\\UniverseFiles\\";
             }
         }
-        
+
         public async Task MainAsync()
         {
             var _config = new DiscordSocketConfig {MessageCacheSize = 100};
@@ -110,8 +116,8 @@ namespace dmHaggisBot
                 else
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
-            
-            if(_probCreate.IsMatch(sm.Content))
+
+            if (_probCreate.IsMatch(sm.Content))
             {
                 if (_universe != null)
                     CreateProb(sm);
@@ -299,7 +305,7 @@ namespace dmHaggisBot
                 await sm.Channel.SendMessageAsync(e.Message);
             }
         }
-        
+
         public async Task CreateProb(SocketMessage sm)
         {
             var c = ParseCommand("c", sm.Content);
@@ -337,12 +343,18 @@ namespace dmHaggisBot
 
             SearchDefaultSettings searchDef = new SearchDefaultSettings();
 
-            searchDef.ID = id;
-            searchDef.Name = n;
+            searchDef.ID = string.IsNullOrEmpty(id)
+                ? new string[] { }
+                : id.Split(", ");
+            searchDef.Name = string.IsNullOrEmpty(n)
+                ? new string[] { }
+                : n.Split(", ");
             searchDef.Index = string.IsNullOrEmpty(c)
                 ? 0
                 : Int32.Parse(c);
-            searchDef.Tag = t;
+            searchDef.Tag = string.IsNullOrEmpty(t)
+                ? new string[] { }
+                : t.Split(" ");
 
             await SearchData(sm.Channel, sm.Content, searchDef);
         }
@@ -386,7 +398,7 @@ namespace dmHaggisBot
         {
             var start = argVal.IndexOf(" -" + argName + " ") + 1;
             if (start == 0)
-                return "";
+                return null;
 
             var end = argVal.IndexOf(" -", start);
             if (end == -1)
@@ -414,8 +426,20 @@ namespace dmHaggisBot
                 message = message.Replace(cs, "");
             }
 
-            SearchDefaultSettings searchDef = new SearchDefaultSettings
-                {ID = id, Name = n, Index = Int32.Parse(c), Tag = t};
+            SearchDefaultSettings searchDef = new SearchDefaultSettings();
+            // {ID = id, Name = n, Index = Int32.Parse(c), Tag = t}
+
+            searchDef.ID = string.IsNullOrEmpty(id)
+                ? new string[] { }
+                : id.Split(", ");
+            searchDef.Name = string.IsNullOrEmpty(n)
+                ? new string[] { }
+                : n.Split(", ");
+            searchDef.Index = Int32.Parse(c);
+            searchDef.Tag = string.IsNullOrEmpty(t)
+                ? new string[] { }
+                : t.Split(" ");
+            
 
             return (searchDef, message);
         }

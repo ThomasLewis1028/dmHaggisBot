@@ -5,7 +5,7 @@ namespace SWNUniverseGenerator
     /// <summary>
     /// This is the class where a worldTags.json will be deserialized to
     /// </summary>
-    internal class WorldInfo
+    public class WorldInfo
     {
         /// <summary>
         /// This stores a list of Atmospheres to be randomly pulled from
@@ -58,7 +58,7 @@ namespace SWNUniverseGenerator
     /// <summary>
     /// This is where the World Tags from Stars Without Number's rulebook are deserialized to
     /// </summary>
-    internal class WorldTag
+    public class WorldTag
     {
         /// <summary>
         /// Stores the type of World Tag
@@ -99,7 +99,7 @@ namespace SWNUniverseGenerator
     /// <summary>
     /// This holds information about an Atmosphere
     /// </summary>
-    internal class Atmosphere
+    public class Atmosphere
     {
         /// <summary>
         /// Stores the type of Atmosphere
@@ -116,7 +116,7 @@ namespace SWNUniverseGenerator
     /// <summary>
     /// This holds information about a Temperature
     /// </summary>
-    internal class Temperature
+    public class Temperature
     {
         /// <summary>
         /// Stores the type of Temperature
@@ -132,7 +132,7 @@ namespace SWNUniverseGenerator
     /// <summary>
     /// This hold information about a Biosphere
     /// </summary>
-    internal class Biosphere
+    public class Biosphere
     {
         /// <summary>
         /// Stores the type of Biosphere
@@ -148,7 +148,7 @@ namespace SWNUniverseGenerator
     /// <summary>
     /// This holds information about a Population
     /// </summary>
-    internal class Population
+    public class Population
     {
         /// <summary>
         /// Stores the type of Population
@@ -164,7 +164,7 @@ namespace SWNUniverseGenerator
     /// <summary>
     /// This holds information about a Tech Level
     /// </summary>
-    internal class TechLevel
+    public class TechLevel
     {
         /// <summary>
         /// Stores the type of Tech Level

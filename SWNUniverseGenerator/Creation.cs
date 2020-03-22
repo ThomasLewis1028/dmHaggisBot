@@ -180,13 +180,8 @@ namespace SWNUniverseGenerator
         public SearchResult SearchUniverse(Universe universe, SearchDefaultSettings searchDefaultSettings)
         {
             // Check if the ID or Name tags have values and set those. Default to empty arrays.
-            var id = string.IsNullOrEmpty(searchDefaultSettings.ID)
-                ? new string[] { }
-                : searchDefaultSettings.ID.Split(", ");
-
-            var n = string.IsNullOrEmpty(searchDefaultSettings.Name)
-                ? new string[] { }
-                : searchDefaultSettings.Name.Split(", ");
+            var id = searchDefaultSettings.ID ?? new string[] { };
+            var n = searchDefaultSettings.Name ?? new string[] { };
 
             // Set a regular expression for the Name 
             var nrgx = "(";
@@ -200,12 +195,10 @@ namespace SWNUniverseGenerator
                 : searchDefaultSettings.Index - 1;
 
             // Set the tags for more specific searches.
-            var t = string.IsNullOrEmpty(searchDefaultSettings.Tag)
-                ? null
-                : searchDefaultSettings.Tag;
-            bool includePlanets = string.IsNullOrEmpty(t) || t.Contains("p");
-            bool includeChars = string.IsNullOrEmpty(t) || t.Contains("ch");
-            bool includeStars = string.IsNullOrEmpty(t) || t.Contains("s");
+            var t = searchDefaultSettings.Tag;
+            bool includePlanets = t.Contains("p") || t.Length == 0;
+            bool includeChars = t.Contains("ch") || t.Length == 0;
+            bool includeStars = t.Contains("s") || t.Length == 0;
 
             // Use a Linq query to find the number of items that match your search query.
             var maxCount = (from p in universe.Planets
@@ -258,7 +251,7 @@ namespace SWNUniverseGenerator
             // If there were no results then return null
             if (maxCount == 0 || maxCount <= c || maxCount < 0 || result == null)
                 return new SearchResult(null, 0, 0);
-            
+
             return new SearchResult(result, c + 1, maxCount);
         }
 

@@ -82,7 +82,6 @@
         </e>
         <e p="Readme.md" t="Include" />
         <e p="SearchResult.cs" t="Include" />
-        <e p="StringMarkovNames.cs" t="Include" />
         <e p="SWNUniverseGenerator.csproj" t="IncludeRecursive" />
       </e>
     </e>

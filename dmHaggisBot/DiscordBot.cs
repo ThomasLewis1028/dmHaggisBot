@@ -31,7 +31,7 @@ namespace dmHaggisBot
         private static readonly string Token = (string) Prop.GetValue("token");
 
         //<editor-fold desc="Regular expressions for commands">
-        private readonly Regex _charChreate = new Regex("^(charCreate|createChar|cc)($| .*)", RegexOptions.IgnoreCase);
+        private readonly Regex _charCreate = new Regex("^(charCreate|createChar|cc)($| .*)", RegexOptions.IgnoreCase);
 
         private readonly Regex _starCreate =
             new Regex("^(starCreate|createStar|sc|cs)($| .*)", RegexOptions.IgnoreCase);
@@ -39,7 +39,7 @@ namespace dmHaggisBot
         private readonly Regex _planCreate =
             new Regex("^(planetCreate|createPlanet|pc|cp)($| .*)", RegexOptions.IgnoreCase);
 
-        private readonly Regex _univChreate =
+        private readonly Regex _univCreate =
             new Regex("^(univCreate|createUniv|uc|cu)($| .*)", RegexOptions.IgnoreCase);
 
         private readonly Regex _univLoad = new Regex("^(univLoad|loadUniv|ul|lu)($| .*)", RegexOptions.IgnoreCase);
@@ -90,13 +90,13 @@ namespace dmHaggisBot
             await Task.Delay(-1);
         }
 
-        public async Task MessageReceived(SocketMessage sm)
+        private async Task MessageReceived(SocketMessage sm)
         {
             if (sm.Author.IsBot)
                 return;
 
             // Character Creation
-            if (_charChreate.IsMatch(sm.Content))
+            if (_charCreate.IsMatch(sm.Content))
             {
                 if (_universe != null)
                     await CreateChar(sm);
@@ -105,7 +105,7 @@ namespace dmHaggisBot
             }
 
             // Universe Creation
-            if (_univChreate.IsMatch(sm.Content))
+            if (_univCreate.IsMatch(sm.Content))
                 await CreateUniv(sm);
 
             // Universe Loading
@@ -152,20 +152,20 @@ namespace dmHaggisBot
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="cacheable"></param>
+        /// <param name="cache"></param>
         /// <param name="sc"></param>
         /// <param name="sr"></param>
-        private async Task ReactionAdded(Cacheable<IUserMessage, ulong> cacheable, ISocketMessageChannel sc,
+        private async Task ReactionAdded(Cacheable<IUserMessage, ulong> cache, ISocketMessageChannel sc,
             SocketReaction sr)
         {
             var user = _client.GetUser(sr.UserId);
             if (user.IsBot)
                 return;
 
-            bool up = true;
-
             if (!_dataSearch.IsMatch(sr.Message.ToString()))
                 return;
+
+            bool up = true;
 
             if (sr.Emote.ToString().Equals(RightArrow.ToString()))
                 up = true;
@@ -176,7 +176,7 @@ namespace dmHaggisBot
             var (searchDefaultSettings, message) = ParsePagination(sr.Message.ToString(), up);
 
             await sr.Message.Value.RemoveReactionAsync(sr.Emote, user);
-            await SearchData(sr.Channel, message, searchDefaultSettings, cacheable.Value);
+            await SearchData(sr.Channel, message, searchDefaultSettings, cache.Value);
         }
 
         private async Task CreateUniv(SocketMessage sm)
@@ -185,15 +185,17 @@ namespace dmHaggisBot
             var n = ParseCommand("n", sm.Content);
             var o = ParseCommand("o", sm.Content);
 
-            var univDef = new UniverseDefaultSettings();
+            var univDef = new UniverseDefaultSettings
+            {
+                Name = n,
+                Grid = string.IsNullOrEmpty(g)
+                    ? null
+                    : g.Split(" ").Length == 1
+                        ? new Grid(Int32.Parse(g), Int32.Parse(g))
+                        : new Grid(Int32.Parse(g.Split(" ")[0]), Int32.Parse(g.Split(" ")[1])),
+                Overwrite = o
+            };
 
-            univDef.Name = n;
-            univDef.Grid = string.IsNullOrEmpty(g)
-                ? null
-                : g.Split(" ").Length == 1
-                    ? new Grid(Int32.Parse(g), Int32.Parse(g))
-                    : new Grid(Int32.Parse(g.Split(" ")[0]), Int32.Parse(g.Split(" ")[1]));
-            univDef.Overwrite = o;
 
             try
             {
@@ -212,7 +214,7 @@ namespace dmHaggisBot
             }
         }
 
-        public async Task LoadUniv(SocketMessage sm)
+        private async Task LoadUniv(SocketMessage sm)
         {
             var n = ParseCommand("n", sm.Content);
 
@@ -229,21 +231,23 @@ namespace dmHaggisBot
             }
         }
 
-        public async Task CreateStar(SocketMessage sm)
+        private async Task CreateStar(SocketMessage sm)
         {
             var s = ParseCommand("s", sm.Content);
 
-            var starDef = new StarDefaultSettings();
+            var starDef = new StarDefaultSettings
+            {
+                StarCount = string.IsNullOrEmpty(s)
+                    ? -1
+                    : Int32.Parse(s)
+            };
 
-            starDef.StarCount = string.IsNullOrEmpty(s)
-                ? -1
-                : Int32.Parse(s);
 
             try
             {
                 _universe = _creation.CreateStars(_universe, starDef);
                 await sm.Channel.SendMessageAsync(s + " stars created in " + _universe.Name);
-                SetGameStatus();
+                await SetGameStatus();
             }
             catch (FileNotFoundException e)
             {
@@ -251,7 +255,7 @@ namespace dmHaggisBot
             }
         }
 
-        public async Task CreatePlanet(SocketMessage sm)
+        private async Task CreatePlanet(SocketMessage sm)
         {
             var r = ParseCommand("r", sm.Content);
             var pr = string.IsNullOrEmpty(r)
@@ -260,9 +264,7 @@ namespace dmHaggisBot
                     ? new[] {Int32.Parse(r), Int32.Parse(r)}
                     : new[] {Int32.Parse(r.Split(" ")[0]), Int32.Parse(r.Split(" ")[1])};
 
-            var planDef = new PlanetDefaultSettings();
-
-            planDef.PlanetRange = pr;
+            var planDef = new PlanetDefaultSettings {PlanetRange = pr};
 
             try
             {
@@ -276,7 +278,7 @@ namespace dmHaggisBot
             }
         }
 
-        public async Task CreateChar(SocketMessage sm)
+        private async Task CreateChar(SocketMessage sm)
         {
             var a = ParseCommand("a", sm.Content);
             var ar = string.IsNullOrEmpty(a)
@@ -294,16 +296,18 @@ namespace dmHaggisBot
             var t = ParseCommand("t", sm.Content);
 
             // await sm.Channel.SendMessageAsync(sb.ToString());
-            var charDef = new CharacterDefaultSettings();
+            var charDef = new CharacterDefaultSettings
+            {
+                Count = string.IsNullOrEmpty(c) ? 1 : int.Parse(c),
+                First = f,
+                Last = l,
+                Age = ar,
+                HairStyle = h,
+                HairCol = hc,
+                EyeCol = ec,
+                Title = t
+            };
 
-            charDef.Count = string.IsNullOrEmpty(c) ? 1 : int.Parse(c);
-            charDef.First = f;
-            charDef.Last = l;
-            charDef.Age = ar;
-            charDef.HairStyle = h;
-            charDef.HairCol = hc;
-            charDef.EyeCol = ec;
-            charDef.Title = t;
 
             if (g == "0")
                 charDef.Gender = Character.GenderEnum.Male;
@@ -325,21 +329,23 @@ namespace dmHaggisBot
             }
         }
 
-        public async Task CreateProb(SocketMessage sm)
+        private async Task CreateProb(SocketMessage sm)
         {
             var c = ParseCommand("c", sm.Content);
             var a = ParseCommand("a", sm.Content);
             var id = ParseCommand("id", sm.Content);
 
-            var probDef = new ProblemDefaultSettings();
+            var probDef = new ProblemDefaultSettings
+            {
+                Count = string.IsNullOrEmpty(c)
+                    ? -1
+                    : Int32.Parse(c),
+                Additive = !string.IsNullOrEmpty(a) && a.ToUpper() == "Y",
+                ID = string.IsNullOrEmpty(id)
+                    ? null
+                    : id
+            };
 
-            probDef.Count = string.IsNullOrEmpty(c)
-                ? -1
-                : Int32.Parse(c);
-            probDef.Additive = !string.IsNullOrEmpty(a) && a.ToUpper() == "Y";
-            probDef.ID = string.IsNullOrEmpty(id)
-                ? null
-                : id;
 
             try
             {
@@ -353,27 +359,29 @@ namespace dmHaggisBot
             }
         }
 
-        public async Task SearchData(SocketMessage sm)
+        private async Task SearchData(SocketMessage sm)
         {
             var id = ParseCommand("id", sm.Content);
             var n = ParseCommand("n", sm.Content);
             var c = ParseCommand("c", sm.Content);
             var t = ParseCommand("t", sm.Content);
 
-            SearchDefaultSettings searchDef = new SearchDefaultSettings();
+            SearchDefaultSettings searchDef = new SearchDefaultSettings
+            {
+                ID = string.IsNullOrEmpty(id)
+                    ? new string[] { }
+                    : id.Split(", "),
+                Name = string.IsNullOrEmpty(n)
+                    ? new string[] { }
+                    : n.Split(", "),
+                Index = string.IsNullOrEmpty(c)
+                    ? 0
+                    : Int32.Parse(c),
+                Tag = string.IsNullOrEmpty(t)
+                    ? new string[] { }
+                    : t.Split(" ")
+            };
 
-            searchDef.ID = string.IsNullOrEmpty(id)
-                ? new string[] { }
-                : id.Split(", ");
-            searchDef.Name = string.IsNullOrEmpty(n)
-                ? new string[] { }
-                : n.Split(", ");
-            searchDef.Index = string.IsNullOrEmpty(c)
-                ? 0
-                : Int32.Parse(c);
-            searchDef.Tag = string.IsNullOrEmpty(t)
-                ? new string[] { }
-                : t.Split(" ");
 
             await SearchData(sm.Channel, sm.Content, searchDef);
         }
@@ -411,13 +419,13 @@ namespace dmHaggisBot
                 await sc.SendMessageAsync("No results found");
         }
 
-        private string ParseCommand(string argName, string argVal)
+        private static string ParseCommand(string argName, string argVal)
         {
-            var start = argVal.IndexOf(" -" + argName + " ") + 1;
+            var start = argVal.IndexOf(" -" + argName + " ", StringComparison.Ordinal) + 1;
             if (start == 0)
                 return null;
 
-            var end = argVal.IndexOf(" -", start);
+            var end = argVal.IndexOf(" -", start, StringComparison.Ordinal);
             if (end == -1)
                 end = argVal.Length - 1;
 
@@ -426,7 +434,7 @@ namespace dmHaggisBot
             return cmd.Trim();
         }
 
-        public (SearchDefaultSettings, string) ParsePagination(String message, bool up)
+        private static (SearchDefaultSettings, string) ParsePagination(String message, bool up)
         {
             var id = ParseCommand("id", message);
             var n = ParseCommand("n", message);
@@ -443,19 +451,19 @@ namespace dmHaggisBot
                 message = message.Replace(cs, "");
             }
 
-            SearchDefaultSettings searchDef = new SearchDefaultSettings();
-            // {ID = id, Name = n, Index = Int32.Parse(c), Tag = t}
-
-            searchDef.ID = string.IsNullOrEmpty(id)
-                ? new string[] { }
-                : id.Split(", ");
-            searchDef.Name = string.IsNullOrEmpty(n)
-                ? new string[] { }
-                : n.Split(", ");
-            searchDef.Index = Int32.Parse(c);
-            searchDef.Tag = string.IsNullOrEmpty(t)
-                ? new string[] { }
-                : t.Split(" ");
+            SearchDefaultSettings searchDef = new SearchDefaultSettings
+            {
+                ID = string.IsNullOrEmpty(id)
+                    ? new string[] { }
+                    : id.Split(", "),
+                Name = string.IsNullOrEmpty(n)
+                    ? new string[] { }
+                    : n.Split(", "),
+                Index = Int32.Parse(c),
+                Tag = string.IsNullOrEmpty(t)
+                    ? new string[] { }
+                    : t.Split(" ")
+            };
 
             return (searchDef, message);
         }

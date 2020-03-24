@@ -74,7 +74,8 @@
             </e>
           </e>
         </e>
-        <e p="ReadFromDescriptions" t="Include">
+        <e p="OBSOLETE" t="Include">
+          <e p="IEntityNames.cs" t="Include" />
           <e p="SetDataFromReader.cs" t="Include" />
           <e p="WorldTags.cs" t="Include" />
           <e p="worldTemp.json" t="Include" />

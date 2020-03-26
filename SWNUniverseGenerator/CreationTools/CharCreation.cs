@@ -82,8 +82,7 @@ namespace SWNUniverseGenerator.CreationTools
                     ? charData.LastName[rand.Next(0, lastCount - 1)]
                     : characterDefaultSettings.Last;
                 character.Age = characterDefaultSettings.Age == null || characterDefaultSettings.Age.Length == 0 ||
-                                characterDefaultSettings.Age[0] == -1 ||
-                                characterDefaultSettings.Age[1] == -1
+                                characterDefaultSettings.Age[0] == -1 || characterDefaultSettings.Age[1] == -1
                     // This creates Ages on a bell-curve where it's more likely to land somewhere around 30-45
                     // with a minimum of 15
                     ? rand.Next(5, 22) + rand.Next(5, 23) + rand.Next(5, 23)
@@ -103,6 +102,17 @@ namespace SWNUniverseGenerator.CreationTools
                     : characterDefaultSettings.Title;
                 character.BirthPlanet = universe.Planets?[rand.Next(0, universe.Planets.Count)].ID;
                 character.CurrentLocation = universe.Planets?[rand.Next(0, universe.Planets.Count)].ID;
+                character.CrimeChance = characterDefaultSettings.CrimeChance == null ||
+                                        characterDefaultSettings.CrimeChance.Length == 0 ||
+                                        characterDefaultSettings.CrimeChance[0] == -1 ||
+                                        characterDefaultSettings.CrimeChance[1] == -1
+                    ? rand.Next(1, 26) + rand.Next(0, 25) + // Default chance up to 50%
+                      (rand.Next(0, 4) != 1
+                          ? 0
+                          : rand.Next(1, 26) + rand.Next(0, 25)) // 25% Additional crime roll chance
+                    : rand.Next(characterDefaultSettings.CrimeChance[0], characterDefaultSettings.CrimeChance[1] + 1);
+
+                Console.Out.WriteLine(character.Name + " - " + character.CrimeChance);
 
                 // Add the Character to the list of Characters in the universe
                 universe.Characters.Add(character);

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Discord;
 using SWNUniverseGenerator;
 using SWNUniverseGenerator.DefaultSettings;
@@ -8,7 +9,7 @@ namespace dmHaggisBot
 {
     internal class GenerateEmbeds
     {
-        public static Embed CharacterEmbed(Universe universe, Character character)
+        public static Embed CharacterEmbed(Universe universe, Character character, Boolean dmChannel)
         {
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.DarkGrey);
@@ -27,6 +28,10 @@ namespace dmHaggisBot
             eb.AddField("Current Location: ",
                 character.CurrentLocation + " - " +
                 universe.Planets.Single(a => a.ID == character.CurrentLocation).Name);
+            if (dmChannel)
+            {
+                eb.AddField("Crime Chance: ", character.CrimeChance + "%");
+            }
 
             return eb.Build();
         }

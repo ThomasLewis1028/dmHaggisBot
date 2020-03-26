@@ -89,5 +89,10 @@ namespace SWNUniverseGenerator.Models
         /// Returns the concatenation of the First and Last name without storing it in the Json
         /// </summary>
         [JsonIgnore] public String Name => First + " " + Last;
+        
+        /// <summary>
+        /// An integer representation of the likelihood a character will aide in some shady matter
+        /// </summary>
+        public Int32 CrimeChance { get; set; }
     }
 }

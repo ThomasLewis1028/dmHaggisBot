@@ -55,5 +55,10 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// This value should be the number of times you will create a new character with the given values
         /// </summary>
         public Int32 Count { get; set; }
+        
+        /// <summary>
+        /// This value should be the range that you wish to randomly pick from to create a CrimeChance
+        /// </summary>
+        public Int32[] CrimeChance { get; set; }
     }
 }

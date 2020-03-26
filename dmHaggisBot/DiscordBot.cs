@@ -419,8 +419,8 @@ namespace dmHaggisBot
                     ? new string[] { }
                     : t.Split(" "),
                 Permission = DMChannel == (long) sm.Channel.Id
-                ? SearchDefaultSettings.PermissionType.DM
-                : SearchDefaultSettings.PermissionType.Player
+                    ? SearchDefaultSettings.PermissionType.DM
+                    : SearchDefaultSettings.PermissionType.Player
             };
 
 
@@ -443,12 +443,13 @@ namespace dmHaggisBot
             if (results.Result != null)
             {
                 if (results.Result.GetType() == typeof(Character))
-                    embeds.Add(GenerateEmbeds.CharacterEmbed(_universe, (Character) results.Result));
+                    embeds.Add(GenerateEmbeds.CharacterEmbed(_universe, (Character) results.Result,
+                        searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
                 else if (results.Result.GetType() == typeof(Planet))
                     embeds.Add(GenerateEmbeds.PlanetEmbed(_universe, (Planet) results.Result));
                 else if (results.Result.GetType() == typeof(Star))
                     embeds.Add(GenerateEmbeds.StarEmbed(_universe, (Star) results.Result));
-                else if(results.Result.GetType() == typeof(Problem))
+                else if (results.Result.GetType() == typeof(Problem))
                     embeds.Add(GenerateEmbeds.ProblemEmbed(_universe, (Problem) results.Result));
 
                 var message = sm + " - [" + results.CurrentIndex + ", " + results.MaxCount + "]";

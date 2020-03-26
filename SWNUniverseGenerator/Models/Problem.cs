@@ -6,6 +6,8 @@ namespace SWNUniverseGenerator.Models
     {
         public String ID { get; set; }
         
+        public String Name => ID;
+
         public String LocationID { get; set; }
         
         public String ConflictType { get; set; }

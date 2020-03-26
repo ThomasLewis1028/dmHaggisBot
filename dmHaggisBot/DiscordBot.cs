@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -31,6 +32,7 @@ namespace dmHaggisBot
 
         // Get the token out of the properties folder
         private static readonly string Token = (string) Prop.GetValue("token");
+        private static readonly long DMChannel = (long) Prop.GetValue("DM Channel");
 
         //<editor-fold desc="Regular expressions for commands">
         private readonly Regex _charCreate = new Regex("^(charCreate|createChar|cc)($| .*)", RegexOptions.IgnoreCase);
@@ -144,7 +146,7 @@ namespace dmHaggisBot
                 else
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
-            
+
             // Point of Interest Creation
 
             // Search Data
@@ -181,7 +183,7 @@ namespace dmHaggisBot
             else if (sr.Emote.ToString().Equals(LeftArrow.ToString()))
                 up = false;
 
-            var (searchDefaultSettings, message) = ParsePagination(sr.Message.ToString(), up);
+            var (searchDefaultSettings, message) = ParsePagination(sr, up);
 
             await sr.Message.Value.RemoveReactionAsync(sr.Emote, user);
             await SearchData(sr.Channel, message, searchDefaultSettings, cache.Value);
@@ -416,7 +418,10 @@ namespace dmHaggisBot
                     : Int32.Parse(c),
                 Tag = string.IsNullOrEmpty(t)
                     ? new string[] { }
-                    : t.Split(" ")
+                    : t.Split(" "),
+                Permission = DMChannel == (long) sm.Channel.Id
+                ? SearchDefaultSettings.PermissionType.DM
+                : SearchDefaultSettings.PermissionType.Player
             };
 
 
@@ -433,7 +438,7 @@ namespace dmHaggisBot
         private async Task SearchData(ISocketMessageChannel sc, string sm,
             SearchDefaultSettings searchDefaultSettings, IUserMessage userMessage = null)
         {
-            var results = _creation.SearchUniverse(_universe, searchDefaultSettings);
+            var results = Search.SearchUniverse(_universe, searchDefaultSettings);
             var embeds = new List<Embed>();
 
             if (results.Result != null)
@@ -444,6 +449,8 @@ namespace dmHaggisBot
                     embeds.Add(GenerateEmbeds.PlanetEmbed(_universe, (Planet) results.Result));
                 else if (results.Result.GetType() == typeof(Star))
                     embeds.Add(GenerateEmbeds.StarEmbed(_universe, (Star) results.Result));
+                else if(results.Result.GetType() == typeof(Problem))
+                    embeds.Add(GenerateEmbeds.ProblemEmbed(_universe, (Problem) results.Result));
 
                 var message = sm + " - [" + results.CurrentIndex + ", " + results.MaxCount + "]";
 
@@ -478,10 +485,10 @@ namespace dmHaggisBot
             return cmd.Trim();
         }
 
-        private static (SearchDefaultSettings, string) ParsePagination(String message, bool up)
+        private static (SearchDefaultSettings, string) ParsePagination(SocketReaction sr, bool up)
         {
-            
-            
+            var message = sr.Message.ToString();
+
             var id = ParseCommand("id", message);
             var n = ParseCommand("n", message);
             var c = ParseCommand("c", message);
@@ -508,7 +515,10 @@ namespace dmHaggisBot
                 Index = Int32.Parse(c),
                 Tag = string.IsNullOrEmpty(t)
                     ? new string[] { }
-                    : t.Split(" ")
+                    : t.Split(" "),
+                Permission = DMChannel == (long) sr.Channel.Id
+                    ? SearchDefaultSettings.PermissionType.DM
+                    : SearchDefaultSettings.PermissionType.Player
             };
 
             return (searchDef, message);

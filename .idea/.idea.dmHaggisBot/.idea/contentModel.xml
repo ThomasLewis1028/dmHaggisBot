@@ -82,6 +82,7 @@
           <e p="worldTemp.json" t="Include" />
         </e>
         <e p="Readme.md" t="Include" />
+        <e p="Search.cs" t="Include" />
         <e p="SearchResult.cs" t="Include" />
         <e p="SWNUniverseGenerator.csproj" t="IncludeRecursive" />
       </e>

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -185,47 +186,72 @@ namespace SWNUniverseGenerator
             var id = searchDefaultSettings.ID ?? new string[] { };
             var n = searchDefaultSettings.Name ?? new string[] { };
 
-            // Set a regular expression for the Name 
-            var nrgx = "(";
-            foreach (var i in n)
-                nrgx += "" + i + "|";
-            nrgx = nrgx.Substring(0, nrgx.Length - 1) + ")";
+            // Set a regular expression for the Name
+            var nrgx = "";
+            if (n.Length != 0)
+            {
+                foreach (var i in n)
+                    nrgx += "" + i + "|";
+                nrgx = nrgx.Substring(0, nrgx.Length - 1);
+            }
+            else
+                nrgx = "^$";
 
-            // Set the count of what result number is requested. Default to 0.
+
+            // Set a regular expression for the ID
+            var idrgx = "";
+            if (id.Length != 0)
+            {
+                foreach (var i in id)
+                    idrgx += "" + i + "|";
+                idrgx = idrgx.Substring(0, idrgx.Length - 1);
+            }
+            else
+                idrgx = "^$";
+
+            Console.Out.WriteLine(idrgx);
+
+            // Set the count of what result number is requested. Default to 0
             var c = searchDefaultSettings.Index == 0
                 ? 0
                 : searchDefaultSettings.Index - 1;
 
-            // Set the tags for more specific searches.
+            // Set the tags for more specific searches
             var t = searchDefaultSettings.Tag;
             bool includePlanets = t.Contains("p") || t.Length == 0;
             bool includeChars = t.Contains("ch") || t.Length == 0;
             bool includeStars = t.Contains("s") || t.Length == 0;
 
-            // Use a Linq query to find the number of items that match your search query.
+            // Use a Linq query to find the number of items that match your search query
             var maxCount = (from p in universe.Planets
-                    where (Regex.IsMatch(p.Name, nrgx, RegexOptions.IgnoreCase) || id.Contains(p.ID)) &&
+                    where (Regex.IsMatch(p.Name, nrgx, RegexOptions.IgnoreCase) ||
+                           Regex.IsMatch(p.ID, idrgx, RegexOptions.IgnoreCase)) &&
                           includePlanets
                     select new {p.ID, p.Name})
                 .Union(from ch in universe.Characters
-                    where (Regex.IsMatch(ch.Name, nrgx, RegexOptions.IgnoreCase) || id.Contains(ch.ID)) &&
+                    where (Regex.IsMatch(ch.Name, nrgx, RegexOptions.IgnoreCase) ||
+                           Regex.IsMatch(ch.ID, idrgx, RegexOptions.IgnoreCase)) &&
                           includeChars
                     select new {ch.ID, ch.Name})
                 .Union(from s in universe.Stars
-                    where (Regex.IsMatch(s.Name, nrgx, RegexOptions.IgnoreCase) || id.Contains(s.ID)) &&
+                    where (Regex.IsMatch(s.Name, nrgx, RegexOptions.IgnoreCase) ||
+                           Regex.IsMatch(s.ID, idrgx, RegexOptions.IgnoreCase)) &&
                           includeStars
                     select new {s.ID, s.Name})
                 .Count();
 
             // Use a Linq query to find all of the IDs in the list that match your search query and take the specified index
             var item = (from p in universe.Planets
-                    where (Regex.IsMatch(p.Name, nrgx, RegexOptions.IgnoreCase) || id.Contains(p.ID)) && includePlanets
+                    where (Regex.IsMatch(p.Name, nrgx, RegexOptions.IgnoreCase) ||
+                           Regex.IsMatch(p.ID, idrgx, RegexOptions.IgnoreCase)) && includePlanets
                     select new {p.ID, p.Name, Type = SearchType.Planets})
                 .Union(from ch in universe.Characters
-                    where (Regex.IsMatch(ch.Name, nrgx, RegexOptions.IgnoreCase) || id.Contains(ch.ID)) && includeChars
+                    where (Regex.IsMatch(ch.Name, nrgx, RegexOptions.IgnoreCase) ||
+                           Regex.IsMatch(ch.ID, idrgx, RegexOptions.IgnoreCase)) && includeChars
                     select new {ch.ID, ch.Name, Type = SearchType.Characters})
                 .Union(from s in universe.Stars
-                    where (Regex.IsMatch(s.Name, nrgx, RegexOptions.IgnoreCase) || id.Contains(s.ID)) && includeStars
+                    where (Regex.IsMatch(s.Name, nrgx, RegexOptions.IgnoreCase) ||
+                           Regex.IsMatch(s.ID, idrgx, RegexOptions.IgnoreCase)) && includeStars
                     select new {s.ID, s.Name, Type = SearchType.Stars})
                 .Skip(c)
                 .Take(1)

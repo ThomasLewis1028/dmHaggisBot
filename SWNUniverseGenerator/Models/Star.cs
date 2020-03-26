@@ -1,6 +1,7 @@
 ﻿using System;
+using Newtonsoft.Json;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.Models
 {
     /// <summary>
     /// This holds all of the necessary information about a Star
@@ -26,5 +27,10 @@ namespace SWNUniverseGenerator
         /// A Star's Y location on a Grid
         /// </summary>
         public Int32 Y { get; set; }
+
+        /// <summary>
+        /// The specific zone location on a grid
+        /// </summary>
+        [JsonIgnore] public String GetZone => X.ToString() + Y.ToString() ;
     }
 }

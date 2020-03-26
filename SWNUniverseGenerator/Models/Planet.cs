@@ -1,6 +1,7 @@
 ﻿using System;
+using SWNUniverseGenerator.DeserializedObjects;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.Models
 {
     /// <summary>
     /// Planet object that stores all of the necessary information about a Planet
@@ -28,7 +29,14 @@ namespace SWNUniverseGenerator
         /// This will include a Type and a Description of the Tag, as well as potential Enemies, Friends
         /// and Complications
         /// </summary>
-        public WorldTag WorldTag { get; set; }
+        public WorldTag FirstWorldTag { get; set; }
+        
+        /// <summary>
+        /// This implements a World class from WorldInfo.cs and specifies the World Tag of a Planet
+        /// This will include a Type and a Description of the Tag, as well as potential Enemies, Friends
+        /// and Complications
+        /// </summary>
+        public WorldTag SecondWorldTag { get; set; }
 
         /// <summary>
         /// This implements an Atmosphere class from WorldInfo.cs and specifies the Atmosphere of a Planet
@@ -58,16 +66,16 @@ namespace SWNUniverseGenerator
         /// <summary>
         /// This is the "Origin" of the planet from the Primary
         /// </summary>
-        public string Origin { get; set; }
+        public String Origin { get; set; }
 
         /// <summary>
         /// This is the "Relationship" between the Primary Planet and a non-Primary Planet
         /// </summary>
-        public string Relationship { get; set; }
+        public String Relationship { get; set; }
 
         /// <summary>
         /// This is a "Point of Contact" between the Primary Planet and a non-Primary Planet
         /// </summary>
-        public string Contact { get; set; }
+        public String Contact { get; set; }
     }
 }

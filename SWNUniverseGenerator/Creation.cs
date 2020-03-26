@@ -4,6 +4,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SWNUniverseGenerator.CreationTools;
+using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator
 {

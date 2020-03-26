@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.Models
 {
     /// <summary>
     /// Character object that stores all of the necessary information about a Character
@@ -88,6 +88,6 @@ namespace SWNUniverseGenerator
         /// <summary>
         /// Returns the concatenation of the First and Last name without storing it in the Json
         /// </summary>
-        [JsonIgnore] public string Name => First + " " + Last;
+        [JsonIgnore] public String Name => First + " " + Last;
     }
 }

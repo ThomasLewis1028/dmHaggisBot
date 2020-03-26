@@ -2,8 +2,10 @@
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SWNUniverseGenerator.DeserializedObjects;
+using SWNUniverseGenerator.Models;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.CreationTools
 {
     /// <summary>
     /// This class holds all the necessary functions for creating Planets and adding them to the Universe
@@ -62,7 +64,8 @@ namespace SWNUniverseGenerator
                     
                     // Set the Planet information from either a randomized value or specified information
                     planet.StarID = star.ID;
-                    planet.WorldTag = worldInfo.WorldTags[rand.Next(0, 100)];
+                    planet.FirstWorldTag = worldInfo.WorldTags[rand.Next(0, 100)];
+                    planet.SecondWorldTag = worldInfo.WorldTags[rand.Next(0, 100)];
                     planet.Atmosphere = worldInfo.Atmospheres[rand.Next(0, 6) + rand.Next(0, 6)];
                     planet.Temperature = worldInfo.Temperatures[rand.Next(0, 6) + rand.Next(0, 6)];
                     planet.Biosphere = worldInfo.Biospheres[rand.Next(0, 6) + rand.Next(0, 6)];

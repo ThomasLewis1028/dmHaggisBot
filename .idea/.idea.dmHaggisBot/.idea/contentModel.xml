@@ -53,18 +53,19 @@
         </e>
         <e p="Grid.cs" t="Include" />
         <e p="IDGen.cs" t="Include" />
-        <e p="IEntity Objects" t="Include">
+        <e p="Item.cs" t="Include" />
+        <e p="Models" t="Include">
           <e p="Character.cs" t="Include" />
           <e p="City.cs" t="Include" />
           <e p="IEntity.cs" t="Include" />
           <e p="ILocation.cs" t="Include" />
           <e p="Job.cs" t="Include" />
           <e p="Planet.cs" t="Include" />
+          <e p="PointOfInterest.cs" t="Include" />
           <e p="Problem.cs" t="Include" />
           <e p="Star.cs" t="Include" />
           <e p="Universe.cs" t="Include" />
         </e>
-        <e p="Item.cs" t="Include" />
         <e p="NameGenerator.cs" t="Include" />
         <e p="NameGenerator.js" t="Include" />
         <e p="obj" t="ExcludeRecursive">

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SWNUniverseGenerator.DeserializedObjects;
 
 /*
  * This is mostly obsolete. I used this function to copy/paste the descriptions from the Stars Without Number rulebook

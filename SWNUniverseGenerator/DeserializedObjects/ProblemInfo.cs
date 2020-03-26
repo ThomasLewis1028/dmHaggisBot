@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.DeserializedObjects
 {
     /// <summary>
     /// This is the class where a problemData.json will be deserialized to

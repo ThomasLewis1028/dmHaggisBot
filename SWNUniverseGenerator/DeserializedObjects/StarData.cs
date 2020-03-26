@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.DeserializedObjects
 {
     /// <summary>
     /// Hold all data of Star and Planet names to be used in generation

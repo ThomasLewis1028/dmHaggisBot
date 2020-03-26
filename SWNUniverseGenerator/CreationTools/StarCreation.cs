@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SWNUniverseGenerator.DeserializedObjects;
+using SWNUniverseGenerator.Models;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.CreationTools
 {
     /// <summary>
     /// This class contains the necessary functions for creating a Star

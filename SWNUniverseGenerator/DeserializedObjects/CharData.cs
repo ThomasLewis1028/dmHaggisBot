@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.DeserializedObjects
 {
     /// <summary>
     /// This is where a characterData.json file is deserialized to

@@ -1,6 +1,6 @@
 ﻿﻿using System;
 
-namespace SWNUniverseGenerator
+ namespace SWNUniverseGenerator.Models
 {
     /// <summary>
     /// The base interface for a Location that also implements IEntity

@@ -9,6 +9,7 @@ using Discord.Rest;
 using Discord.WebSocket;
 using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator;
+using SWNUniverseGenerator.Models;
 
 namespace dmHaggisBot
 {
@@ -90,6 +91,10 @@ namespace dmHaggisBot
             await Task.Delay(-1);
         }
 
+        /// <summary>
+        /// This method handles messages received on the Discord bot
+        /// </summary>
+        /// <param name="sm"></param>
         private async Task MessageReceived(SocketMessage sm)
         {
             if (sm.Author.IsBot)
@@ -138,6 +143,8 @@ namespace dmHaggisBot
                 else
                     await sm.Channel.SendMessageAsync("No universe file loaded");
             }
+            
+            // Point of Interest Creation
 
             // Search Data
             if (_dataSearch.IsMatch(sm.Content))
@@ -150,7 +157,7 @@ namespace dmHaggisBot
         }
 
         /// <summary>
-        /// 
+        /// This method handles reactions added to a message
         /// </summary>
         /// <param name="cache"></param>
         /// <param name="sc"></param>
@@ -179,6 +186,10 @@ namespace dmHaggisBot
             await SearchData(sr.Channel, message, searchDefaultSettings, cache.Value);
         }
 
+        /// <summary>
+        /// This method handles creating a Universe from a SocketMessage
+        /// </summary>
+        /// <param name="sm"></param>
         private async Task CreateUniv(SocketMessage sm)
         {
             var g = ParseCommand("g", sm.Content);
@@ -214,6 +225,10 @@ namespace dmHaggisBot
             }
         }
 
+        /// <summary>
+        /// This method handles loading a Universe from a SocketMessage
+        /// </summary>
+        /// <param name="sm"></param>
         private async Task LoadUniv(SocketMessage sm)
         {
             var n = ParseCommand("n", sm.Content);
@@ -231,6 +246,10 @@ namespace dmHaggisBot
             }
         }
 
+        /// <summary>
+        /// This method handles creating stars in a Universe from a SocketMessage
+        /// </summary>
+        /// <param name="sm"></param>
         private async Task CreateStar(SocketMessage sm)
         {
             var s = ParseCommand("s", sm.Content);
@@ -255,6 +274,10 @@ namespace dmHaggisBot
             }
         }
 
+        /// <summary>
+        /// This method handles creating planets in a Universe from a SocketMessage
+        /// </summary>
+        /// <param name="sm"></param>
         private async Task CreatePlanet(SocketMessage sm)
         {
             var r = ParseCommand("r", sm.Content);
@@ -278,6 +301,10 @@ namespace dmHaggisBot
             }
         }
 
+        /// <summary>
+        /// This method handles creating characters in a Universe from a SocketMessage
+        /// </summary>
+        /// <param name="sm"></param>
         private async Task CreateChar(SocketMessage sm)
         {
             var a = ParseCommand("a", sm.Content);
@@ -329,6 +356,10 @@ namespace dmHaggisBot
             }
         }
 
+        /// <summary>
+        /// This method handles creating problems in a Universe from a SocketMessage
+        /// </summary>
+        /// <param name="sm"></param>
         private async Task CreateProb(SocketMessage sm)
         {
             var c = ParseCommand("c", sm.Content);
@@ -359,6 +390,11 @@ namespace dmHaggisBot
             }
         }
 
+        /// <summary>
+        /// This method handles searching through a Universe from a SocketMessage
+        /// </summary>
+        /// <param name="sm"></param>
+        /// <returns></returns>
         private async Task SearchData(SocketMessage sm)
         {
             var id = ParseCommand("id", sm.Content);
@@ -386,6 +422,13 @@ namespace dmHaggisBot
             await SearchData(sm.Channel, sm.Content, searchDef);
         }
 
+        /// <summary>
+        /// This method handles
+        /// </summary>
+        /// <param name="sc"></param>
+        /// <param name="sm"></param>
+        /// <param name="searchDefaultSettings"></param>
+        /// <param name="userMessage"></param>
         private async Task SearchData(ISocketMessageChannel sc, string sm,
             SearchDefaultSettings searchDefaultSettings, IUserMessage userMessage = null)
         {

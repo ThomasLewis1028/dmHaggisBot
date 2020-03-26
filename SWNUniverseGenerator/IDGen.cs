@@ -1,4 +1,5 @@
 ﻿using System;
+using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator
 {
@@ -26,6 +27,7 @@ namespace SWNUniverseGenerator
                 Character _ => ("U-" + id),
                 City _ => ("C-" + id),
                 Problem _ => ("Q-" + id),
+                PointOfInterest _ => ("I-"+id),
                 _ => ("Z-" + id)
             };
 

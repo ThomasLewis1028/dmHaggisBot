@@ -1,4 +1,4 @@
-﻿namespace SWNUniverseGenerator
+﻿namespace SWNUniverseGenerator.Models
 {
     public class Job
     {

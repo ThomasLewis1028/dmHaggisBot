@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Discord;
 using SWNUniverseGenerator;
+using SWNUniverseGenerator.Models;
 
 namespace dmHaggisBot
 {
@@ -33,7 +34,7 @@ namespace dmHaggisBot
             eb.Title = star.ID;
 
             eb.AddField("Name: ", star.Name);
-            eb.AddField("Grid: ", star.X + ", " + star.Y);
+            eb.AddField("Zone: ", star.GetZone);
             string planets = "";
             foreach (Planet p in universe.Planets.FindAll(a => a.StarID == star.ID))
                 planets += (p.ID + " - " + p.Name + "\n");

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.Models
 {
     public class City : ILocation
     {

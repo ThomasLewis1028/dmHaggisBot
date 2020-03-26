@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.Models
 {
     /// <summary>
     /// The Universe class that holds all information about a Universe

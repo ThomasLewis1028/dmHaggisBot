@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.DeserializedObjects
 {
     /// <summary>
     /// This is the class where a worldTags.json will be deserialized to

@@ -62,6 +62,7 @@ namespace SWNUniverseGenerator
             var id = searchDefaultSettings.ID ?? new string[] { };
             var n = searchDefaultSettings.Name ?? new string[] { };
             var t = searchDefaultSettings.Tag ?? new string[] { };
+            var cl = searchDefaultSettings.CurrentLocation ?? new string[] { };
 
             // Set a regular expression for the Name
             var nrgx = "";
@@ -84,6 +85,17 @@ namespace SWNUniverseGenerator
             }
             else
                 idrgx = "^$";
+            
+            // Set a regular expression for the ID
+            var clrgx = "";
+            if (cl.Length != 0)
+            {
+                foreach (var i in cl)
+                    clrgx += "" + i + "|";
+                clrgx = clrgx.Substring(0, clrgx.Length - 1);
+            }
+            else
+                clrgx = "^$";
 
             // Set the tags for more specific searches
             bool includePlanets = t.Contains("p") || t.Length == 0;
@@ -99,7 +111,8 @@ namespace SWNUniverseGenerator
                     select (IEntity) p)
                 .Union(from ch in universe.Characters
                     where (Regex.IsMatch(ch.Name, nrgx, RegexOptions.IgnoreCase) ||
-                           Regex.IsMatch(ch.ID, idrgx, RegexOptions.IgnoreCase)) &&
+                           Regex.IsMatch(ch.ID, idrgx, RegexOptions.IgnoreCase) ||
+                           Regex.IsMatch(ch.CurrentLocation, clrgx, RegexOptions.IgnoreCase)) &&
                           includeChars
                     select (IEntity) ch)
                 .Union(from s in universe.Stars
@@ -110,7 +123,7 @@ namespace SWNUniverseGenerator
                 .Union(from pr in universe.Problems
                     where (Regex.IsMatch(pr.ID, idrgx, RegexOptions.IgnoreCase) &&
                            includeProbs)
-                        select (IEntity) pr)
+                    select (IEntity) pr)
                 .AsQueryable();
         }
     }

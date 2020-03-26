@@ -403,6 +403,7 @@ namespace dmHaggisBot
             var n = ParseCommand("n", sm.Content);
             var c = ParseCommand("c", sm.Content);
             var t = ParseCommand("t", sm.Content);
+            var cl = ParseCommand("cl", sm.Content);
 
             SearchDefaultSettings searchDef = new SearchDefaultSettings
             {
@@ -420,7 +421,10 @@ namespace dmHaggisBot
                     : t.Split(" "),
                 Permission = DMChannel == (long) sm.Channel.Id
                     ? SearchDefaultSettings.PermissionType.DM
-                    : SearchDefaultSettings.PermissionType.Player
+                    : SearchDefaultSettings.PermissionType.Player,
+                CurrentLocation = string.IsNullOrEmpty(cl)
+                    ? new string[] { }
+                    : cl.Split(", ")
             };
 
 
@@ -493,6 +497,7 @@ namespace dmHaggisBot
             var n = ParseCommand("n", message);
             var c = ParseCommand("c", message);
             var t = ParseCommand("t", message);
+            var cl = ParseCommand("cl", message);
 
             Match match = Regex.Match(message, @"\s\-\s\[\d+\,\s\d+\]$");
             if (match.Success)
@@ -518,7 +523,10 @@ namespace dmHaggisBot
                     : t.Split(" "),
                 Permission = DMChannel == (long) sr.Channel.Id
                     ? SearchDefaultSettings.PermissionType.DM
-                    : SearchDefaultSettings.PermissionType.Player
+                    : SearchDefaultSettings.PermissionType.Player,
+                CurrentLocation = string.IsNullOrEmpty(cl)
+                    ? new string[] { }
+                    : cl.Split(", ")
             };
 
             return (searchDef, message);

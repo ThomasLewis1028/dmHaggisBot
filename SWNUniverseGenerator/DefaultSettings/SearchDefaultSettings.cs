@@ -27,8 +27,19 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// </summary>
         public String[] Tag { get; set; }
         
+        /// <summary>
+        /// A list of Locations to search for Characters on
+        /// </summary>
+        public String[] CurrentLocation { get; set; }
+        
+        /// <summary>
+        /// Permission type to be passed in
+        /// </summary>
         public PermissionType Permission { get; set; }
 
+        /// <summary>
+        /// List of permission types for the DM
+        /// </summary>
         public enum PermissionType
         {
             DM,

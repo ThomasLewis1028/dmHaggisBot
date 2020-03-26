@@ -1,7 +1,7 @@
 ﻿using System;
 using SWNUniverseGenerator.Models;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.DefaultSettings
 {
     /// <summary>
     /// This holds the parameters that can be used in creating a Character

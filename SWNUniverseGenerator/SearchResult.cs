@@ -32,7 +32,6 @@ namespace SWNUniverseGenerator
         /// </summary>
         public Int32 CurrentIndex { get; set; }
 
-        
         /// <summary>
         /// The maximum number that a given search query can yield
         /// </summary>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.DefaultSettings
 {
     /// <summary>
     /// This class holds the parameters needed when creating a search query

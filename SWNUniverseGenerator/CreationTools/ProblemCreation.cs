@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
 
@@ -11,7 +12,7 @@ namespace SWNUniverseGenerator.CreationTools
 {
     public class ProblemCreation
     {
-        private static readonly Random rand = new Random();
+        private static readonly Random Rand = new Random();
 
         public Universe AddProblems(Universe universe, ProblemDefaultSettings problemDefaultSettings)
         {
@@ -51,12 +52,12 @@ namespace SWNUniverseGenerator.CreationTools
 
                     IDGen.GenerateID(problem);
                     problem.LocationID = locID;
-                    var conflict = probData.Conflicts[rand.Next(0, probData.Conflicts.Count)];
+                    var conflict = probData.Conflicts[Rand.Next(0, probData.Conflicts.Count)];
                     problem.ConflictType = conflict.Type;
-                    problem.Situation = conflict.Situations[rand.Next(0, 5)];
-                    problem.Focus = conflict.Focuses[rand.Next(0, 5)];
-                    problem.Restraint = probData.Restraints[rand.Next(0, 20)];
-                    problem.Twist = probData.Twists[rand.Next(0, 20)];
+                    problem.Situation = conflict.Situations[Rand.Next(0, 5)];
+                    problem.Focus = conflict.Focuses[Rand.Next(0, 5)];
+                    problem.Restraint = probData.Restraints[Rand.Next(0, 20)];
+                    problem.Twist = probData.Twists[Rand.Next(0, 20)];
 
                     universe.Problems.Add(problem);
 
@@ -78,12 +79,12 @@ namespace SWNUniverseGenerator.CreationTools
 
                         IDGen.GenerateID(problem);
                         problem.LocationID = planet.ID;
-                        var conflict = probData.Conflicts[rand.Next(0, probData.Conflicts.Count)];
+                        var conflict = probData.Conflicts[Rand.Next(0, probData.Conflicts.Count)];
                         problem.ConflictType = conflict.Type;
-                        problem.Situation = conflict.Situations[rand.Next(0, 5)];
-                        problem.Focus = conflict.Focuses[rand.Next(0, 5)];
-                        problem.Restraint = probData.Restraints[rand.Next(0, 20)];
-                        problem.Twist = probData.Twists[rand.Next(0, 20)];
+                        problem.Situation = conflict.Situations[Rand.Next(0, 5)];
+                        problem.Focus = conflict.Focuses[Rand.Next(0, 5)];
+                        problem.Restraint = probData.Restraints[Rand.Next(0, 20)];
+                        problem.Twist = probData.Twists[Rand.Next(0, 20)];
 
                         universe.Problems.Add(problem);
 

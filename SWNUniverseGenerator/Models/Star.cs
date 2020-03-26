@@ -32,7 +32,7 @@ namespace SWNUniverseGenerator.Models
         /// The specific zone location on a grid
         /// </summary>
         [JsonIgnore]
-        public String GetZone => (X < 10 ? "0" + X.ToString() : X.ToString()) +
-                                 (Y < 10 ? "0" + Y.ToString() : Y.ToString());
+        public String GetZone => (X < 10 ? "0" + X : X.ToString()) +
+                                 (Y < 10 ? "0" + Y : Y.ToString());
     }
 }

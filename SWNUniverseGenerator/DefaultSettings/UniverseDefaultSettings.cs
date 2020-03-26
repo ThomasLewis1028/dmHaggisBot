@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.DefaultSettings
 {
     /// <summary>
     ///     This is the default creator class for Universe Objects

@@ -9,6 +9,7 @@ using Discord.Rest;
 using Discord.WebSocket;
 using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator;
+using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
 
 namespace dmHaggisBot
@@ -479,6 +480,8 @@ namespace dmHaggisBot
 
         private static (SearchDefaultSettings, string) ParsePagination(String message, bool up)
         {
+            
+            
             var id = ParseCommand("id", message);
             var n = ParseCommand("n", message);
             var c = ParseCommand("c", message);

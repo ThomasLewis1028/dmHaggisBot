@@ -2,6 +2,7 @@
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
 
@@ -38,7 +39,7 @@ namespace SWNUniverseGenerator.CreationTools
                 var pMax = planetDefaultSettings.PlanetRange == null || planetDefaultSettings.PlanetRange.Length == 0 ||
                            planetDefaultSettings.PlanetRange[0] == 0 ||
                            planetDefaultSettings.PlanetRange[1] == 0
-                    ? 4 // Default Planet count is up-to 4
+                    ? rand.Next(0, 4) // Default Planet count is up-to 4
                     : rand.Next(planetDefaultSettings.PlanetRange[0],
                         planetDefaultSettings.PlanetRange[1] + 1);
 

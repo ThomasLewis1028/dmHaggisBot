@@ -1,6 +1,6 @@
 # SWNUniverseGenerator and dmHaggisBot
 
-This project is currently two different projects (likely will split later) that consists of a generator for a Stars Without Number tabletop game, and a Discord bot that acts as a front-end.
+This project is currently two different projects (likely will split later) that consist of a generator for a Stars Without Number tabletop game, and a Discord bot that acts as a front-end.
 
 ## SWNUniverseGenerator
 

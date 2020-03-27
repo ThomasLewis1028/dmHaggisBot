@@ -69,7 +69,7 @@ namespace dmHaggisBot
         public static Embed ProblemEmbed(Universe universe, Problem problem)
         {
             EmbedBuilder eb = new EmbedBuilder();
-            eb.WithColor(Color.DarkGreen);
+            eb.WithColor(Color.DarkRed);
             eb.Title = problem.ID;
             eb.AddField("Type: ", problem.ConflictType);
             eb.AddField("Situation: ", problem.Situation);
@@ -79,6 +79,22 @@ namespace dmHaggisBot
             eb.AddField("Location: ", problem.LocationID + " - " +
                                       Search.SearchUniverse(universe,
                                           new SearchDefaultSettings {ID = new[] {problem.LocationID}}).Result.Name);
+
+            return eb.Build();
+        }
+        
+        
+        public static Embed POIEmbed(Universe universe, PointOfInterest poi)
+        {
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.WithColor(Color.Gold);
+            eb.Title = poi.ID;
+            eb.AddField("Type: ", poi.Type);
+            eb.AddField("Situation: ", poi.Situation);
+            eb.AddField("Occupied By: ", poi.OccupiedBy);
+            eb.AddField("Location: ", poi.StarID + " - " +
+                                      Search.SearchUniverse(universe,
+                                          new SearchDefaultSettings {ID = new[] {poi.StarID}}).Result.Name);
 
             return eb.Build();
         }

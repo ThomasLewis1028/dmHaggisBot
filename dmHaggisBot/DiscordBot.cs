@@ -55,6 +55,9 @@ namespace dmHaggisBot
 
         private readonly Regex _probCreate =
             new Regex("^(probCreate|createProb|prc|cpr)($| .*)", RegexOptions.IgnoreCase);
+        
+        private readonly Regex _poiCreate =
+            new Regex("^(poiCreate|createPoi|poic|cpoi)($| .*)", RegexOptions.IgnoreCase);
         //</editor-fold>
 
         // Set up emoji for pagination
@@ -167,6 +170,13 @@ namespace dmHaggisBot
             }
 
             // Point of Interest Creation
+            if (_poiCreate.IsMatch(sm.Content))
+            {
+                if (_universe != null)
+                    await CreatePOI(sm);
+                else
+                    await sm.Channel.SendMessageAsync("No universe file loaded");
+            }
 
             // Search Data
             if (_dataSearch.IsMatch(sm.Content))
@@ -411,6 +421,41 @@ namespace dmHaggisBot
                 await sm.Channel.SendMessageAsync(e.Message);
             }
         }
+        
+        /// <summary>
+        /// This method handles creating Points of Interest in a Universe from a SocketMessage
+        /// </summary>
+        /// <param name="sm"></param>
+        private async Task CreatePOI(SocketMessage sm)
+        {
+            var c = ParseCommand("c", sm.Content);
+            var cr = string.IsNullOrEmpty(c)
+                ? new[] {-1, -1}
+                : c.Split(" ").Length == 1
+                    ? new[] {Int32.Parse(c), Int32.Parse(c),}
+                    : new[] {Int32.Parse(c.Split(" ")[0]), Int32.Parse(c.Split(" ")[1])};
+            var id = ParseCommand("id", sm.Content);
+            var n = ParseCommand("n", sm.Content);
+
+            var poiDef = new POIDefaultSettings()
+            {
+                POIRange = cr,
+                StarID = id,
+                Name = n
+            };
+
+
+            try
+            {
+                _universe = _creation.CreatePOI(_universe, poiDef);
+                await sm.Channel.SendMessageAsync("Points of Interest created in " + _universe.Name);
+                await SetGameStatus();
+            }
+            catch (FileNotFoundException e)
+            {
+                await sm.Channel.SendMessageAsync(e.Message);
+            }
+        }
 
         /// <summary>
         /// This method handles searching through a Universe from a SocketMessage
@@ -475,6 +520,8 @@ namespace dmHaggisBot
                     embeds.Add(GenerateEmbeds.StarEmbed(_universe, (Star) results.Result));
                 else if (results.Result.GetType() == typeof(Problem))
                     embeds.Add(GenerateEmbeds.ProblemEmbed(_universe, (Problem) results.Result));
+                else if (results.Result.GetType() == typeof(PointOfInterest))
+                    embeds.Add(GenerateEmbeds.POIEmbed(_universe, (PointOfInterest) results.Result));
 
                 var message = sm + " - [" + results.CurrentIndex + ", " + results.MaxCount + "]";
 

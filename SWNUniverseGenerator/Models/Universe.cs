@@ -54,5 +54,10 @@ namespace SWNUniverseGenerator.Models
         /// The list of all Jobs in the Universe
         /// </summary>
         public List<Job> Jobs { get; set; }
+        
+        /// <summary>
+        /// The list of all Points of Interest in the Universe
+        /// </summary>
+        public List<PointOfInterest> PointsOfInterest { get; set; }
     }
 }

@@ -155,7 +155,9 @@ namespace SWNUniverseGenerator
         /// </summary>
         /// <param name="universe"></param>
         /// <param name="problemDefaultSettings"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// Return the newly edited Universe
+        /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
         public Universe CreateProblems(Universe universe, ProblemDefaultSettings problemDefaultSettings)
         {
@@ -165,6 +167,29 @@ namespace SWNUniverseGenerator
 
             // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
             universe = new ProblemCreation().AddProblems(universe, problemDefaultSettings);
+            SerializeData(universe);
+            return universe;
+        }
+
+        /// <summary>
+        /// This method should receive the Universe to add Points of Interest to and a set of POIDefaultSettings
+        ///
+        /// Default values are handled in POICreation.AddPOI
+        /// </summary>
+        /// <param name="universe"></param>
+        /// <param name="poiDefaultSettings"></param>
+        /// <returns>
+        /// Return the newly edited Universe
+        /// </returns>
+        /// <exception cref="FileNotFoundException"></exception>
+        public Universe CreatePOI(Universe universe, POIDefaultSettings poiDefaultSettings)
+        {
+            // If there are no Planets or Locations for the Problems to be tied to then throw an exception
+            if (universe.Stars == null || universe.Stars.Count == 0)
+                throw new FileNotFoundException("No locations have been loaded.");
+
+            // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
+            universe = new POICreation().AddPOI(universe, poiDefaultSettings);
             SerializeData(universe);
             return universe;
         }

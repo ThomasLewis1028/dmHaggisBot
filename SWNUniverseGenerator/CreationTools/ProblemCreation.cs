@@ -33,7 +33,6 @@ namespace SWNUniverseGenerator.CreationTools
 
             if (id != null)
             {
-
                 var locID = (from planets in universe.Planets select new {planets.ID})
                     .Union(from stars in universe.Stars select new {stars.ID})
                     .Single(a => a.ID == id).ID;

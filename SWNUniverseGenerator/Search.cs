@@ -85,7 +85,7 @@ namespace SWNUniverseGenerator
             }
             else
                 idrgx = "^$";
-            
+
             // Set a regular expression for the ID
             var clrgx = "";
             if (cl.Length != 0)
@@ -103,6 +103,7 @@ namespace SWNUniverseGenerator
             bool includeStars = t.Contains("s") || t.Length == 0;
             bool includeProbs = (t.Contains("pr") || t.Length == 0)
                                 && searchDefaultSettings.Permission != SearchDefaultSettings.PermissionType.Player;
+            bool includePOI = t.Contains("poi") || t.Length == 0;
 
             return (from p in universe.Planets
                     where (Regex.IsMatch(p.Name, nrgx, RegexOptions.IgnoreCase) ||
@@ -124,6 +125,10 @@ namespace SWNUniverseGenerator
                     where (Regex.IsMatch(pr.ID, idrgx, RegexOptions.IgnoreCase) &&
                            includeProbs)
                     select (IEntity) pr)
+                .Union(from poi in universe.PointsOfInterest
+                    where (Regex.IsMatch(poi.ID, idrgx, RegexOptions.IgnoreCase) &&
+                           includePOI)
+                    select (IEntity) poi)
                 .AsQueryable();
         }
     }

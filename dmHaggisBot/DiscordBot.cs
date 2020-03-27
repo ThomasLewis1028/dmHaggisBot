@@ -458,17 +458,16 @@ namespace dmHaggisBot
         }
 
         /// <summary>
-        /// This method handles searching through a Universe from a SocketMessage
+        /// This method handles setting up an initial search through a Universe from a SocketMessage
         /// </summary>
         /// <param name="sm"></param>
-        /// <returns></returns>
         private async Task SearchData(SocketMessage sm)
         {
             var id = ParseCommand("id", sm.Content);
             var n = ParseCommand("n", sm.Content);
             var c = ParseCommand("c", sm.Content);
             var t = ParseCommand("t", sm.Content);
-            var cl = ParseCommand("cl", sm.Content);
+            var l = ParseCommand("l", sm.Content);
 
             SearchDefaultSettings searchDef = new SearchDefaultSettings
             {
@@ -487,9 +486,9 @@ namespace dmHaggisBot
                 Permission = _dmChannel == (long) sm.Channel.Id
                     ? SearchDefaultSettings.PermissionType.DM
                     : SearchDefaultSettings.PermissionType.Player,
-                CurrentLocation = string.IsNullOrEmpty(cl)
+                Location = string.IsNullOrEmpty(l)
                     ? new string[] { }
-                    : cl.Split(", ")
+                    : l.Split(", ")
             };
 
 
@@ -497,7 +496,7 @@ namespace dmHaggisBot
         }
 
         /// <summary>
-        /// This method handles
+        /// This method handles searching through a Universe from a SocketMessage or a SocketReaction
         /// </summary>
         /// <param name="sc"></param>
         /// <param name="sm"></param>
@@ -541,6 +540,12 @@ namespace dmHaggisBot
                 await sc.SendMessageAsync("No results found");
         }
 
+        /// <summary>
+        /// This method handles parsing commands that are passed in from the user
+        /// </summary>
+        /// <param name="argName"></param>
+        /// <param name="argVal"></param>
+        /// <returns></returns>
         private static string ParseCommand(string argName, string argVal)
         {
             var start = argVal.IndexOf(" -" + argName + " ", StringComparison.Ordinal) + 1;
@@ -556,6 +561,17 @@ namespace dmHaggisBot
             return cmd.Trim();
         }
 
+        /// <summary>
+        /// This method handles pagination through from a SocketReaction
+        ///
+        /// This receives a SocketReaction that includes the necessary commands and search query
+        /// It also receives a boolean that determines whether the search is incrementing or decrementing
+        /// </summary>
+        /// <param name="sr"></param>
+        /// <param name="up"></param>
+        /// <returns>
+        /// Return a set of SearchDefaultSettings and the message stripped from the SocketReaction 
+        /// </returns>
         private (SearchDefaultSettings, string) ParsePagination(SocketReaction sr, bool up)
         {
             var message = sr.Message.ToString();
@@ -564,7 +580,7 @@ namespace dmHaggisBot
             var n = ParseCommand("n", message);
             var c = ParseCommand("c", message);
             var t = ParseCommand("t", message);
-            var cl = ParseCommand("cl", message);
+            var l = ParseCommand("l", message);
 
             Match match = Regex.Match(message, @"\s\-\s\[\d+\,\s\d+\]$");
             if (match.Success)
@@ -591,9 +607,9 @@ namespace dmHaggisBot
                 Permission = _dmChannel == (long) sr.Channel.Id
                     ? SearchDefaultSettings.PermissionType.DM
                     : SearchDefaultSettings.PermissionType.Player,
-                CurrentLocation = string.IsNullOrEmpty(cl)
+                Location = string.IsNullOrEmpty(l)
                     ? new string[] { }
-                    : cl.Split(", ")
+                    : l.Split(", ")
             };
 
             return (searchDef, message);

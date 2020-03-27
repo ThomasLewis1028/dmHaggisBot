@@ -62,7 +62,7 @@ namespace SWNUniverseGenerator
             var id = searchDefaultSettings.ID ?? new string[] { };
             var n = searchDefaultSettings.Name ?? new string[] { };
             var t = searchDefaultSettings.Tag ?? new string[] { };
-            var cl = searchDefaultSettings.CurrentLocation ?? new string[] { };
+            var l = searchDefaultSettings.Location ?? new string[] { };
 
             // Set a regular expression for the Name
             var nrgx = "";
@@ -87,15 +87,15 @@ namespace SWNUniverseGenerator
                 idrgx = "^$";
 
             // Set a regular expression for the ID
-            var clrgx = "";
-            if (cl.Length != 0)
+            var lrgx = "";
+            if (l.Length != 0)
             {
-                foreach (var i in cl)
-                    clrgx += "" + i + "|";
-                clrgx = clrgx.Substring(0, clrgx.Length - 1);
+                foreach (var i in l)
+                    lrgx += "" + i + "|";
+                lrgx = lrgx.Substring(0, lrgx.Length - 1);
             }
             else
-                clrgx = "^$";
+                lrgx = "^$";
 
             // Set the tags for more specific searches
             bool includePlanets = t.Contains("p") || t.Length == 0;
@@ -113,7 +113,7 @@ namespace SWNUniverseGenerator
                 .Union(from ch in universe.Characters
                     where (Regex.IsMatch(ch.Name, nrgx, RegexOptions.IgnoreCase) ||
                            Regex.IsMatch(ch.ID, idrgx, RegexOptions.IgnoreCase) ||
-                           Regex.IsMatch(ch.CurrentLocation, clrgx, RegexOptions.IgnoreCase)) &&
+                           Regex.IsMatch(ch.CurrentLocation, lrgx, RegexOptions.IgnoreCase)) &&
                           includeChars
                     select (IEntity) ch)
                 .Union(from s in universe.Stars
@@ -122,12 +122,13 @@ namespace SWNUniverseGenerator
                           includeStars
                     select (IEntity) s)
                 .Union(from pr in universe.Problems
-                    where (Regex.IsMatch(pr.ID, idrgx, RegexOptions.IgnoreCase) &&
-                           includeProbs)
+                    where Regex.IsMatch(pr.ID, idrgx, RegexOptions.IgnoreCase) &&
+                           includeProbs
                     select (IEntity) pr)
                 .Union(from poi in universe.PointsOfInterest
-                    where (Regex.IsMatch(poi.ID, idrgx, RegexOptions.IgnoreCase) &&
-                           includePOI)
+                    where (Regex.IsMatch(poi.ID, idrgx, RegexOptions.IgnoreCase) ||
+                           Regex.IsMatch(poi.StarID, lrgx, RegexOptions.IgnoreCase))&&
+                           includePOI
                     select (IEntity) poi)
                 .AsQueryable();
         }

@@ -30,7 +30,7 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// <summary>
         /// A list of Locations to search for Characters on
         /// </summary>
-        public String[] CurrentLocation { get; set; }
+        public String[] Location { get; set; }
         
         /// <summary>
         /// Permission type to be passed in

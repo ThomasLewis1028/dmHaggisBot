@@ -24,14 +24,17 @@ namespace dmHaggisBot
         private static Universe _universe;
         private static Creation _creation;
 
+        private static bool _test;
+
         // Properties file
         private static readonly JObject Prop =
             JObject.Parse(
                 File.ReadAllText(@"properties.json"));
 
         // Get the token out of the properties folder
-        private static readonly string Token = (string) Prop.GetValue("token");
-        private static readonly long DMChannel = (long) Prop.GetValue("DM Channel");
+        private readonly string _token;
+        private readonly long _generalChannel;
+        private readonly long _dmChannel;
 
         //<editor-fold desc="Regular expressions for commands">
         private readonly Regex _charCreate = new Regex("^(charCreate|createChar|cc)($| .*)", RegexOptions.IgnoreCase);
@@ -60,6 +63,20 @@ namespace dmHaggisBot
 
         // Discord config files
         private DiscordSocketClient _client;
+
+        public DiscordBot(bool test)
+        {
+            _test = test;
+
+            _token =
+                _test ? (string) Prop.GetValue("tokenTest") : (string) Prop.GetValue("token");
+
+            _generalChannel =
+                _test ? (long) Prop.GetValue("Test General") : (long) Prop.GetValue("General");
+
+            _dmChannel =
+                _test ? (long) Prop.GetValue("Test DM") : (long) Prop.GetValue("DM Channel");
+        }
         // private IConfiguration _config;
 
         // Set the path to the Universe files
@@ -84,7 +101,7 @@ namespace dmHaggisBot
             _client.MessageReceived += MessageReceived;
             _client.ReactionAdded += ReactionAdded;
 
-            await _client.LoginAsync(TokenType.Bot, Token);
+            await _client.LoginAsync(TokenType.Bot, _token);
             await _client.StartAsync();
             await _client.SetGameAsync("No Universe Loaded");
 
@@ -100,6 +117,9 @@ namespace dmHaggisBot
         private async Task MessageReceived(SocketMessage sm)
         {
             if (sm.Author.IsBot)
+                return;
+
+            if ((long) sm.Channel.Id != _generalChannel && (long) sm.Channel.Id != _dmChannel)
                 return;
 
             // Character Creation
@@ -419,7 +439,7 @@ namespace dmHaggisBot
                 Tag = string.IsNullOrEmpty(t)
                     ? new string[] { }
                     : t.Split(" "),
-                Permission = DMChannel == (long) sm.Channel.Id
+                Permission = _dmChannel == (long) sm.Channel.Id
                     ? SearchDefaultSettings.PermissionType.DM
                     : SearchDefaultSettings.PermissionType.Player,
                 CurrentLocation = string.IsNullOrEmpty(cl)
@@ -489,7 +509,7 @@ namespace dmHaggisBot
             return cmd.Trim();
         }
 
-        private static (SearchDefaultSettings, string) ParsePagination(SocketReaction sr, bool up)
+        private (SearchDefaultSettings, string) ParsePagination(SocketReaction sr, bool up)
         {
             var message = sr.Message.ToString();
 
@@ -521,7 +541,7 @@ namespace dmHaggisBot
                 Tag = string.IsNullOrEmpty(t)
                     ? new string[] { }
                     : t.Split(" "),
-                Permission = DMChannel == (long) sr.Channel.Id
+                Permission = _dmChannel == (long) sr.Channel.Id
                     ? SearchDefaultSettings.PermissionType.DM
                     : SearchDefaultSettings.PermissionType.Player,
                 CurrentLocation = string.IsNullOrEmpty(cl)

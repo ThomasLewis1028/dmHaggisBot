@@ -96,7 +96,7 @@ namespace SWNUniverseGenerator.CreationTools
         {
             var tags =
                 JObject.Parse(
-                    File.ReadAllText(@"Data\worldTags.json"));
+                    File.ReadAllText(@"Data/worldTags.json"));
 
             return JsonConvert.DeserializeObject<WorldInfo>(tags.ToString());
         }
@@ -112,7 +112,7 @@ namespace SWNUniverseGenerator.CreationTools
         {
             var charData =
                 JObject.Parse(
-                    File.ReadAllText(@"Data\StarData.json"));
+                    File.ReadAllText(@"Data/starData.json"));
 
             return JsonConvert.DeserializeObject<StarData>(charData.ToString());
         }

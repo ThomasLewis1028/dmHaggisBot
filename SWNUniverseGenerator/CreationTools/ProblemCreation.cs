@@ -102,7 +102,7 @@ namespace SWNUniverseGenerator.CreationTools
         {
             var probData =
                 JObject.Parse(
-                    File.ReadAllText(@"Data\problemData.json"));
+                    File.ReadAllText(@"Data/problemData.json"));
 
             return JsonConvert.DeserializeObject<ProblemInfo>(probData.ToString());
         }

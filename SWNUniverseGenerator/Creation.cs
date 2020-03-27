@@ -194,11 +194,11 @@ namespace SWNUniverseGenerator
         {
             // Set the path to the name
             var path = new StringBuilder();
-            path.Append(_universePath + "\\" + name + ".json");
+            path.Append(_universePath + "/" + name + ".json");
 
             // If none exists throw an exception
             if (!File.Exists(path.ToString()))
-                throw new FileNotFoundException("{0}.json not found.");
+                throw new FileNotFoundException(path + " not found.");
 
             // Parse the file into a JObject
             var univ =
@@ -216,7 +216,7 @@ namespace SWNUniverseGenerator
         private void SerializeData(Universe universe)
         {
             // Set the path to the file and write it, overwriting the previous file if it exists.
-            var path = _universePath + "\\" + universe.Name + ".json";
+            var path = _universePath + universe.Name + ".json";
             using var file =
                 File.CreateText(path);
             var serializer = new JsonSerializer();

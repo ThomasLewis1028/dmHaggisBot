@@ -135,7 +135,7 @@ namespace SWNUniverseGenerator.CreationTools
         {
             var charData =
                 JObject.Parse(
-                    File.ReadAllText(@"Data\CharacterData.json"));
+                    File.ReadAllText(@"Data/characterData.json"));
 
             return JsonConvert.DeserializeObject<CharData>(charData.ToString());
         }

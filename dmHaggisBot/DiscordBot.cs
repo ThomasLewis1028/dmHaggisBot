@@ -70,9 +70,9 @@ namespace dmHaggisBot
                 var codeBase = Assembly.GetExecutingAssembly().CodeBase;
                 var uri = new UriBuilder(codeBase);
                 var path = Uri.UnescapeDataString(uri.Path);
-                if (!Directory.Exists(Path.GetDirectoryName(path) + "\\UniverseFiles\\"))
-                    Directory.CreateDirectory(Path.GetDirectoryName(path) + "\\UniverseFiles\\");
-                return Path.GetDirectoryName(path) + "\\UniverseFiles\\";
+                if (!Directory.Exists(Path.GetDirectoryName(path) + "/UniverseFiles/"))
+                    Directory.CreateDirectory(Path.GetDirectoryName(path) + "/UniverseFiles/");
+                return Path.GetDirectoryName(path) + "/UniverseFiles/";
             }
         }
 

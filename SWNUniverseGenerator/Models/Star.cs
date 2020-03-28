@@ -17,6 +17,11 @@ namespace SWNUniverseGenerator.Models
         /// The string Name of a Star
         /// </summary>
         public String Name { get; set; }
+        
+        /// <summary>
+        /// The Type of Star
+        /// </summary>
+        public String StarType { get; set; }
 
         /// <summary>
         /// A Star's X location on a Grid

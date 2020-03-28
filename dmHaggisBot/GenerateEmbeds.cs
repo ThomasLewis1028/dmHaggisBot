@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Discord;
 using SWNUniverseGenerator;
@@ -106,6 +105,7 @@ namespace dmHaggisBot
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.Gold);
             eb.Title = poi.ID;
+            eb.AddField("Name: ", poi.Name);
             eb.AddField("Type: ", poi.Type);
             eb.AddField("Situation: ", poi.Situation);
             eb.AddField("Occupied By: ", poi.OccupiedBy);

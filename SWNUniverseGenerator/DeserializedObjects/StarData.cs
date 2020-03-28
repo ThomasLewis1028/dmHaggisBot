@@ -13,5 +13,8 @@ namespace SWNUniverseGenerator.DeserializedObjects
         
         // Hold a list of Planet Names for generation
         public List<String> Planets { get; set; }
+        
+        // Hold a list of Star Types for generation
+        public List<String> StarTypes { get; set; }
     }
 }

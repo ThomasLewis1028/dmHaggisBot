@@ -59,6 +59,9 @@ namespace SWNUniverseGenerator.CreationTools
                 if (universe.Stars.Exists(a => a.Name == star.Name))
                     continue;
                 
+                // Set the type of Star
+                star.StarType = starData.StarTypes[rand.Next(0, 12) + rand.Next(0, 12) + rand.Next(0, 12)];
+                
                 // Set Grid Location of the Star
                 star.X = rand.Next(0, universe.Grid.X + 1);
                 star.Y = rand.Next(0, universe.Grid.Y + 1);

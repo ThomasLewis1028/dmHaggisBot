@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace SWNUniverseGenerator.Models
 {
@@ -59,5 +60,18 @@ namespace SWNUniverseGenerator.Models
         /// The list of all Points of Interest in the Universe
         /// </summary>
         public List<PointOfInterest> PointsOfInterest { get; set; }
+    }
+
+    public class Zone
+    {
+        public Int32 X { get; set; }
+        
+        public Int32 Y { get; set; }
+        
+        [JsonIgnore]
+        public String GetHex => (X < 10 ? "0" + X : X.ToString()) +
+                                 (Y < 10 ? "0" + Y : Y.ToString());
+        
+        public String StarID { get; set; }
     }
 }

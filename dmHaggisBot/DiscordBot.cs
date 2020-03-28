@@ -514,13 +514,17 @@ namespace dmHaggisBot
                     embeds.Add(GenerateEmbeds.CharacterEmbed(_universe, (Character) results.Result,
                         searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
                 else if (results.Result.GetType() == typeof(Planet))
-                    embeds.Add(GenerateEmbeds.PlanetEmbed(_universe, (Planet) results.Result));
+                    embeds.Add(GenerateEmbeds.PlanetEmbed(_universe, (Planet) results.Result,
+                        searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
                 else if (results.Result.GetType() == typeof(Star))
-                    embeds.Add(GenerateEmbeds.StarEmbed(_universe, (Star) results.Result));
+                    embeds.Add(GenerateEmbeds.StarEmbed(_universe, (Star) results.Result,
+                        searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
                 else if (results.Result.GetType() == typeof(Problem))
-                    embeds.Add(GenerateEmbeds.ProblemEmbed(_universe, (Problem) results.Result));
+                    embeds.Add(GenerateEmbeds.ProblemEmbed(_universe, (Problem) results.Result,
+                        searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
                 else if (results.Result.GetType() == typeof(PointOfInterest))
-                    embeds.Add(GenerateEmbeds.POIEmbed(_universe, (PointOfInterest) results.Result));
+                    embeds.Add(GenerateEmbeds.POIEmbed(_universe, (PointOfInterest) results.Result,
+                        searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
 
                 var message = sm + " - [" + results.CurrentIndex + ", " + results.MaxCount + "]";
 

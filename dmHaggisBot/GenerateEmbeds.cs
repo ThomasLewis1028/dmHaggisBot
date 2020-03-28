@@ -36,7 +36,7 @@ namespace dmHaggisBot
             return eb.Build();
         }
 
-        public static Embed StarEmbed(Universe universe, Star star)
+        public static Embed StarEmbed(Universe universe, Star star, Boolean dmChannel)
         {
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.DarkBlue);
@@ -54,7 +54,7 @@ namespace dmHaggisBot
             return eb.Build();
         }
 
-        public static Embed PlanetEmbed(Universe universe, Planet planet)
+        public static Embed PlanetEmbed(Universe universe, Planet planet, Boolean dmChannel)
         {
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.DarkGreen);
@@ -62,11 +62,22 @@ namespace dmHaggisBot
             eb.AddField("Name: ", planet.Name);
             eb.AddField("Star: ", planet.StarID + " - " +
                                   universe.Stars.Single(a => a.ID == planet.StarID).Name);
+            eb.AddField("Atmosphere: ", planet.Atmosphere.Type);
+            eb.AddField("Biosphere: ", planet.Biosphere.Type);
+            eb.AddField("Temperature: ", planet.Temperature.Type);
+            eb.AddField("Population: ", planet.Population.Type);
+            eb.AddField("Tech Level: ", planet.TechLevel.Type);
+            if (dmChannel)
+            {
+                eb.AddField("World Tags: ", planet.FirstWorldTag.Type + ", " + planet.SecondWorldTag.Type);
+            }
+            
+            
 
             return eb.Build();
         }
 
-        public static Embed ProblemEmbed(Universe universe, Problem problem)
+        public static Embed ProblemEmbed(Universe universe, Problem problem, Boolean dmChannel)
         {
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.DarkRed);
@@ -84,7 +95,7 @@ namespace dmHaggisBot
         }
         
         
-        public static Embed POIEmbed(Universe universe, PointOfInterest poi)
+        public static Embed POIEmbed(Universe universe, PointOfInterest poi, Boolean dmChannel)
         {
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.Gold);

@@ -34,10 +34,10 @@ namespace SWNUniverseGenerator.CreationTools
             // Load the StarData
             var starData = LoadStarData();
 
-            // Set the number of stars to create. The default is 20% of the number of zones in the grid 
+            // Set the number of stars to create. The default is 1d10+20 
             var starLen = starData.Stars.Count;
             var starCount = starDefaultSettings.StarCount < 0
-                ? Math.Floor(universe.Grid.X * universe.Grid.Y * .2)
+                ? rand.Next(0, 10) + 20
                 : starDefaultSettings.StarCount;
 
             var sCount = 0;

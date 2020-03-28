@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Discord;
 using SWNUniverseGenerator;
@@ -62,15 +63,21 @@ namespace dmHaggisBot
             eb.AddField("Name: ", planet.Name);
             eb.AddField("Star: ", planet.StarID + " - " +
                                   universe.Stars.Single(a => a.ID == planet.StarID).Name);
+            eb.AddField("World Tags: ", planet.FirstWorldTag.Type + ", " + planet.SecondWorldTag.Type);
             eb.AddField("Atmosphere: ", planet.Atmosphere.Type);
             eb.AddField("Biosphere: ", planet.Biosphere.Type);
             eb.AddField("Temperature: ", planet.Temperature.Type);
             eb.AddField("Population: ", planet.Population.Type);
             eb.AddField("Tech Level: ", planet.TechLevel.Type);
-            if (dmChannel)
+            eb.AddField("Primary World: ", planet.IsPrimary ? "Yes" : "No");
+            if (!planet.IsPrimary)
             {
-                eb.AddField("World Tags: ", planet.FirstWorldTag.Type + ", " + planet.SecondWorldTag.Type);
+                eb.AddField("Origin: ", planet.Origin);
+                eb.AddField("Relationship: ", planet.Relationship);
+                eb.AddField("Contact: ", planet.Contact);
             }
+
+            
 
 
             return eb.Build();

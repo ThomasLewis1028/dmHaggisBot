@@ -64,6 +64,11 @@ namespace SWNUniverseGenerator.Models
         public TechLevel TechLevel { get; set; }
 
         /// <summary>
+        /// This is a marker to create a primary world for system
+        /// </summary>
+        public Boolean IsPrimary { get; set; }
+        
+        /// <summary>
         /// This is the "Origin" of the planet from the Primary
         /// </summary>
         public String Origin { get; set; }

@@ -112,8 +112,6 @@ namespace SWNUniverseGenerator.CreationTools
                           : rand.Next(1, 26) + rand.Next(0, 25)) // 25% Additional crime roll chance
                     : rand.Next(characterDefaultSettings.CrimeChance[0], characterDefaultSettings.CrimeChance[1] + 1);
 
-                Console.Out.WriteLine(character.Name + " - " + character.CrimeChance);
-
                 // Add the Character to the list of Characters in the universe
                 universe.Characters.Add(character);
 

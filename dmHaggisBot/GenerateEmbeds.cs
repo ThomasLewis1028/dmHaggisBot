@@ -71,8 +71,7 @@ namespace dmHaggisBot
             {
                 eb.AddField("World Tags: ", planet.FirstWorldTag.Type + ", " + planet.SecondWorldTag.Type);
             }
-            
-            
+
 
             return eb.Build();
         }
@@ -93,8 +92,8 @@ namespace dmHaggisBot
 
             return eb.Build();
         }
-        
-        
+
+
         public static Embed POIEmbed(Universe universe, PointOfInterest poi, Boolean dmChannel)
         {
             EmbedBuilder eb = new EmbedBuilder();

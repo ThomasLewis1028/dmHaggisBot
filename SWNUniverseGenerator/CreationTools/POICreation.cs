@@ -49,7 +49,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                         // Set the POI information with randomized data
                         poi.StarID = star.ID;
-                        poi.Name = star.Name + " " + ToRoman(poiCount);
+                        poi.Name = star.Name + " " + ToRoman(poiCount + 1);
                         var type = poiData.PointsOfInterest[Rand.Next(0, poiData.PointsOfInterest.Count)];
                         poi.Type = type.Type;
                         poi.OccupiedBy = type.OccupiedBy[Rand.Next(0, type.OccupiedBy.Count)];
@@ -88,7 +88,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                     // Set the POI information with randomized data
                     poi.StarID = starID;
-                    poi.Name = universe.Stars.Single(a => a.ID == starID).Name + " " + ToRoman(poiCount);
+                    poi.Name = universe.Stars.Single(a => a.ID == starID).Name + " " + ToRoman(poiCount + 1);
                     var type = poiData.PointsOfInterest[Rand.Next(0, poiData.PointsOfInterest.Count)];
                     poi.Type = type.Type;
                     poi.OccupiedBy = type.OccupiedBy[Rand.Next(0, type.OccupiedBy.Count)];

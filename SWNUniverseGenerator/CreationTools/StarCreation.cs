@@ -60,7 +60,7 @@ namespace SWNUniverseGenerator.CreationTools
                     continue;
                 
                 // Set the type of Star
-                star.StarType = starData.StarTypes[rand.Next(0, 12) + rand.Next(0, 12) + rand.Next(0, 12)];
+                star.StarType = starData.StarTypes[rand.Next(0, 8) + rand.Next(0, 8) + rand.Next(0, 8)];
                 
                 // Set Grid Location of the Star
                 star.X = rand.Next(0, universe.Grid.X + 1);

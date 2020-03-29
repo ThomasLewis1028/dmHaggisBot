@@ -628,6 +628,10 @@ namespace dmHaggisBot
             sb.Append(_universe.Name);
             sb.Append("```\n");
             
+            sb.Append("## ");
+                        for (var i = 0; i < _universe.Grid.X; i++)
+                            sb.Append(i < 10 ? "0" + i + " " : i + " ");
+
             foreach (var z in _universe.Zones)
             {
                 if (z.X == 0)
@@ -636,11 +640,7 @@ namespace dmHaggisBot
                 if (z.X == _universe.Grid.X - 1)
                     sb.Append("\n");
             }
-
-            sb.Append("## ");
-            for (var i = 0; i < _universe.Grid.X; i++)
-                sb.Append(i < 10 ? "0" + i + " " : i + " ");
-
+            
             sb.Append("```");
 
             await sm.Channel.SendMessageAsync(sb.ToString());

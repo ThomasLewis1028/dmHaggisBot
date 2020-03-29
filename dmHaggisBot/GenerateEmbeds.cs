@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using Discord;
 using SWNUniverseGenerator;
 using SWNUniverseGenerator.DefaultSettings;
@@ -39,11 +40,11 @@ namespace dmHaggisBot
         public static Embed StarEmbed(Universe universe, Star star, Boolean dmChannel)
         {
             EmbedBuilder eb = new EmbedBuilder();
-            eb.WithColor(Color.DarkBlue);
+            eb.WithColor(Color.LightOrange);
             eb.Title = star.ID;
 
             eb.AddField("Name: ", star.Name);
-            eb.AddField("Zone: ", star.GetZone);
+            eb.AddField("Zone: ", universe.Zones.Single(a => a.StarID == star.ID).GetHex);
             string planets = "";
             foreach (Planet p in universe.Planets.FindAll(a => a.StarID == star.ID))
                 planets += (p.ID + " - " + p.Name + "\n");
@@ -112,6 +113,28 @@ namespace dmHaggisBot
             eb.AddField("Location: ", poi.StarID + " - " +
                                       Search.SearchUniverse(universe,
                                           new SearchDefaultSettings {ID = new[] {poi.StarID}}).Result.Name);
+
+            return eb.Build();
+        }
+        
+        public static Embed ZoneEmbed(Universe universe, Zone zone, Boolean dmChannel)
+        {
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.WithColor(Color.Blue);
+            eb.Title = zone.GetHex;
+            eb.AddField("Star: ", zone.StarID != null ? zone.StarID : "No System");
+            if (zone.Planets.Count != 0)
+            {
+                var sb = new StringBuilder();
+                zone.Planets.ForEach(a => sb.Append(a + "\n"));
+                eb.AddField("Planets: ", sb);
+            }
+            if (zone.PointsOfInterest.Count != 0)
+            {
+                var sb = new StringBuilder();
+                zone.PointsOfInterest.ForEach(a => sb.Append(a + "\n"));
+                eb.AddField("Points of Interest: ", sb);
+            }
 
             return eb.Build();
         }

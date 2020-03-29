@@ -48,6 +48,13 @@ namespace SWNUniverseGenerator.CreationTools
                 // Generate the unique ID for the Star
                 IDGen.GenerateID(star);
                 
+                // Set Grid Location of the Star
+                var zone = universe.Zones[rand.Next(0, universe.Zones.Count)];
+                if (zone.StarID == null)
+                    zone.StarID = star.ID;
+                else
+                    continue;
+
                 // If that ID exists roll a new one
                 if (universe.Stars.Exists(a => a.ID == star.ID))
                     continue;
@@ -62,10 +69,6 @@ namespace SWNUniverseGenerator.CreationTools
                 // Set the type of Star
                 star.StarType = starData.StarTypes[rand.Next(0, 8) + rand.Next(0, 8) + rand.Next(0, 8)];
                 
-                // Set Grid Location of the Star
-                star.X = rand.Next(0, universe.Grid.X + 1);
-                star.Y = rand.Next(0, universe.Grid.Y + 1);
-
                 // Add the Star to the Universe
                 universe.Stars.Add(star);
 

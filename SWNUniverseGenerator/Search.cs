@@ -104,6 +104,7 @@ namespace SWNUniverseGenerator
             bool includeProbs = (t.Contains("pr") || t.Length == 0)
                                 && searchDefaultSettings.Permission != SearchDefaultSettings.PermissionType.Player;
             bool includePOI = t.Contains("poi") || t.Length == 0;
+            bool includeZones = t.Contains("z") || t.Length == 0;
 
             return (from p in universe.Planets
                     where (Regex.IsMatch(p.Name, nrgx, RegexOptions.IgnoreCase) ||
@@ -123,13 +124,17 @@ namespace SWNUniverseGenerator
                     select (IEntity) s)
                 .Union(from pr in universe.Problems
                     where Regex.IsMatch(pr.ID, idrgx, RegexOptions.IgnoreCase) &&
-                           includeProbs
+                          includeProbs
                     select (IEntity) pr)
                 .Union(from poi in universe.PointsOfInterest
                     where (Regex.IsMatch(poi.ID, idrgx, RegexOptions.IgnoreCase) ||
-                           Regex.IsMatch(poi.StarID, lrgx, RegexOptions.IgnoreCase))&&
-                           includePOI
+                           Regex.IsMatch(poi.StarID, lrgx, RegexOptions.IgnoreCase)) &&
+                          includePOI
                     select (IEntity) poi)
+                .Union(from z in universe.Zones
+                    where Regex.IsMatch(z.ID, idrgx, RegexOptions.IgnoreCase) &&
+                          includeZones
+                    select (IEntity) z)
                 .AsQueryable();
         }
     }

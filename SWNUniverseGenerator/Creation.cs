@@ -73,10 +73,32 @@ namespace SWNUniverseGenerator
             else
                 grid = universeDefaultSettings.Grid;
 
-            // Create, serialize, and return Universe.
+            // Create the Universe.
             var universe = new Universe(name, grid);
+            universe.Zones = new List<Zone>();
+            universe.Stars = new List<Star>();
+            universe.Planets = new List<Planet>();
+            universe.PointsOfInterest = new List<PointOfInterest>();
+            universe.Characters = new List<Character>();
+            universe.Problems = new List<Problem>();
+
+            // Add the Zones to the Universe
+            for (var i = 0; i < grid.Y; i++)
+            {
+                for (var j = 0; j < grid.X; j++)
+                {
+                    Zone zone = new Zone() {X = j, Y = i};
+                    zone.Planets = new List<string>();
+                    zone.PointsOfInterest = new List<string>();
+                    IDGen.GenerateID(zone);
+                    universe.Zones.Add(zone);
+                    
+                }
+            }
+
+            // Serialize and return the Universe
             SerializeData(universe);
-            return new Universe(name, grid);
+            return universe;
         }
 
         /// <summary>
@@ -206,7 +228,6 @@ namespace SWNUniverseGenerator
         /// <returns>
         /// Return the single SearchResult.
         /// </returns>
-
         /// <summary>
         /// This method receives the name of a Universe and deserializes it into a Universe object
         /// </summary>

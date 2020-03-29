@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator.DefaultSettings;
@@ -66,6 +67,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                     // Set the Planet information from either a randomized value or specified information
                     planet.StarID = star.ID;
+                    universe.Zones.Single(a => a.StarID == star.ID).Planets.Add(planet.ID);
                     planet.FirstWorldTag = worldInfo.WorldTags[rand.Next(0, 100)];
                     planet.SecondWorldTag = worldInfo.WorldTags[rand.Next(0, 100)];
                     planet.Atmosphere = worldInfo.Atmospheres[rand.Next(0, 6) + rand.Next(0, 6)];

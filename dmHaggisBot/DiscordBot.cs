@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord;
@@ -172,6 +173,12 @@ namespace dmHaggisBot
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
+                case var content when Regex.IsMatch("pg", content, RegexOptions.IgnoreCase):
+                    if (_universe != null)
+                        await PrintGrid(sm);
+                    else
+                        await sm.Channel.SendMessageAsync("No universe file loaded");
+                    break;
             }
         }
 
@@ -231,9 +238,6 @@ namespace dmHaggisBot
             {
                 _creation = new Creation(UniversePath);
                 _universe = _creation.CreateUniverse(univDef);
-                _universe.Characters = new List<Character>();
-                _universe.Stars = new List<Star>();
-                _universe.Planets = new List<Planet>();
 
                 await sm.Channel.SendMessageAsync("Created Universe with the name " + _universe.Name);
                 await SetGameStatus();
@@ -519,6 +523,10 @@ namespace dmHaggisBot
                         embeds.Add(GenerateEmbeds.POIEmbed(_universe, pointOfInterest,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
                         break;
+                    case Zone zone:
+                        embeds.Add(GenerateEmbeds.ZoneEmbed(_universe, zone,
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                        break;
                 }
 
                 var message = sm + " - [" + results.CurrentIndex + ", " + results.MaxCount + "]";
@@ -612,6 +620,30 @@ namespace dmHaggisBot
             };
 
             return (searchDef, message);
+        }
+
+        private async Task PrintGrid(SocketMessage sm)
+        {
+            var sb = new StringBuilder();
+            sb.Append(_universe.Name);
+            sb.Append("```\n");
+            
+            foreach (var z in _universe.Zones)
+            {
+                if (z.X == 0)
+                    sb.Append(z.Y < 10 ? "0" + z.Y + " " : z.Y + " ");
+                sb.Append(string.IsNullOrEmpty(z.StarID) ? ".  " : "X  ");
+                if (z.X == _universe.Grid.X - 1)
+                    sb.Append("\n");
+            }
+
+            sb.Append("## ");
+            for (var i = 0; i < _universe.Grid.X; i++)
+                sb.Append(i < 10 ? "0" + i + " " : i + " ");
+
+            sb.Append("```");
+
+            await sm.Channel.SendMessageAsync(sb.ToString());
         }
 
         private async Task SetGameStatus()

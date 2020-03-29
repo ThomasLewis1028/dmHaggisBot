@@ -15,6 +15,6 @@
         /// <summary>
         /// All ILocation type objects much implement a Name 
         /// </summary>
-        public String Name { get; set; }
+        public new String Name { get; set; }
     }
 }

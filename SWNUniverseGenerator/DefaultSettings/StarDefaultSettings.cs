@@ -17,10 +17,5 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// Cannot be used with a StarCount
         /// </summary>
         public String Name { get; set; }
-        
-        /// <summary>
-        /// Store a Grid location for the star.
-        /// </summary>
-        public Grid Grid { get; set;  }
     }
 }

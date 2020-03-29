@@ -49,6 +49,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                         // Set the POI information with randomized data
                         poi.StarID = star.ID;
+                        universe.Zones.Single(a => a.StarID == star.ID).PointsOfInterest.Add(poi.ID);
                         poi.Name = star.Name + " " + ToRoman(poiCount + 1);
                         var type = poiData.PointsOfInterest[Rand.Next(0, poiData.PointsOfInterest.Count)];
                         poi.Type = type.Type;
@@ -71,7 +72,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                 var max = poiDefaultSettings.POIRange == null || poiDefaultSettings.POIRange.Length == 0 ||
                           poiDefaultSettings.POIRange[0] == -1 || poiDefaultSettings.POIRange[1] == -1
-                    ? Rand.Next(2, 5)
+                    ? Rand.Next(1, 5)
                     : Rand.Next(poiDefaultSettings.POIRange[0], poiDefaultSettings.POIRange[1] + 1);
 
                 var poiCount = 0;
@@ -88,6 +89,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                     // Set the POI information with randomized data
                     poi.StarID = starID;
+                    universe.Zones.Single(a => a.StarID == starID).PointsOfInterest.Add(poi.ID);
                     poi.Name = universe.Stars.Single(a => a.ID == starID).Name + " " + ToRoman(poiCount + 1);
                     var type = poiData.PointsOfInterest[Rand.Next(0, poiData.PointsOfInterest.Count)];
                     poi.Type = type.Type;

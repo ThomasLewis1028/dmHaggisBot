@@ -22,22 +22,5 @@ namespace SWNUniverseGenerator.Models
         /// The Type of Star
         /// </summary>
         public String StarType { get; set; }
-
-        /// <summary>
-        /// A Star's X location on a Grid
-        /// </summary>
-        public Int32 X { get; set; }
-
-        /// <summary>
-        /// A Star's Y location on a Grid
-        /// </summary>
-        public Int32 Y { get; set; }
-
-        /// <summary>
-        /// The specific zone location on a grid
-        /// </summary>
-        [JsonIgnore]
-        public String GetZone => (X < 10 ? "0" + X : X.ToString()) +
-                                 (Y < 10 ? "0" + Y : Y.ToString());
     }
 }

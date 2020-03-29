@@ -510,21 +510,29 @@ namespace dmHaggisBot
 
             if (results.Result != null)
             {
-                if (results.Result.GetType() == typeof(Character))
-                    embeds.Add(GenerateEmbeds.CharacterEmbed(_universe, (Character) results.Result,
-                        searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
-                else if (results.Result.GetType() == typeof(Planet))
-                    embeds.Add(GenerateEmbeds.PlanetEmbed(_universe, (Planet) results.Result,
-                        searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
-                else if (results.Result.GetType() == typeof(Star))
-                    embeds.Add(GenerateEmbeds.StarEmbed(_universe, (Star) results.Result,
-                        searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
-                else if (results.Result.GetType() == typeof(Problem))
-                    embeds.Add(GenerateEmbeds.ProblemEmbed(_universe, (Problem) results.Result,
-                        searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
-                else if (results.Result.GetType() == typeof(PointOfInterest))
-                    embeds.Add(GenerateEmbeds.POIEmbed(_universe, (PointOfInterest) results.Result,
-                        searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                switch (results.Result)
+                {
+                    case Character character:
+                        embeds.Add(GenerateEmbeds.CharacterEmbed(_universe, character,
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                        break;
+                    case Planet planet:
+                        embeds.Add(GenerateEmbeds.PlanetEmbed(_universe, planet,
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                        break;
+                    case Star star:
+                        embeds.Add(GenerateEmbeds.StarEmbed(_universe, star,
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                        break;
+                    case Problem problem:
+                        embeds.Add(GenerateEmbeds.ProblemEmbed(_universe, problem,
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                        break;
+                    case PointOfInterest pointOfInterest:
+                        embeds.Add(GenerateEmbeds.POIEmbed(_universe, pointOfInterest,
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                        break;
+                }
 
                 var message = sm + " - [" + results.CurrentIndex + ", " + results.MaxCount + "]";
 

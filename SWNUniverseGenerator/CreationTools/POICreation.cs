@@ -112,8 +112,7 @@ namespace SWNUniverseGenerator.CreationTools
             return JsonConvert.DeserializeObject<POIData>(poiData.ToString());
         }
 
-
-        public static string ToRoman(int number)
+        private static string ToRoman(int number)
         {
             if ((number < 0) || (number > 3999)) throw new ArgumentOutOfRangeException("Number not in range");
             if (number < 1) return string.Empty;

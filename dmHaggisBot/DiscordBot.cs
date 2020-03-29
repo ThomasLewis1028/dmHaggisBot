@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -55,7 +56,7 @@ namespace dmHaggisBot
 
         private readonly Regex _probCreate =
             new Regex("^(probCreate|createProb|prc|cpr)($| .*)", RegexOptions.IgnoreCase);
-        
+
         private readonly Regex _poiCreate =
             new Regex("^(poiCreate|createPoi|poic|cpoi)($| .*)", RegexOptions.IgnoreCase);
         //</editor-fold>
@@ -125,66 +126,52 @@ namespace dmHaggisBot
             if ((long) sm.Channel.Id != _generalChannel && (long) sm.Channel.Id != _dmChannel)
                 return;
 
-            // Character Creation
-            if (_charCreate.IsMatch(sm.Content))
+
+            // Switch based on the set of regular expressions provided
+            switch (sm.Content)
             {
-                if (_universe != null)
-                    await CreateChar(sm);
-                else
-                    await sm.Channel.SendMessageAsync("No universe file loaded");
-            }
-
-            // Universe Creation
-            if (_univCreate.IsMatch(sm.Content))
-                await CreateUniv(sm);
-
-            // Universe Loading
-            if (_univLoad.IsMatch(sm.Content))
-                await LoadUniv(sm);
-
-            // Star Creation
-            if (_starCreate.IsMatch(sm.Content))
-            {
-                if (_universe != null)
-                    await CreateStar(sm);
-                else
-                    await sm.Channel.SendMessageAsync("No universe file loaded");
-            }
-
-            // Planet Creation
-            if (_planCreate.IsMatch(sm.Content))
-            {
-                if (_universe != null)
-                    await CreatePlanet(sm);
-                else
-                    await sm.Channel.SendMessageAsync("No universe file loaded");
-            }
-
-            // Problem Creation
-            if (_probCreate.IsMatch(sm.Content))
-            {
-                if (_universe != null)
-                    await CreateProb(sm);
-                else
-                    await sm.Channel.SendMessageAsync("No universe file loaded");
-            }
-
-            // Point of Interest Creation
-            if (_poiCreate.IsMatch(sm.Content))
-            {
-                if (_universe != null)
-                    await CreatePOI(sm);
-                else
-                    await sm.Channel.SendMessageAsync("No universe file loaded");
-            }
-
-            // Search Data
-            if (_dataSearch.IsMatch(sm.Content))
-            {
-                if (_universe != null)
-                    await SearchData(sm);
-                else
-                    await sm.Channel.SendMessageAsync("No universe file loaded");
+                case var content when _univCreate.IsMatch(content): // Universe creation
+                    await CreateUniv(sm);
+                    break;
+                case var content when _univLoad.IsMatch(content): // Universe loading
+                    await LoadUniv(sm);
+                    break;
+                case var content when _starCreate.IsMatch(content): // Star creation
+                    if (_universe != null)
+                        await CreateStar(sm);
+                    else
+                        await sm.Channel.SendMessageAsync("No universe file loaded");
+                    break;
+                case var content when _planCreate.IsMatch(content): // Planet creation
+                    if (_universe != null)
+                        await CreatePlanet(sm);
+                    else
+                        await sm.Channel.SendMessageAsync("No universe file loaded");
+                    break;
+                case var content when _charCreate.IsMatch(content): // Character creation
+                    if (_universe != null)
+                        await CreateChar(sm);
+                    else
+                        await sm.Channel.SendMessageAsync("No universe file loaded");
+                    break;
+                case var content when _probCreate.IsMatch(content): // Problem creation
+                    if (_universe != null)
+                        await CreateProb(sm);
+                    else
+                        await sm.Channel.SendMessageAsync("No universe file loaded");
+                    break;
+                case var content when _poiCreate.IsMatch(content): // Point of Interest creation
+                    if (_universe != null)
+                        await CreatePOI(sm);
+                    else
+                        await sm.Channel.SendMessageAsync("No universe file loaded");
+                    break;
+                case var content when _dataSearch.IsMatch(content): // Searching
+                    if (_universe != null)
+                        await SearchData(sm);
+                    else
+                        await sm.Channel.SendMessageAsync("No universe file loaded");
+                    break;
             }
         }
 
@@ -421,7 +408,7 @@ namespace dmHaggisBot
                 await sm.Channel.SendMessageAsync(e.Message);
             }
         }
-        
+
         /// <summary>
         /// This method handles creating Points of Interest in a Universe from a SocketMessage
         /// </summary>

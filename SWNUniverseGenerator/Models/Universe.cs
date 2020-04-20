@@ -50,6 +50,11 @@ namespace SWNUniverseGenerator.Models
         /// The list of all Characters in the Universe
         /// </summary>
         public List<Character> Characters { get; set; }
+        
+        /// <summary>
+        /// The list of all Ships in the Universe
+        /// </summary>
+        public List<Ship> Ships { get; set; }
 
         /// <summary>
         /// The list of all Problems in the Universe

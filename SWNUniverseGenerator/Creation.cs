@@ -148,6 +148,29 @@ namespace SWNUniverseGenerator
         }
 
         /// <summary>
+        /// This method should receive the Universe to add Ships to and a set of ShipDefaultSettings
+        /// 
+        /// Default values are handled in ShipCreation.AddShips
+        /// </summary>
+        /// <param name="universe"></param>
+        /// <param name="shipDefaultSettings"></param>
+        /// <returns>
+        /// Return the newly edited Universe
+        /// </returns>
+        /// <exception cref="FileNotFoundException"></exception>
+        public Universe CreateShips(Universe universe, ShipDefaultSettings shipDefaultSettings)
+        {
+            // If there are no Planets for the Ships to be tied to then throw an exception
+            if (universe.Planets == null || universe.Planets.Count == 0)
+                throw new FileNotFoundException("No planets have been created for the universe");
+
+            // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
+            universe = new ShipCreation().AddShips(universe, shipDefaultSettings);
+            SerializeData(universe);
+            return universe;
+        }
+
+        /// <summary>
         /// This method should receive the Universe to add Characters to and a set of CharacterDefaultSettings
         ///
         /// Default values are handled in CharCreation.AddCharacters
@@ -215,19 +238,7 @@ namespace SWNUniverseGenerator
             SerializeData(universe);
             return universe;
         }
-
-        /// <summary>
-        /// This is the Search function that will iterate through all of the created objects and returns the specified
-        /// index. It receives a Universe to search through and a SearchDefaultSettings to apply the settings.
-        ///
-        /// Example: if a search yields 5 results and you ask for the index of 3, it will return the third item
-        /// in the list. Going above or below the range of the search results will return "No results found".
-        /// </summary>
-        /// <param name="universe"></param>
-        /// <param name="searchDefaultSettings"></param>
-        /// <returns>
-        /// Return the single SearchResult.
-        /// </returns>
+        
         /// <summary>
         /// This method receives the name of a Universe and deserializes it into a Universe object
         /// </summary>

@@ -8,6 +8,18 @@ namespace SWNUniverseGenerator
 {
     public class Search
     {
+        /// <summary>
+        /// This is the Search function that will iterate through all of the created objects and returns the specified
+        /// index. It receives a Universe to search through and a SearchDefaultSettings to apply the settings.
+        ///
+        /// Example: if a search yields 5 results and you ask for the index of 3, it will return the third item
+        /// in the list. Going above or below the range of the search results will return "No results found".
+        /// </summary>
+        /// <param name="universe"></param>
+        /// <param name="searchDefaultSettings"></param>
+        /// <returns>
+        /// Return the single SearchResult.
+        /// </returns>
         public static SearchResult SearchUniverse(Universe universe, SearchDefaultSettings searchDefaultSettings)
         {
             // Set the count of what result number is requested. Default to 0

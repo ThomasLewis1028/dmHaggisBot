@@ -27,8 +27,7 @@ namespace SWNUniverseGenerator.CreationTools
         public Universe AddCharacters(Universe universe, CharacterDefaultSettings characterDefaultSettings)
         {
             // If no Characters have been created on the Universe then give it an empty list of them.
-            if (universe.Characters == null)
-                universe.Characters = new List<Character>();
+            universe.Characters ??= new List<Character>();
 
             // Load the list of Data from the charData.json
             var charData = LoadCharData();

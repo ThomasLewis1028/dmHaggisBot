@@ -28,6 +28,9 @@
       <EmbeddedResource Include="Data\pointsOfInterest.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
+      <None Update="Data\shipData.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -59,6 +60,9 @@ namespace dmHaggisBot
 
         private readonly Regex _poiCreate =
             new Regex("^(poiCreate|createPoi|poic|cpoi)($| .*)", RegexOptions.IgnoreCase);
+
+        private readonly Regex _shipCreate =
+            new Regex("^(shipCreate|createShip|shc|csh)($| .*)", RegexOptions.IgnoreCase);
         //</editor-fold>
 
         // Set up emoji for pagination
@@ -175,6 +179,12 @@ namespace dmHaggisBot
                 case var content when Regex.IsMatch("pg", content, RegexOptions.IgnoreCase):
                     if (_universe != null)
                         await PrintGrid(sm);
+                    else
+                        await sm.Channel.SendMessageAsync("No universe file loaded");
+                    break;
+                case var content when _shipCreate.IsMatch(content): // Ship creation
+                    if (_universe != null)
+                        await CreateShip(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
@@ -398,8 +408,6 @@ namespace dmHaggisBot
                     ? null
                     : id
             };
-
-
             try
             {
                 _universe = _creation.CreateProblems(_universe, probDef);
@@ -433,12 +441,66 @@ namespace dmHaggisBot
                 StarID = id,
                 Name = n
             };
-
-
             try
             {
                 _universe = _creation.CreatePOI(_universe, poiDef);
                 await sm.Channel.SendMessageAsync("Points of Interest created in " + _universe.Name);
+                await SetGameStatus();
+            }
+            catch (FileNotFoundException e)
+            {
+                await sm.Channel.SendMessageAsync(e.Message);
+            }
+        }
+
+        private async Task CreateShip(SocketMessage sm)
+        {
+            var c = ParseCommand("c", sm.Content);
+            var id = ParseCommand("id", sm.Content);
+            var n = ParseCommand("n", sm.Content);
+            var cid = ParseCommand("cid", sm.Content);
+            var pid = ParseCommand("pid", sm.Content);
+            var eid = ParseCommand("eid", sm.Content);
+            var gid = ParseCommand("gid", sm.Content);
+            var cmid = ParseCommand("cmid", sm.Content);
+            var crid = ParseCommand("crid", sm.Content);
+            var crl = string.IsNullOrEmpty(crid)
+                ? null
+                : crid.Split(" ").ToList();
+
+
+            var shipDef = new ShipDefaultSettings
+            {
+                Count = string.IsNullOrEmpty(c)
+                    ? -1
+                    : Int32.Parse(c),
+                ID = string.IsNullOrEmpty(id)
+                    ? null
+                    : id,
+                Name = string.IsNullOrEmpty(n)
+                    ? null
+                    : n,
+                CaptainID = string.IsNullOrEmpty(cid)
+                    ? null
+                    : cid,
+                PilotID = string.IsNullOrEmpty(pid)
+                    ? null
+                    : pid,
+                EngineerID = string.IsNullOrEmpty(eid)
+                    ? null
+                    : eid,
+                CommsID = string.IsNullOrEmpty(cmid)
+                    ? null
+                    : cmid,
+                GunnerID = string.IsNullOrEmpty(gid)
+                    ? null
+                    : gid,
+                CrewID = crl
+            };
+            try
+            {
+                _universe = _creation.CreateShips(_universe, shipDef);
+                await sm.Channel.SendMessageAsync("Ships created in " + _universe.Name);
                 await SetGameStatus();
             }
             catch (FileNotFoundException e)
@@ -626,10 +688,10 @@ namespace dmHaggisBot
             var sb = new StringBuilder();
             sb.Append(_universe.Name);
             sb.Append("```\n");
-            
+
             sb.Append("## ");
-                        for (var i = 0; i < _universe.Grid.X; i++)
-                            sb.Append(i < 10 ? "0" + i + " " : i + " ");
+            for (var i = 0; i < _universe.Grid.X; i++)
+                sb.Append(i < 10 ? "0" + i + " " : i + " ");
 
             foreach (var z in _universe.Zones)
             {
@@ -639,7 +701,7 @@ namespace dmHaggisBot
                 if (z.X == _universe.Grid.X - 1)
                     sb.Append("\n");
             }
-            
+
             sb.Append("```");
 
             await sm.Channel.SendMessageAsync(sb.ToString());
@@ -654,7 +716,7 @@ namespace dmHaggisBot
                                        _universe.Stars.Count + " Stars - " +
                                        _universe.Planets.Count + " Planets - " +
                                        _universe.Characters.Count + " Characters - " +
-                                       _universe.PointsOfInterest.Count + " Points of Interest - " + 
+                                       _universe.PointsOfInterest.Count + " Points of Interest - " +
                                        _universe.Problems.Count + " Problems");
         }
     }

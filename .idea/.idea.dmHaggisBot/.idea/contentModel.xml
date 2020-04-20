@@ -29,6 +29,7 @@
           <e p="PlanetCreation.cs" t="Include" />
           <e p="POICreation.cs" t="Include" />
           <e p="ProblemCreation.cs" t="Include" />
+          <e p="ShipCreation.cs" t="Include" />
           <e p="StarCreation.cs" t="Include" />
         </e>
         <e p="Data" t="Include">
@@ -45,6 +46,7 @@
           <e p="POIDefaultSettings.cs" t="Include" />
           <e p="ProblemDefaultSettings.cs" t="Include" />
           <e p="SearchDefaultSettings.cs" t="Include" />
+          <e p="ShipDefaultSettings.cs" t="Include" />
           <e p="StarDefaultSettings.cs" t="Include" />
           <e p="UniverseDefaultSettings.cs" t="Include" />
         </e>
@@ -52,6 +54,7 @@
           <e p="CharData.cs" t="Include" />
           <e p="POIData.cs" t="Include" />
           <e p="ProblemInfo.cs" t="Include" />
+          <e p="ShipData.cs" t="Include" />
           <e p="StarData.cs" t="Include" />
           <e p="WorldInfo.cs" t="Include" />
         </e>
@@ -66,6 +69,7 @@
           <e p="Planet.cs" t="Include" />
           <e p="PointOfInterest.cs" t="Include" />
           <e p="Problem.cs" t="Include" />
+          <e p="Ship.cs" t="Include" />
           <e p="Star.cs" t="Include" />
           <e p="Universe.cs" t="Include" />
         </e>

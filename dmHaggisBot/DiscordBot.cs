@@ -645,12 +645,17 @@ namespace dmHaggisBot
             await sm.Channel.SendMessageAsync(sb.ToString());
         }
 
+        /// <summary>
+        /// Set the game status of the bot to show the universe stats
+        /// </summary>
         private async Task SetGameStatus()
         {
             await _client.SetGameAsync(_universe.Name + " Loaded - " +
                                        _universe.Stars.Count + " Stars - " +
                                        _universe.Planets.Count + " Planets - " +
-                                       _universe.Characters.Count + " Characters");
+                                       _universe.Characters.Count + " Characters - " +
+                                       _universe.PointsOfInterest.Count + " Points of Interest - " + 
+                                       _universe.Problems.Count + " Problems");
         }
     }
 }

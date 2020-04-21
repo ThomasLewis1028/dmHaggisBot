@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using Discord;
+using Microsoft.VisualBasic.CompilerServices;
 using SWNUniverseGenerator;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
@@ -21,16 +22,19 @@ namespace dmHaggisBot
             eb.AddField("Age: ", character.Age);
             if (!string.IsNullOrEmpty(character.Title))
                 eb.AddField("Title:", character.Title);
+            if (!string.IsNullOrEmpty(character.ShipID))
+                eb.AddField("Ship: ", character.ShipID);
             eb.AddField("Hair Color: ", character.HairCol);
             eb.AddField("Hair Style: ", character.HairStyle);
             eb.AddField("Eye Color: ", character.EyeCol);
             eb.AddField("Birth Planet: ",
                 character.BirthPlanet + " - " + universe.Planets.Single(a => a.ID == character.BirthPlanet).Name);
-            eb.AddField("Current Location: ",
-                character.CurrentLocation + " - " +
-                universe.Planets.Single(a => a.ID == character.CurrentLocation).Name);
+            
             if (dmChannel)
             {
+                eb.AddField("Current Location: ",
+                             character.CurrentLocation + " - " +
+                             universe.Planets.Single(a => a.ID == character.CurrentLocation).Name);
                 eb.AddField("Crime Chance: ", character.CrimeChance + "%");
             }
 
@@ -77,8 +81,18 @@ namespace dmHaggisBot
                 eb.AddField("Contact: ", planet.Contact);
             }
 
-            
-
+            return eb.Build();
+        }
+        
+        public static Embed ShipEmbed(Universe universe, Ship ship, Boolean dmChannel)
+        {
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.WithColor(Color.LighterGrey);
+            eb.Title = ship.ID;
+            // eb.AddField("Name: ", ship.Name);
+            eb.AddField("Hull: ", ship.Hull.Type);
+            eb.AddField("Class: ", ship.Hull.Class);
+            eb.AddField("Total Cost: ", ship.TotalCost());
 
             return eb.Build();
         }

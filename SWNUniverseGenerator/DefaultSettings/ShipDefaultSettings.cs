@@ -22,5 +22,7 @@ namespace SWNUniverseGenerator.DefaultSettings
         public String GunnerID { get; set; }
         
         public List<String> CrewID { get; set; }
+        
+        public String Type { get; set; }
     }
 }

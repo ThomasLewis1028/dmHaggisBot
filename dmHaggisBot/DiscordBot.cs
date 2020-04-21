@@ -467,6 +467,7 @@ namespace dmHaggisBot
             var crl = string.IsNullOrEmpty(crid)
                 ? null
                 : crid.Split(" ").ToList();
+            var t = ParseCommand("t", sm.Content);
 
 
             var shipDef = new ShipDefaultSettings
@@ -495,7 +496,10 @@ namespace dmHaggisBot
                 GunnerID = string.IsNullOrEmpty(gid)
                     ? null
                     : gid,
-                CrewID = crl
+                CrewID = crl,
+                Type = string.IsNullOrEmpty(t)
+                    ? null
+                    : t
             };
             try
             {
@@ -574,6 +578,10 @@ namespace dmHaggisBot
                         break;
                     case Star star:
                         embeds.Add(GenerateEmbeds.StarEmbed(_universe, star,
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                        break;
+                    case Ship ship:
+                        embeds.Add(GenerateEmbeds.ShipEmbed(_universe, ship,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
                         break;
                     case Problem problem:

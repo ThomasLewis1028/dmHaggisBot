@@ -94,5 +94,10 @@ namespace SWNUniverseGenerator.Models
         /// An integer representation of the likelihood a character will aide in some shady matter
         /// </summary>
         public Int32 CrimeChance { get; set; }
+        
+        /// <summary>
+        /// A string value for the ship a given character is tied to
+        /// </summary>
+        public String ShipID { get; set; }
     }
 }

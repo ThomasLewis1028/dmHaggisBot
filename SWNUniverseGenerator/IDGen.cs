@@ -28,6 +28,7 @@ namespace SWNUniverseGenerator
                 City _ => ("C-" + id),
                 Problem _ => ("Q-" + id),
                 PointOfInterest _ => ("I-"+id),
+                Ship _ => ("CS-"+id),
                 _ => ("Z-" + id)
             };
 

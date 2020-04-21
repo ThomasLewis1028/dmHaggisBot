@@ -117,6 +117,7 @@ namespace SWNUniverseGenerator
                                 && searchDefaultSettings.Permission != SearchDefaultSettings.PermissionType.Player;
             bool includePOI = t.Contains("poi") || t.Length == 0;
             bool includeZones = t.Contains("z") || t.Length == 0;
+            bool includeShips = t.Contains("sh") || t.Length == 0;
 
             return (from p in universe.Planets
                     where (Regex.IsMatch(p.Name, nrgx, RegexOptions.IgnoreCase) ||
@@ -143,6 +144,10 @@ namespace SWNUniverseGenerator
                            Regex.IsMatch(poi.StarID, lrgx, RegexOptions.IgnoreCase)) &&
                           includePOI
                     select (IEntity) poi)
+                .Union(from ship in universe.Ships
+                    where Regex.IsMatch(ship.ID, idrgx, RegexOptions.IgnoreCase) &&
+                          includeShips
+                    select (IEntity) ship)
                 .Union(from z in universe.Zones
                     where Regex.IsMatch(z.ID, idrgx, RegexOptions.IgnoreCase) &&
                           includeZones

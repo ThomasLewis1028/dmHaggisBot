@@ -95,16 +95,24 @@ namespace SWNUniverseGenerator.CreationTools
                         ? string.IsNullOrEmpty(crewList[0]) ? null : crewList[0]
                         : shipDefaultSettings.CaptainID;
                     ship.PilotID = string.IsNullOrEmpty(shipDefaultSettings.PilotID)
-                        ? string.IsNullOrEmpty(crewList[1]) ? null : crewList[1]
+                        ? crewList.Count < 2
+                            ? null
+                            : crewList[1]
                         : shipDefaultSettings.PilotID;
                     ship.GunnerID = string.IsNullOrEmpty(shipDefaultSettings.GunnerID)
-                        ? string.IsNullOrEmpty(crewList[2]) ? null : crewList[2]
+                        ? crewList.Count < 3
+                            ? null
+                            : crewList[2]
                         : shipDefaultSettings.GunnerID;
                     ship.EngineerID = string.IsNullOrEmpty(shipDefaultSettings.EngineerID)
-                        ? string.IsNullOrEmpty(crewList[3]) ? null : crewList[3]
+                        ? crewList.Count < 4
+                            ? null
+                            : crewList[3]
                         : shipDefaultSettings.EngineerID;
                     ship.CommsID = string.IsNullOrEmpty(shipDefaultSettings.CommsID)
-                        ? string.IsNullOrEmpty(crewList[4]) ? null : crewList[4]
+                        ? crewList.Count < 5
+                            ? null
+                            : crewList[4]
                         : shipDefaultSettings.CommsID;
                 }
 

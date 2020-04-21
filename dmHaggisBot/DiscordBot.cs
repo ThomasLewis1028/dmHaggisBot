@@ -723,6 +723,7 @@ namespace dmHaggisBot
             await _client.SetGameAsync(_universe.Name + " Loaded - " +
                                        _universe.Stars.Count + " Stars - " +
                                        _universe.Planets.Count + " Planets - " +
+                                       _universe.Ships.Count + " Ships - " + 
                                        _universe.Characters.Count + " Characters - " +
                                        _universe.PointsOfInterest.Count + " Points of Interest - " +
                                        _universe.Problems.Count + " Problems");

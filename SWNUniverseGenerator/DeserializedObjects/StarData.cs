@@ -6,7 +6,7 @@ namespace SWNUniverseGenerator.DeserializedObjects
     /// <summary>
     /// Hold all data of Star and Planet names to be used in generation
     /// </summary>
-    internal class StarData
+    public class StarData
     {
         // Hold a list of Star Names for generation
         public List<String> Stars { get; set; }

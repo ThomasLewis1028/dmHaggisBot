@@ -89,9 +89,9 @@ namespace dmHaggisBot
             eb.WithColor(Color.LighterGrey);
             eb.Title = ship.Id;
             // eb.AddField("Name: ", ship.Name);
-            eb.AddField("Hull: ", ship.Hull.Type);
-            eb.AddField("Class: ", ship.Hull.Class);
-            eb.AddField("Total Cost: ", ship.TotalCost());
+            // eb.AddField("Hull: ", ship.Hull.Type);
+            // eb.AddField("Class: ", ship.Hull.Class);
+            // eb.AddField("Total Cost: ", ship.TotalCost());
 
             return eb.Build();
         }

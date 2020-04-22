@@ -21,13 +21,13 @@ namespace SWNUniverseGenerator
     public class Creation
     {
         private readonly string _universePath;
-        public readonly ShipData _shipData;
-        private readonly WorldInfo _worldInfo;
-        private readonly StarData _starData;
-        private readonly CharData _charData;
-        private readonly PoiData _poiData;
-        private readonly ProblemData _problemData;
-        
+        public readonly ShipData ShipData;
+        public readonly WorldInfo WorldInfo;
+        public readonly StarData StarData;
+        public readonly CharData CharData;
+        public readonly PoiData PoiData;
+        public readonly ProblemData ProblemData;
+
         /// <summary>
         /// Default constructor that requires a path to be passed in
         /// </summary>
@@ -35,12 +35,12 @@ namespace SWNUniverseGenerator
         public Creation(string path)
         {
             _universePath = path;
-            _shipData = LoadData<ShipData>(@"Data/shipData.json");
-            _worldInfo = LoadData<WorldInfo>(@"Data/worldTags.json");
-            _starData = LoadData<StarData>(@"Data/starData.json");
-            _charData = LoadData<CharData>(@"Data/characterData.json");
-            _poiData =LoadData<PoiData>(@"Data/pointsOfInterest.json");
-            _problemData = LoadData<ProblemData>(@"Data/problemData.json");
+            ShipData = LoadData<ShipData>(@"Data/shipData.json");
+            WorldInfo = LoadData<WorldInfo>(@"Data/worldTags.json");
+            StarData = LoadData<StarData>(@"Data/starData.json");
+            CharData = LoadData<CharData>(@"Data/characterData.json");
+            PoiData =LoadData<PoiData>(@"Data/pointsOfInterest.json");
+            ProblemData = LoadData<ProblemData>(@"Data/problemData.json");
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No grid has been set for the universe");
 
             // Set the Universe to the Universe returned from StarCreation.AddStars and serialize/return it
-            universe = new StarCreation().AddStars(universe, starDefaultSettings, _starData);
+            universe = new StarCreation().AddStars(universe, starDefaultSettings, StarData);
             SerializeData(universe);
             return universe;
         }
@@ -150,7 +150,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No stars have been created for the universe");
 
             // Set the Universe to the Universe returned from PlanetCreation.AddPlanets and serialize/return it
-            universe = new PlanetCreation().AddPlanets(universe, planetDefaultSettings, _worldInfo, _starData);
+            universe = new PlanetCreation().AddPlanets(universe, planetDefaultSettings, WorldInfo, StarData);
             SerializeData(universe);
             return universe;
         }
@@ -173,7 +173,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No planets have been created for the universe");
 
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
-            universe = new ShipCreation().AddShips(universe, shipDefaultSettings, _shipData, _charData);
+            universe = new ShipCreation().AddShips(universe, shipDefaultSettings, ShipData, CharData);
             SerializeData(universe);
             return universe;
         }
@@ -196,7 +196,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No planets have been created for the universe");
 
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
-            universe = new CharCreation().AddCharacters(universe, characterDefaultSettings, _charData);
+            universe = new CharCreation().AddCharacters(universe, characterDefaultSettings, CharData);
             SerializeData(universe);
             return universe;
         }
@@ -219,7 +219,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No locations have been loaded.");
 
             // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
-            universe = new ProblemCreation().AddProblems(universe, problemDefaultSettings, _problemData);
+            universe = new ProblemCreation().AddProblems(universe, problemDefaultSettings, ProblemData);
             SerializeData(universe);
             return universe;
         }
@@ -242,7 +242,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No locations have been loaded.");
 
             // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
-            universe = new PoiCreation().AddPoi(universe, poiDefaultSettings, _poiData);
+            universe = new PoiCreation().AddPoi(universe, poiDefaultSettings, PoiData);
             SerializeData(universe);
             return universe;
         }

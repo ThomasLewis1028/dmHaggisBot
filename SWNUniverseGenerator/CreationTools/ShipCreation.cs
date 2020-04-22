@@ -11,7 +11,8 @@ namespace SWNUniverseGenerator.CreationTools
     {
         private static readonly Random Rand = new Random();
 
-        public Universe AddShips(Universe universe, ShipDefaultSettings shipDefaultSettings, ShipData shipData, CharData charData)
+        public Universe AddShips(Universe universe, ShipDefaultSettings shipDefaultSettings, ShipData shipData,
+            CharData charData)
         {
             // Create a list of ships if it doesn't already exist
             universe.Ships ??= new List<Ship>();
@@ -33,80 +34,87 @@ namespace SWNUniverseGenerator.CreationTools
 
                 var hullSwitch = Rand.Next(0, 100);
 
+                Hull hull;
+
                 // Weighted chances for each hull type
                 switch (hullSwitch)
                 {
                     case { } n when (n >= 0 && n < 10):
-                        ship.Hull = shipData.Hulls[0];
+                        hull = shipData.Hulls[0];
                         break;
                     case { } n when (n >= 10 && n < 25):
-                        ship.Hull = shipData.Hulls[1];
+                        hull = shipData.Hulls[1];
                         break;
                     case { } n when (n >= 25 && n < 50):
-                        ship.Hull = shipData.Hulls[2];
+                        hull = shipData.Hulls[2];
                         break;
                     case { } n when (n >= 50 && n < 60):
-                        ship.Hull = shipData.Hulls[3];
+                        hull = shipData.Hulls[3];
                         break;
                     case { } n when (n >= 60 && n < 72):
-                        ship.Hull = shipData.Hulls[4];
+                        hull = shipData.Hulls[4];
                         break;
                     case { } n when (n >= 72 && n < 81):
-                        ship.Hull = shipData.Hulls[5];
+                        hull = shipData.Hulls[5];
                         break;
                     case { } n when (n >= 81 && n < 86):
-                        ship.Hull = shipData.Hulls[6];
+                        hull = shipData.Hulls[6];
                         break;
                     case { } n when (n >= 86 && n < 91):
-                        ship.Hull = shipData.Hulls[7];
+                        hull = shipData.Hulls[7];
                         break;
                     case { } n when (n >= 91 && n < 94):
-                        ship.Hull = shipData.Hulls[8];
+                        hull = shipData.Hulls[8];
                         break;
                     case { } n when (n >= 94 && n < 95):
-                        ship.Hull = shipData.Hulls[9];
+                        hull = shipData.Hulls[9];
                         break;
                     case { } n when (n >= 95 && n < 97):
-                        ship.Hull = shipData.Hulls[10];
+                        hull = shipData.Hulls[10];
                         break;
                     case { } n when (n >= 97 && n < 100):
-                        ship.Hull = shipData.Hulls[11];
+                        hull = shipData.Hulls[11];
+                        break;
+                    default:
+                        hull = shipData.Hulls[2];
                         break;
                 }
 
-                Presets presets = shipData.Presets.Find(a => a.HullType == ship.Hull.Type);
+                ship.Hull = hull.Type;
+
+                Presets presets = shipData.Presets.Find(a => a.HullType == hull.Type);
                 Preset preset = presets.ListPresets[Rand.Next(0, presets.ListPresets.Count)];
                 ship.CrewSkill = preset.CrewSkill;
                 ship.Cp = preset.Cp;
                 if (preset.Weapons != null)
                 {
-                    ship.Weapons = new List<Weapon>();
+                    ship.Weapons = new List<String>();
                     foreach (var w in preset.Weapons)
-                        ship.Weapons.Add(shipData.Weapons[w]);
+                        ship.Weapons.Add(shipData.Weapons[w].Type);
                 }
 
                 if (preset.Defenses != null)
                 {
-                    ship.Defenses = new List<Defense>();
+                    ship.Defenses = new List<String>();
                     foreach (var d in preset.Defenses)
-                        ship.Defenses.Add(shipData.Defenses[d]);
+                        ship.Defenses.Add(shipData.Defenses[d].Type);
                 }
 
                 if (preset.Fittings != null)
                 {
-                    ship.Fittings = new List<Fitting>();
+                    ship.Fittings = new List<String>();
                     foreach (var f in preset.Fittings)
-                        ship.Fittings.Add(shipData.Fittings[f]);
+                        ship.Fittings.Add(shipData.Fittings[f].Type);
                 }
 
                 CharCreation charCreation = new CharCreation();
                 universe = charCreation.AddCharacters(universe,
                     new CharacterDefaultSettings
-                        {Count = Rand.Next(ship.Hull.CrewMin, ship.Hull.CrewMax + 1), ShipId = ship.Id}, charData);
+                        {Count = Rand.Next(hull.CrewMin, hull.CrewMax + 1), ShipId = ship.Id}, charData);
 
                 var crewList = (from c in universe.Characters where c.ShipId == ship.Id select c.Id).ToList();
 
-                if (ship.Hull.Type == "Strike Fighter")
+                if (hull.Type == "Strike Fighter")
                     ship.CaptainId = ship.PilotId = ship.EngineerId = ship.CommsId = ship.GunnerId = crewList[0];
                 else
                 {

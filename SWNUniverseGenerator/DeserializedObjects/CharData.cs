@@ -6,7 +6,7 @@ namespace SWNUniverseGenerator.DeserializedObjects
     /// <summary>
     /// This is where a characterData.json file is deserialized to
     /// </summary>
-    internal class CharData
+    public class CharData
     {
         /// <summary>
         /// Holds the String List of Male First names

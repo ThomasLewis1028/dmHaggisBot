@@ -89,7 +89,7 @@ namespace dmHaggisBot
             get
             {
                 var codeBase = Assembly.GetExecutingAssembly().CodeBase;
-                var uri = new UriBuilder(codeBase);
+                var uri = new UriBuilder(codeBase!);
                 var path = Uri.UnescapeDataString(uri.Path);
                 if (!Directory.Exists(Path.GetDirectoryName(path) + "/UniverseFiles/"))
                     Directory.CreateDirectory(Path.GetDirectoryName(path) + "/UniverseFiles/");
@@ -109,7 +109,7 @@ namespace dmHaggisBot
             await _client.StartAsync();
             await _client.SetGameAsync("No Universe Loaded");
 
-            Console.Out.WriteLine("DiscordBot Connected");
+            await Console.Out.WriteLineAsync("DiscordBot Connected");
 
             await Task.Delay(-1);
         }
@@ -203,12 +203,13 @@ namespace dmHaggisBot
             if (!_dataSearch.IsMatch(sr.Message.ToString()))
                 return;
 
-            bool up = true;
+            var up = true;
 
-            if (sr.Emote.ToString().Equals(RightArrow.ToString()))
+            if (sr.Emote.ToString()!.Equals(RightArrow.ToString()))
+                // ReSharper disable once RedundantAssignment
                 up = true;
 
-            else if (sr.Emote.ToString().Equals(LeftArrow.ToString()))
+            else if (sr.Emote.ToString()!.Equals(LeftArrow.ToString()))
                 up = false;
 
             var (searchDefaultSettings, message) = ParsePagination(sr, up);
@@ -554,7 +555,7 @@ namespace dmHaggisBot
         /// <param name="sm"></param>
         /// <param name="searchDefaultSettings"></param>
         /// <param name="userMessage"></param>
-        private async Task SearchData(ISocketMessageChannel sc, string sm,
+        private static async Task SearchData(ISocketMessageChannel sc, string sm,
             SearchDefaultSettings searchDefaultSettings, IUserMessage userMessage = null)
         {
             var results = Search.SearchUniverse(_universe, searchDefaultSettings);
@@ -687,7 +688,7 @@ namespace dmHaggisBot
             return (searchDef, message);
         }
 
-        private async Task PrintGrid(SocketMessage sm)
+        private static async Task PrintGrid(SocketMessage sm)
         {
             var sb = new StringBuilder();
             sb.Append(_universe.Name);

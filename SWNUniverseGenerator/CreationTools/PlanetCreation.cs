@@ -63,13 +63,13 @@ namespace SWNUniverseGenerator.CreationTools
                     // Set the Planet information from either a randomized value or specified information
                     planet.StarId = star.Id;
                     universe.Zones.Single(a => a.StarId == star.Id).Planets.Add(planet.Id);
-                    planet.FirstWorldTag = worldInfo.WorldTags[Rand.Next(0, 100)];
-                    planet.SecondWorldTag = worldInfo.WorldTags[Rand.Next(0, 100)];
-                    planet.Atmosphere = worldInfo.Atmospheres[Rand.Next(0, 6) + Rand.Next(0, 6)];
-                    planet.Temperature = worldInfo.Temperatures[Rand.Next(0, 6) + Rand.Next(0, 6)];
-                    planet.Biosphere = worldInfo.Biospheres[Rand.Next(0, 6) + Rand.Next(0, 6)];
-                    planet.Population = worldInfo.Populations[Rand.Next(0, 6) + Rand.Next(0, 6)];
-                    planet.TechLevel = worldInfo.TechLevels[Rand.Next(0, 6) + Rand.Next(0, 6)];
+                    planet.FirstWorldTag = worldInfo.WorldTags[Rand.Next(0, 100)].Type;
+                    planet.SecondWorldTag = worldInfo.WorldTags[Rand.Next(0, 100)].Type;
+                    planet.Atmosphere = worldInfo.Atmospheres[Rand.Next(0, 6) + Rand.Next(0, 6)].Type;
+                    planet.Temperature = worldInfo.Temperatures[Rand.Next(0, 6) + Rand.Next(0, 6)].Type;
+                    planet.Biosphere = worldInfo.Biospheres[Rand.Next(0, 6) + Rand.Next(0, 6)].Type;
+                    planet.Population = worldInfo.Populations[Rand.Next(0, 6) + Rand.Next(0, 6)].Type;
+                    planet.TechLevel = worldInfo.TechLevels[Rand.Next(0, 6) + Rand.Next(0, 6)].Type;
 
                     // Set primary world
                     if (pCount == 0)

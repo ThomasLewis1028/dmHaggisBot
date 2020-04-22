@@ -26,8 +26,6 @@ namespace dmHaggisBot
         private static Universe _universe;
         private static Creation _creation;
 
-        private static bool _test;
-
         // Properties file
         private static readonly JObject Prop =
             JObject.Parse(
@@ -74,16 +72,14 @@ namespace dmHaggisBot
 
         public DiscordBot(bool test)
         {
-            _test = test;
-
             _token =
-                _test ? (string) Prop.GetValue("tokenTest") : (string) Prop.GetValue("token");
+                test ? (string) Prop.GetValue("tokenTest") : (string) Prop.GetValue("token");
 
             _generalChannel =
-                _test ? (long) Prop.GetValue("Test General") : (long) Prop.GetValue("General");
+                test ? (long) Prop.GetValue("Test General") : (long) Prop.GetValue("General");
 
             _dmChannel =
-                _test ? (long) Prop.GetValue("Test DM") : (long) Prop.GetValue("DM Channel");
+                test ? (long) Prop.GetValue("Test DM") : (long) Prop.GetValue("DM Channel");
         }
         // private IConfiguration _config;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using SWNUniverseGenerator.DeserializedObjects;
 
 namespace SWNUniverseGenerator.Models
 {

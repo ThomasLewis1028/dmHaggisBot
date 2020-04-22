@@ -66,12 +66,12 @@ namespace dmHaggisBot
             eb.AddField("Name: ", planet.Name);
             eb.AddField("Star: ", planet.StarId + " - " +
                                   universe.Stars.Single(a => a.Id == planet.StarId).Name);
-            eb.AddField("World Tags: ", planet.FirstWorldTag.Type + ", " + planet.SecondWorldTag.Type);
-            eb.AddField("Atmosphere: ", planet.Atmosphere.Type);
-            eb.AddField("Biosphere: ", planet.Biosphere.Type);
-            eb.AddField("Temperature: ", planet.Temperature.Type);
-            eb.AddField("Population: ", planet.Population.Type);
-            eb.AddField("Tech Level: ", planet.TechLevel.Type);
+            eb.AddField("World Tags: ", planet.FirstWorldTag + ", " + planet.SecondWorldTag);
+            eb.AddField("Atmosphere: ", planet.Atmosphere);
+            eb.AddField("Biosphere: ", planet.Biosphere);
+            eb.AddField("Temperature: ", planet.Temperature);
+            eb.AddField("Population: ", planet.Population);
+            eb.AddField("Tech Level: ", planet.TechLevel);
             eb.AddField("Primary World: ", planet.IsPrimary ? "Yes" : "No");
             if (!planet.IsPrimary)
             {
@@ -91,15 +91,20 @@ namespace dmHaggisBot
             //eb.AddField("Name: ", ship.Name);
             eb.AddField("Hull: ", Creation.ShipData.Hulls.Find(a => a.Type == ship.Hull)?.Type);
             eb.AddField("Class: ", Creation.ShipData.Hulls.Find(a => a.Type == ship.Hull)?.Class);
-            int? totalCost = 0;
-            totalCost += Creation.ShipData.Hulls.Find(a => a.Type == ship.Hull)?.Cost;
-            totalCost = ship.Weapons.Aggregate(totalCost,
-                (current, w) => current + Creation.ShipData.Weapons.Find(a => a.Type == w)?.Cost);
-            totalCost = ship.Defenses.Aggregate(totalCost,
-                (current, d) => current + Creation.ShipData.Defenses.Find(a => a.Type == d)?.Cost);
-            totalCost = ship.Fittings.Aggregate(totalCost,
-                (current, f) => current + Creation.ShipData.Fittings.Find(a => a.Type == f)?.Cost);
-            eb.AddField("Total Cost: ", totalCost);
+            int totalCost = 0;
+            totalCost += Creation.ShipData.Hulls.Find(a => a.Type == ship.Hull).Cost;
+
+            if (ship.Weapons != null)
+                foreach (var w in ship.Weapons)
+                    totalCost += Creation.ShipData.Weapons.Find(a => a.Type == w).Cost;
+            if (ship.Defenses != null)
+                foreach (var d in ship.Defenses)
+                    totalCost += Creation.ShipData.Defenses.Find(a => a.Type == d).Cost;
+            if (ship.Fittings != null)
+                foreach (var f in ship.Fittings)
+                    totalCost += (int) Creation.ShipData.Fittings.Find(a => a.Type == f).Cost;
+            
+            eb.AddField("Total Cost: ", (totalCost).ToString("#,###"));
 
             return eb.Build();
         }

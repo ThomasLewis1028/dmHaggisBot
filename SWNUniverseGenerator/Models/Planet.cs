@@ -29,39 +29,39 @@ namespace SWNUniverseGenerator.Models
         /// This will include a Type and a Description of the Tag, as well as potential Enemies, Friends
         /// and Complications
         /// </summary>
-        public WorldTag FirstWorldTag { get; set; }
+        public String FirstWorldTag { get; set; }
         
         /// <summary>
         /// This implements a World class from WorldInfo.cs and specifies the World Tag of a Planet
         /// This will include a Type and a Description of the Tag, as well as potential Enemies, Friends
         /// and Complications
         /// </summary>
-        public WorldTag SecondWorldTag { get; set; }
+        public String SecondWorldTag { get; set; }
 
         /// <summary>
         /// This implements an Atmosphere class from WorldInfo.cs and specifies the Atmosphere of a Planet
         /// </summary>
-        public Atmosphere Atmosphere { get; set; }
+        public String Atmosphere { get; set; }
 
         /// <summary>
         /// This implements a Temperature class from WorldInfo.cs and specifies the Temperature of a Planet
         /// </summary>
-        public Temperature Temperature { get; set; }
+        public String Temperature { get; set; }
 
         /// <summary>
         /// This implements a Biosphere class from WorldInfo.cs and specifies the Biosphere of a Planet
         /// </summary>
-        public Biosphere Biosphere { get; set; }
+        public String Biosphere { get; set; }
 
         /// <summary>
         /// This implements a Population class from WorldInfo.cs and specifies the Population of a Planet
         /// </summary>
-        public Population Population { get; set; }
+        public String Population { get; set; }
 
         /// <summary>
         /// This implements a TechLevel class from WorldInfo.cs and specifies the Tech Level for a Planet
         /// </summary>
-        public TechLevel TechLevel { get; set; }
+        public String TechLevel { get; set; }
 
         /// <summary>
         /// This is a marker to create a primary world for system

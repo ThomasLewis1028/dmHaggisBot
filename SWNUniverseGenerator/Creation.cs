@@ -87,7 +87,8 @@ namespace SWNUniverseGenerator
                 Planets = new List<Planet>(),
                 PointsOfInterest = new List<PointOfInterest>(),
                 Characters = new List<Character>(),
-                Problems = new List<Problem>()
+                Problems = new List<Problem>(),
+                Ships = new List<Ship>()
             };
 
             // Add the Zones to the Universe

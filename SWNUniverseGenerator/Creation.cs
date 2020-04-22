@@ -21,12 +21,12 @@ namespace SWNUniverseGenerator
     public class Creation
     {
         private readonly string _universePath;
-        public readonly ShipData ShipData;
-        public readonly WorldInfo WorldInfo;
-        public readonly StarData StarData;
-        public readonly CharData CharData;
-        public readonly PoiData PoiData;
-        public readonly ProblemData ProblemData;
+        public static ShipData ShipData;
+        public static WorldInfo WorldInfo;
+        public static StarData StarData;
+        public static CharData CharData;
+        public static PoiData PoiData;
+        public static ProblemData ProblemData;
 
         /// <summary>
         /// Default constructor that requires a path to be passed in
@@ -287,10 +287,14 @@ namespace SWNUniverseGenerator
             var serializer = new JsonSerializer();
             serializer.Serialize(file, universe);
         }
-
-
         
-        private T LoadData<T>(String path)
+        /// <summary>
+        /// Receive the path to a data type and return the deserialized version of that data
+        /// </summary>
+        /// <param name="path"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        private static T LoadData<T>(String path)
         {
             var data =
                 JObject.Parse(

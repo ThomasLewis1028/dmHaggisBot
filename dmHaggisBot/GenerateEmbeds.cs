@@ -28,12 +28,12 @@ namespace dmHaggisBot
             eb.AddField("Eye Color: ", character.EyeCol);
             eb.AddField("Birth Planet: ",
                 character.BirthPlanet + " - " + universe.Planets.Single(a => a.Id == character.BirthPlanet).Name);
-            
+
             if (dmChannel)
             {
                 eb.AddField("Current Location: ",
-                             character.CurrentLocation + " - " +
-                             universe.Planets.Single(a => a.Id == character.CurrentLocation).Name);
+                    character.CurrentLocation + " - " +
+                    universe.Planets.Single(a => a.Id == character.CurrentLocation).Name);
                 eb.AddField("Crime Chance: ", character.CrimeChance + "%");
             }
 
@@ -82,16 +82,24 @@ namespace dmHaggisBot
 
             return eb.Build();
         }
-        
+
         public static Embed ShipEmbed(Universe universe, Ship ship, Boolean dmChannel)
         {
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.LighterGrey);
             eb.Title = ship.Id;
-            // eb.AddField("Name: ", ship.Name);
-            // eb.AddField("Hull: ", ship.Hull.Type);
-            // eb.AddField("Class: ", ship.Hull.Class);
-            // eb.AddField("Total Cost: ", ship.TotalCost());
+            //eb.AddField("Name: ", ship.Name);
+            eb.AddField("Hull: ", Creation.ShipData.Hulls.Find(a => a.Type == ship.Hull)?.Type);
+            eb.AddField("Class: ", Creation.ShipData.Hulls.Find(a => a.Type == ship.Hull)?.Class);
+            int? totalCost = 0;
+            totalCost += Creation.ShipData.Hulls.Find(a => a.Type == ship.Hull)?.Cost;
+            totalCost = ship.Weapons.Aggregate(totalCost,
+                (current, w) => current + Creation.ShipData.Weapons.Find(a => a.Type == w)?.Cost);
+            totalCost = ship.Defenses.Aggregate(totalCost,
+                (current, d) => current + Creation.ShipData.Defenses.Find(a => a.Type == d)?.Cost);
+            totalCost = ship.Fittings.Aggregate(totalCost,
+                (current, f) => current + Creation.ShipData.Fittings.Find(a => a.Type == f)?.Cost);
+            eb.AddField("Total Cost: ", totalCost);
 
             return eb.Build();
         }
@@ -129,7 +137,7 @@ namespace dmHaggisBot
 
             return eb.Build();
         }
-        
+
         public static Embed ZoneEmbed(Universe universe, Zone zone, Boolean dmChannel)
         {
             EmbedBuilder eb = new EmbedBuilder();
@@ -142,6 +150,7 @@ namespace dmHaggisBot
                 zone.Planets.ForEach(a => sb.Append(a + "\n"));
                 eb.AddField("Planets: ", sb);
             }
+
             if (zone.PointsOfInterest.Count != 0)
             {
                 var sb = new StringBuilder();

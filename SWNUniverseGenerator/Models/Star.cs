@@ -11,7 +11,7 @@ namespace SWNUniverseGenerator.Models
         /// <summary>
         /// A unique ID that will be generated when creating a Star
         /// </summary>
-        public String ID { get; set; }
+        public String Id { get; set; }
 
         /// <summary>
         /// The string Name of a Star

@@ -28,7 +28,7 @@ namespace SWNUniverseGenerator.OBSOLETE
 
             var path = @"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\SWNUniverseGenerator\OBSOLETE\namesTemp.json";
 
-            var names = new IEntityNames();
+            var names = new EntityNames();
             names.Stars = new List<string>();
             names.Planets = new List<string>();
 

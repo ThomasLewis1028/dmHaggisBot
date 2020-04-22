@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator.CreationTools;
 using SWNUniverseGenerator.DefaultSettings;
+using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator
@@ -22,7 +21,13 @@ namespace SWNUniverseGenerator
     public class Creation
     {
         private readonly string _universePath;
-
+        public readonly ShipData _shipData;
+        private readonly WorldInfo _worldInfo;
+        private readonly StarData _starData;
+        private readonly CharData _charData;
+        private readonly PoiData _poiData;
+        private readonly ProblemData _problemData;
+        
         /// <summary>
         /// Default constructor that requires a path to be passed in
         /// </summary>
@@ -30,6 +35,12 @@ namespace SWNUniverseGenerator
         public Creation(string path)
         {
             _universePath = path;
+            _shipData = LoadData<ShipData>(@"Data/shipData.json");
+            _worldInfo = LoadData<WorldInfo>(@"Data/worldTags.json");
+            _starData = LoadData<StarData>(@"Data/starData.json");
+            _charData = LoadData<CharData>(@"Data/characterData.json");
+            _poiData =LoadData<PoiData>(@"Data/pointsOfInterest.json");
+            _problemData = LoadData<ProblemData>(@"Data/problemData.json");
         }
 
         /// <summary>
@@ -59,40 +70,37 @@ namespace SWNUniverseGenerator
                     File.Delete(path.ToString());
                 // Otherwise throw an exception to be caught
                 else
-                    throw new IOException(string.Format("{0} already exists.",
-                        universeDefaultSettings.Name));
+                    throw new IOException($"{universeDefaultSettings.Name} already exists.");
             }
 
             // Close the file so that it can be written to by the rest of the program
             File.Create(path.ToString()).Close();
 
             // Set the grid to the specified values or the default [8, 10]
-            Grid grid;
-            if (universeDefaultSettings.Grid == null)
-                grid = new Grid(8, 10);
-            else
-                grid = universeDefaultSettings.Grid;
+            var grid = universeDefaultSettings.Grid ?? new Grid(8, 10);
 
             // Create the Universe.
-            var universe = new Universe(name, grid);
-            universe.Zones = new List<Zone>();
-            universe.Stars = new List<Star>();
-            universe.Planets = new List<Planet>();
-            universe.PointsOfInterest = new List<PointOfInterest>();
-            universe.Characters = new List<Character>();
-            universe.Problems = new List<Problem>();
+            var universe = new Universe(name, grid)
+            {
+                Zones = new List<Zone>(),
+                Stars = new List<Star>(),
+                Planets = new List<Planet>(),
+                PointsOfInterest = new List<PointOfInterest>(),
+                Characters = new List<Character>(),
+                Problems = new List<Problem>()
+            };
 
             // Add the Zones to the Universe
             for (var i = 0; i < grid.Y; i++)
             {
                 for (var j = 0; j < grid.X; j++)
                 {
-                    Zone zone = new Zone() {X = j, Y = i};
-                    zone.Planets = new List<string>();
-                    zone.PointsOfInterest = new List<string>();
-                    IDGen.GenerateID(zone);
+                    Zone zone = new Zone
+                    {
+                        X = j, Y = i, Planets = new List<string>(), PointsOfInterest = new List<string>()
+                    };
+                    IdGen.GenerateId(zone);
                     universe.Zones.Add(zone);
-                    
                 }
             }
 
@@ -119,7 +127,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No grid has been set for the universe");
 
             // Set the Universe to the Universe returned from StarCreation.AddStars and serialize/return it
-            universe = new StarCreation().AddStars(universe, starDefaultSettings);
+            universe = new StarCreation().AddStars(universe, starDefaultSettings, _starData);
             SerializeData(universe);
             return universe;
         }
@@ -142,7 +150,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No stars have been created for the universe");
 
             // Set the Universe to the Universe returned from PlanetCreation.AddPlanets and serialize/return it
-            universe = new PlanetCreation().AddPlanets(universe, planetDefaultSettings);
+            universe = new PlanetCreation().AddPlanets(universe, planetDefaultSettings, _worldInfo, _starData);
             SerializeData(universe);
             return universe;
         }
@@ -165,7 +173,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No planets have been created for the universe");
 
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
-            universe = new ShipCreation().AddShips(universe, shipDefaultSettings);
+            universe = new ShipCreation().AddShips(universe, shipDefaultSettings, _shipData, _charData);
             SerializeData(universe);
             return universe;
         }
@@ -188,7 +196,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No planets have been created for the universe");
 
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
-            universe = new CharCreation().AddCharacters(universe, characterDefaultSettings);
+            universe = new CharCreation().AddCharacters(universe, characterDefaultSettings, _charData);
             SerializeData(universe);
             return universe;
         }
@@ -211,7 +219,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No locations have been loaded.");
 
             // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
-            universe = new ProblemCreation().AddProblems(universe, problemDefaultSettings);
+            universe = new ProblemCreation().AddProblems(universe, problemDefaultSettings, _problemData);
             SerializeData(universe);
             return universe;
         }
@@ -227,18 +235,18 @@ namespace SWNUniverseGenerator
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public Universe CreatePOI(Universe universe, POIDefaultSettings poiDefaultSettings)
+        public Universe CreatePoi(Universe universe, PoiDefaultSettings poiDefaultSettings)
         {
             // If there are no Planets or Locations for the Problems to be tied to then throw an exception
             if (universe.Stars == null || universe.Stars.Count == 0)
                 throw new FileNotFoundException("No locations have been loaded.");
 
             // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
-            universe = new POICreation().AddPOI(universe, poiDefaultSettings);
+            universe = new PoiCreation().AddPoi(universe, poiDefaultSettings, _poiData);
             SerializeData(universe);
             return universe;
         }
-        
+
         /// <summary>
         /// This method receives the name of a Universe and deserializes it into a Universe object
         /// </summary>
@@ -278,6 +286,17 @@ namespace SWNUniverseGenerator
                 File.CreateText(path);
             var serializer = new JsonSerializer();
             serializer.Serialize(file, universe);
+        }
+
+
+        
+        private T LoadData<T>(String path)
+        {
+            var data =
+                JObject.Parse(
+                    File.ReadAllText(path));
+
+            return JsonConvert.DeserializeObject<T>(data.ToString());
         }
     }
 }

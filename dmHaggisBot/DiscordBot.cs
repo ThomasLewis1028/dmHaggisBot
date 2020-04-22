@@ -166,7 +166,7 @@ namespace dmHaggisBot
                     break;
                 case var content when _poiCreate.IsMatch(content): // Point of Interest creation
                     if (_universe != null)
-                        await CreatePOI(sm);
+                        await CreatePoi(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
@@ -404,7 +404,7 @@ namespace dmHaggisBot
                     ? -1
                     : Int32.Parse(c),
                 Additive = !string.IsNullOrEmpty(a) && a.ToUpper() == "Y",
-                ID = string.IsNullOrEmpty(id)
+                Id = string.IsNullOrEmpty(id)
                     ? null
                     : id
             };
@@ -424,7 +424,7 @@ namespace dmHaggisBot
         /// This method handles creating Points of Interest in a Universe from a SocketMessage
         /// </summary>
         /// <param name="sm"></param>
-        private async Task CreatePOI(SocketMessage sm)
+        private async Task CreatePoi(SocketMessage sm)
         {
             var c = ParseCommand("c", sm.Content);
             var cr = string.IsNullOrEmpty(c)
@@ -435,15 +435,15 @@ namespace dmHaggisBot
             var id = ParseCommand("id", sm.Content);
             var n = ParseCommand("n", sm.Content);
 
-            var poiDef = new POIDefaultSettings()
+            var poiDef = new PoiDefaultSettings()
             {
-                POIRange = cr,
-                StarID = id,
+                PoiRange = cr,
+                StarId = id,
                 Name = n
             };
             try
             {
-                _universe = _creation.CreatePOI(_universe, poiDef);
+                _universe = _creation.CreatePoi(_universe, poiDef);
                 await sm.Channel.SendMessageAsync("Points of Interest created in " + _universe.Name);
                 await SetGameStatus();
             }
@@ -475,28 +475,28 @@ namespace dmHaggisBot
                 Count = string.IsNullOrEmpty(c)
                     ? -1
                     : Int32.Parse(c),
-                ID = string.IsNullOrEmpty(id)
+                Id = string.IsNullOrEmpty(id)
                     ? null
                     : id,
                 Name = string.IsNullOrEmpty(n)
                     ? null
                     : n,
-                CaptainID = string.IsNullOrEmpty(cid)
+                CaptainId = string.IsNullOrEmpty(cid)
                     ? null
                     : cid,
-                PilotID = string.IsNullOrEmpty(pid)
+                PilotId = string.IsNullOrEmpty(pid)
                     ? null
                     : pid,
-                EngineerID = string.IsNullOrEmpty(eid)
+                EngineerId = string.IsNullOrEmpty(eid)
                     ? null
                     : eid,
-                CommsID = string.IsNullOrEmpty(cmid)
+                CommsId = string.IsNullOrEmpty(cmid)
                     ? null
                     : cmid,
-                GunnerID = string.IsNullOrEmpty(gid)
+                GunnerId = string.IsNullOrEmpty(gid)
                     ? null
                     : gid,
-                CrewID = crl,
+                CrewId = crl,
                 Type = string.IsNullOrEmpty(t)
                     ? null
                     : t
@@ -527,7 +527,7 @@ namespace dmHaggisBot
 
             SearchDefaultSettings searchDef = new SearchDefaultSettings
             {
-                ID = string.IsNullOrEmpty(id)
+                Id = string.IsNullOrEmpty(id)
                     ? new string[] { }
                     : id.Split(", "),
                 Name = string.IsNullOrEmpty(n)
@@ -540,7 +540,7 @@ namespace dmHaggisBot
                     ? new string[] { }
                     : t.Split(" "),
                 Permission = _dmChannel == (long) sm.Channel.Id
-                    ? SearchDefaultSettings.PermissionType.DM
+                    ? SearchDefaultSettings.PermissionType.Dm
                     : SearchDefaultSettings.PermissionType.Player,
                 Location = string.IsNullOrEmpty(l)
                     ? new string[] { }
@@ -570,31 +570,31 @@ namespace dmHaggisBot
                 {
                     case Character character:
                         embeds.Add(GenerateEmbeds.CharacterEmbed(_universe, character,
-                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Planet planet:
                         embeds.Add(GenerateEmbeds.PlanetEmbed(_universe, planet,
-                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Star star:
                         embeds.Add(GenerateEmbeds.StarEmbed(_universe, star,
-                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Ship ship:
                         embeds.Add(GenerateEmbeds.ShipEmbed(_universe, ship,
-                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Problem problem:
                         embeds.Add(GenerateEmbeds.ProblemEmbed(_universe, problem,
-                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case PointOfInterest pointOfInterest:
-                        embeds.Add(GenerateEmbeds.POIEmbed(_universe, pointOfInterest,
-                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                        embeds.Add(GenerateEmbeds.PoiEmbed(_universe, pointOfInterest,
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Zone zone:
                         embeds.Add(GenerateEmbeds.ZoneEmbed(_universe, zone,
-                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.DM));
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                 }
 
@@ -670,7 +670,7 @@ namespace dmHaggisBot
 
             SearchDefaultSettings searchDef = new SearchDefaultSettings
             {
-                ID = string.IsNullOrEmpty(id)
+                Id = string.IsNullOrEmpty(id)
                     ? new string[] { }
                     : id.Split(", "),
                 Name = string.IsNullOrEmpty(n)
@@ -681,7 +681,7 @@ namespace dmHaggisBot
                     ? new string[] { }
                     : t.Split(" "),
                 Permission = _dmChannel == (long) sr.Channel.Id
-                    ? SearchDefaultSettings.PermissionType.DM
+                    ? SearchDefaultSettings.PermissionType.Dm
                     : SearchDefaultSettings.PermissionType.Player,
                 Location = string.IsNullOrEmpty(l)
                     ? new string[] { }
@@ -705,7 +705,7 @@ namespace dmHaggisBot
             {
                 if (z.X == 0)
                     sb.Append(z.Y < 10 ? "0" + z.Y + " " : z.Y + " ");
-                sb.Append(string.IsNullOrEmpty(z.StarID) ? ".  " : "X  ");
+                sb.Append(string.IsNullOrEmpty(z.StarId) ? ".  " : "X  ");
                 if (z.X == _universe.Grid.X - 1)
                     sb.Append("\n");
             }

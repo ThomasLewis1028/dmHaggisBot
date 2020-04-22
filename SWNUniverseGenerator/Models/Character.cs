@@ -23,7 +23,7 @@ namespace SWNUniverseGenerator.Models
         /// <summary>
         /// The unique String ID of a Character. This should be randomly generated to assure uniqueness.
         /// </summary>
-        public String ID { get; set; }
+        public String Id { get; set; }
         
         /// <summary>
         /// First name of the Character
@@ -98,6 +98,6 @@ namespace SWNUniverseGenerator.Models
         /// <summary>
         /// A string value for the ship a given character is tied to
         /// </summary>
-        public String ShipID { get; set; }
+        public String ShipId { get; set; }
     }
 }

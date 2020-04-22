@@ -1,26 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.CreationTools
 {
-    public class ShipCreation
+    internal class ShipCreation
     {
         private static readonly Random Rand = new Random();
 
-        public Universe AddShips(Universe universe, ShipDefaultSettings shipDefaultSettings)
+        public Universe AddShips(Universe universe, ShipDefaultSettings shipDefaultSettings, ShipData shipData, CharData charData)
         {
             // Create a list of ships if it doesn't already exist
             universe.Ships ??= new List<Ship>();
-
-            // Deserialize data
-            var shipData = LoadShipData();
 
             // Set the number of ships you want to create. Default is 1
             var count = shipDefaultSettings.Count < 0
@@ -32,9 +26,9 @@ namespace SWNUniverseGenerator.CreationTools
             {
                 var ship = new Ship();
 
-                IDGen.GenerateID(ship);
+                IdGen.GenerateId(ship);
 
-                if (universe.Ships.Exists(a => a.ID == ship.ID))
+                if (universe.Ships.Exists(a => a.Id == ship.Id))
                     continue;
 
                 var hullSwitch = Rand.Next(0, 100);
@@ -80,40 +74,65 @@ namespace SWNUniverseGenerator.CreationTools
                         break;
                 }
 
+                Presets presets = shipData.Presets.Find(a => a.HullType == ship.Hull.Type);
+                Preset preset = presets.ListPresets[Rand.Next(0, presets.ListPresets.Count)];
+                ship.CrewSkill = preset.CrewSkill;
+                ship.Cp = preset.Cp;
+                if (preset.Weapons != null)
+                {
+                    ship.Weapons = new List<Weapon>();
+                    foreach (var w in preset.Weapons)
+                        ship.Weapons.Add(shipData.Weapons[w]);
+                }
+
+                if (preset.Defenses != null)
+                {
+                    ship.Defenses = new List<Defense>();
+                    foreach (var d in preset.Defenses)
+                        ship.Defenses.Add(shipData.Defenses[d]);
+                }
+
+                if (preset.Fittings != null)
+                {
+                    ship.Fittings = new List<Fitting>();
+                    foreach (var f in preset.Fittings)
+                        ship.Fittings.Add(shipData.Fittings[f]);
+                }
+
                 CharCreation charCreation = new CharCreation();
                 universe = charCreation.AddCharacters(universe,
                     new CharacterDefaultSettings
-                        {Count = Rand.Next(ship.Hull.CrewMin, ship.Hull.CrewMax + 1), ShipID = ship.ID});
+                        {Count = Rand.Next(ship.Hull.CrewMin, ship.Hull.CrewMax + 1), ShipId = ship.Id}, charData);
 
-                var crewList = (from c in universe.Characters where c.ShipID == ship.ID select c.ID).ToList();
+                var crewList = (from c in universe.Characters where c.ShipId == ship.Id select c.Id).ToList();
 
                 if (ship.Hull.Type == "Strike Fighter")
-                    ship.CaptainID = ship.PilotID = ship.EngineerID = ship.CommsID = ship.GunnerID = crewList[0];
+                    ship.CaptainId = ship.PilotId = ship.EngineerId = ship.CommsId = ship.GunnerId = crewList[0];
                 else
                 {
-                    ship.CaptainID = string.IsNullOrEmpty(shipDefaultSettings.CaptainID)
+                    ship.CaptainId = string.IsNullOrEmpty(shipDefaultSettings.CaptainId)
                         ? string.IsNullOrEmpty(crewList[0]) ? null : crewList[0]
-                        : shipDefaultSettings.CaptainID;
-                    ship.PilotID = string.IsNullOrEmpty(shipDefaultSettings.PilotID)
+                        : shipDefaultSettings.CaptainId;
+                    ship.PilotId = string.IsNullOrEmpty(shipDefaultSettings.PilotId)
                         ? crewList.Count < 2
                             ? null
                             : crewList[1]
-                        : shipDefaultSettings.PilotID;
-                    ship.GunnerID = string.IsNullOrEmpty(shipDefaultSettings.GunnerID)
+                        : shipDefaultSettings.PilotId;
+                    ship.GunnerId = string.IsNullOrEmpty(shipDefaultSettings.GunnerId)
                         ? crewList.Count < 3
                             ? null
                             : crewList[2]
-                        : shipDefaultSettings.GunnerID;
-                    ship.EngineerID = string.IsNullOrEmpty(shipDefaultSettings.EngineerID)
+                        : shipDefaultSettings.GunnerId;
+                    ship.EngineerId = string.IsNullOrEmpty(shipDefaultSettings.EngineerId)
                         ? crewList.Count < 4
                             ? null
                             : crewList[3]
-                        : shipDefaultSettings.EngineerID;
-                    ship.CommsID = string.IsNullOrEmpty(shipDefaultSettings.CommsID)
+                        : shipDefaultSettings.EngineerId;
+                    ship.CommsId = string.IsNullOrEmpty(shipDefaultSettings.CommsId)
                         ? crewList.Count < 5
                             ? null
                             : crewList[4]
-                        : shipDefaultSettings.CommsID;
+                        : shipDefaultSettings.CommsId;
                 }
 
                 universe.Ships.Add(ship);
@@ -122,18 +141,9 @@ namespace SWNUniverseGenerator.CreationTools
             }
 
             // Re-order the list of Ships by their ID
-            universe.Ships = universe.Ships.OrderBy(s => s.ID).ToList();
+            universe.Ships = universe.Ships.OrderBy(s => s.Id).ToList();
 
             return universe;
-        }
-
-        private ShipData LoadShipData()
-        {
-            var shipData =
-                JObject.Parse(
-                    File.ReadAllText(@"Data/shipData.json"));
-
-            return JsonConvert.DeserializeObject<ShipData>(shipData.ToString());
         }
     }
 }

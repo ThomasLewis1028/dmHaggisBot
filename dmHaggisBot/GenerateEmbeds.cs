@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text;
 using Discord;
-using Microsoft.VisualBasic.CompilerServices;
 using SWNUniverseGenerator;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
@@ -15,26 +14,26 @@ namespace dmHaggisBot
         {
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.DarkGrey);
-            eb.Title = character.ID;
+            eb.Title = character.Id;
 
             eb.AddField("Name: ", character.Name);
             eb.AddField("Gender: ", character.GetGender());
             eb.AddField("Age: ", character.Age);
             if (!string.IsNullOrEmpty(character.Title))
                 eb.AddField("Title:", character.Title);
-            if (!string.IsNullOrEmpty(character.ShipID))
-                eb.AddField("Ship: ", character.ShipID);
+            if (!string.IsNullOrEmpty(character.ShipId))
+                eb.AddField("Ship: ", character.ShipId);
             eb.AddField("Hair Color: ", character.HairCol);
             eb.AddField("Hair Style: ", character.HairStyle);
             eb.AddField("Eye Color: ", character.EyeCol);
             eb.AddField("Birth Planet: ",
-                character.BirthPlanet + " - " + universe.Planets.Single(a => a.ID == character.BirthPlanet).Name);
+                character.BirthPlanet + " - " + universe.Planets.Single(a => a.Id == character.BirthPlanet).Name);
             
             if (dmChannel)
             {
                 eb.AddField("Current Location: ",
                              character.CurrentLocation + " - " +
-                             universe.Planets.Single(a => a.ID == character.CurrentLocation).Name);
+                             universe.Planets.Single(a => a.Id == character.CurrentLocation).Name);
                 eb.AddField("Crime Chance: ", character.CrimeChance + "%");
             }
 
@@ -45,13 +44,13 @@ namespace dmHaggisBot
         {
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.LightOrange);
-            eb.Title = star.ID;
+            eb.Title = star.Id;
 
             eb.AddField("Name: ", star.Name);
-            eb.AddField("Zone: ", universe.Zones.Single(a => a.StarID == star.ID).GetHex);
+            eb.AddField("Zone: ", universe.Zones.Single(a => a.StarId == star.Id).GetHex);
             string planets = "";
-            foreach (Planet p in universe.Planets.FindAll(a => a.StarID == star.ID))
-                planets += (p.ID + " - " + p.Name + "\n");
+            foreach (Planet p in universe.Planets.FindAll(a => a.StarId == star.Id))
+                planets += (p.Id + " - " + p.Name + "\n");
 
             if (!string.IsNullOrEmpty(planets))
                 eb.AddField("Planets", planets);
@@ -63,10 +62,10 @@ namespace dmHaggisBot
         {
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.DarkGreen);
-            eb.Title = planet.ID;
+            eb.Title = planet.Id;
             eb.AddField("Name: ", planet.Name);
-            eb.AddField("Star: ", planet.StarID + " - " +
-                                  universe.Stars.Single(a => a.ID == planet.StarID).Name);
+            eb.AddField("Star: ", planet.StarId + " - " +
+                                  universe.Stars.Single(a => a.Id == planet.StarId).Name);
             eb.AddField("World Tags: ", planet.FirstWorldTag.Type + ", " + planet.SecondWorldTag.Type);
             eb.AddField("Atmosphere: ", planet.Atmosphere.Type);
             eb.AddField("Biosphere: ", planet.Biosphere.Type);
@@ -88,7 +87,7 @@ namespace dmHaggisBot
         {
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.LighterGrey);
-            eb.Title = ship.ID;
+            eb.Title = ship.Id;
             // eb.AddField("Name: ", ship.Name);
             eb.AddField("Hull: ", ship.Hull.Type);
             eb.AddField("Class: ", ship.Hull.Class);
@@ -101,32 +100,32 @@ namespace dmHaggisBot
         {
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.DarkRed);
-            eb.Title = problem.ID;
+            eb.Title = problem.Id;
             eb.AddField("Type: ", problem.ConflictType);
             eb.AddField("Situation: ", problem.Situation);
             eb.AddField("Focus: ", problem.Focus);
             eb.AddField("Restraint: ", problem.Restraint);
             eb.AddField("Twist: ", problem.Twist);
-            eb.AddField("Location: ", problem.LocationID + " - " +
+            eb.AddField("Location: ", problem.LocationId + " - " +
                                       Search.SearchUniverse(universe,
-                                          new SearchDefaultSettings {ID = new[] {problem.LocationID}}).Result.Name);
+                                          new SearchDefaultSettings {Id = new[] {problem.LocationId}}).Result.Name);
 
             return eb.Build();
         }
 
 
-        public static Embed POIEmbed(Universe universe, PointOfInterest poi, Boolean dmChannel)
+        public static Embed PoiEmbed(Universe universe, PointOfInterest poi, Boolean dmChannel)
         {
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.Gold);
-            eb.Title = poi.ID;
+            eb.Title = poi.Id;
             eb.AddField("Name: ", poi.Name);
             eb.AddField("Type: ", poi.Type);
             eb.AddField("Situation: ", poi.Situation);
             eb.AddField("Occupied By: ", poi.OccupiedBy);
-            eb.AddField("Location: ", poi.StarID + " - " +
+            eb.AddField("Location: ", poi.StarId + " - " +
                                       Search.SearchUniverse(universe,
-                                          new SearchDefaultSettings {ID = new[] {poi.StarID}}).Result.Name);
+                                          new SearchDefaultSettings {Id = new[] {poi.StarId}}).Result.Name);
 
             return eb.Build();
         }
@@ -136,7 +135,7 @@ namespace dmHaggisBot
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.Blue);
             eb.Title = zone.GetHex;
-            eb.AddField("Star: ", zone.StarID != null ? zone.StarID : "No System");
+            eb.AddField("Star: ", zone.StarId != null ? zone.StarId : "No System");
             if (zone.Planets.Count != 0)
             {
                 var sb = new StringBuilder();

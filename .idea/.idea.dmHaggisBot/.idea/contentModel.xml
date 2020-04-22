@@ -53,7 +53,7 @@
         <e p="DeserializedObjects" t="Include">
           <e p="CharData.cs" t="Include" />
           <e p="POIData.cs" t="Include" />
-          <e p="ProblemInfo.cs" t="Include" />
+          <e p="ProblemData.cs" t="Include" />
           <e p="ShipData.cs" t="Include" />
           <e p="StarData.cs" t="Include" />
           <e p="WorldInfo.cs" t="Include" />

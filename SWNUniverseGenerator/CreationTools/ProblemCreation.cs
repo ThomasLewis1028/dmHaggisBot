@@ -2,24 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.CreationTools
 {
-    public class ProblemCreation
+    internal class ProblemCreation
     {
         private static readonly Random Rand = new Random();
 
-        public Universe AddProblems(Universe universe, ProblemDefaultSettings problemDefaultSettings)
+        public Universe AddProblems(Universe universe, ProblemDefaultSettings problemDefaultSettings, ProblemData problemData)
         {
             if (universe.Problems == null)
                 universe.Problems = new List<Problem>();
-
-            var probData = LoadProbData();
 
             var count = problemDefaultSettings.Count < 0
                 ? 5
@@ -27,36 +23,36 @@ namespace SWNUniverseGenerator.CreationTools
 
             var add = problemDefaultSettings.Additive;
 
-            var id = string.IsNullOrEmpty(problemDefaultSettings.ID)
+            var id = string.IsNullOrEmpty(problemDefaultSettings.Id)
                 ? null
-                : problemDefaultSettings.ID;
+                : problemDefaultSettings.Id;
 
             if (id != null)
             {
-                var locID = (from planets in universe.Planets select new {planets.ID})
-                    .Union(from stars in universe.Stars select new {stars.ID})
+                var locId = (from planets in universe.Planets select new {ID = planets.Id})
+                    .Union(from stars in universe.Stars select new {ID = stars.Id})
                     .Single(a => a.ID == id).ID;
 
-                if (string.IsNullOrEmpty(locID))
+                if (string.IsNullOrEmpty(locId))
                     throw new FileNotFoundException("No locations with ID " + id + " found");
 
                 var probCount = 0;
                 while (probCount < count)
                 {
-                    if (count <= universe.Problems.Count(a => a.LocationID == locID)
+                    if (count <= universe.Problems.Count(a => a.LocationId == locId)
                         && !add)
                         break;
 
                     var problem = new Problem();
 
-                    IDGen.GenerateID(problem);
-                    problem.LocationID = locID;
-                    var conflict = probData.Conflicts[Rand.Next(0, probData.Conflicts.Count)];
+                    IdGen.GenerateId(problem);
+                    problem.LocationId = locId;
+                    var conflict = problemData.Conflicts[Rand.Next(0, problemData.Conflicts.Count)];
                     problem.ConflictType = conflict.Type;
                     problem.Situation = conflict.Situations[Rand.Next(0, 5)];
                     problem.Focus = conflict.Focuses[Rand.Next(0, 5)];
-                    problem.Restraint = probData.Restraints[Rand.Next(0, 20)];
-                    problem.Twist = probData.Twists[Rand.Next(0, 20)];
+                    problem.Restraint = problemData.Restraints[Rand.Next(0, 20)];
+                    problem.Twist = problemData.Twists[Rand.Next(0, 20)];
 
                     universe.Problems.Add(problem);
 
@@ -70,20 +66,20 @@ namespace SWNUniverseGenerator.CreationTools
                     var probCount = 0;
                     while (probCount < count)
                     {
-                        if (probCount + count <= universe.Problems.Count(a => a.LocationID == planet.ID)
+                        if (probCount + count <= universe.Problems.Count(a => a.LocationId == planet.Id)
                             && !add)
                             break;
 
                         var problem = new Problem();
 
-                        IDGen.GenerateID(problem);
-                        problem.LocationID = planet.ID;
-                        var conflict = probData.Conflicts[Rand.Next(0, probData.Conflicts.Count)];
+                        IdGen.GenerateId(problem);
+                        problem.LocationId = planet.Id;
+                        var conflict = problemData.Conflicts[Rand.Next(0, problemData.Conflicts.Count)];
                         problem.ConflictType = conflict.Type;
                         problem.Situation = conflict.Situations[Rand.Next(0, 5)];
                         problem.Focus = conflict.Focuses[Rand.Next(0, 5)];
-                        problem.Restraint = probData.Restraints[Rand.Next(0, 20)];
-                        problem.Twist = probData.Twists[Rand.Next(0, 20)];
+                        problem.Restraint = problemData.Restraints[Rand.Next(0, 20)];
+                        problem.Twist = problemData.Twists[Rand.Next(0, 20)];
 
                         universe.Problems.Add(problem);
 
@@ -95,15 +91,6 @@ namespace SWNUniverseGenerator.CreationTools
             }
 
             return universe;
-        }
-
-        private ProblemInfo LoadProbData()
-        {
-            var probData =
-                JObject.Parse(
-                    File.ReadAllText(@"Data/problemData.json"));
-
-            return JsonConvert.DeserializeObject<ProblemInfo>(probData.ToString());
         }
     }
 }

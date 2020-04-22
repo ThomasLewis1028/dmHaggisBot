@@ -10,7 +10,7 @@
 
     <ItemGroup>
       <None Remove="Data\StarData.json" />
-      <EmbeddedResource Include="Data\StarData.json">
+      <EmbeddedResource Include="Data\starData.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
       <None Remove="Data\worldTags.json" />

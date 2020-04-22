@@ -339,6 +339,18 @@
       "Description": "Drills along a known spike drive route have no chance of failure so long as the route is no longer than twice the operating pilot’s skill level and does not involve course trimming. Thus, a navigator with Pilot-1 skill would always succeed in making a drill of two hexes or less, provided the route was a known one. The drill course regulator requires a sophisticated technical base and compatible metadimensional energy conditions in a given sector; many sectors no longer have this technology or lack the right environment to use it. If the GM prefers a campaign where space travel is always at least somewhat dangerous, they may deny access to this fitting. Ships piloted by exceptionally talented navigators may choose not to mount it even then."
     },
     {
+      "Type": "Drive-1",
+      "Cost": 0,
+      "CostExtra": true,
+      "Power": 0,
+      "PowerExtra": true,
+      "Mass": 0,
+      "MassExtra": true,
+      "Class": "Fighter",
+      "Effect": "The standard spike drive common among all ships",
+      "Description": "A ship can improve its standard-issue drive-1 spike drive with additional phase filters and power throughput refinements. A captain needs buy only the final grade of drive desired. He does not have to buy upgrades sequentially. Drives of rating 4 and higher are generally TL5 artifacts that cannot be built most modern worlds."
+    },
+    {
       "Type": "Drive-2 upgrade",
       "Cost": 10000,
       "CostExtra": true,
@@ -1071,6 +1083,350 @@
       "TechLevel": 5,
       "Qualities": "AP 25",
       "Description": "One of the few surviving pretech weapons in anything resembling wide currency, this capital-class weapons system fires something mathematically related to a miniaturized black hole at a target."
+    }
+  ],
+  "Presets": [
+    {
+      "HullType": "Strike Fighter",
+      "ListPresets": [
+        {
+          "PresetName": "Fighter",
+          "CrewSkill": 2,
+          "CP": 4,
+          "Weapons": [
+            1
+          ],
+          "Defenses": null,
+          "Fittings": [
+            4,
+            13
+          ]
+        },
+        {
+          "PresetName": "Bomber",
+          "CrewSkill": 2,
+          "CP": 4,
+          "Weapons": [
+            2
+          ],
+          "Defenses": null,
+          "Fittings": [
+            4,
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "HullType": "Shuttle",
+      "ListPresets": [
+        {
+          "PresetName": "Shuttle",
+          "CrewSkill": 1,
+          "CP": 4,
+          "Weapons": null,
+          "Defenses": null,
+          "Fittings": [
+            4,
+            9,
+            9,
+            9,
+            13,
+            22
+          ]
+        }
+      ]
+    },
+    {
+      "HullType": "Free Merchant",
+      "ListPresets": [
+        {
+          "PresetName": "Frigate",
+          "CrewSkill": 1,
+          "CP": 4,
+          "Weapons": [
+            0,
+            4
+          ],
+          "Defenses": null,
+          "Fittings": [
+            4,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            13,
+            25,
+            26
+          ]
+        }
+      ]
+    },
+    {
+      "HullType": "Patrol Boat",
+      "ListPresets": [
+        {
+          "PresetName": "Frigate",
+          "CrewSkill": 2,
+          "CP": 5,
+          "Weapons": [
+            8
+          ],
+          "Defenses": null,
+          "Fittings": [
+            3,
+            4,
+            7,
+            14,
+            24,
+            37,
+            40
+          ]
+        }
+      ]
+    },
+    {
+      "HullType": "Corvette",
+      "ListPresets": [
+        {
+          "PresetName": "Corvette",
+          "CrewSkill": 2,
+          "CP": 5,
+          "Weapons": [
+            4,
+            8,
+            8
+          ],
+          "Defenses": [
+            6
+          ],
+          "Fittings": [
+            3,
+            7,
+            8,
+            14,
+            24,
+            25,
+            37
+          ]
+        }
+      ]
+    },
+    {
+      "HullType": "Heavy Frigate",
+      "ListPresets": [
+        {
+          "PresetName": "Heavy Frigate",
+          "CrewSkill": 2,
+          "CP": 5,
+          "Weapons": [
+            6,
+            8,
+            8
+          ],
+          "Defenses": [
+            6
+          ],
+          "Fittings": [
+            3,
+            7,
+            14,
+            19,
+            25,
+            26,
+            37
+          ]
+        }
+      ]
+    },
+    {
+      "HullType": "Bulk Freighter",
+      "ListPresets": [
+        {
+          "PresetName": "Bulk Freighter",
+          "CrewSkill": 1,
+          "CP": 4,
+          "Weapons": [
+            8
+          ],
+          "Defenses": null,
+          "Fittings": [
+            8,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            14,
+            25,
+            37
+          ]
+        }
+      ]
+    },
+    {
+      "HullType": "Fleet Cruiser",
+      "ListPresets": [
+        {
+          "PresetName": "Fleet Cruiser",
+          "CrewSkill": 2,
+          "CP": 5,
+          "Weapons": [
+            0,
+            0,
+            12,
+            13
+          ],
+          "Defenses": [
+            6
+          ],
+          "Fittings": [
+            1,
+            3,
+            7,
+            9,
+            9,
+            9,
+            15,
+            19,
+            26,
+            37
+          ]
+        }
+      ]
+    },
+    {
+      "HullType": "Battleship",
+      "ListPresets": [
+        {
+          "PresetName": "Battleship",
+          "CrewSkill": 3,
+          "CP": 6,
+          "Weapons": [
+            0,
+            0,
+            13,
+            15,
+            17
+          ],
+          "Defenses": [
+            0,
+            6
+          ],
+          "Fittings": [
+            1,
+            3,
+            7,
+            9,
+            15,
+            19,
+            25,
+            26,
+            35,
+            36,
+            36,
+            36,
+            36,
+            36,
+            37
+          ]
+        }
+      ]
+    },
+    {
+      "HullType": "Carrier",
+      "ListPresets": [
+        {
+          "PresetName": "Carrier",
+          "CrewSkill": 3,
+          "CP": 6,
+          "Weapons": [
+            13
+          ],
+          "Defenses": [
+            0,
+            6
+          ],
+          "Fittings": [
+            1,
+            3,
+            9,
+            9,
+            9,
+            9,
+            9,
+            15,
+            19,
+            25,
+            26,
+            28,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            35,
+            37,
+            45
+          ]
+        }
+      ]
+    },
+    {
+      "HullType": "Small Station",
+      "ListPresets": [
+        {
+          "PresetName": "Small Station",
+          "CrewSkill": 3,
+          "CP": 6,
+          "Weapons": null,
+          "Defenses": null,
+          "Fittings": null
+        }
+      ]
+    },
+    {
+      "HullType": "Large Station",
+      "ListPresets": [
+        {
+          "PresetName": "Large Station",
+          "CrewSkill": 3,
+          "CP": 6,
+          "Weapons": null,
+          "Defenses": null,
+          "Fittings": null
+        }
+      ]
     }
   ]
 }

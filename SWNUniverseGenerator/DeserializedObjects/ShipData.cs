@@ -12,6 +12,8 @@ namespace SWNUniverseGenerator.DeserializedObjects
         public List<Defense> Defenses { get; set; }
 
         public List<Weapon> Weapons { get; set; }
+        
+        public List<Presets> Presets { get; set; }
     }
 
     public class Hull
@@ -24,13 +26,13 @@ namespace SWNUniverseGenerator.DeserializedObjects
 
         public Int32 Armor { get; set; }
 
-        public Int32 HP { get; set; }
+        public Int32 Hp { get; set; }
 
         public Int32 CrewMin { get; set; }
 
         public Int32 CrewMax { get; set; }
 
-        public Int32 AC { get; set; }
+        public Int32 Ac { get; set; }
 
         public Int32 Power { get; set; }
 
@@ -110,5 +112,28 @@ namespace SWNUniverseGenerator.DeserializedObjects
         public String Qualities { get; set; }
 
         public String Description { get; set; }
+    }
+
+    public class Presets
+    {
+        public String HullType { get; set; }
+        
+        public List<Preset> ListPresets { get; set; }
+    }
+
+    public class Preset
+    {
+        public String PresetName { get; set; }
+        
+        public Int32 CrewSkill { get; set; }
+        
+        public Int32 Cp { get; set; }
+        
+        public List<Int32> Weapons { get; set; }
+        
+        public List<Int32> Defenses { get; set; }
+        
+        public List<Int32> Fittings { get; set; }
+        
     }
 }

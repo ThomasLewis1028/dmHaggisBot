@@ -10,7 +10,7 @@
         /// <summary>
         /// ID from IEntity that all ILocation type objects must implement
         /// </summary>
-        public new String ID { get; set; }
+        public new String Id { get; set; }
         
         /// <summary>
         /// All ILocation type objects much implement a Name 

@@ -64,6 +64,6 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// <summary>
         /// This value should be a specific ShipID that you wish you tie a character to
         /// </summary>
-        public String ShipID { get; set; }
+        public String ShipId { get; set; }
     }
 }

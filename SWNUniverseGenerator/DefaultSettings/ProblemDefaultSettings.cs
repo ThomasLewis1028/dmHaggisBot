@@ -8,6 +8,6 @@ namespace SWNUniverseGenerator.DefaultSettings
         
         public Boolean Additive { get; set; }
         
-        public String ID { get; set; }
+        public String Id { get; set; }
     }
 }

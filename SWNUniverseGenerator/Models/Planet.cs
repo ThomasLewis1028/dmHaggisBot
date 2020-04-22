@@ -11,13 +11,13 @@ namespace SWNUniverseGenerator.Models
         /// <summary>
         /// Implemented from ILocation. Will be the unique ID for a Planet
         /// </summary>
-        public String ID { get; set; }
+        public String Id { get; set; }
 
         /// <summary>
         /// This is the parent Star that a Planet orbits. This allows for a partially non-relational database
         /// but still allows you to tie planets to Stars
         /// </summary>
-        public String StarID { get; set; }
+        public String StarId { get; set; }
 
         /// <summary>
         /// Implemented from ILocation. This should be a unique name for a Planet

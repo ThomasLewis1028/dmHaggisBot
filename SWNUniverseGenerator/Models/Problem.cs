@@ -4,11 +4,11 @@ namespace SWNUniverseGenerator.Models
 {
     public class Problem : IEntity
     {
-        public String ID { get; set; }
+        public String Id { get; set; }
         
-        public String Name => ID;
+        public String Name => Id;
 
-        public String LocationID { get; set; }
+        public String LocationId { get; set; }
         
         public String ConflictType { get; set; }
         

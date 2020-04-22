@@ -10,7 +10,7 @@ namespace SWNUniverseGenerator.Models
         /// <summary>
         /// The ID of the point of interest
         /// </summary>
-        public String ID { get; set; }
+        public String Id { get; set; }
         
         /// <summary>
         /// The name of the point of interest
@@ -35,6 +35,6 @@ namespace SWNUniverseGenerator.Models
         /// <summary>
         /// The star system in which this point of interest may reside
         /// </summary>
-        public String StarID { get; set; }
+        public String StarId { get; set; }
     }
 }

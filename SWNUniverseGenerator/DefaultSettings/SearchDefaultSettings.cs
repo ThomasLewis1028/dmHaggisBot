@@ -10,7 +10,7 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// <summary>
         /// A list of String IDs that will be used in a search
         /// </summary>
-        public String[] ID { get; set; }
+        public String[] Id { get; set; }
 
         /// <summary>
         /// A list of String Names that will be used in a search
@@ -42,7 +42,7 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// </summary>
         public enum PermissionType
         {
-            DM,
+            Dm,
             Player
         }
     }

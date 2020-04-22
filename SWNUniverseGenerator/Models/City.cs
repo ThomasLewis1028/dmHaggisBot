@@ -4,7 +4,7 @@ namespace SWNUniverseGenerator.Models
 {
     public class City : ILocation
     {
-        public String ID { get; set; }
+        public String Id { get; set; }
 
         public City(string name, Planet planet)
         {

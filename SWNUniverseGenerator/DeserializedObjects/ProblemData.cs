@@ -6,7 +6,7 @@ namespace SWNUniverseGenerator.DeserializedObjects
     /// <summary>
     /// This is the class where a problemData.json will be deserialized to
     /// </summary>
-    public class ProblemInfo
+    public class ProblemData
     {
         /// <summary>
         /// Store a list of Conflicts to be randomly pulled from

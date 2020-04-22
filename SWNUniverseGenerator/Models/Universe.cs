@@ -78,7 +78,7 @@ namespace SWNUniverseGenerator.Models
         public String GetHex => (X < 10 ? "0" + X : X.ToString()) +
                             (Y < 10 ? "0" + Y : Y.ToString());
 
-        public String ID { get; set; }
+        public String Id { get; set; }
         
         [JsonIgnore] public String Name => GetHex;
 
@@ -86,7 +86,7 @@ namespace SWNUniverseGenerator.Models
 
         public Int32 Y { get; set; }
 
-        public String StarID { get; set; }
+        public String StarId { get; set; }
 
         public List<String> Planets { get; set; }
 

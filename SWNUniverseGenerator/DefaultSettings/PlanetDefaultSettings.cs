@@ -21,6 +21,6 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// <summary>
         /// Store a list of StarIDs if you want to create a planet on a specific Star or set of Stars
         /// </summary>
-        public String[] StarID { get; set; }
+        public String[] StarId { get; set; }
     }
 }

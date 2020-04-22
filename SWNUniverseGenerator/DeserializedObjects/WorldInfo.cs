@@ -40,19 +40,19 @@ namespace SWNUniverseGenerator.DeserializedObjects
         /// <summary>
         /// This stores a list of Origins for Planets to be randomly pulled from
         /// </summary>
-        public List<string> OWOrigins { get; set; }
+        public List<string> OwOrigins { get; set; }
 
         /// <summary>
         /// This stores a list of Relationships between a Planet and the Primary Planet
         /// To be randomly pulled from
         /// </summary>
-        public List<string> OWRelationships { get; set; }
+        public List<string> OwRelationships { get; set; }
 
         /// <summary>
         /// This stores a list of Contact reasons between a Planet and the Primary Planet
         /// To be randomly pulled from
         /// </summary>
-        public List<string> OWContacts { get; set; }
+        public List<string> OwContacts { get; set; }
     }
 
     /// <summary>

@@ -2,9 +2,9 @@
 {
     public class Job
     {
-        private Item cargo;
-        private Character contact;
-        private Planet dest;
-        private int pay;
+        private Item _cargo;
+        private Character _contact;
+        private Planet _dest;
+        private int _pay;
     }
 }

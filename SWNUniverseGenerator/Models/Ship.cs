@@ -6,7 +6,7 @@ namespace SWNUniverseGenerator.Models
 {
     public class Ship : IEntity
     {
-        public String ID { get; set; }
+        public String Id { get; set; }
 
         public String Name { get; set; }
 
@@ -17,18 +17,22 @@ namespace SWNUniverseGenerator.Models
         public List<Defense> Defenses { get; set; }
 
         public List<Weapon> Weapons { get; set; }
-        
-        public String CaptainID { get; set; }
-        
-        public String PilotID { get; set; }
-        
-        public String EngineerID { get; set; }
-        
-        public String CommsID { get; set; }
-        
-        public String GunnerID { get; set; }
-        
-        public List<String> CrewID { get; set; }
+
+        public String CaptainId { get; set; }
+
+        public String PilotId { get; set; }
+
+        public String EngineerId { get; set; }
+
+        public String CommsId { get; set; }
+
+        public String GunnerId { get; set; }
+
+        public Int32 CrewSkill { get; set; }
+
+        public Int32 Cp { get; set; }
+
+        public List<String> StoredShips { get; set; }
 
         public Int32? TotalCost()
         {
@@ -36,14 +40,17 @@ namespace SWNUniverseGenerator.Models
             int defensesCost = 0;
             int weaponsCost = 0;
 
-            // foreach (var f in Fittings)
-            //     fittingsCost += f.Cost ?? 0;
-            //
-            // foreach (var d in Defenses)
-            //     defensesCost += d.Cost;
-            //
-            // foreach (var w in Weapons)
-            //     weaponsCost += w.Cost;
+            if (Fittings != null)
+                foreach (var f in Fittings)
+                    fittingsCost += f.Cost ?? 0;
+
+            if (Defenses != null)
+                foreach (var d in Defenses)
+                    defensesCost += d.Cost;
+
+            if (Weapons != null)
+                foreach (var w in Weapons)
+                    weaponsCost += w.Cost;
 
             return Hull.Cost + fittingsCost + defensesCost + weaponsCost;
         }

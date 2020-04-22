@@ -1,8 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
@@ -12,9 +9,9 @@ namespace SWNUniverseGenerator.CreationTools
     /// <summary>
     /// This class holds all the necessary functions for creating Planets and adding them to the Universe
     /// </summary>
-    public class PlanetCreation
+    internal class PlanetCreation
     {
-        private static readonly Random rand = new Random();
+        private static readonly Random Rand = new Random();
 
         /// <summary>
         /// This function receives a Universe and a PlanetDefaultSettings to create planets based on
@@ -22,15 +19,13 @@ namespace SWNUniverseGenerator.CreationTools
         /// </summary>
         /// <param name="universe"></param>
         /// <param name="planetDefaultSettings"></param>
+        /// <param name="worldInfo"></param>
+        /// <param name="starData"></param>
         /// <returns>
         /// The newly updated Universe
         /// </returns>
-        public Universe AddPlanets(Universe universe, PlanetDefaultSettings planetDefaultSettings)
+        public Universe AddPlanets(Universe universe, PlanetDefaultSettings planetDefaultSettings,WorldInfo worldInfo, StarData starData)
         {
-            // Load the information about World Tags and the Planet Names
-            var worldInfo = LoadWorldInfo();
-            var starData = LoadStarData();
-
             // Get the number of Planet Names from starData
             var planLen = starData.Planets.Count;
 
@@ -41,8 +36,8 @@ namespace SWNUniverseGenerator.CreationTools
                 var pMax = planetDefaultSettings.PlanetRange == null || planetDefaultSettings.PlanetRange.Length == 0 ||
                            planetDefaultSettings.PlanetRange[0] == 0 ||
                            planetDefaultSettings.PlanetRange[1] == 0
-                    ? rand.Next(1, 3) // Default Planet count is up-to 3
-                    : rand.Next(planetDefaultSettings.PlanetRange[0],
+                    ? Rand.Next(1, 3) // Default Planet count is up-to 3
+                    : Rand.Next(planetDefaultSettings.PlanetRange[0],
                         planetDefaultSettings.PlanetRange[1] + 1);
 
                 var pCount = 0;
@@ -52,29 +47,29 @@ namespace SWNUniverseGenerator.CreationTools
                     var planet = new Planet();
 
                     // Generate the ID for the Planet
-                    IDGen.GenerateID(planet);
+                    IdGen.GenerateId(planet);
 
                     // If that ID exists somewhere then re-roll it
-                    if (universe.Planets.Exists(a => a.ID == planet.ID))
+                    if (universe.Planets.Exists(a => a.Id == planet.Id))
                         continue;
 
                     // Pick a random name out of the list of Planets
-                    planet.Name = starData.Planets[rand.Next(0, planLen)];
+                    planet.Name = starData.Planets[Rand.Next(0, planLen)];
 
                     // No planets can share a name
                     if (universe.Planets.Exists(a => a.Name == planet.Name))
                         continue;
 
                     // Set the Planet information from either a randomized value or specified information
-                    planet.StarID = star.ID;
-                    universe.Zones.Single(a => a.StarID == star.ID).Planets.Add(planet.ID);
-                    planet.FirstWorldTag = worldInfo.WorldTags[rand.Next(0, 100)];
-                    planet.SecondWorldTag = worldInfo.WorldTags[rand.Next(0, 100)];
-                    planet.Atmosphere = worldInfo.Atmospheres[rand.Next(0, 6) + rand.Next(0, 6)];
-                    planet.Temperature = worldInfo.Temperatures[rand.Next(0, 6) + rand.Next(0, 6)];
-                    planet.Biosphere = worldInfo.Biospheres[rand.Next(0, 6) + rand.Next(0, 6)];
-                    planet.Population = worldInfo.Populations[rand.Next(0, 6) + rand.Next(0, 6)];
-                    planet.TechLevel = worldInfo.TechLevels[rand.Next(0, 6) + rand.Next(0, 6)];
+                    planet.StarId = star.Id;
+                    universe.Zones.Single(a => a.StarId == star.Id).Planets.Add(planet.Id);
+                    planet.FirstWorldTag = worldInfo.WorldTags[Rand.Next(0, 100)];
+                    planet.SecondWorldTag = worldInfo.WorldTags[Rand.Next(0, 100)];
+                    planet.Atmosphere = worldInfo.Atmospheres[Rand.Next(0, 6) + Rand.Next(0, 6)];
+                    planet.Temperature = worldInfo.Temperatures[Rand.Next(0, 6) + Rand.Next(0, 6)];
+                    planet.Biosphere = worldInfo.Biospheres[Rand.Next(0, 6) + Rand.Next(0, 6)];
+                    planet.Population = worldInfo.Populations[Rand.Next(0, 6) + Rand.Next(0, 6)];
+                    planet.TechLevel = worldInfo.TechLevels[Rand.Next(0, 6) + Rand.Next(0, 6)];
 
                     // Set primary world
                     if (pCount == 0)
@@ -82,9 +77,9 @@ namespace SWNUniverseGenerator.CreationTools
                     else
                     {
                         // Non-primary world information
-                        planet.Origin = worldInfo.OWOrigins[rand.Next(0, 8)];
-                        planet.Relationship = worldInfo.OWRelationships[rand.Next(0, 8)];
-                        planet.Contact = worldInfo.OWContacts[rand.Next(0, 8)];
+                        planet.Origin = worldInfo.OwOrigins[Rand.Next(0, 8)];
+                        planet.Relationship = worldInfo.OwRelationships[Rand.Next(0, 8)];
+                        planet.Contact = worldInfo.OwContacts[Rand.Next(0, 8)];
                         planet.IsPrimary = false;
                     }
 
@@ -95,38 +90,6 @@ namespace SWNUniverseGenerator.CreationTools
             }
 
             return universe;
-        }
-
-        /// <summary>
-        /// This grabs all of the information out of the worldTags.json and places it into a WorldInfo object
-        /// after deserializing it.
-        /// </summary>
-        /// <returns>
-        /// A deserialized WorldInfo object
-        /// </returns>
-        private WorldInfo LoadWorldInfo()
-        {
-            var tags =
-                JObject.Parse(
-                    File.ReadAllText(@"Data/worldTags.json"));
-
-            return JsonConvert.DeserializeObject<WorldInfo>(tags.ToString());
-        }
-
-        /// <summary>
-        /// This grabs all of the information out of the StarData.json and places it into a StarData object
-        /// after deserializing it.
-        /// </summary>
-        /// <returns>
-        /// A deserialized StarData object
-        /// </returns>
-        private StarData LoadStarData()
-        {
-            var charData =
-                JObject.Parse(
-                    File.ReadAllText(@"Data/starData.json"));
-
-            return JsonConvert.DeserializeObject<StarData>(charData.ToString());
         }
     }
 }

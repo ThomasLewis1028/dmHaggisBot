@@ -15,7 +15,7 @@ namespace SWNUniverseGenerator.CreationTools
     /// </summary>
     internal class CharCreation
     {
-        private static readonly Random rand = new Random();
+        private static readonly Random Rand = new Random();
 
         /// <summary>
         /// This function handles all Character creation. Should receive a Universe to edit and a set of
@@ -23,14 +23,12 @@ namespace SWNUniverseGenerator.CreationTools
         /// </summary>
         /// <param name="universe"></param>
         /// <param name="characterDefaultSettings"></param>
+        /// <param name="charData"></param>
         /// <returns>The newly modified universe</returns>
-        public Universe AddCharacters(Universe universe, CharacterDefaultSettings characterDefaultSettings)
+        public Universe AddCharacters(Universe universe, CharacterDefaultSettings characterDefaultSettings, CharData charData)
         {
             // If no Characters have been created on the Universe then give it an empty list of them.
             universe.Characters ??= new List<Character>();
-
-            // Load the list of Data from the charData.json
-            var charData = LoadCharData();
 
             // Set the number of characters you want to create. Default is 1.
             var count = characterDefaultSettings.Count < 0
@@ -44,17 +42,17 @@ namespace SWNUniverseGenerator.CreationTools
                 var character = new Character();
 
                 // Generate a randomized ID for the new Character
-                IDGen.GenerateID(character);
+                IdGen.GenerateId(character);
 
                 // If the created ID happens to exist (unlikely) then just continue and create a new one
-                if (universe.Characters.Exists(a => a.ID == character.ID))
+                if (universe.Characters.Exists(a => a.Id == character.Id))
                     continue;
 
                 // Set sheet bounds including sheet# and row count.
                 // Must be done here to randomly select the sheet
                 var gender = characterDefaultSettings.Gender != Character.GenderEnum.Undefined
                     ? characterDefaultSettings.Gender == Character.GenderEnum.Male ? 0 : 1
-                    : rand.Next(0, 2);
+                    : Rand.Next(0, 2);
 
                 // Get the list of names for the specified gender
                 var firstNameList = gender == 0 ? charData.MaleName : charData.FemaleName;
@@ -75,44 +73,44 @@ namespace SWNUniverseGenerator.CreationTools
 
                 // Grab random values from their respective lists or use provided values
                 character.First = string.IsNullOrEmpty(characterDefaultSettings.First)
-                    ? firstNameList[rand.Next(0, firstCount - 1)]
+                    ? firstNameList[Rand.Next(0, firstCount - 1)]
                     : characterDefaultSettings.First;
                 character.Last = string.IsNullOrEmpty(characterDefaultSettings.Last)
-                    ? charData.LastName[rand.Next(0, lastCount - 1)]
+                    ? charData.LastName[Rand.Next(0, lastCount - 1)]
                     : characterDefaultSettings.Last;
                 character.Age = characterDefaultSettings.Age == null || characterDefaultSettings.Age.Length == 0 ||
                                 characterDefaultSettings.Age[0] == -1 || characterDefaultSettings.Age[1] == -1
                     // This creates Ages on a bell-curve where it's more likely to land somewhere around 30-45
                     // with a minimum of 15
-                    ? rand.Next(5, 22) + rand.Next(5, 23) + rand.Next(5, 23)
-                    : rand.Next(characterDefaultSettings.Age[0], characterDefaultSettings.Age[1]);
+                    ? Rand.Next(5, 22) + Rand.Next(5, 23) + Rand.Next(5, 23)
+                    : Rand.Next(characterDefaultSettings.Age[0], characterDefaultSettings.Age[1]);
                 character.Gender = (Character.GenderEnum) gender;
                 character.HairCol = string.IsNullOrEmpty(characterDefaultSettings.HairCol)
-                    ? charData.HairColor[rand.Next(0, hairColorCount)]
+                    ? charData.HairColor[Rand.Next(0, hairColorCount)]
                     : characterDefaultSettings.HairCol;
                 character.HairStyle = string.IsNullOrEmpty(characterDefaultSettings.HairStyle)
-                    ? charData.HairStyle[rand.Next(0, hairStyleCount)]
+                    ? charData.HairStyle[Rand.Next(0, hairStyleCount)]
                     : characterDefaultSettings.HairStyle;
                 character.EyeCol = string.IsNullOrEmpty(characterDefaultSettings.EyeCol)
-                    ? charData.EyeColor[rand.Next(0, eyeColorCount)]
+                    ? charData.EyeColor[Rand.Next(0, eyeColorCount)]
                     : characterDefaultSettings.EyeCol;
                 character.Title = string.IsNullOrEmpty(characterDefaultSettings.Title)
                     ? null
                     : characterDefaultSettings.Title;
-                character.BirthPlanet = universe.Planets?[rand.Next(0, universe.Planets.Count)].ID;
-                character.CurrentLocation = universe.Planets?[rand.Next(0, universe.Planets.Count)].ID;
+                character.BirthPlanet = universe.Planets?[Rand.Next(0, universe.Planets.Count)].Id;
+                character.CurrentLocation = universe.Planets?[Rand.Next(0, universe.Planets.Count)].Id;
                 character.CrimeChance = characterDefaultSettings.CrimeChance == null ||
                                         characterDefaultSettings.CrimeChance.Length == 0 ||
                                         characterDefaultSettings.CrimeChance[0] == -1 ||
                                         characterDefaultSettings.CrimeChance[1] == -1
-                    ? rand.Next(1, 26) + rand.Next(0, 25) + // Default chance up to 50%
-                      (rand.Next(0, 4) != 1
+                    ? Rand.Next(1, 26) + Rand.Next(0, 25) + // Default chance up to 50%
+                      (Rand.Next(0, 4) != 1
                           ? 0
-                          : rand.Next(1, 26) + rand.Next(0, 25)) // 25% Additional crime roll chance
-                    : rand.Next(characterDefaultSettings.CrimeChance[0], characterDefaultSettings.CrimeChance[1] + 1);
-                character.ShipID = string.IsNullOrEmpty(characterDefaultSettings.ShipID)
+                          : Rand.Next(1, 26) + Rand.Next(0, 25)) // 25% Additional crime roll chance
+                    : Rand.Next(characterDefaultSettings.CrimeChance[0], characterDefaultSettings.CrimeChance[1] + 1);
+                character.ShipId = string.IsNullOrEmpty(characterDefaultSettings.ShipId)
                     ? null
-                    : characterDefaultSettings.ShipID;
+                    : characterDefaultSettings.ShipId;
 
                 // Add the Character to the list of Characters in the universe
                 universe.Characters.Add(character);
@@ -124,20 +122,6 @@ namespace SWNUniverseGenerator.CreationTools
             universe.Characters = universe.Characters.OrderBy(c => c.First).ToList();
 
             return universe;
-        }
-
-        /// <summary>
-        /// This grabs all of the information out of the characterData.json and places it into a CharData object
-        /// after deserializing it.
-        /// </summary>
-        /// <returns>A deserialized CharData object</returns>
-        private CharData LoadCharData()
-        {
-            var charData =
-                JObject.Parse(
-                    File.ReadAllText(@"Data/characterData.json"));
-
-            return JsonConvert.DeserializeObject<CharData>(charData.ToString());
         }
     }
 }

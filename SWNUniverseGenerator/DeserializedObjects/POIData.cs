@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace SWNUniverseGenerator.DeserializedObjects
 {
-    public class POIData
+    public class PoiData
     {
-        public List<POI> PointsOfInterest { get; set; }
+        public List<Poi> PointsOfInterest { get; set; }
     }
 
-    public class POI
+    public class Poi
     {
         public String Type { get; set; }
         

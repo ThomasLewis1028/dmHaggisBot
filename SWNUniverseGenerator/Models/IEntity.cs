@@ -10,7 +10,7 @@ namespace SWNUniverseGenerator.Models
         /// <summary>
         /// All IEntity objects must have an ID
         /// </summary>
-        public String ID { get; set; }
+        public String Id { get; set; }
         
         /// <summary>
         /// All IEntity objects must have a Name

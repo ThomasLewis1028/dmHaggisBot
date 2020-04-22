@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
@@ -14,7 +11,7 @@ namespace SWNUniverseGenerator.CreationTools
     /// </summary>
     internal class StarCreation
     {
-        private static readonly Random rand = new Random();
+        private static readonly Random Rand = new Random();
 
         /// <summary>
         /// This function will receive a Universe and a StarDefaultSettings object and create Stars from the data
@@ -22,22 +19,19 @@ namespace SWNUniverseGenerator.CreationTools
         /// </summary>
         /// <param name="universe"></param>
         /// <param name="starDefaultSettings"></param>
+        /// <param name="starData"></param>
         /// <returns>
         /// A newly modified Universe
         /// </returns>
-        public Universe AddStars(Universe universe, StarDefaultSettings starDefaultSettings)
+        public Universe AddStars(Universe universe, StarDefaultSettings starDefaultSettings, StarData starData)
         {
             // Check if the Stars have been initialized prior
-            if (universe.Stars == null)
-                universe.Stars = new List<Star>();
-
-            // Load the StarData
-            var starData = LoadStarData();
+            universe.Stars ??= new List<Star>();
 
             // Set the number of stars to create. The default is 1d10+20 
             var starLen = starData.Stars.Count;
             var starCount = starDefaultSettings.StarCount < 0
-                ? rand.Next(0, 10) + 20
+                ? Rand.Next(0, 10) + 20
                 : starDefaultSettings.StarCount;
 
             var sCount = 0;
@@ -46,28 +40,28 @@ namespace SWNUniverseGenerator.CreationTools
                 var star = new Star();
 
                 // Generate the unique ID for the Star
-                IDGen.GenerateID(star);
+                IdGen.GenerateId(star);
                 
                 // Set Grid Location of the Star
-                var zone = universe.Zones[rand.Next(0, universe.Zones.Count)];
-                if (zone.StarID == null)
-                    zone.StarID = star.ID;
+                var zone = universe.Zones[Rand.Next(0, universe.Zones.Count)];
+                if (zone.StarId == null)
+                    zone.StarId = star.Id;
                 else
                     continue;
 
                 // If that ID exists roll a new one
-                if (universe.Stars.Exists(a => a.ID == star.ID))
+                if (universe.Stars.Exists(a => a.Id == star.Id))
                     continue;
                 
                 // Pick a random Name for the Star
-                star.Name = starData.Stars[rand.Next(0, starLen - 1)];
+                star.Name = starData.Stars[Rand.Next(0, starLen - 1)];
                 
                 // If that Name exists roll a new one 
                 if (universe.Stars.Exists(a => a.Name == star.Name))
                     continue;
                 
                 // Set the type of Star
-                star.StarType = starData.StarTypes[rand.Next(0, 8) + rand.Next(0, 8) + rand.Next(0, 8)];
+                star.StarType = starData.StarTypes[Rand.Next(0, 8) + Rand.Next(0, 8) + Rand.Next(0, 8)];
                 
                 // Add the Star to the Universe
                 universe.Stars.Add(star);
@@ -76,22 +70,6 @@ namespace SWNUniverseGenerator.CreationTools
             }
 
             return universe;
-        }
-
-
-        /// <summary>
-        /// Load the Data needed about Stars into a StarData object
-        /// </summary>
-        /// <returns>
-        /// A StarData object
-        /// </returns>
-        private StarData LoadStarData()
-        {
-            var charData =
-                JObject.Parse(
-                    File.ReadAllText(@"Data/starData.json"));
-
-            return JsonConvert.DeserializeObject<StarData>(charData.ToString());
         }
     }
 }

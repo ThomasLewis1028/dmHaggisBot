@@ -36,7 +36,6 @@ namespace dmHaggisBot
         private readonly long _generalChannel;
         private readonly long _dmChannel;
 
-        //<editor-fold desc="Regular expressions for commands">
         private readonly Regex _charCreate = new Regex("^(charCreate|createChar|cc)($| .*)", RegexOptions.IgnoreCase);
 
         private readonly Regex _starCreate =
@@ -61,7 +60,6 @@ namespace dmHaggisBot
 
         private readonly Regex _shipCreate =
             new Regex("^(shipCreate|createShip|shc|csh)($| .*)", RegexOptions.IgnoreCase);
-        //</editor-fold>
 
         // Set up emoji for pagination
         private static readonly Emoji RightArrow = new Emoji("▶️");
@@ -281,20 +279,20 @@ namespace dmHaggisBot
         /// <param name="sm"></param>
         private async Task CreateStar(SocketMessage sm)
         {
-            var s = ParseCommand("s", sm.Content);
+            var c = ParseCommand("c", sm.Content);
 
             var starDef = new StarDefaultSettings
             {
-                StarCount = string.IsNullOrEmpty(s)
+                StarCount = string.IsNullOrEmpty(c)
                     ? -1
-                    : Int32.Parse(s)
+                    : Int32.Parse(c)
             };
 
 
             try
             {
                 _universe = _creation.CreateStars(_universe, starDef);
-                await sm.Channel.SendMessageAsync(s + " stars created in " + _universe.Name);
+                await sm.Channel.SendMessageAsync(c + " stars created in " + _universe.Name);
                 await SetGameStatus();
             }
             catch (FileNotFoundException e)
@@ -450,6 +448,11 @@ namespace dmHaggisBot
             }
         }
 
+        /// <summary>
+        /// This method handles creating Ships in a Universe from a SocketMessage
+        /// </summary>
+        /// <param name="sm"></param>
+        /// <returns></returns>
         private async Task CreateShip(SocketMessage sm)
         {
             var c = ParseCommand("c", sm.Content);
@@ -720,7 +723,7 @@ namespace dmHaggisBot
             await _client.SetGameAsync(_universe.Name + " Loaded - " +
                                        _universe.Stars.Count + " Stars - " +
                                        _universe.Planets.Count + " Planets - " +
-                                       _universe.Ships.Count + " Ships - " + 
+                                       _universe.Ships.Count + " Ships - " +
                                        _universe.Characters.Count + " Characters - " +
                                        _universe.PointsOfInterest.Count + " Points of Interest - " +
                                        _universe.Problems.Count + " Problems");

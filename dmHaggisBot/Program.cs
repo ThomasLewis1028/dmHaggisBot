@@ -1,10 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using SWNUniverseGenerator;
-using SWNUniverseGenerator.Models;
-
-namespace dmHaggisBot
+﻿namespace dmHaggisBot
 {
     internal class Program
     {

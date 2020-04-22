@@ -98,10 +98,19 @@ namespace dmHaggisBot
             if (ship.Weapons != null)
             {
                 StringBuilder wsb = new StringBuilder();
-                foreach (var w in ship.Weapons)
+
+                var wl = ship.Weapons.GroupBy(w => w)
+                    .Select(w => new
+                    {
+                        Count = w.Count(),
+                        Name = w.Key
+                    });
+
+                foreach (var w in wl)
                 {
-                    wsb.Append(w + "\n");
-                    totalCost += Creation.ShipData.Weapons.Find(a => a.Type == w).Cost;
+                    wsb.Append(w.Count + "x " + w.Name + "\n");
+                    totalCost += w.Count * Creation.ShipData.Weapons.Find(a => a.Type == w.Name).Cost;
+                    
                 }
 
                 eb.AddField("Weapons: ", wsb.ToString());
@@ -110,22 +119,31 @@ namespace dmHaggisBot
             if (ship.Defenses != null)
             {
                 StringBuilder dsb = new StringBuilder();
+
                 foreach (var d in ship.Defenses)
                 {
                     dsb.Append(d + "\n");
                     totalCost += Creation.ShipData.Defenses.Find(a => a.Type == d).Cost;
                 }
-                
+
                 eb.AddField("Defenses: ", dsb.ToString());
             }
 
             if (ship.Fittings != null)
             {
                 StringBuilder fsb = new StringBuilder();
-                foreach (var f in ship.Fittings)
+                
+                var fl = ship.Fittings.GroupBy(f => f)
+                    .Select(f => new
+                    {
+                        Count = f.Count(),
+                        Name = f.Key
+                    });
+                
+                foreach (var f in fl)
                 {
-                    fsb.Append(f + "\n");
-                    totalCost += (int) Creation.ShipData.Fittings.Find(a => a.Type == f).Cost;
+                    fsb.Append(f.Count + "x " + f.Name + "\n");
+                    totalCost += f.Count * (int) Creation.ShipData.Fittings.Find(a => a.Type == f.Name).Cost;
                 }
                 
                 eb.AddField("Fittings: ", fsb.ToString());

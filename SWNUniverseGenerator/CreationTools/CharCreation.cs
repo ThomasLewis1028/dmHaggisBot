@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
@@ -58,11 +55,11 @@ namespace SWNUniverseGenerator.CreationTools
                 var firstNameList = gender == 0 ? charData.MaleName : charData.FemaleName;
 
                 // Markov stuff; doesn't work right now
-                // var model = new StringMarkovNames(1);
-                // model.SplitTokens("");
-                // model.Learn(firstNameList);
-                //
-                // Console.WriteLine(model.Walk().First());
+                // NameGenerator ng = new NameGenerator();
+                // Console.Out.WriteLine("NG Created");
+                // dynamic chain = ng.construct_chain(firstNameList);
+                // Console.Out.WriteLine("Chain Created");
+                // Console.Out.WriteLine(ng.markov_name(chain));
 
                 // Set the number of items in each list to be used for the max value in rand.Next()
                 var firstCount = firstNameList.Count;

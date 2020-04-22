@@ -70,10 +70,12 @@ namespace SWNUniverseGenerator.CreationTools
                         hull = shipData.Hulls[9];
                         break;
                     case { } n when (n >= 95 && n < 97):
-                        hull = shipData.Hulls[10];
+                        hull = shipData.Hulls[2]; // Free Merchant temporary value
+                        // hull = shipData.Hulls[10];
                         break;
                     case { } n when (n >= 97 && n < 100):
-                        hull = shipData.Hulls[11];
+                        hull = shipData.Hulls[2]; // Free Merchant temporary value
+                        // hull = shipData.Hulls[11];
                         break;
                     default:
                         hull = shipData.Hulls[2];
@@ -115,7 +117,7 @@ namespace SWNUniverseGenerator.CreationTools
                 var crewList = (from c in universe.Characters where c.ShipId == ship.Id select c.Id).ToList();
 
                 if (hull.Type == "Strike Fighter")
-                    ship.CaptainId = ship.PilotId = ship.EngineerId = ship.CommsId = ship.GunnerId = crewList[0];
+                    ship.CaptainId = crewList[0];
                 else
                 {
                     ship.CaptainId = string.IsNullOrEmpty(shipDefaultSettings.CaptainId)
@@ -142,6 +144,17 @@ namespace SWNUniverseGenerator.CreationTools
                             : crewList[4]
                         : shipDefaultSettings.CommsId;
                 }
+
+                if (ship.CaptainId != null)
+                    universe.Characters.Find(c => c.Id == ship.CaptainId).Title = "Captain";
+                if (ship.PilotId != null)
+                    universe.Characters.Find(c => c.Id == ship.PilotId).Title = "Pilot";
+                if (ship.GunnerId != null)
+                    universe.Characters.Find(c => c.Id == ship.GunnerId).Title = "Gunner";
+                if (ship.EngineerId != null)
+                    universe.Characters.Find(c => c.Id == ship.EngineerId).Title = "Engineer";
+                if (ship.CommsId != null)
+                    universe.Characters.Find(c => c.Id == ship.CommsId).Title = "Comms Expert";
 
                 universe.Ships.Add(ship);
 

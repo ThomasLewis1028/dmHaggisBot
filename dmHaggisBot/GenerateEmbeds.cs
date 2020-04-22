@@ -94,16 +94,44 @@ namespace dmHaggisBot
             int totalCost = 0;
             totalCost += Creation.ShipData.Hulls.Find(a => a.Type == ship.Hull).Cost;
 
+
             if (ship.Weapons != null)
+            {
+                StringBuilder wsb = new StringBuilder();
                 foreach (var w in ship.Weapons)
+                {
+                    wsb.Append(w + "\n");
                     totalCost += Creation.ShipData.Weapons.Find(a => a.Type == w).Cost;
+                }
+
+                eb.AddField("Weapons: ", wsb.ToString());
+            }
+
             if (ship.Defenses != null)
+            {
+                StringBuilder dsb = new StringBuilder();
                 foreach (var d in ship.Defenses)
+                {
+                    dsb.Append(d + "\n");
                     totalCost += Creation.ShipData.Defenses.Find(a => a.Type == d).Cost;
+                }
+                
+                eb.AddField("Defenses: ", dsb.ToString());
+            }
+
             if (ship.Fittings != null)
+            {
+                StringBuilder fsb = new StringBuilder();
                 foreach (var f in ship.Fittings)
+                {
+                    fsb.Append(f + "\n");
                     totalCost += (int) Creation.ShipData.Fittings.Find(a => a.Type == f).Cost;
-            
+                }
+                
+                eb.AddField("Fittings: ", fsb.ToString());
+            }
+
+
             eb.AddField("Total Cost: ", (totalCost).ToString("#,###"));
 
             return eb.Build();

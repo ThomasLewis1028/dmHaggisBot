@@ -106,7 +106,7 @@ namespace SWNUniverseGenerator.CreationTools
                     planet.Flavor.OutsiderTreatment = societyData.Flavors.OutsiderTreatments[Rand.Next(0, 6)];
                     planet.Flavor.PrimaryVirtue = societyData.Flavors.PrimaryVirtues[Rand.Next(0, 8)];
                     planet.Flavor.PrimaryVice = societyData.Flavors.PrimaryVices[Rand.Next(0, 10)];
-                    planet.Flavor.XenophiliaDegree = societyData.Flavors.PossiblePatrons[Rand.Next(0, 4)];
+                    planet.Flavor.XenophiliaDegree = societyData.Flavors.XenophiliaDegrees[Rand.Next(0, 4)];
                     planet.Flavor.PossiblePatron = societyData.Flavors.PossiblePatrons[Rand.Next(0, 12)];
                     planet.Flavor.Customs = societyData.Flavors.Customs[Rand.Next(0, 20)];
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
@@ -24,7 +25,8 @@ namespace SWNUniverseGenerator.CreationTools
         /// <returns>
         /// The newly updated Universe
         /// </returns>
-        public Universe AddPlanets(Universe universe, PlanetDefaultSettings planetDefaultSettings,WorldInfo worldInfo, StarData starData)
+        public Universe AddPlanets(Universe universe, PlanetDefaultSettings planetDefaultSettings, WorldInfo worldInfo,
+            StarData starData, SocietyData societyData)
         {
             // Get the number of Planet Names from starData
             var planLen = starData.Planets.Count;
@@ -45,6 +47,8 @@ namespace SWNUniverseGenerator.CreationTools
                 while (pCount < pMax)
                 {
                     var planet = new Planet();
+                    planet.Society = new Society();
+                    planet.Ruler = new Ruler();
 
                     // Generate the ID for the Planet
                     IdGen.GenerateId(planet);
@@ -70,6 +74,22 @@ namespace SWNUniverseGenerator.CreationTools
                     planet.Biosphere = worldInfo.Biospheres[Rand.Next(0, 6) + Rand.Next(0, 6)].Type;
                     planet.Population = worldInfo.Populations[Rand.Next(0, 6) + Rand.Next(0, 6)].Type;
                     planet.TechLevel = worldInfo.TechLevels[Rand.Next(0, 6) + Rand.Next(0, 6)].Type;
+
+                    // Set the Planet's society information
+                    planet.Society.PriorCulture = societyData.Societies.PriorCultures[Rand.Next(0, 6)];
+                    planet.Society.OtherSociety = societyData.Societies.OtherSocieties[Rand.Next(0, 8)];
+                    planet.Society.MainRemnant = societyData.Societies.MainRemnants[Rand.Next(0, 10)];
+                    planet.Society.SocietyAge = societyData.Societies.SocietyAges[Rand.Next(0, 4)];
+                    planet.Society.ImportantResource = societyData.Societies.ImportantResources[Rand.Next(0, 12)];
+                    planet.Society.FoundingReason = societyData.Societies.FoundingReasons[Rand.Next(0, 20)];
+                    
+                    // Set the Planet's Ruler
+                    planet.Ruler.GeneralSecurity = societyData.Rulers.GeneralSecurities[Rand.Next(0, 6)];
+                    planet.Ruler.LegitimacySource = societyData.Rulers.LegitimacySources[Rand.Next(0, 8)];
+                    planet.Ruler.MainRulerConflict = societyData.Rulers.MainRulerConflicts[Rand.Next(0, 10)];
+                    planet.Ruler.RuleCompletion = societyData.Rulers.RuleCompletions[Rand.Next(0, 4)];
+                    planet.Ruler.RuleForm = societyData.Rulers.RuleForms[Rand.Next(0, 12)];
+                    planet.Ruler.MainPopConflict = societyData.Rulers.MainPopConflicts[Rand.Next(0, 20)];
 
                     // Set primary world
                     if (pCount == 0)

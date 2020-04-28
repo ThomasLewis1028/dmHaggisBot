@@ -27,6 +27,7 @@ namespace SWNUniverseGenerator
         public static CharData CharData;
         public static PoiData PoiData;
         public static ProblemData ProblemData;
+        public static SocietyData SocietyData;
 
         /// <summary>
         /// Default constructor that requires a path to be passed in
@@ -41,6 +42,7 @@ namespace SWNUniverseGenerator
             CharData = LoadData<CharData>(@"Data/characterData.json");
             PoiData =LoadData<PoiData>(@"Data/pointsOfInterest.json");
             ProblemData = LoadData<ProblemData>(@"Data/problemData.json");
+            SocietyData = LoadData<SocietyData>(@"Data/societyData.json");
         }
 
         /// <summary>
@@ -88,7 +90,7 @@ namespace SWNUniverseGenerator
                 PointsOfInterest = new List<PointOfInterest>(),
                 Characters = new List<Character>(),
                 Problems = new List<Problem>(),
-                Ships = new List<Ship>()
+                Ships = new List<Ship>(),
             };
 
             // Add the Zones to the Universe
@@ -151,7 +153,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No stars have been created for the universe");
 
             // Set the Universe to the Universe returned from PlanetCreation.AddPlanets and serialize/return it
-            universe = new PlanetCreation().AddPlanets(universe, planetDefaultSettings, WorldInfo, StarData);
+            universe = new PlanetCreation().AddPlanets(universe, planetDefaultSettings, WorldInfo, StarData, SocietyData);
             SerializeData(universe);
             return universe;
         }

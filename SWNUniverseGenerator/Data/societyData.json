@@ -1,0 +1,150 @@
+﻿{
+  "Societies": {
+    "PriorCultures": [
+      "This culture has persisted since founding",
+      "The culture’s changed, but has continuity",
+      "Founding group splintered, this is one heir",
+      "Founding group collapsed and became this",
+      "Founding group wiped out; new colonists",
+      "Several founding groups before this one"
+    ],
+    "OtherSocieties": [
+      "There is no other meaningful group here",
+      "The society has significant sub-groups",
+      "The society is a unified world government",
+      "The only rivals have been conquered here",
+      "There are several minor rival nations here",
+      "There's at least one major planetary rival",
+      "Alliances exist of semi-equal rival nations",
+      "There are dozens of significant societies"
+    ],
+    "MainRemnants": [
+      "Vital advanced tech was left behind",
+      "Ritually-important religious centers",
+      "Dangerous ruins of high-security areas",
+      "Abandoned cities, now dangerous to enter",
+      "Bunker-caches of stored valuables and tech",
+      "Massive megastructures of strange purpose",
+      "Terraforming tech that needs maintenance",
+      "Ethnic group with a grudge of some kind",
+      "Bloodline of former rulers, resentful now",
+      "Ancient resource extraction facilities"
+    ],
+    "SocietyAges": [
+      "An ancient First Wave colony",
+      "Founded during the Second Wave",
+      "Founded sometime around the Scream",
+      "Founded within the past century"
+    ],
+    "ImportantResources": [
+      "Critical resources for making spike drives",
+      "Nexus of interstellar spike drill routes",
+      "Valuable alien tech relics or remnants",
+      "Abundant food resources",
+      "Important medical compound or extract",
+      "Industry salvaged from a prior colony try",
+      "Friendly alien population",
+      "Valuable raw resources for luxury goods",
+      "Local environment augments humans here",
+      "Only semi-safe habitable place in system",
+      "Raw materials to maintain TL5 industry",
+      "Important Mandate naval base site"
+    ],
+    "FoundingReasons": [
+      "Castaways",
+      "Corporate factory world",
+      "Ethnic or national purity",
+      "Excavation site",
+      "Exiles from Old Terra or a losing regime",
+      "Exotic genotype designed for here",
+      "Homeworld overpopulation",
+      "Invasion force",
+      "Liaison outpost",
+      "Mandate malcontents",
+      "Military outpost",
+      "Political liberty",
+      "Precious export",
+      "Prison planet",
+      "Refueling outpost",
+      "Religious liberty",
+      "Research outpost",
+      "Rich natural resources",
+      "Social liberty",
+      "Trade hub"
+    ]
+  },
+  "Rulers": {
+    "GeneralSecurities": [
+      "The rulers teeter on the brink of collapse",
+      "They seem likely to fall soon",
+      "They’ve recently overcome a real threat",
+      "They have no serious threats to their rule",
+      "No alternative is currently imaginable",
+      "They’ve ruled undisputed for ages"
+    ],
+    "LegitimacySources": [
+      "A glorious bloodline or honored family",
+      "Control of overwhelming martial force",
+      "Popular support among a wide class",
+      "Loyalty of a major ethnic/religious group",
+      "Social compact among the ruled groups",
+      "Possession of pretech artifacts",
+      "Religiously-legitimated sacredness",
+      "Personal merit among the ruling class"
+    ],
+    "MainRulerConflicts": [
+      "Peripheral elites against the central power",
+      "Old leadership group deposed by new one",
+      "Dividing the profits of taxation or tribute",
+      "Starting or stopping a current war",
+     "“Reformists” with new ideas for control",
+      "Sectarian religious groups struggle",
+      "Expanding membership in the ruling class",
+      "Enacting a major public building project",
+      "Support for favored corporations/groups",
+      "Dividing power and offices among them"
+    ],
+    "RuleCompletions": [
+      "All aspects of life are touched by the rulers",
+      "The rulers firmly control the populace",
+      "The rulers control only critical elements",
+      "The rulers have little control of the ruled"
+    ],
+    "RuleForms": [
+      "Autocracy of a single popular ruler",
+      "Corporatism among guilds/classes/corps",
+      "Democracy, one sentient, one vote",
+      "Feudalism, many near-free sub-rulers",
+      "Hydraulic Despotism over a vital resource",
+      "Military Dictatorship via martial force",
+      "Monarchy, single ruler via bloodline",
+      "Oligarchy of the society’s powerful elite",
+      "Republic of representative delegates",
+      "Technocracy of intellectual elites",
+      "Theocracy by the religious leadership",
+      "Tribalism without structure beyond blood"
+    ],
+    "MainPopConflicts": [
+      "Their taxation is intolerably high",
+      "Crimes against the ruled are ignored",
+      "They trample on cherished customs",
+      "They hold the ruled in obvious contempt",
+      "The law is designed to favor them greatly",
+      "They have immunity to onerous taxes",
+      "Disrespect for common religious belief",
+      "They failed or are failing in a recent war",
+      "They waste taxes and labor on vain things",
+      "Ways to enter the class have been removed",
+      "The rulers are all of a different ethnicity",
+      "They have different basic moral values",
+      "The rulers ignore rights when it’s useful",
+      "They deposed former popular rulers",
+      "State connections are vital to all success",
+      "They have fine ideas that ignore public will",
+      "They have removed a prized ancient right",
+      "They’re seen as puppets of a hated group",
+      "Their source of legitimacy is crumbling",
+      "The leadership is deeply incompetent"
+    ]
+  }
+}

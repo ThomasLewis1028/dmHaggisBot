@@ -22,7 +22,8 @@ namespace SWNUniverseGenerator.CreationTools
         /// <param name="characterDefaultSettings"></param>
         /// <param name="charData"></param>
         /// <returns>The newly modified universe</returns>
-        public Universe AddCharacters(Universe universe, CharacterDefaultSettings characterDefaultSettings, CharData charData)
+        public Universe AddCharacters(Universe universe, CharacterDefaultSettings characterDefaultSettings,
+            CharData charData)
         {
             // If no Characters have been created on the Universe then give it an empty list of them.
             universe.Characters ??= new List<Character>();
@@ -95,7 +96,9 @@ namespace SWNUniverseGenerator.CreationTools
                     ? null
                     : characterDefaultSettings.Title;
                 character.BirthPlanet = universe.Planets?[Rand.Next(0, universe.Planets.Count)].Id;
-                character.CurrentLocation = universe.Planets?[Rand.Next(0, universe.Planets.Count)].Id;
+                character.CurrentLocation = Rand.Next(0, 100) < 5
+                    ? universe.Planets?[Rand.Next(0, universe.Planets.Count)].Id
+                    : character.BirthPlanet;
                 character.CrimeChance = characterDefaultSettings.CrimeChance == null ||
                                         characterDefaultSettings.CrimeChance.Length == 0 ||
                                         characterDefaultSettings.CrimeChance[0] == -1 ||

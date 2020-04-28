@@ -30,7 +30,7 @@ namespace SWNUniverseGenerator.Models
         /// and Complications
         /// </summary>
         public String FirstWorldTag { get; set; }
-        
+
         /// <summary>
         /// This implements a World class from WorldInfo.cs and specifies the World Tag of a Planet
         /// This will include a Type and a Description of the Tag, as well as potential Enemies, Friends
@@ -67,7 +67,7 @@ namespace SWNUniverseGenerator.Models
         /// This is a marker to create a primary world for system
         /// </summary>
         public Boolean IsPrimary { get; set; }
-        
+
         /// <summary>
         /// This is the "Origin" of the planet from the Primary
         /// </summary>
@@ -82,5 +82,39 @@ namespace SWNUniverseGenerator.Models
         /// This is a "Point of Contact" between the Primary Planet and a non-Primary Planet
         /// </summary>
         public String Contact { get; set; }
+        
+        public Society Society { get; set; }
+        
+        public Ruler Ruler { get; set; }
+    }
+
+    public class Society
+    {
+        public String PriorCulture { get; set; }
+
+        public String OtherSociety { get; set; }
+
+        public String MainRemnant { get; set; }
+
+        public String SocietyAge { get; set; }
+
+        public String ImportantResource { get; set; }
+
+        public String FoundingReason { get; set; }
+    }
+
+    public class Ruler
+    {
+        public String GeneralSecurity { get; set; }
+
+        public String LegitimacySource { get; set; }
+
+        public String MainRulerConflict { get; set; }
+
+        public String RuleCompletion { get; set; }
+
+        public String RuleForm { get; set; }
+
+        public String MainPopConflict { get; set; }
     }
 }

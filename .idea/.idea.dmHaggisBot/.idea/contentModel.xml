@@ -37,6 +37,7 @@
           <e p="pointsOfInterest.json" t="Include" />
           <e p="problemData.json" t="Include" />
           <e p="shipData.json" t="Include" />
+          <e p="societyData.json" t="Include" />
           <e p="StarData.json" t="Include" />
           <e p="worldTags.json" t="Include" />
         </e>
@@ -55,6 +56,7 @@
           <e p="POIData.cs" t="Include" />
           <e p="ProblemData.cs" t="Include" />
           <e p="ShipData.cs" t="Include" />
+          <e p="SocietyData.cs" t="Include" />
           <e p="StarData.cs" t="Include" />
           <e p="WorldInfo.cs" t="Include" />
         </e>

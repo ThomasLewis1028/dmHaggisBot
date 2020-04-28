@@ -93,7 +93,7 @@ namespace SWNUniverseGenerator.CreationTools
                     planet.Ruler.RuleForm = societyData.Rulers.RuleForms[Rand.Next(0, 12)];
                     planet.Ruler.MainPopConflict = societyData.Rulers.MainPopConflicts[Rand.Next(0, 20)];
 
-                    // Set the Planets Ruled
+                    // Set the Planet's Ruled
                     planet.Ruled.Contentment = societyData.Ruled.Contentments[Rand.Next(0, 6)];
                     planet.Ruled.LastMajorThreat = societyData.Ruled.LastMajorThreats[Rand.Next(0, 8)];
                     planet.Ruled.Power = societyData.Ruled.Powers[Rand.Next(0, 10)];
@@ -101,7 +101,7 @@ namespace SWNUniverseGenerator.CreationTools
                     planet.Ruled.MainConflict = societyData.Ruled.MainConflicts[Rand.Next(0, 12)];
                     planet.Ruled.Trends = societyData.Ruled.Trends[Rand.Next(0, 20)];
 
-                    // Set the Planets Flavor
+                    // Set the Planet's Flavor
                     planet.Flavor.BasicFlavor = societyData.Flavors.BasicFlavors[Rand.Next(0, 12)];
                     planet.Flavor.OutsiderTreatment = societyData.Flavors.OutsiderTreatments[Rand.Next(0, 6)];
                     planet.Flavor.PrimaryVirtue = societyData.Flavors.PrimaryVirtues[Rand.Next(0, 8)];

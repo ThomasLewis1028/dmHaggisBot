@@ -701,6 +701,8 @@ namespace dmHaggisBot
             for (var i = 0; i < _universe.Grid.X; i++)
                 sb.Append(i < 10 ? "0" + i + " " : i + " ");
 
+            sb.Append("\n");
+
             foreach (var z in _universe.Zones)
             {
                 if (z.X == 0)

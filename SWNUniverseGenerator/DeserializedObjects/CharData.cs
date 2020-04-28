@@ -37,5 +37,10 @@ namespace SWNUniverseGenerator.DeserializedObjects
         /// Holds the String List of EyeColors
         /// </summary>
         public List<String> EyeColor { get; set; }
+        
+        /// <summary>
+        /// Holds the String List of Initial Reactions
+        /// </summary>
+        public List<String> InitialReactions { get; set; }
     }
 }

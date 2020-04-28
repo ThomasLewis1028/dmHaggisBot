@@ -35,6 +35,7 @@ namespace dmHaggisBot
                     character.CurrentLocation + " - " +
                     universe.Planets.Single(a => a.Id == character.CurrentLocation).Name);
                 eb.AddField("Crime Chance: ", character.CrimeChance + "%");
+                eb.AddField("Initial Reaction: ", character.InitialReaction);
             }
 
             return eb.Build();
@@ -110,7 +111,6 @@ namespace dmHaggisBot
                 {
                     wsb.Append(w.Count + "x " + w.Name + "\n");
                     totalCost += w.Count * Creation.ShipData.Weapons.Find(a => a.Type == w.Name).Cost;
-                    
                 }
 
                 eb.AddField("Weapons: ", wsb.ToString());
@@ -132,20 +132,20 @@ namespace dmHaggisBot
             if (ship.Fittings != null)
             {
                 StringBuilder fsb = new StringBuilder();
-                
+
                 var fl = ship.Fittings.GroupBy(f => f)
                     .Select(f => new
                     {
                         Count = f.Count(),
                         Name = f.Key
                     });
-                
+
                 foreach (var f in fl)
                 {
                     fsb.Append(f.Count + "x " + f.Name + "\n");
                     totalCost += f.Count * (int) Creation.ShipData.Fittings.Find(a => a.Type == f.Name).Cost;
                 }
-                
+
                 eb.AddField("Fittings: ", fsb.ToString());
             }
 

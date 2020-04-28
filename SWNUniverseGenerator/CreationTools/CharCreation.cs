@@ -112,6 +112,16 @@ namespace SWNUniverseGenerator.CreationTools
                     ? null
                     : characterDefaultSettings.ShipId;
 
+                character.InitialReaction = (Rand.Next(0, 6) + Rand.Next(0, 6)) switch
+                {
+                    0 => charData.InitialReactions[0],
+                    {} n when (n >= 1 && n <= 3) => charData.InitialReactions[1],
+                    {} n when (n >= 4 && n <= 6) => charData.InitialReactions[2],
+                    {} n when (n >= 7 && n <= 9) => charData.InitialReactions[3],
+                    10 => charData.InitialReactions[4],
+                    _ => charData.InitialReactions[2]
+                };
+
                 // Add the Character to the list of Characters in the universe
                 universe.Characters.Add(character);
 

@@ -99,5 +99,10 @@ namespace SWNUniverseGenerator.Models
         /// A string value for the ship a given character is tied to
         /// </summary>
         public String ShipId { get; set; }
+        
+        /// <summary>
+        /// A string value for a character's initial reaction to the players
+        /// </summary>
+        public String InitialReaction { get; set; }
     }
 }

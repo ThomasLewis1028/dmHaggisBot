@@ -30774,5 +30774,12 @@
     "Green",
     "Grey",
     "Hazel"
+  ],
+  "InitialReactions": [
+    "Hostile, reacting as negatively as is plausible",
+    "Negative, unfriendly and unhelpful",
+    "Neutral, reacting predictably or warily",
+    "Positive, potentially cooperative with PCs",
+    "Friendly, helpful as is plausible to be"
   ]
 }

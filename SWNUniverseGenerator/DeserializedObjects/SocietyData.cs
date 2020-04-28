@@ -8,6 +8,10 @@ namespace SWNUniverseGenerator.DeserializedObjects
         public Societies Societies { get; set; }
 
         public Rulers Rulers { get; set; }
+
+        public Ruled Ruled { get; set; }
+
+        public Flavors Flavors { get; set; }
     }
 
     public class Societies
@@ -38,5 +42,37 @@ namespace SWNUniverseGenerator.DeserializedObjects
         public List<String> RuleForms { get; set; }
 
         public List<String> MainPopConflicts { get; set; }
+    }
+
+    public class Ruled
+    {
+        public List<String> Contentments { get; set; }
+
+        public List<String> LastMajorThreats { get; set; }
+
+        public List<String> Powers { get; set; }
+
+        public List<String> Uniformities { get; set; }
+
+        public List<String> MainConflicts { get; set; }
+
+        public List<String> Trends { get; set; }
+    }
+
+    public class Flavors
+    {
+        public List<String> BasicFlavors { get; set; }
+        
+        public List<String> OutsiderTreatments { get; set; }
+
+        public List<String> PrimaryVirtues { get; set; }
+
+        public List<String> PrimaryVices { get; set; }
+
+        public List<String> XenophiliaDegrees { get; set; }
+
+        public List<String> PossiblePatrons { get; set; }
+
+        public List<String> Customs { get; set; }
     }
 }

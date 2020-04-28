@@ -82,10 +82,14 @@ namespace SWNUniverseGenerator.Models
         /// This is a "Point of Contact" between the Primary Planet and a non-Primary Planet
         /// </summary>
         public String Contact { get; set; }
-        
+
         public Society Society { get; set; }
-        
+
         public Ruler Ruler { get; set; }
+
+        public Ruled Ruled { get; set; }
+        
+        public Flavor Flavor { get; set; }
     }
 
     public class Society
@@ -116,5 +120,37 @@ namespace SWNUniverseGenerator.Models
         public String RuleForm { get; set; }
 
         public String MainPopConflict { get; set; }
+    }
+
+    public class Ruled
+    {
+        public String Contentment { get; set; }
+        
+        public String LastMajorThreat { get; set; }
+        
+        public String Power { get; set; }
+        
+        public String Uniformity { get; set; }
+        
+        public String MainConflict { get; set; }
+        
+        public String Trends { get; set; }
+    }
+    
+    public class Flavor
+    {
+        public String BasicFlavor { get; set; }
+        
+        public String OutsiderTreatment { get; set; }
+
+        public String PrimaryVirtue { get; set; }
+
+        public String PrimaryVice { get; set; }
+
+        public String XenophiliaDegree { get; set; }
+
+        public String PossiblePatron { get; set; }
+
+        public String Customs { get; set; }
     }
 }

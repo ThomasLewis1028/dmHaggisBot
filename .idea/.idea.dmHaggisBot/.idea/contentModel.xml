@@ -33,6 +33,7 @@
           <e p="StarCreation.cs" t="Include" />
         </e>
         <e p="Data" t="Include">
+          <e p="beastData.json" t="Include" />
           <e p="characterData.json" t="Include" />
           <e p="pointsOfInterest.json" t="Include" />
           <e p="problemData.json" t="Include" />

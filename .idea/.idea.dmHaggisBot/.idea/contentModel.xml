@@ -33,6 +33,7 @@
           <e p="StarCreation.cs" t="Include" />
         </e>
         <e p="Data" t="Include">
+          <e p="alienData.json" t="Include" />
           <e p="beastData.json" t="Include" />
           <e p="characterData.json" t="Include" />
           <e p="pointsOfInterest.json" t="Include" />
@@ -53,6 +54,8 @@
           <e p="UniverseDefaultSettings.cs" t="Include" />
         </e>
         <e p="DeserializedObjects" t="Include">
+          <e p="AlienData.cs" t="Include" />
+          <e p="BeastData.cs" t="Include" />
           <e p="CharData.cs" t="Include" />
           <e p="POIData.cs" t="Include" />
           <e p="ProblemData.cs" t="Include" />

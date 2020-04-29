@@ -4,7 +4,7 @@
       "Type": "Small Vicious Beast",
       "HD": 0,
       "AC": 14,
-      "Attack": "+1",
+      "Attack": 1,
       "Damage": "1d2",
       "AttackMult": 1,
       "Move": 10,

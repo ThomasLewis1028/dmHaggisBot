@@ -469,8 +469,7 @@ namespace dmHaggisBot
                 : crid.Split(" ").ToList();
             var t = ParseCommand("t", sm.Content);
             var cc = ParseCommand("cc", sm.Content);
-
-
+            
             var shipDef = new ShipDefaultSettings
             {
                 Count = string.IsNullOrEmpty(c)

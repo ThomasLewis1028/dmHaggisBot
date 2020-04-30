@@ -133,12 +133,20 @@ namespace SWNUniverseGenerator.CreationTools
                         ship.Fittings.Add(shipData.Fittings[f].Type);
                 }
 
+                foreach (var c in shipDefaultSettings.CrewId)
+                {
+                    universe.Characters.Find(a => a.Id == c).ShipId = ship.Id;
+                }
+
                 if (shipDefaultSettings.CreateCrew)
                 {
                     CharCreation charCreation = new CharCreation();
                     universe = charCreation.AddCharacters(universe,
                         new CharacterDefaultSettings
-                            {Count = Rand.Next(hull.CrewMin, hull.CrewMax + 1), ShipId = ship.Id}, charData);
+                        {
+                            Count = Rand.Next(hull.CrewMin, hull.CrewMax + 1 - shipDefaultSettings.CrewId.Count),
+                            ShipId = ship.Id
+                        }, charData);
 
                     var crewList = (from c in universe.Characters where c.ShipId == ship.Id select c.Id).ToList();
 

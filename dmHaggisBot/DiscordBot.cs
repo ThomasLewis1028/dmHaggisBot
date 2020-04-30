@@ -468,6 +468,7 @@ namespace dmHaggisBot
                 ? null
                 : crid.Split(" ").ToList();
             var t = ParseCommand("t", sm.Content);
+            var cc = ParseCommand("cc", sm.Content);
 
 
             var shipDef = new ShipDefaultSettings
@@ -481,6 +482,7 @@ namespace dmHaggisBot
                 Name = string.IsNullOrEmpty(n)
                     ? null
                     : n,
+                CreateCrew = string.IsNullOrEmpty(cc) || Boolean.Parse(cc),
                 CaptainId = string.IsNullOrEmpty(cid)
                     ? null
                     : cid,

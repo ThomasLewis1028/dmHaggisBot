@@ -11,6 +11,8 @@ namespace SWNUniverseGenerator.DefaultSettings
 
         public String Name { get; set; }
         
+        public Boolean CreateCrew { get; set; }
+
         public String CaptainId { get; set; }
         
         public String PilotId { get; set; }
@@ -24,5 +26,9 @@ namespace SWNUniverseGenerator.DefaultSettings
         public List<String> CrewId { get; set; }
         
         public String Type { get; set; }
+        
+        public String HomeId { get; set; }
+        
+        public String LocationId { get; set; }
     }
 }

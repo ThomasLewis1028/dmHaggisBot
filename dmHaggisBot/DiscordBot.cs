@@ -691,6 +691,11 @@ namespace dmHaggisBot
             return (searchDef, message);
         }
 
+        /// <summary>
+        /// This message receives a socket message to respond with rough square grid of the universe
+        /// </summary>
+        /// <param name="sm"></param>
+        /// <returns></returns>
         private static async Task PrintGrid(SocketMessage sm)
         {
             var sb = new StringBuilder();

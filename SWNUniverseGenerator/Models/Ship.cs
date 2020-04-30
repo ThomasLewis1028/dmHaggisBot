@@ -31,6 +31,8 @@ namespace SWNUniverseGenerator.Models
 
         public Int32 Cp { get; set; }
 
-        public List<String> StoredShips { get; set; }
+        public String HomeId { get; set; }
+        
+        public String LocationId { get; set; }
     }
 }

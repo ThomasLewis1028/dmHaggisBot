@@ -124,7 +124,6 @@ namespace dmHaggisBot
             if ((long) sm.Channel.Id != _generalChannel && (long) sm.Channel.Id != _dmChannel)
                 return;
 
-
             // Switch based on the set of regular expressions provided
             switch (sm.Content)
             {
@@ -469,7 +468,7 @@ namespace dmHaggisBot
                 : crid.Split(" ").ToList();
             var t = ParseCommand("t", sm.Content);
             var cc = ParseCommand("cc", sm.Content);
-            
+
             var shipDef = new ShipDefaultSettings
             {
                 Count = string.IsNullOrEmpty(c)

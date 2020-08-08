@@ -4,7 +4,7 @@
     {
         private static void Main(string[] args)
         {
-            var bot = new DiscordBot(args[0] == "-test");
+            var bot = new DiscordBot(args.Length > 0  && args[0] == "-test");
             bot?.MainAsync();
 
             while (true)

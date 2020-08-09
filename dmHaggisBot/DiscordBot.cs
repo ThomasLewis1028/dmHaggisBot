@@ -137,55 +137,64 @@ namespace dmHaggisBot
             switch (sm.Content)
             {
                 case var content when _univCreate.IsMatch(content): // Universe creation
-                    _logger.Info("Creating Universe");
+                    _logger.Info("Creating Universe: " + content);
                     await CreateUniv(sm);
                     break;
                 case var content when _univLoad.IsMatch(content): // Universe loading
+                    _logger.Info("Loading Universe: " + content);
                     await LoadUniv(sm);
                     break;
                 case var content when _starCreate.IsMatch(content): // Star creation
+                    _logger.Info("Creating Stars: " + content);
                     if (_universe != null)
                         await CreateStar(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
                 case var content when _planCreate.IsMatch(content): // Planet creation
+                    _logger.Info("Creating Planets: " + content);
                     if (_universe != null)
                         await CreatePlanet(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
                 case var content when _charCreate.IsMatch(content): // Character creation
+                    _logger.Info("Creating Characters: " + content);
                     if (_universe != null)
                         await CreateChar(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
                 case var content when _probCreate.IsMatch(content): // Problem creation
+                    _logger.Info("Creating Problems: " + content);
                     if (_universe != null)
                         await CreateProb(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
                 case var content when _poiCreate.IsMatch(content): // Point of Interest creation
+                    _logger.Info("Creating Points of Interest: " + content);
                     if (_universe != null)
                         await CreatePoi(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
                 case var content when _dataSearch.IsMatch(content): // Searching
+                    _logger.Info("Searching in Universe: " + content);
                     if (_universe != null)
                         await SearchData(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
                 case var content when Regex.IsMatch("pg", content, RegexOptions.IgnoreCase):
+                    _logger.Info("Printing Grid");
                     if (_universe != null)
                         await PrintGrid(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
                 case var content when _shipCreate.IsMatch(content): // Ship creation
+                    _logger.Info("Creating Ships: " + content);
                     if (_universe != null)
                         await CreateShip(sm);
                     else
@@ -634,7 +643,7 @@ namespace dmHaggisBot
         /// <param name="argName"></param>
         /// <param name="argVal"></param>
         /// <returns></returns>
-        private static string ParseCommand(string argName, string argVal)
+        private string ParseCommand(string argName, string argVal)
         {
             var start = argVal.IndexOf(" -" + argName + " ", StringComparison.Ordinal) + 1;
             if (start == 0)

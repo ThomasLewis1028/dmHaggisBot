@@ -137,6 +137,7 @@ namespace dmHaggisBot
             switch (sm.Content)
             {
                 case var content when _univCreate.IsMatch(content): // Universe creation
+                    _logger.Info("Creating Universe");
                     await CreateUniv(sm);
                     break;
                 case var content when _univLoad.IsMatch(content): // Universe loading
@@ -489,7 +490,9 @@ namespace dmHaggisBot
                 Name = string.IsNullOrEmpty(n)
                     ? null
                     : n,
-                CreateCrew = string.IsNullOrEmpty(cc) || Boolean.Parse(cc),
+                CreateCrew = string.IsNullOrEmpty(cc)
+                             ? true
+                             : Boolean.Parse(cc),
                 CaptainId = string.IsNullOrEmpty(cid)
                     ? null
                     : cid,

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
@@ -133,10 +134,10 @@ namespace SWNUniverseGenerator.CreationTools
                         ship.Fittings.Add(shipData.Fittings[f].Type);
                 }
 
-                foreach (var c in shipDefaultSettings.CrewId)
-                {
-                    universe.Characters.Find(a => a.Id == c).ShipId = ship.Id;
-                }
+                if(shipDefaultSettings.CrewId != null)
+                    foreach (var c in shipDefaultSettings.CrewId)
+                        universe.Characters.Find(a => a.Id == c).ShipId = ship.Id;
+                
 
                 if (shipDefaultSettings.CreateCrew)
                 {
@@ -144,7 +145,7 @@ namespace SWNUniverseGenerator.CreationTools
                     universe = charCreation.AddCharacters(universe,
                         new CharacterDefaultSettings
                         {
-                            Count = Rand.Next(hull.CrewMin, hull.CrewMax + 1 - shipDefaultSettings.CrewId.Count),
+                            Count = Rand.Next(hull.CrewMin, hull.CrewMax + 1 - (shipDefaultSettings.CrewId?.Count ?? 0)),
                             ShipId = ship.Id
                         }, charData);
 

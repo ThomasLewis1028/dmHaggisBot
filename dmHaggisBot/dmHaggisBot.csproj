@@ -8,6 +8,7 @@
     <ItemGroup>
       <PackageReference Include="Discord.Net" Version="2.1.1" />
       <PackageReference Include="Discord.Net.Commands" Version="2.1.1" />
+      <PackageReference Include="NLog" Version="4.7.3" />
     </ItemGroup>
 
     <ItemGroup>
@@ -16,6 +17,13 @@
 
     <ItemGroup>
       <None Update="properties.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="appsettings.config" />
+      <None Include="NLog.config">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

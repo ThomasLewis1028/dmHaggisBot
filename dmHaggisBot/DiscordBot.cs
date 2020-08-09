@@ -36,6 +36,8 @@ namespace dmHaggisBot
         private readonly long _generalChannel;
         private readonly long _dmChannel;
 
+        private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+
         private readonly Regex _charCreate = new Regex("^(charCreate|createChar|cc)($| .*)", RegexOptions.IgnoreCase);
 
         private readonly Regex _starCreate =
@@ -97,17 +99,24 @@ namespace dmHaggisBot
 
         public async Task MainAsync()
         {
-            var config = new DiscordSocketConfig {MessageCacheSize = 100};
-            // _client.Log += message => Console.Out.WriteLine();
-            _client = new DiscordSocketClient(config);
-            _client.MessageReceived += MessageReceived;
-            _client.ReactionAdded += ReactionAdded;
+            try
+            {
+                var config = new DiscordSocketConfig {MessageCacheSize = 100};
+                // _client.Log += message => Console.Out.WriteLine();
+                _client = new DiscordSocketClient(config);
+                _client.MessageReceived += MessageReceived;
+                _client.ReactionAdded += ReactionAdded;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+            }
 
             await _client.LoginAsync(TokenType.Bot, _token);
             await _client.StartAsync();
             await _client.SetGameAsync("No Universe Loaded");
 
-            await Console.Out.WriteLineAsync("DiscordBot Connected");
+            _logger.Info("DiscordBot Connected");
 
             await Task.Delay(-1);
         }

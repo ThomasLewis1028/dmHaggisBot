@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
@@ -118,6 +119,7 @@ namespace SWNUniverseGenerator
             bool includePoi = t.Contains("poi") || t.Length == 0;
             bool includeZones = t.Contains("z") || t.Length == 0;
             bool includeShips = t.Contains("sh") || t.Length == 0;
+            bool includeAliens = t.Contains("a") || t.Length == 0;
 
             return (from p in universe.Planets
                     where (Regex.IsMatch(p.Name, nrgx, RegexOptions.IgnoreCase) ||
@@ -148,6 +150,9 @@ namespace SWNUniverseGenerator
                     where Regex.IsMatch(ship.Id, idrgx, RegexOptions.IgnoreCase) &&
                           includeShips
                     select (IEntity) ship)
+                .Union(from alien in universe.Aliens
+                    where Regex.IsMatch(alien.Id, idrgx, RegexOptions.IgnoreCase) && includeAliens
+                    select (IEntity) alien)
                 .Union(from z in universe.Zones
                     where Regex.IsMatch(z.Id, idrgx, RegexOptions.IgnoreCase) &&
                           includeZones

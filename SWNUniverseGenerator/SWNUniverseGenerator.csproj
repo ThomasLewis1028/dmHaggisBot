@@ -34,6 +34,10 @@
       <None Update="Data\societyData.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Remove="Data\alienData.json" />
+      <EmbeddedResource Include="Data\alienData.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 
 </Project>

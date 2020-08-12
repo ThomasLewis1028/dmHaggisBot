@@ -62,6 +62,9 @@ namespace dmHaggisBot
 
         private readonly Regex _shipCreate =
             new Regex("^(shipCreate|createShip|shc|csh)($| .*)", RegexOptions.IgnoreCase);
+        
+        private readonly Regex _alienCreate =
+            new Regex("^(alienCreate|createAlien|ac|ca)($| .*)", RegexOptions.IgnoreCase);
 
         // Set up emoji for pagination
         private static readonly Emoji RightArrow = new Emoji("▶️");
@@ -187,7 +190,7 @@ namespace dmHaggisBot
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
                 case var content when Regex.IsMatch("pg", content, RegexOptions.IgnoreCase):
-                    _logger.Info("Printing Grid");
+                    _logger.Info("Printing Grid"); // Print Grid
                     if (_universe != null)
                         await PrintGrid(sm);
                     else
@@ -197,6 +200,13 @@ namespace dmHaggisBot
                     _logger.Info("Creating Ships: " + content);
                     if (_universe != null)
                         await CreateShip(sm);
+                    else
+                        await sm.Channel.SendMessageAsync("No universe file loaded");
+                    break;
+                case var content when _alienCreate.IsMatch(content): // Alien creation
+                    _logger.Info("Creating Aliens: " + content);
+                    if (_universe != null)
+                        await CreateAlien(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
@@ -499,9 +509,7 @@ namespace dmHaggisBot
                 Name = string.IsNullOrEmpty(n)
                     ? null
                     : n,
-                CreateCrew = string.IsNullOrEmpty(cc)
-                             ? true
-                             : Boolean.Parse(cc),
+                CreateCrew = string.IsNullOrEmpty(cc) || Boolean.Parse(cc),
                 CaptainId = string.IsNullOrEmpty(cid)
                     ? null
                     : cid,
@@ -526,6 +534,48 @@ namespace dmHaggisBot
             {
                 _universe = _creation.CreateShips(_universe, shipDef);
                 await sm.Channel.SendMessageAsync("Ships created in " + _universe.Name);
+                await SetGameStatus();
+            }
+            catch (FileNotFoundException e)
+            {
+                await sm.Channel.SendMessageAsync(e.Message);
+            }
+        }
+        
+        /// <summary>
+        /// This method handles creating Ships in a Universe from a SocketMessage
+        /// </summary>
+        /// <param name="sm"></param>
+        /// <returns></returns>
+        private async Task CreateAlien(SocketMessage sm)
+        {
+            var c = ParseCommand("c", sm.Content);
+            var btc = ParseCommand("btc", sm.Content);
+            var bt = ParseCommand("bt", sm.Content);
+            var btl = string.IsNullOrEmpty(bt)
+                ? null
+                : bt.Split(" ").ToList();
+            var l = ParseCommand("", sm.Content);
+            var ll = string.IsNullOrEmpty(l)
+                ? null
+                : l.Split(" ").ToList();
+
+            var alienDef = new AlienDefaultSettings()
+            {
+                Count = string.IsNullOrEmpty(c)
+                    ? -1
+                    : Int32.Parse(c),
+                BodyTrait = btl,
+                BodyTraitCount = string.IsNullOrEmpty(btc)
+                ? -1
+                : Int32.Parse(btc),
+                Lenses = ll
+                
+            };
+            try
+            {
+                _universe = _creation.CreateAliens(_universe, alienDef);
+                await sm.Channel.SendMessageAsync("Aliens created in " + _universe.Name);
                 await SetGameStatus();
             }
             catch (FileNotFoundException e)
@@ -611,6 +661,10 @@ namespace dmHaggisBot
                         break;
                     case PointOfInterest pointOfInterest:
                         embeds.Add(GenerateEmbeds.PoiEmbed(_universe, pointOfInterest,
+                            searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
+                        break;
+                    case Alien alien:
+                        embeds.Add(GenerateEmbeds.AlienEmbed(_universe, alien,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Zone zone:
@@ -753,6 +807,7 @@ namespace dmHaggisBot
                                        _universe.Planets.Count + " Planets - " +
                                        _universe.Ships.Count + " Ships - " +
                                        _universe.Characters.Count + " Characters - " +
+                                       _universe.Aliens.Count + " Aliens - " +
                                        _universe.PointsOfInterest.Count + " Points of Interest - " +
                                        _universe.Problems.Count + " Problems");
         }

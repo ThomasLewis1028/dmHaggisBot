@@ -97,7 +97,7 @@
       "Description": "The race is hot-tempered, prone to fits of personal violence. Disputes are settled by force, though rarely to the point of death among their own kind. Outsiders can expect swift and bloody retaliation for any insult or slight, and the prospect of death rarely intimidates these beings. Their chief mode of emotional expression is anger; wrath at obstacles, fury at enemies, and a slow smoldering burn when neither are available."
     }
   ],
-  "SocialStructure": [
+  "SocialStructures": [
     {
       "Type": "Democratic",
       "Description": "The species has a broadly democratic organization, with individual members having a formal say in the choice of leadership. This voting need not necessarily be based on numbers; it might be a vote with money, military power, religious influence, possession of certain biological traits, or any other metric that makes sense to the aliens. Whatever the specific currency, politics for this race tends to revolve around persuasion and diplomacy rather than use of military force to determine species-wide policies."
@@ -113,14 +113,6 @@
     {
       "Type": "Oligarchic",
       "Description": "The species is led by a number of powerful or revered figures who work in nominal harmony. Individual oligarchs might have their own goals, but no single member has the strength to enforce its will upon the whole. These oligarchs might be the product of hereditary inheritance, or individual members of the species might one day aspire to join their numbers."
-    },
-    {
-      "Type": "Multipolar Competitive",
-      "Description": "The species has more than one leadership organization. Roll 1d6; on a 1-2 it has two, 3-4 indicates three, and 5-6 indicates four. Roll on this table the requisite number of times to determine the nature of these organizations. Some such multipolar institutions operate in parallel; a tribal organization headed by one gender, for example, that determines the division of goods while a monarchic head of a different gender makes decisions about the race’s relations with other species. Others are directly in conflict, such as a monarchy struggling against a democratic neighbor."
-    },
-    {
-      "Type": "Multipolar Cooperative",
-      "Description": "The species has more than one leadership organization. Roll 1d6; on a 1-2 it has two, 3-4 indicates three, and 5-6 indicates four. Roll on this table the requisite number of times to determine the nature of these organizations. Some such multipolar institutions operate in parallel; a tribal organization headed by one gender, for example, that determines the division of goods while a monarchic head of a different gender makes decisions about the race’s relations with other species. Others are directly in conflict, such as a monarchy struggling against a democratic neighbor."
     }
   ]
 }

@@ -28,6 +28,7 @@ namespace SWNUniverseGenerator
         public static PoiData PoiData;
         public static ProblemData ProblemData;
         public static SocietyData SocietyData;
+        public static AlienData AlienData;
 
         /// <summary>
         /// Default constructor that requires a path to be passed in
@@ -43,6 +44,7 @@ namespace SWNUniverseGenerator
             PoiData =LoadData<PoiData>(@"Data/pointsOfInterest.json");
             ProblemData = LoadData<ProblemData>(@"Data/problemData.json");
             SocietyData = LoadData<SocietyData>(@"Data/societyData.json");
+            AlienData = LoadData<AlienData>(@"Data/alienData.json");
         }
 
         /// <summary>
@@ -246,6 +248,29 @@ namespace SWNUniverseGenerator
 
             // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
             universe = new PoiCreation().AddPoi(universe, poiDefaultSettings, PoiData);
+            SerializeData(universe);
+            return universe;
+        }
+        
+        /// <summary>
+        /// This method should receive the Universe to add Aliens to and a set of AlienDefaultSettings
+        ///
+        /// Default values are handled in AlienCreation.AddAliens
+        /// </summary>
+        /// <param name="universe"></param>
+        /// <param name="alienDefaultSettings"></param>
+        /// <returns>
+        /// Return the newly edited Universe
+        /// </returns>
+        /// <exception cref="FileNotFoundException"></exception>
+        public Universe CreateAliens(Universe universe, AlienDefaultSettings alienDefaultSettings)
+        {
+            // If there are no Planets or Locations for the Problems to be tied to then throw an exception
+            if (universe.Stars == null || universe.Stars.Count == 0)
+                throw new FileNotFoundException("No locations have been loaded.");
+
+            // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
+            universe = new AlienCreation().AddAliens(universe, alienDefaultSettings, AlienData);
             SerializeData(universe);
             return universe;
         }

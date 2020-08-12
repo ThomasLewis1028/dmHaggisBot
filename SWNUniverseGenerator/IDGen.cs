@@ -30,6 +30,7 @@ namespace SWNUniverseGenerator
                 PointOfInterest _ => ("I-" + id),
                 Ship _ => ("CS-" + id),
                 Job _ => ("J-" + id),
+                Alien _ => ("X-" + id),
                 // Location _ => ("L-" + id),
                 _ => ("Z-" + id)
             };

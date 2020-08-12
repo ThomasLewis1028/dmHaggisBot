@@ -9,7 +9,7 @@ namespace SWNUniverseGenerator.DeserializedObjects
         
         public List<Lense> Lenses { get; set; }
         
-        public List<SocialStructure> SocialStructures { get; set; }
+        public List<SocialStructures> SocialStructures { get; set; }
     }
 
     public class Lense
@@ -19,7 +19,7 @@ namespace SWNUniverseGenerator.DeserializedObjects
         public String Description { get; set; }
     }
     
-    public class SocialStructure
+    public class SocialStructures
     {
         public String Type { get; set; }
         

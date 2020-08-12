@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using Discord;
@@ -65,8 +66,9 @@ namespace dmHaggisBot
             eb.WithColor(Color.DarkGreen);
             eb.Title = planet.Id;
             eb.AddField("Name: ", planet.Name);
-            eb.AddField("Star: ", planet.StarId + " - " +
-                                  universe.Stars.Single(a => a.Id == planet.StarId).Name);
+            if (dmChannel)
+                eb.AddField("Star: ", planet.StarId + " - " +
+                                      universe.Stars.Single(a => a.Id == planet.StarId).Name);
             eb.AddField("World Tags: ", planet.FirstWorldTag + ", " + planet.SecondWorldTag);
             eb.AddField("Atmosphere: ", planet.Atmosphere);
             eb.AddField("Biosphere: ", planet.Biosphere);
@@ -80,6 +82,38 @@ namespace dmHaggisBot
                 eb.AddField("Relationship: ", planet.Relationship);
                 eb.AddField("Contact: ", planet.Contact);
             }
+
+            // if (dmChannel)
+            // {
+            //     eb.AddField("Prior Culture: ", planet.Society.PriorCulture);
+            //     eb.AddField("Other Society: ", planet.Society.OtherSociety);
+            //     eb.AddField("Main Remnant: ", planet.Society.MainRemnant);
+            //     eb.AddField("Society Age: ", planet.Society.SocietyAge);
+            //     eb.AddField("Important Resource: ", planet.Society.ImportantResource);
+            //     eb.AddField("Founding Reason: ", planet.Society.FoundingReason);
+            //
+            //     eb.AddField("General Security: ", planet.Ruler.GeneralSecurity);
+            //     eb.AddField("Legitimacy Source: ", planet.Ruler.LegitimacySource);
+            //     eb.AddField("Main Ruler Conflict: ", planet.Ruler.MainRulerConflict);
+            //     eb.AddField("Rule Completion: ", planet.Ruler.RuleCompletion);
+            //     eb.AddField("Rule Form: ", planet.Ruler.RuleForm);
+            //     eb.AddField("Main Population Conflict: ", planet.Ruler.MainPopConflict);
+            //     
+            //     eb.AddField("Contentment: ", planet.Ruled.Contentment);
+            //     eb.AddField("Last Major Threat: ", planet.Ruled.LastMajorThreat);
+            //     eb.AddField("Power: ", planet.Ruled.Power);
+            //     eb.AddField("Uniformity: ", planet.Ruled.Uniformity);
+            //     eb.AddField("Main Conflict: ", planet.Ruled.MainConflict);
+            //     eb.AddField("Trends: ", planet.Ruled.Trends);
+            //     
+            //     eb.AddField("Basic Trends: ", planet.Flavor.BasicFlavor);
+            //     eb.AddField("Outsider Treatment: ", planet.Flavor.OutsiderTreatment);
+            //     eb.AddField("Primary Virtue: ", planet.Flavor.PrimaryVirtue);
+            //     eb.AddField("Primary Vice: ", planet.Flavor.PrimaryVice);
+            //     eb.AddField("Xenophilia Degree: ", planet.Flavor.XenophiliaDegree);
+            //     eb.AddField("Possible Patron: ", planet.Flavor.PossiblePatron);
+            //     eb.AddField("Customs: ", planet.Flavor.Customs);
+            // }
 
             return eb.Build();
         }
@@ -151,6 +185,32 @@ namespace dmHaggisBot
 
 
             eb.AddField("Total Cost: ", (totalCost).ToString("#,###"));
+
+            return eb.Build();
+        }
+
+        public static Embed AlienEmbed(Universe universe, Alien alien, Boolean dmChannel)
+        {
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.WithColor(Color.LightOrange);
+            eb.Title = alien.Id;
+
+            // eb.AddField("Name: ", alien.Name);
+            StringBuilder btsb = new StringBuilder();
+            foreach (var bt in alien.BodyTraits)
+                btsb.Append(bt + "\n");
+            eb.AddField("Body Traits: ", btsb.ToString());
+
+            StringBuilder lsb = new StringBuilder();
+            foreach (var l in alien.Lenses)
+                lsb.Append(l + "\n");
+            eb.AddField("Lenses: ", lsb.ToString());
+
+            StringBuilder ssb = new StringBuilder();
+            foreach (var l in alien.SocialStructures)
+                ssb.Append(l + "\n");
+            eb.AddField("Social Structures" + (alien.MultiPolarType == null ? ": " : " (" + alien.MultiPolarType + "):"),
+                ssb.ToString());
 
             return eb.Build();
         }

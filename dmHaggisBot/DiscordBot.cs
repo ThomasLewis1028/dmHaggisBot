@@ -38,34 +38,6 @@ namespace dmHaggisBot
 
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 
-        private readonly Regex _charCreate = new Regex("^(charCreate|createChar|cc)($| .*)", RegexOptions.IgnoreCase);
-
-        private readonly Regex _starCreate =
-            new Regex("^(starCreate|createStar|sc|cs)($| .*)", RegexOptions.IgnoreCase);
-
-        private readonly Regex _planCreate =
-            new Regex("^(planetCreate|createPlanet|pc|cp)($| .*)", RegexOptions.IgnoreCase);
-
-        private readonly Regex _univCreate =
-            new Regex("^(univCreate|createUniv|uc|cu)($| .*)", RegexOptions.IgnoreCase);
-
-        private readonly Regex _univLoad = new Regex("^(univLoad|loadUniv|ul|lu)($| .*)", RegexOptions.IgnoreCase);
-
-        private readonly Regex _dataSearch =
-            new Regex("^(dataSearch|searchData|ds|sd)($| .*)", RegexOptions.IgnoreCase);
-
-        private readonly Regex _probCreate =
-            new Regex("^(probCreate|createProb|prc|cpr)($| .*)", RegexOptions.IgnoreCase);
-
-        private readonly Regex _poiCreate =
-            new Regex("^(poiCreate|createPoi|poic|cpoi)($| .*)", RegexOptions.IgnoreCase);
-
-        private readonly Regex _shipCreate =
-            new Regex("^(shipCreate|createShip|shc|csh)($| .*)", RegexOptions.IgnoreCase);
-        
-        private readonly Regex _alienCreate =
-            new Regex("^(alienCreate|createAlien|ac|ca)($| .*)", RegexOptions.IgnoreCase);
-
         // Set up emoji for pagination
         private static readonly Emoji RightArrow = new Emoji("▶️");
         private static readonly Emoji LeftArrow = new Emoji("◀️");
@@ -139,50 +111,50 @@ namespace dmHaggisBot
             // Switch based on the set of regular expressions provided
             switch (sm.Content)
             {
-                case var content when _univCreate.IsMatch(content): // Universe creation
+                case var content when RegularExpressions.UniverseCreate.IsMatch(content): // Universe creation
                     _logger.Info("Creating Universe: " + content);
                     await CreateUniv(sm);
                     break;
-                case var content when _univLoad.IsMatch(content): // Universe loading
+                case var content when RegularExpressions.UniverseLoad.IsMatch(content): // Universe loading
                     _logger.Info("Loading Universe: " + content);
                     await LoadUniv(sm);
                     break;
-                case var content when _starCreate.IsMatch(content): // Star creation
+                case var content when RegularExpressions.StarCreate.IsMatch(content): // Star creation
                     _logger.Info("Creating Stars: " + content);
                     if (_universe != null)
                         await CreateStar(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
-                case var content when _planCreate.IsMatch(content): // Planet creation
+                case var content when RegularExpressions.PlanetCreate.IsMatch(content): // Planet creation
                     _logger.Info("Creating Planets: " + content);
                     if (_universe != null)
                         await CreatePlanet(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
-                case var content when _charCreate.IsMatch(content): // Character creation
+                case var content when RegularExpressions.CharacterCreate.IsMatch(content): // Character creation
                     _logger.Info("Creating Characters: " + content);
                     if (_universe != null)
                         await CreateChar(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
-                case var content when _probCreate.IsMatch(content): // Problem creation
+                case var content when RegularExpressions.ProblemCreate.IsMatch(content): // Problem creation
                     _logger.Info("Creating Problems: " + content);
                     if (_universe != null)
                         await CreateProb(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
-                case var content when _poiCreate.IsMatch(content): // Point of Interest creation
+                case var content when RegularExpressions.PoiCreate.IsMatch(content): // Point of Interest creation
                     _logger.Info("Creating Points of Interest: " + content);
                     if (_universe != null)
                         await CreatePoi(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
-                case var content when _dataSearch.IsMatch(content): // Searching
+                case var content when RegularExpressions.DataSearch.IsMatch(content): // Searching
                     _logger.Info("Searching in Universe: " + content);
                     if (_universe != null)
                         await SearchData(sm);
@@ -196,14 +168,14 @@ namespace dmHaggisBot
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
-                case var content when _shipCreate.IsMatch(content): // Ship creation
+                case var content when RegularExpressions.ShipCreate.IsMatch(content): // Ship creation
                     _logger.Info("Creating Ships: " + content);
                     if (_universe != null)
                         await CreateShip(sm);
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
-                case var content when _alienCreate.IsMatch(content): // Alien creation
+                case var content when RegularExpressions.AlienCreate.IsMatch(content): // Alien creation
                     _logger.Info("Creating Aliens: " + content);
                     if (_universe != null)
                         await CreateAlien(sm);
@@ -226,7 +198,7 @@ namespace dmHaggisBot
             if (user.IsBot)
                 return;
 
-            if (!_dataSearch.IsMatch(sr.Message.ToString()))
+            if (!RegularExpressions.DataSearch.IsMatch(sr.Message.ToString()))
                 return;
 
             var up = true;
@@ -541,7 +513,7 @@ namespace dmHaggisBot
                 await sm.Channel.SendMessageAsync(e.Message);
             }
         }
-        
+
         /// <summary>
         /// This method handles creating Ships in a Universe from a SocketMessage
         /// </summary>
@@ -567,10 +539,9 @@ namespace dmHaggisBot
                     : Int32.Parse(c),
                 BodyTrait = btl,
                 BodyTraitCount = string.IsNullOrEmpty(btc)
-                ? -1
-                : Int32.Parse(btc),
+                    ? -1
+                    : Int32.Parse(btc),
                 Lenses = ll
-                
             };
             try
             {
@@ -802,14 +773,17 @@ namespace dmHaggisBot
         /// </summary>
         private async Task SetGameStatus()
         {
-            await _client.SetGameAsync(_universe.Name + " Loaded - " +
-                                       _universe.Stars.Count + " Stars - " +
-                                       _universe.Planets.Count + " Planets - " +
-                                       _universe.Ships.Count + " Ships - " +
-                                       _universe.Characters.Count + " Characters - " +
-                                       _universe.Aliens.Count + " Aliens - " +
-                                       _universe.PointsOfInterest.Count + " Points of Interest - " +
-                                       _universe.Problems.Count + " Problems");
+            if (_universe != null)
+                await _client.SetGameAsync(_universe.Name + " Loaded - "+  
+                      _universe.Stars.Count + " Stars - " +
+                      _universe.Planets.Count + " Planets - " +
+                      _universe.Ships.Count + " Ships - " +
+                      _universe.Characters.Count + " Characters - " +
+                      _universe.Aliens.Count + " Aliens - " +
+                      _universe.PointsOfInterest.Count + " Points of Interest - " +
+                      _universe.Problems.Count + " Problems");
+            else
+                await _client.SetGameAsync("No universe loaded");
         }
     }
 }

@@ -6,15 +6,15 @@ namespace SWNUniverseGenerator.Models
     {
         public String Id { get; set; }
 
-        public City(string name, Planet planet)
+        public City(String name, String planetId)
         {
             Name = name;
-            Planet = planet;
+            PlanetId = planetId;
         }
 
-        public string Name { get; set; }
+        public String Name { get; set; }
 
-        public Planet Planet { get; set; }
+        public String PlanetId { get; }
 
         public Int32 Pop { get; set; }
     }

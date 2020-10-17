@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
@@ -111,15 +110,15 @@ namespace SWNUniverseGenerator
                 lrgx = "^$";
 
             // Set the tags for more specific searches
-            bool includePlanets = t.Contains("p") || t.Length == 0;
-            bool includeChars = t.Contains("ch") || t.Length == 0;
-            bool includeStars = t.Contains("s") || t.Length == 0;
-            bool includeProbs = (t.Contains("pr") || t.Length == 0)
-                                && searchDefaultSettings.Permission != SearchDefaultSettings.PermissionType.Player;
-            bool includePoi = t.Contains("poi") || t.Length == 0;
-            bool includeZones = t.Contains("z") || t.Length == 0;
-            bool includeShips = t.Contains("sh") || t.Length == 0;
-            bool includeAliens = t.Contains("a") || t.Length == 0;
+            var includePlanets = t.Contains("p") || t.Length == 0;
+            var includeChars = t.Contains("ch") || t.Length == 0;
+            var includeStars = t.Contains("s") || t.Length == 0;
+            var includeProbs = (t.Contains("pr") || t.Length == 0)
+                               && searchDefaultSettings.Permission != SearchDefaultSettings.PermissionType.Player;
+            var includePoi = t.Contains("poi") || t.Length == 0;
+            var includeZones = t.Contains("z") || t.Length == 0;
+            var includeShips = t.Contains("sh") || t.Length == 0;
+            var includeAliens = t.Contains("a") || t.Length == 0;
 
             return (from p in universe.Planets
                     where (Regex.IsMatch(p.Name, nrgx, RegexOptions.IgnoreCase) ||
@@ -154,7 +153,8 @@ namespace SWNUniverseGenerator
                     where Regex.IsMatch(alien.Id, idrgx, RegexOptions.IgnoreCase) && includeAliens
                     select (IEntity) alien)
                 .Union(from z in universe.Zones
-                    where Regex.IsMatch(z.Id, idrgx, RegexOptions.IgnoreCase) &&
+                    where Regex.IsMatch(z.Id, idrgx, RegexOptions.IgnoreCase) ||
+                          Regex.IsMatch(z.Name, nrgx, RegexOptions.IgnoreCase) &&
                           includeZones
                     select (IEntity) z)
                 .AsQueryable();

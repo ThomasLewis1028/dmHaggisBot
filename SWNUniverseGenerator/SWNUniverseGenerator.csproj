@@ -5,6 +5,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Markov" Version="2.0.0" />
+      <PackageReference Include="MongoDB.Driver" Version="2.11.0" />
+      <PackageReference Include="MongoDB.Driver.Core" Version="2.11.0" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     </ItemGroup>
 

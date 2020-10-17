@@ -83,37 +83,41 @@ namespace dmHaggisBot
                 eb.AddField("Contact: ", planet.Contact);
             }
 
-            // if (dmChannel)
-            // {
-            //     eb.AddField("Prior Culture: ", planet.Society.PriorCulture);
-            //     eb.AddField("Other Society: ", planet.Society.OtherSociety);
-            //     eb.AddField("Main Remnant: ", planet.Society.MainRemnant);
-            //     eb.AddField("Society Age: ", planet.Society.SocietyAge);
-            //     eb.AddField("Important Resource: ", planet.Society.ImportantResource);
-            //     eb.AddField("Founding Reason: ", planet.Society.FoundingReason);
-            //
-            //     eb.AddField("General Security: ", planet.Ruler.GeneralSecurity);
-            //     eb.AddField("Legitimacy Source: ", planet.Ruler.LegitimacySource);
-            //     eb.AddField("Main Ruler Conflict: ", planet.Ruler.MainRulerConflict);
-            //     eb.AddField("Rule Completion: ", planet.Ruler.RuleCompletion);
-            //     eb.AddField("Rule Form: ", planet.Ruler.RuleForm);
-            //     eb.AddField("Main Population Conflict: ", planet.Ruler.MainPopConflict);
-            //     
-            //     eb.AddField("Contentment: ", planet.Ruled.Contentment);
-            //     eb.AddField("Last Major Threat: ", planet.Ruled.LastMajorThreat);
-            //     eb.AddField("Power: ", planet.Ruled.Power);
-            //     eb.AddField("Uniformity: ", planet.Ruled.Uniformity);
-            //     eb.AddField("Main Conflict: ", planet.Ruled.MainConflict);
-            //     eb.AddField("Trends: ", planet.Ruled.Trends);
-            //     
-            //     eb.AddField("Basic Trends: ", planet.Flavor.BasicFlavor);
-            //     eb.AddField("Outsider Treatment: ", planet.Flavor.OutsiderTreatment);
-            //     eb.AddField("Primary Virtue: ", planet.Flavor.PrimaryVirtue);
-            //     eb.AddField("Primary Vice: ", planet.Flavor.PrimaryVice);
-            //     eb.AddField("Xenophilia Degree: ", planet.Flavor.XenophiliaDegree);
-            //     eb.AddField("Possible Patron: ", planet.Flavor.PossiblePatron);
-            //     eb.AddField("Customs: ", planet.Flavor.Customs);
-            // }
+            if (dmChannel)
+            {
+                eb.AddField("Society",
+                    $"Prior Culture - {planet.Society.PriorCulture}" +
+                    $"\nOther Society - {planet.Society.OtherSociety}" +
+                    $"\nMain Remnant - {planet.Society.MainRemnant}" +
+                    $"\nSociety Age - {planet.Society.SocietyAge}" +
+                    $"\nImportant Resource - {planet.Society.ImportantResource}" +
+                    $"\nFounding Reason - {planet.Society.FoundingReason}");
+
+                eb.AddField("Ruler",
+                    $"General Security - {planet.Ruler.GeneralSecurity}" +
+                    $"\nLegitimacy Source - {planet.Ruler.LegitimacySource}" +
+                    $"\nMain Ruler Conflict - {planet.Ruler.MainRulerConflict}" +
+                    $"\nRule Completion - {planet.Ruler.RuleCompletion}" +
+                    $"\nRule Form - {planet.Ruler.RuleForm}" +
+                    $"\nMain Population Conflict - {planet.Ruler.MainPopConflict}");
+
+                eb.AddField("Ruled",
+                    $"\nContentment - {planet.Ruled.Contentment}" +
+                    $"\nLast Major Threat - {planet.Ruled.LastMajorThreat}" +
+                    $"\nPower - {planet.Ruled.Power}" +
+                    $"\nUniformity - {planet.Ruled.Uniformity}" +
+                    $"\nMain Conflict - {planet.Ruled.MainConflict}" +
+                    $"\nTrends - {planet.Ruled.Trends}");
+
+                eb.AddField("Flavor",
+                    $"\nBasic Trends - {planet.Flavor.BasicFlavor}" +
+                    $"\nOutsider Treatment - {planet.Flavor.OutsiderTreatment}" +
+                    $"\nPrimary Virtue - {planet.Flavor.PrimaryVirtue}" +
+                    $"\nPrimary Vice - {planet.Flavor.PrimaryVice}" +
+                    $"\nXenophilia Degree - {planet.Flavor.XenophiliaDegree}" +
+                    $"\nPossible Patron - {planet.Flavor.PossiblePatron}" +
+                    $"\nCustoms - {planet.Flavor.Customs}");
+            }
 
             return eb.Build();
         }
@@ -209,7 +213,8 @@ namespace dmHaggisBot
             StringBuilder ssb = new StringBuilder();
             foreach (var l in alien.SocialStructures)
                 ssb.Append(l + "\n");
-            eb.AddField("Social Structures" + (alien.MultiPolarType == null ? ": " : " (" + alien.MultiPolarType + "):"),
+            eb.AddField(
+                "Social Structures" + (alien.MultiPolarType == null ? ": " : " (" + alien.MultiPolarType + "):"),
                 ssb.ToString());
 
             return eb.Build();

@@ -93,6 +93,7 @@ namespace SWNUniverseGenerator
                 Characters = new List<Character>(),
                 Problems = new List<Problem>(),
                 Ships = new List<Ship>(),
+                Aliens = new List<Alien>()
             };
 
             // Add the Zones to the Universe

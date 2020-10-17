@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Markov;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator.CreationTools;
@@ -30,6 +31,14 @@ namespace SWNUniverseGenerator
         public static SocietyData SocietyData;
         public static AlienData AlienData;
 
+        public static NameGeneration MaleFirstNameGeneration;
+        public static NameGeneration FemaleFirstNameGeneration;
+        public static NameGeneration LastNameGeneration;
+        public static List<NameGeneration> CharacterNameGenerations = new List<NameGeneration>();
+
+        public static NameGeneration PlanetNameGeneration;
+        public static NameGeneration StarNameGeneration;
+
         /// <summary>
         /// Default constructor that requires a path to be passed in
         /// </summary>
@@ -41,10 +50,29 @@ namespace SWNUniverseGenerator
             WorldInfo = LoadData<WorldInfo>(@"Data/worldTags.json");
             StarData = LoadData<StarData>(@"Data/starData.json");
             CharData = LoadData<CharData>(@"Data/characterData.json");
-            PoiData =LoadData<PoiData>(@"Data/pointsOfInterest.json");
+            PoiData = LoadData<PoiData>(@"Data/pointsOfInterest.json");
             ProblemData = LoadData<ProblemData>(@"Data/problemData.json");
             SocietyData = LoadData<SocietyData>(@"Data/societyData.json");
             AlienData = LoadData<AlienData>(@"Data/alienData.json");
+
+            MaleFirstNameGeneration = new NameGeneration();
+            MaleFirstNameGeneration.GenerateChain(CharData.MaleName);
+
+            FemaleFirstNameGeneration = new NameGeneration();
+            FemaleFirstNameGeneration.GenerateChain(CharData.FemaleName);
+
+            StarNameGeneration = new NameGeneration();
+            StarNameGeneration.GenerateChain(StarData.Stars);
+
+            PlanetNameGeneration = new NameGeneration();
+            PlanetNameGeneration.GenerateChain(StarData.Planets);
+
+            // LastNameGeneration = new NameGeneration();
+            // LastNameGeneration.GenerateChain(CharData.LastName);
+
+            CharacterNameGenerations.Add(MaleFirstNameGeneration);
+            CharacterNameGenerations.Add(FemaleFirstNameGeneration);
+            // CharacterNameGenerations.Add(LastNameGeneration);
         }
 
         /// <summary>
@@ -133,7 +161,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No grid has been set for the universe");
 
             // Set the Universe to the Universe returned from StarCreation.AddStars and serialize/return it
-            universe = new StarCreation().AddStars(universe, starDefaultSettings, StarData);
+            universe = new StarCreation().AddStars(universe, starDefaultSettings, StarData, StarNameGeneration);
             SerializeData(universe);
             return universe;
         }
@@ -156,7 +184,8 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No stars have been created for the universe");
 
             // Set the Universe to the Universe returned from PlanetCreation.AddPlanets and serialize/return it
-            universe = new PlanetCreation().AddPlanets(universe, planetDefaultSettings, WorldInfo, StarData, SocietyData);
+            universe = new PlanetCreation().AddPlanets(universe, planetDefaultSettings, WorldInfo, StarData,
+                SocietyData, PlanetNameGeneration);
             SerializeData(universe);
             return universe;
         }
@@ -179,7 +208,8 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No planets have been created for the universe");
 
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
-            universe = new ShipCreation().AddShips(universe, shipDefaultSettings, ShipData, CharData);
+            universe = new ShipCreation().AddShips(universe, shipDefaultSettings, ShipData, CharData,
+                CharacterNameGenerations);
             SerializeData(universe);
             return universe;
         }
@@ -202,7 +232,8 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No planets have been created for the universe");
 
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
-            universe = new CharCreation().AddCharacters(universe, characterDefaultSettings, CharData);
+            universe = new CharCreation().AddCharacters(universe, characterDefaultSettings, CharData,
+                CharacterNameGenerations);
             SerializeData(universe);
             return universe;
         }
@@ -252,7 +283,7 @@ namespace SWNUniverseGenerator
             SerializeData(universe);
             return universe;
         }
-        
+
         /// <summary>
         /// This method should receive the Universe to add Aliens to and a set of AlienDefaultSettings
         ///
@@ -316,7 +347,7 @@ namespace SWNUniverseGenerator
             var serializer = new JsonSerializer();
             serializer.Serialize(file, universe);
         }
-        
+
         /// <summary>
         /// Receive the path to a data type and return the deserialized version of that data
         /// </summary>

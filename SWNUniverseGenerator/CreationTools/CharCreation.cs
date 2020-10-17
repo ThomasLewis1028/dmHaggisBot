@@ -21,9 +21,10 @@ namespace SWNUniverseGenerator.CreationTools
         /// <param name="universe"></param>
         /// <param name="characterDefaultSettings"></param>
         /// <param name="charData"></param>
+        /// <param name="nameGenerations"></param>
         /// <returns>The newly modified universe</returns>
         public Universe AddCharacters(Universe universe, CharacterDefaultSettings characterDefaultSettings,
-            CharData charData)
+            CharData charData, List<NameGeneration> nameGenerations)
         {
             // If no Characters have been created on the Universe then give it an empty list of them.
             universe.Characters ??= new List<Character>();
@@ -54,6 +55,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                 // Get the list of names for the specified gender
                 var firstNameList = gender == 0 ? charData.MaleName : charData.FemaleName;
+                var nameGeneration = gender == 0 ? nameGenerations[0] : nameGenerations[1];
 
                 // Markov stuff; doesn't work right now
                 // NameGenerator ng = new NameGenerator();
@@ -71,7 +73,9 @@ namespace SWNUniverseGenerator.CreationTools
 
                 // Grab random values from their respective lists or use provided values
                 character.First = string.IsNullOrEmpty(characterDefaultSettings.First)
-                    ? firstNameList[Rand.Next(0, firstCount - 1)]
+                    ? Rand.Next(0, 4) == 1
+                        ? nameGeneration.GenerateName()
+                        : firstNameList[Rand.Next(0, firstCount - 1)]
                     : characterDefaultSettings.First;
                 character.Last = string.IsNullOrEmpty(characterDefaultSettings.Last)
                     ? charData.LastName[Rand.Next(0, lastCount - 1)]

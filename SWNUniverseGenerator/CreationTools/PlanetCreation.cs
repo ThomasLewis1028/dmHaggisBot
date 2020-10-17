@@ -27,7 +27,7 @@ namespace SWNUniverseGenerator.CreationTools
         /// The newly updated Universe
         /// </returns>
         public Universe AddPlanets(Universe universe, PlanetDefaultSettings planetDefaultSettings, WorldInfo worldInfo,
-            StarData starData, SocietyData societyData)
+            StarData starData, SocietyData societyData, NameGeneration nameGeneration)
         {
             // Get the number of Planet Names from starData
             var planLen = starData.Planets.Count;
@@ -60,7 +60,9 @@ namespace SWNUniverseGenerator.CreationTools
                         continue;
 
                     // Pick a random name out of the list of Planets
-                    planet.Name = starData.Planets[Rand.Next(0, planLen)];
+                    planet.Name = Rand.Next(0, 4) == 2
+                        ? nameGeneration.GenerateName()
+                        : starData.Planets[Rand.Next(0, planLen)];
 
                     // No planets can share a name
                     if (universe.Planets.Exists(a => a.Name == planet.Name))

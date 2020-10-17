@@ -14,7 +14,7 @@ namespace SWNUniverseGenerator.CreationTools
         private static readonly Random Rand = new Random();
 
         public Universe AddShips(Universe universe, ShipDefaultSettings shipDefaultSettings, ShipData shipData,
-            CharData charData)
+            CharData charData, List<NameGeneration> nameGenerations)
         {
             // Create a list of ships if it doesn't already exist
             universe.Ships ??= new List<Ship>();
@@ -147,7 +147,7 @@ namespace SWNUniverseGenerator.CreationTools
                         {
                             Count = Rand.Next(hull.CrewMin, hull.CrewMax + 1 - (shipDefaultSettings.CrewId?.Count ?? 0)),
                             ShipId = ship.Id
-                        }, charData);
+                        }, charData, nameGenerations);
 
                     var crewList = (from c in universe.Characters where c.ShipId == ship.Id select c.Id).ToList();
 
@@ -211,7 +211,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 Type = shipData.Hulls.FindAll(h => h.Class == "Fighter")[
                                     Rand.Next(0, shipData.Hulls.FindAll(h => h.Class == "Fighter").Count)].Type
                             },
-                            shipData, charData);
+                            shipData, charData, nameGenerations);
                         fCount++;
                     }
                 }
@@ -235,7 +235,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 Type = shipData.Hulls.FindAll(h => h.Class == "Frigate")[
                                     Rand.Next(0, shipData.Hulls.FindAll(h => h.Class == "Frigate").Count)].Type
                             },
-                            shipData, charData);
+                            shipData, charData, nameGenerations);
                         fCount++;
                     }
                 }

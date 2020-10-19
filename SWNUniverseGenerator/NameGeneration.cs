@@ -13,14 +13,12 @@ namespace SWNUniverseGenerator
         public void GenerateChain(List<String> nameList)
         {
             foreach (var name in nameList)
-            {
                 _chain.Add(name, 1);
-            }
         }
 
         public String GenerateName()
         {
-            return new String(_chain.Chain(rand).ToArray());
+            return new String(_chain.Chain(rand.Next()).ToArray());
         }
     }
 }

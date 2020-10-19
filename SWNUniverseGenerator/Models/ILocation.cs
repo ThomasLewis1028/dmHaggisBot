@@ -1,6 +1,6 @@
-﻿﻿using System;
+﻿using System;
 
- namespace SWNUniverseGenerator.Models
+namespace SWNUniverseGenerator.Models
 {
     /// <summary>
     /// The base interface for a Location that also implements IEntity
@@ -11,7 +11,7 @@
         /// ID from IEntity that all ILocation type objects must implement
         /// </summary>
         public new String Id { get; set; }
-        
+
         /// <summary>
         /// All ILocation type objects much implement a Name 
         /// </summary>

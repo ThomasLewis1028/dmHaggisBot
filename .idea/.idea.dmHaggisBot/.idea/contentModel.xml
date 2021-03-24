@@ -23,8 +23,8 @@
     <e p="C:\Users\Thomas Lewis\.nuget\packages\mongodb.driver.core\2.11.0\runtimes\win\native\libzstd.dll" t="Include" />
     <e p="C:\Users\Thomas Lewis\.nuget\packages\mongodb.driver.core\2.11.0\runtimes\win\native\snappy32.dll" t="Include" />
     <e p="C:\Users\Thomas Lewis\.nuget\packages\mongodb.driver.core\2.11.0\runtimes\win\native\snappy64.dll" t="Include" />
-    <e p="C:\Users\Thomas Lewis\AppData\local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\Thomas Lewis\AppData\local\JetBrains\Rider2020.2\resharper-host\local\Transient\Rider\v202\SolutionCaches\_dmHaggisBot.848886575.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Thomas Lewis\AppData\local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Thomas Lewis\AppData\local\JetBrains\Rider2020.3\resharper-host\local\Transient\Rider\v203\SolutionCaches\_dmHaggisBot.848886575.00" t="ExcludeRecursive" />
     <e p="C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot" t="IncludeFlat">
       <e p="dmHaggisBot" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
@@ -64,7 +64,6 @@
           <e p="pointsOfInterest.json" t="Include" />
           <e p="problemData.json" t="Include" />
           <e p="shipData.json" t="Include" />
-          <e p="societyData.json" t="Include" />
           <e p="starData.json" t="Include" />
           <e p="worldTags.json" t="Include" />
         </e>

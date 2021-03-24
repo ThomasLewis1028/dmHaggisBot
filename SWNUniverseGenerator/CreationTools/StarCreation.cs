@@ -20,6 +20,7 @@ namespace SWNUniverseGenerator.CreationTools
         /// <param name="universe"></param>
         /// <param name="starDefaultSettings"></param>
         /// <param name="starData"></param>
+        /// <param name="nameGeneration"></param>
         /// <returns>
         /// A newly modified Universe
         /// </returns>

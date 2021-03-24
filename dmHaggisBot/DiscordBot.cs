@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -604,42 +603,42 @@ namespace dmHaggisBot
             SearchDefaultSettings searchDefaultSettings, IUserMessage userMessage = null)
         {
             var results = Search.SearchUniverse(_universe, searchDefaultSettings);
-            var embeds = new List<Embed>();
+            Embed embed = null;
 
             if (results.Result != null)
             {
                 switch (results.Result)
                 {
                     case Character character:
-                        embeds.Add(GenerateEmbeds.CharacterEmbed(_universe, character,
+                        embed = (GenerateEmbeds.CharacterEmbed(_universe, character,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Planet planet:
-                        embeds.Add(GenerateEmbeds.PlanetEmbed(_universe, planet,
+                        embed =(GenerateEmbeds.PlanetEmbed(_universe, planet,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Star star:
-                        embeds.Add(GenerateEmbeds.StarEmbed(_universe, star,
+                        embed =(GenerateEmbeds.StarEmbed(_universe, star,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Ship ship:
-                        embeds.Add(GenerateEmbeds.ShipEmbed(_universe, ship,
+                        embed =(GenerateEmbeds.ShipEmbed(_universe, ship,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Problem problem:
-                        embeds.Add(GenerateEmbeds.ProblemEmbed(_universe, problem,
+                        embed =(GenerateEmbeds.ProblemEmbed(_universe, problem,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case PointOfInterest pointOfInterest:
-                        embeds.Add(GenerateEmbeds.PoiEmbed(_universe, pointOfInterest,
+                        embed =(GenerateEmbeds.PoiEmbed(_universe, pointOfInterest,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Alien alien:
-                        embeds.Add(GenerateEmbeds.AlienEmbed(_universe, alien,
+                        embed =(GenerateEmbeds.AlienEmbed(_universe, alien,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Zone zone:
-                        embeds.Add(GenerateEmbeds.ZoneEmbed(_universe, zone,
+                        embed =(GenerateEmbeds.ZoneEmbed(_universe, zone,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                 }
@@ -648,14 +647,14 @@ namespace dmHaggisBot
 
                 if (userMessage == null)
                 {
-                    RestUserMessage rsu = await sc.SendMessageAsync(message, false, embeds[0]);
+                    RestUserMessage rsu = await sc.SendMessageAsync(message, false, embed);
                     await rsu.AddReactionAsync(LeftArrow);
                     await rsu.AddReactionAsync(RightArrow);
                 }
                 else
                 {
                     await userMessage.ModifyAsync(x => x.Content = message);
-                    await userMessage.ModifyAsync(x => x.Embed = embeds[0]);
+                    await userMessage.ModifyAsync(x => x.Embed = embed);
                 }
             }
             else

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Markov;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator.CreationTools;
@@ -23,9 +22,9 @@ namespace SWNUniverseGenerator
     {
         private readonly string _universePath;
         public static ShipData ShipData;
-        public static WorldInfo WorldInfo;
-        public static StarData StarData;
-        public static CharData CharData;
+        private static WorldInfo _worldInfo;
+        private static StarData _starData;
+        private static CharData _charData;
         public static PoiData PoiData;
         public static ProblemData ProblemData;
         public static SocietyData SocietyData;
@@ -47,25 +46,26 @@ namespace SWNUniverseGenerator
         {
             _universePath = path;
             ShipData = LoadData<ShipData>(@"Data/shipData.json");
-            WorldInfo = LoadData<WorldInfo>(@"Data/worldTags.json");
-            StarData = LoadData<StarData>(@"Data/starData.json");
-            CharData = LoadData<CharData>(@"Data/characterData.json");
+            _worldInfo = LoadData<WorldInfo>(@"Data/worldTags.json");
+            _starData = LoadData<StarData>(@"Data/starData.json");
+            _charData = LoadData<CharData>(@"Data/characterData.json");
             PoiData = LoadData<PoiData>(@"Data/pointsOfInterest.json");
             ProblemData = LoadData<ProblemData>(@"Data/problemData.json");
-            SocietyData = LoadData<SocietyData>(@"Data/societyData.json");
+            // SocietyData = LoadData<SocietyData>(@"Data/societyData.json");
+            SocietyData = null;
             AlienData = LoadData<AlienData>(@"Data/alienData.json");
 
             MaleFirstNameGeneration = new NameGeneration();
-            MaleFirstNameGeneration.GenerateChain(CharData.MaleName);
+            MaleFirstNameGeneration.GenerateChain(_charData.MaleName);
 
             FemaleFirstNameGeneration = new NameGeneration();
-            FemaleFirstNameGeneration.GenerateChain(CharData.FemaleName);
+            FemaleFirstNameGeneration.GenerateChain(_charData.FemaleName);
 
             StarNameGeneration = new NameGeneration();
-            StarNameGeneration.GenerateChain(StarData.Stars);
+            StarNameGeneration.GenerateChain(_starData.Stars);
 
             PlanetNameGeneration = new NameGeneration();
-            PlanetNameGeneration.GenerateChain(StarData.Planets);
+            PlanetNameGeneration.GenerateChain(_starData.Planets);
 
             // LastNameGeneration = new NameGeneration();
             // LastNameGeneration.GenerateChain(CharData.LastName);
@@ -161,7 +161,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No grid has been set for the universe");
 
             // Set the Universe to the Universe returned from StarCreation.AddStars and serialize/return it
-            universe = new StarCreation().AddStars(universe, starDefaultSettings, StarData, StarNameGeneration);
+            universe = new StarCreation().AddStars(universe, starDefaultSettings, _starData, StarNameGeneration);
             SerializeData(universe);
             return universe;
         }
@@ -184,7 +184,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No stars have been created for the universe");
 
             // Set the Universe to the Universe returned from PlanetCreation.AddPlanets and serialize/return it
-            universe = new PlanetCreation().AddPlanets(universe, planetDefaultSettings, WorldInfo, StarData,
+            universe = new PlanetCreation().AddPlanets(universe, planetDefaultSettings, _worldInfo, _starData,
                 SocietyData, PlanetNameGeneration);
             SerializeData(universe);
             return universe;
@@ -208,7 +208,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No planets have been created for the universe");
 
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
-            universe = new ShipCreation().AddShips(universe, shipDefaultSettings, ShipData, CharData,
+            universe = new ShipCreation().AddShips(universe, shipDefaultSettings, ShipData, _charData,
                 CharacterNameGenerations);
             SerializeData(universe);
             return universe;
@@ -232,7 +232,7 @@ namespace SWNUniverseGenerator
                 throw new FileNotFoundException("No planets have been created for the universe");
 
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
-            universe = new CharCreation().AddCharacters(universe, characterDefaultSettings, CharData,
+            universe = new CharCreation().AddCharacters(universe, characterDefaultSettings, _charData,
                 CharacterNameGenerations);
             SerializeData(universe);
             return universe;

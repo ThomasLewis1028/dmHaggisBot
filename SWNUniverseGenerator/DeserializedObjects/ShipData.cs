@@ -14,6 +14,8 @@ namespace SWNUniverseGenerator.DeserializedObjects
         public List<Weapon> Weapons { get; set; }
         
         public List<Presets> Presets { get; set; }
+        
+        public List<Naming> Namings { get; set; }
     }
 
     public class Hull
@@ -134,6 +136,29 @@ namespace SWNUniverseGenerator.DeserializedObjects
         public List<Int32> Defenses { get; set; }
         
         public List<Int32> Fittings { get; set; }
+    }
+
+    public class Naming
+    {
+        public List<AdjectivesList> AdjectivesList { get; set; }
         
+        public List<AnimalsList> AnimalsList { get; set; }
+        
+        public List<NounsList> NounsList { get; set; }
+    }
+
+    public class AdjectivesList
+    {
+        public List<String> Adjectives { get; set; }
+    }
+    
+    public class AnimalsList
+    {
+        public List<String> Animals { get; set; }
+    }
+    
+    public class NounsList
+    {
+        public List<String> Animals { get; set; }
     }
 }

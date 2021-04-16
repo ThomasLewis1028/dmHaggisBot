@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
@@ -48,6 +47,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                 Hull hull;
 
+                // Set the type of ship
                 if (string.IsNullOrEmpty(type))
                 {
                     var hullSwitch = Rand.Next(0, 100);
@@ -104,6 +104,41 @@ namespace SWNUniverseGenerator.CreationTools
                 else
                     throw new FileLoadException("No ship of this type exists");
 
+                if (string.IsNullOrEmpty(shipDefaultSettings.Name))
+                {
+                    while (true)
+                    {
+                        var name = "";
+                        var nameType = Rand.Next(0, 4);
+
+                        if (nameType < 3)
+                        {
+                            name += shipData.Naming.Adjectives[
+                                Rand.Next(0, shipData.Naming.Adjectives.Count)];
+
+                            nameType = Rand.Next(0, 2);
+
+                            if (nameType == 0)
+                                name += " " +
+                                        shipData.Naming.Animals[
+                                            Rand.Next(0, shipData.Naming.Animals.Count)];
+                            else
+                                name += " " +
+                                        shipData.Naming.Nouns[
+                                            Rand.Next(0, shipData.Naming.Nouns.Count)];
+                        }
+                        else
+                            name += shipData.Naming.Nouns[
+                                Rand.Next(0, shipData.Naming.Nouns.Count)];
+
+                        ship.Name = name;
+                        
+                        if (!universe.Ships.Exists(a => a.Name == name))
+                            break;
+                    }
+                
+                }
+
                 ship.Hull = hull.Type;
                 ship.HomeId = homeId;
                 ship.LocationId = locId;
@@ -113,6 +148,7 @@ namespace SWNUniverseGenerator.CreationTools
                 ship.CrewSkill = preset.CrewSkill;
                 ship.Cp = preset.Cp;
 
+                // Set the weapons
                 if (preset.Weapons != null)
                 {
                     ship.Weapons = new List<String>();
@@ -120,6 +156,7 @@ namespace SWNUniverseGenerator.CreationTools
                         ship.Weapons.Add(shipData.Weapons[w].Type);
                 }
 
+                // Set the defenses
                 if (preset.Defenses != null)
                 {
                     ship.Defenses = new List<String>();
@@ -127,6 +164,7 @@ namespace SWNUniverseGenerator.CreationTools
                         ship.Defenses.Add(shipData.Defenses[d].Type);
                 }
 
+                // Set the fittings
                 if (preset.Fittings != null)
                 {
                     ship.Fittings = new List<String>();
@@ -134,18 +172,21 @@ namespace SWNUniverseGenerator.CreationTools
                         ship.Fittings.Add(shipData.Fittings[f].Type);
                 }
 
-                if(shipDefaultSettings.CrewId != null)
+                // Set the crew if the CrewId is not null
+                if (shipDefaultSettings.CrewId != null)
                     foreach (var c in shipDefaultSettings.CrewId)
                         universe.Characters.Find(a => a.Id == c).ShipId = ship.Id;
-                
 
+
+                // Create the crew for the ship
                 if (shipDefaultSettings.CreateCrew)
                 {
                     CharCreation charCreation = new CharCreation();
                     universe = charCreation.AddCharacters(universe,
                         new CharacterDefaultSettings
                         {
-                            Count = Rand.Next(hull.CrewMin, hull.CrewMax + 1 - (shipDefaultSettings.CrewId?.Count ?? 0)),
+                            Count = Rand.Next(hull.CrewMin,
+                                hull.CrewMax + 1 - (shipDefaultSettings.CrewId?.Count ?? 0)),
                             ShipId = ship.Id
                         }, charData, nameGenerations);
 
@@ -180,6 +221,7 @@ namespace SWNUniverseGenerator.CreationTools
                             : shipDefaultSettings.CommsId;
                     }
 
+                    // Tie the main crew to the ship
                     if (ship.CaptainId != null)
                         universe.Characters.Find(c => c.Id == ship.CaptainId).Title = "Captain";
                     if (ship.PilotId != null)
@@ -192,6 +234,7 @@ namespace SWNUniverseGenerator.CreationTools
                         universe.Characters.Find(c => c.Id == ship.CommsId).Title = "Comms Expert";
                 }
 
+                // If the ship has the Ship Bay/Fighter fitting, generate a ship to go in that space
                 if (ship.Fittings.Contains("Ship bay/fighter"))
                 {
                     var fighterHangarCount = ship.Fittings.FindAll(f => f.Contains("Ship bay/fighter")).Count;
@@ -216,6 +259,7 @@ namespace SWNUniverseGenerator.CreationTools
                     }
                 }
 
+                // If the ship has the Ship Bay/Frigate fitting, generate a ship to go in that space
                 if (ship.Fittings.Contains("Ship bay/frigate"))
                 {
                     var frigateHangarCount = ship.Fittings.FindAll(f => f.Contains("Ship bay/frigate")).Count;

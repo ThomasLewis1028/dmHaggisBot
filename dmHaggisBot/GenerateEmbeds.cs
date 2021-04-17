@@ -127,6 +127,7 @@ namespace dmHaggisBot
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.LighterGrey);
             eb.Title = ship.Id;
+            eb.Description = ship.Name;
             //eb.AddField("Name: ", ship.Name);
             eb.AddField("Hull: ", Creation.ShipData.Hulls.Find(a => a.Type == ship.Hull)?.Type);
             eb.AddField("Class: ", Creation.ShipData.Hulls.Find(a => a.Type == ship.Hull)?.Class);

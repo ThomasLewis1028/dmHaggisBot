@@ -113,30 +113,25 @@ namespace SWNUniverseGenerator.CreationTools
 
                         if (nameType < 3)
                         {
-                            name += shipData.Naming.Adjectives[
-                                Rand.Next(0, shipData.Naming.Adjectives.Count)];
+                            name += shipData.Naming.Adjectives[Rand.Next(0, shipData.Naming.Adjectives.Count)];
 
                             nameType = Rand.Next(0, 2);
 
                             if (nameType == 0)
                                 name += " " +
-                                        shipData.Naming.Animals[
-                                            Rand.Next(0, shipData.Naming.Animals.Count)];
+                                        shipData.Naming.Animals[Rand.Next(0, shipData.Naming.Animals.Count)];
                             else
                                 name += " " +
-                                        shipData.Naming.Nouns[
-                                            Rand.Next(0, shipData.Naming.Nouns.Count)];
+                                        shipData.Naming.Nouns[Rand.Next(0, shipData.Naming.Nouns.Count)];
                         }
                         else
-                            name += shipData.Naming.Nouns[
-                                Rand.Next(0, shipData.Naming.Nouns.Count)];
+                            name += shipData.Naming.Nouns[Rand.Next(0, shipData.Naming.Nouns.Count)];
 
                         ship.Name = name;
-                        
+
                         if (!universe.Ships.Exists(a => a.Name == name))
                             break;
                     }
-                
                 }
 
                 ship.Hull = hull.Type;

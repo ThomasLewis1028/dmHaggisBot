@@ -196,6 +196,9 @@ namespace dmHaggisBot
             var user = _client.GetUser(sr.UserId);
             if (user.IsBot)
                 return;
+            
+            if ((long) sc.Id != _generalChannel && (long) sc.Id != _dmChannel)
+                return;
 
             if (!RegularExpressions.DataSearch.IsMatch(sr.Message.ToString()))
                 return;

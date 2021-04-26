@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -89,7 +90,7 @@ namespace dmHaggisBot
             await _client.LoginAsync(TokenType.Bot, _token);
             await _client.StartAsync();
             await _client.SetGameAsync("No Universe Loaded");
-
+            
             _logger.Info("DiscordBot Connected");
 
             await Task.Delay(-1);

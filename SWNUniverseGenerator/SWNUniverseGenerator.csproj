@@ -2,12 +2,13 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <LangVersion>9</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Markov" Version="2.0.0" />
-      <PackageReference Include="MongoDB.Driver" Version="2.11.0" />
-      <PackageReference Include="MongoDB.Driver.Core" Version="2.11.0" />
+      <PackageReference Include="MongoDB.Driver" Version="2.12.2" />
+      <PackageReference Include="MongoDB.Driver.Core" Version="2.12.2" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 

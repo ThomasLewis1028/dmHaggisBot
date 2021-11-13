@@ -56,14 +56,7 @@ namespace SWNUniverseGenerator.CreationTools
                 // Get the list of names for the specified gender
                 var firstNameList = gender == 0 ? charData.MaleName : charData.FemaleName;
                 var nameGeneration = gender == 0 ? nameGenerations[0] : nameGenerations[1];
-
-                // Markov stuff; doesn't work right now
-                // NameGenerator ng = new NameGenerator();
-                // Console.Out.WriteLine("NG Created");
-                // dynamic chain = ng.construct_chain(firstNameList);
-                // Console.Out.WriteLine("Chain Created");
-                // Console.Out.WriteLine(ng.markov_name(chain));
-
+                
                 // Set the number of items in each list to be used for the max value in rand.Next()
                 var firstCount = firstNameList.Count;
                 var lastCount = charData.LastName.Count;

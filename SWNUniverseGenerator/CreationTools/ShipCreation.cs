@@ -109,9 +109,9 @@ namespace SWNUniverseGenerator.CreationTools
                     while (true)
                     {
                         var name = "";
-                        var nameType = Rand.Next(0, 4);
+                        var nameType = Rand.Next(0, 100);
 
-                        if (nameType < 3)
+                        if (nameType > 0)
                         {
                             name += shipData.Naming.Adjectives[Rand.Next(0, shipData.Naming.Adjectives.Count)];
 

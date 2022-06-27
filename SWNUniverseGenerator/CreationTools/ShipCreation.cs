@@ -115,6 +115,10 @@ namespace SWNUniverseGenerator.CreationTools
                         {
                             name += shipData.Naming.Adjectives[Rand.Next(0, shipData.Naming.Adjectives.Count)];
 
+                            name += Rand.Next(0, 10) == 0 
+                                ? "-" + shipData.Naming.Adjectives[Rand.Next(0, shipData.Naming.Adjectives.Count)] 
+                                : "";
+                            
                             nameType = Rand.Next(0, 2);
 
                             if (nameType == 0)

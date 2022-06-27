@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using Discord;
@@ -9,7 +8,7 @@ using SWNUniverseGenerator.Models;
 
 namespace dmHaggisBot
 {
-    internal class GenerateEmbeds
+    internal static class GenerateEmbeds
     {
         public static Embed CharacterEmbed(Universe universe, Character character, Boolean dmChannel)
         {

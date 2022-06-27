@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -39,8 +38,8 @@ namespace dmHaggisBot
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 
         // Set up emoji for pagination
-        private static readonly Emoji RightArrow = new Emoji("▶️");
-        private static readonly Emoji LeftArrow = new Emoji("◀️");
+        private static readonly Emoji RightArrow = new("▶️");
+        private static readonly Emoji LeftArrow = new("◀️");
 
         // Discord config files
         private DiscordSocketClient _client;
@@ -102,6 +101,8 @@ namespace dmHaggisBot
         /// <param name="sm"></param>
         private async Task MessageReceived(SocketMessage sm)
         {
+            
+            
             if (sm.Author.IsBot)
                 return;
 
@@ -161,7 +162,7 @@ namespace dmHaggisBot
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
-                case var content when Regex.IsMatch("pg", content, RegexOptions.IgnoreCase):
+                case var content when Regex.IsMatch("^pg$", content, RegexOptions.IgnoreCase):
                     _logger.Info("Printing Grid"); // Print Grid
                     if (_universe != null)
                         await PrintGrid(sm);
@@ -375,9 +376,13 @@ namespace dmHaggisBot
 
             try
             {
+                var timeStart = DateTime.Now;
                 _universe = _creation.CreateCharacter(_universe, charDef);
+                var timeEnd = DateTime.Now;
 
-                await sm.Channel.SendMessageAsync(charDef.Count + " new character(s) created in " + _universe.Name);
+                var timeDiff = (timeEnd - timeStart).Seconds;
+
+                await sm.Channel.SendMessageAsync(charDef.Count + " new character(s) created in " + _universe.Name + " in " + timeDiff + " seconds.");
                 await SetGameStatus();
             }
             catch (FileNotFoundException e)

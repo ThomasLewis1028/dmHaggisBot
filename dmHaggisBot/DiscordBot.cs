@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -39,8 +38,8 @@ namespace dmHaggisBot
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 
         // Set up emoji for pagination
-        private static readonly Emoji RightArrow = new Emoji("▶️");
-        private static readonly Emoji LeftArrow = new Emoji("◀️");
+        private static readonly Emoji RightArrow = new("▶️");
+        private static readonly Emoji LeftArrow = new("◀️");
 
         // Discord config files
         private DiscordSocketClient _client;
@@ -102,6 +101,8 @@ namespace dmHaggisBot
         /// <param name="sm"></param>
         private async Task MessageReceived(SocketMessage sm)
         {
+            
+            
             if (sm.Author.IsBot)
                 return;
 
@@ -161,7 +162,7 @@ namespace dmHaggisBot
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
-                case var content when Regex.IsMatch("pg", content, RegexOptions.IgnoreCase):
+                case var content when Regex.IsMatch("^pg$", content, RegexOptions.IgnoreCase):
                     _logger.Info("Printing Grid"); // Print Grid
                     if (_universe != null)
                         await PrintGrid(sm);
@@ -197,7 +198,7 @@ namespace dmHaggisBot
             var user = _client.GetUser(sr.UserId);
             if (user.IsBot)
                 return;
-            
+
             if ((long) sc.Id != _generalChannel && (long) sc.Id != _dmChannel)
                 return;
 
@@ -375,9 +376,13 @@ namespace dmHaggisBot
 
             try
             {
+                var timeStart = DateTime.Now;
                 _universe = _creation.CreateCharacter(_universe, charDef);
+                var timeEnd = DateTime.Now;
 
-                await sm.Channel.SendMessageAsync(charDef.Count + " new character(s) created in " + _universe.Name);
+                var timeDiff = (timeEnd - timeStart).Seconds;
+
+                await sm.Channel.SendMessageAsync(charDef.Count + " new character(s) created in " + _universe.Name + " in " + timeDiff + " seconds.");
                 await SetGameStatus();
             }
             catch (FileNotFoundException e)
@@ -618,31 +623,31 @@ namespace dmHaggisBot
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Planet planet:
-                        embed =(GenerateEmbeds.PlanetEmbed(_universe, planet,
+                        embed = (GenerateEmbeds.PlanetEmbed(_universe, planet,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Star star:
-                        embed =(GenerateEmbeds.StarEmbed(_universe, star,
+                        embed = (GenerateEmbeds.StarEmbed(_universe, star,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Ship ship:
-                        embed =(GenerateEmbeds.ShipEmbed(_universe, ship,
+                        embed = (GenerateEmbeds.ShipEmbed(_universe, ship,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Problem problem:
-                        embed =(GenerateEmbeds.ProblemEmbed(_universe, problem,
+                        embed = (GenerateEmbeds.ProblemEmbed(_universe, problem,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case PointOfInterest pointOfInterest:
-                        embed =(GenerateEmbeds.PoiEmbed(_universe, pointOfInterest,
+                        embed = (GenerateEmbeds.PoiEmbed(_universe, pointOfInterest,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Alien alien:
-                        embed =(GenerateEmbeds.AlienEmbed(_universe, alien,
+                        embed = (GenerateEmbeds.AlienEmbed(_universe, alien,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                     case Zone zone:
-                        embed =(GenerateEmbeds.ZoneEmbed(_universe, zone,
+                        embed = (GenerateEmbeds.ZoneEmbed(_universe, zone,
                             searchDefaultSettings.Permission == SearchDefaultSettings.PermissionType.Dm));
                         break;
                 }
@@ -777,14 +782,14 @@ namespace dmHaggisBot
         private async Task SetGameStatus()
         {
             if (_universe != null)
-                await _client.SetGameAsync(_universe.Name + " Loaded - "+  
-                      _universe.Stars.Count + " Stars - " +
-                      _universe.Planets.Count + " Planets - " +
-                      _universe.Ships.Count + " Ships - " +
-                      _universe.Characters.Count + " Characters - " +
-                      _universe.Aliens.Count + " Aliens - " +
-                      _universe.PointsOfInterest.Count + " Points of Interest - " +
-                      _universe.Problems.Count + " Problems");
+                await _client.SetGameAsync(_universe.Name + " Loaded - " +
+                                           _universe.Stars.Count + " Stars - " +
+                                           _universe.Planets.Count + " Planets - " +
+                                           _universe.Ships.Count + " Ships - " +
+                                           _universe.Characters.Count + " Characters - " +
+                                           _universe.Aliens.Count + " Aliens - " +
+                                           _universe.PointsOfInterest.Count + " Points of Interest - " +
+                                           _universe.Problems.Count + " Problems");
             else
                 await _client.SetGameAsync("No universe loaded");
         }

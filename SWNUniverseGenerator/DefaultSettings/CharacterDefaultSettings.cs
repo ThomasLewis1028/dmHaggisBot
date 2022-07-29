@@ -38,6 +38,16 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// This value should be a description of the eye color
         /// </summary>
         public String EyeCol { get; set; }
+        
+        /// <summary>
+        /// This value should be a description of the skin color
+        /// </summary>
+        public String SkinCol { get; set; }
+        
+        /// <summary>
+        /// This value should be a description of the height
+        /// </summary>
+        public String Height { get; set; }
 
         /// <summary>
         /// This value should be a character's title

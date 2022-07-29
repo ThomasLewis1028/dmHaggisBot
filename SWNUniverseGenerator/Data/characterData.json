@@ -30769,11 +30769,13 @@
     "Wings"
   ],
   "EyeColor": [
-    "Blue",
     "Brown",
+    "Blue",
+    "Hazel",
     "Green",
     "Grey",
-    "Hazel"
+    "Purple",
+    "White"
   ],
   "InitialReactions": [
     "Hostile, reacting as negatively as is plausible",

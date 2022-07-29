@@ -33,7 +33,7 @@ namespace SWNUniverseGenerator
         public static NameGeneration MaleFirstNameGeneration;
         public static NameGeneration FemaleFirstNameGeneration;
         public static NameGeneration LastNameGeneration;
-        public static List<NameGeneration> CharacterNameGenerations = new List<NameGeneration>();
+        public static List<NameGeneration> CharacterNameGenerations = new();
 
         public static NameGeneration PlanetNameGeneration;
         public static NameGeneration StarNameGeneration;
@@ -68,7 +68,7 @@ namespace SWNUniverseGenerator
             PlanetNameGeneration.GenerateChain(_starData.Planets);
 
             // LastNameGeneration = new NameGeneration();
-            // LastNameGeneration.GenerateChain(CharData.LastName);
+            // LastNameGeneration.GenerateChain(_charData.LastName);
 
             CharacterNameGenerations.Add(MaleFirstNameGeneration);
             CharacterNameGenerations.Add(FemaleFirstNameGeneration);

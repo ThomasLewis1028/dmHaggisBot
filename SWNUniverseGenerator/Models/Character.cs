@@ -67,6 +67,16 @@ namespace SWNUniverseGenerator.Models
         public String EyeCol { get; set; }
         
         /// <summary>
+        /// A string value of a Character's Skin Color
+        /// </summary>
+        public String SkinCol { get; set; }
+        
+        /// <summary>
+        /// A string value of a Character's Height
+        /// </summary>
+        public String Height { get; set; }
+        
+        /// <summary>
         /// A string value of a Character's Title
         /// </summary>
         public String Title { get; set; }

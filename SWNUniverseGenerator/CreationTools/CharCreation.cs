@@ -12,7 +12,7 @@ namespace SWNUniverseGenerator.CreationTools
     /// </summary>
     internal class CharCreation
     {
-        private static readonly Random Rand = new Random();
+        private static readonly Random Rand = new();
 
         /// <summary>
         /// This function handles all Character creation. Should receive a Universe to edit and a set of
@@ -56,6 +56,7 @@ namespace SWNUniverseGenerator.CreationTools
                 // Get the list of names for the specified gender
                 var firstNameList = gender == 0 ? charData.MaleName : charData.FemaleName;
                 var nameGeneration = gender == 0 ? nameGenerations[0] : nameGenerations[1];
+                // var lastNameGeneration = nameGenerations[2];
                 
                 // Set the number of items in each list to be used for the max value in rand.Next()
                 var firstCount = firstNameList.Count;
@@ -65,14 +66,20 @@ namespace SWNUniverseGenerator.CreationTools
                 var eyeColorCount = charData.EyeColor.Count;
 
                 // Grab random values from their respective lists or use provided values
+                // First name
                 character.First = string.IsNullOrEmpty(characterDefaultSettings.First)
                     ? Rand.Next(0, 4) == 1
                         ? nameGeneration.GenerateName()
                         : firstNameList[Rand.Next(0, firstCount - 1)]
                     : characterDefaultSettings.First;
+                // Last name
                 character.Last = string.IsNullOrEmpty(characterDefaultSettings.Last)
-                    ? charData.LastName[Rand.Next(0, lastCount - 1)]
+                    ? Rand.Next(0, 4) == 1
+                        // ReSharper disable once ConditionalTernaryEqualBranch
+                        ? charData.LastName[Rand.Next(0, lastCount - 1)] //lastNameGeneration.GenerateName()
+                        : charData.LastName[Rand.Next(0, lastCount - 1)]
                     : characterDefaultSettings.Last;
+                // Character age
                 character.Age = characterDefaultSettings.Age == null || characterDefaultSettings.Age.Length == 0 ||
                                 characterDefaultSettings.Age[0] == -1 || characterDefaultSettings.Age[1] == -1
                     // This creates Ages on a bell-curve where it's more likely to land somewhere around 30-45
@@ -80,22 +87,48 @@ namespace SWNUniverseGenerator.CreationTools
                     ? Rand.Next(5, 22) + Rand.Next(5, 23) + Rand.Next(5, 23)
                     : Rand.Next(characterDefaultSettings.Age[0], characterDefaultSettings.Age[1]);
                 character.Gender = (Character.GenderEnum) gender;
+                // Hair color
                 character.HairCol = string.IsNullOrEmpty(characterDefaultSettings.HairCol)
                     ? charData.HairColor[Rand.Next(0, hairColorCount)]
                     : characterDefaultSettings.HairCol;
+                // Hair style
                 character.HairStyle = string.IsNullOrEmpty(characterDefaultSettings.HairStyle)
                     ? charData.HairStyle[Rand.Next(0, hairStyleCount)]
                     : characterDefaultSettings.HairStyle;
+                // Eye color
+                var eyeSwitch = Rand.Next(0, 100);
                 character.EyeCol = string.IsNullOrEmpty(characterDefaultSettings.EyeCol)
-                    ? charData.EyeColor[Rand.Next(0, eyeColorCount)]
+                    ? character.EyeCol = eyeSwitch switch
+                        {
+                            { } n when (n > 0 && n < 45) => charData.EyeColor[0],
+                            { } n when (n >= 45 && n < 72) => charData.EyeColor[1],
+                            { } n when (n >= 72 && n < 90) => charData.EyeColor[2],
+                            { } n when (n >= 90 && n < 99) => charData.EyeColor[3],
+                            { } n when (n >= 99) => charData.EyeColor[Rand.Next(4, eyeColorCount - 4)],
+                            _ => charData.EyeColor[0]
+                        }
                     : characterDefaultSettings.EyeCol;
+                
+                // Skin color
+                // character.SkinCol = string.IsNullOrEmpty(characterDefaultSettings.SkinCol)
+                //     ? charData.SkinColor[Rand.Next(0, SkinColorCount)]
+                //     : characterDefaultSettings.SkinCol;
+                // Height
+                // character.Height = string.IsNullOrEmpty(characterDefaultSettings.Height)
+                //     ? Rand.Next(50, 200)
+                //     : Rand.Next(characterDefaultSettings.Height[0], characterDefaultSettings.Height[1]);
+                
+                // Character title
                 character.Title = string.IsNullOrEmpty(characterDefaultSettings.Title)
                     ? null
                     : characterDefaultSettings.Title;
+                // Character birth planet
                 character.BirthPlanet = universe.Planets?[Rand.Next(0, universe.Planets.Count)].Id;
+                // Character current planet
                 character.CurrentLocation = Rand.Next(0, 100) < 5
                     ? universe.Planets?[Rand.Next(0, universe.Planets.Count)].Id
                     : character.BirthPlanet;
+                // Character crime chance
                 character.CrimeChance = characterDefaultSettings.CrimeChance == null ||
                                         characterDefaultSettings.CrimeChance.Length == 0 ||
                                         characterDefaultSettings.CrimeChance[0] == -1 ||
@@ -105,10 +138,11 @@ namespace SWNUniverseGenerator.CreationTools
                           ? 0
                           : Rand.Next(1, 26) + Rand.Next(0, 25)) // 25% Additional crime roll chance
                     : Rand.Next(characterDefaultSettings.CrimeChance[0], characterDefaultSettings.CrimeChance[1] + 1);
+                // Character ship ID
                 character.ShipId = string.IsNullOrEmpty(characterDefaultSettings.ShipId)
                     ? null
                     : characterDefaultSettings.ShipId;
-
+                // Character initial reaction towards players
                 character.InitialReaction = (Rand.Next(0, 6) + Rand.Next(0, 6)) switch
                 {
                     0 => charData.InitialReactions[0],

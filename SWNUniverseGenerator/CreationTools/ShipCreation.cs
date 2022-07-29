@@ -54,50 +54,22 @@ namespace SWNUniverseGenerator.CreationTools
 
 
                     // Weighted chances for each hull type
-                    switch (hullSwitch)
+                    hull = hullSwitch switch
                     {
-                        case { } n when (n >= 0 && n < 10):
-                            hull = shipData.Hulls[0];
-                            break;
-                        case { } n when (n >= 10 && n < 25):
-                            hull = shipData.Hulls[1];
-                            break;
-                        case { } n when (n >= 25 && n < 50):
-                            hull = shipData.Hulls[2];
-                            break;
-                        case { } n when (n >= 50 && n < 60):
-                            hull = shipData.Hulls[3];
-                            break;
-                        case { } n when (n >= 60 && n < 72):
-                            hull = shipData.Hulls[4];
-                            break;
-                        case { } n when (n >= 72 && n < 81):
-                            hull = shipData.Hulls[5];
-                            break;
-                        case { } n when (n >= 81 && n < 86):
-                            hull = shipData.Hulls[6];
-                            break;
-                        case { } n when (n >= 86 && n < 91):
-                            hull = shipData.Hulls[7];
-                            break;
-                        case { } n when (n >= 91 && n < 94):
-                            hull = shipData.Hulls[8];
-                            break;
-                        case { } n when (n >= 94 && n < 95):
-                            hull = shipData.Hulls[9];
-                            break;
-                        case { } n when (n >= 95 && n < 97):
-                            hull = shipData.Hulls[2]; // Free Merchant temporary value
-                            // hull = shipData.Hulls[10];
-                            break;
-                        case { } n when (n >= 97 && n < 100):
-                            hull = shipData.Hulls[2]; // Free Merchant temporary value
-                            // hull = shipData.Hulls[11];
-                            break;
-                        default:
-                            hull = shipData.Hulls[2];
-                            break;
-                    }
+                        { } n when (n >= 0 && n < 10) => shipData.Hulls[0],
+                        { } n when (n >= 10 && n < 25) => shipData.Hulls[1],
+                        { } n when (n >= 25 && n < 50) => shipData.Hulls[2],
+                        { } n when (n >= 50 && n < 60) => shipData.Hulls[3],
+                        { } n when (n >= 60 && n < 72) => shipData.Hulls[4],
+                        { } n when (n >= 72 && n < 81) => shipData.Hulls[5],
+                        { } n when (n >= 81 && n < 86) => shipData.Hulls[6],
+                        { } n when (n >= 86 && n < 91) => shipData.Hulls[7],
+                        { } n when (n >= 91 && n < 94) => shipData.Hulls[8],
+                        { } n when (n >= 94 && n < 95) => shipData.Hulls[9],
+                        { } n when (n >= 95 && n < 97) => shipData.Hulls[2], // Free Merchant temporary value
+                        { } n when (n >= 97 && n < 100) => shipData.Hulls[2], // Free Merchant temporary value
+                        _ => shipData.Hulls[2]
+                    };
                 }
                 else if (shipData.Hulls.Exists(h => h.Type == type))
                     hull = shipData.Hulls.Find(h => h.Type == type);

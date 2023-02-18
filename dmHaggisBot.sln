@@ -4,6 +4,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dmHaggisBot", "dmHaggisBot\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWNUniverseGenerator", "SWNUniverseGenerator\SWNUniverseGenerator.csproj", "{E5DB0444-9A60-4650-9455-6585D691901A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWNConsole", "SWNConsole\SWNConsole.csproj", "{EA72B4B9-58D6-43CE-AC14-2EE08E61C7C6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E5DB0444-9A60-4650-9455-6585D691901A} = {E5DB0444-9A60-4650-9455-6585D691901A}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +23,9 @@ Global
 		{E5DB0444-9A60-4650-9455-6585D691901A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5DB0444-9A60-4650-9455-6585D691901A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5DB0444-9A60-4650-9455-6585D691901A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA72B4B9-58D6-43CE-AC14-2EE08E61C7C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA72B4B9-58D6-43CE-AC14-2EE08E61C7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA72B4B9-58D6-43CE-AC14-2EE08E61C7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA72B4B9-58D6-43CE-AC14-2EE08E61C7C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -8,6 +8,22 @@ namespace SWNUniverseGenerator.DefaultSettings
     /// </summary>
     public class CharacterDefaultSettings
     {
+        public CharacterDefaultSettings()
+        {
+            First = null;
+            Last = null;
+            Age = null;
+            HairStyle = null;
+            HairCol = null;
+            EyeCol = null;
+            SkinCol = null;
+            Height = null;
+            Title = null;
+            Count = -1;
+            CrimeChance = null;
+            ShipId = null;
+        }
+        
         /// <summary>
         /// This value should be a string for a first name
         /// </summary>

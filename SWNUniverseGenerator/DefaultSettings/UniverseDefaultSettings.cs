@@ -8,6 +8,13 @@ namespace SWNUniverseGenerator.DefaultSettings
     /// </summary>
     public class UniverseDefaultSettings
     {
+        public UniverseDefaultSettings()
+        {
+            Name = null;
+            Grid = new Grid(8, 10);
+            Overwrite = true;
+        }
+        
         /// <summary>
         ///     This value should be the name of your universe
         /// </summary>
@@ -22,6 +29,6 @@ namespace SWNUniverseGenerator.DefaultSettings
         ///     Flag for overwriting a previous universe file
         ///     Y for yes, N for no
         /// </summary>
-        public String Overwrite { get; set; }
+        public Boolean Overwrite { get; set; }
     }
 }

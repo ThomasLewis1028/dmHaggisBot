@@ -10,6 +10,7 @@ using Discord.Rest;
 using Discord.WebSocket;
 using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator;
+using SWNUniverseGenerator.CreationTools;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
 
@@ -79,7 +80,7 @@ namespace dmHaggisBot
                 // _client.Log += message => Console.Out.WriteLine();
                 _client = new DiscordSocketClient(config);
                 _client.MessageReceived += MessageReceived;
-                _client.ReactionAdded += ReactionAdded;
+                // _client.ReactionAdded += ReactionAdded(new Cacheable<IUserMessage, ulong>(), new SocketDMChannel() );
             }
             catch (Exception e)
             {
@@ -89,7 +90,7 @@ namespace dmHaggisBot
             await _client.LoginAsync(TokenType.Bot, _token);
             await _client.StartAsync();
             await _client.SetGameAsync("No Universe Loaded");
-            
+
             _logger.Info("DiscordBot Connected");
 
             await Task.Delay(-1);
@@ -101,8 +102,6 @@ namespace dmHaggisBot
         /// <param name="sm"></param>
         private async Task MessageReceived(SocketMessage sm)
         {
-            
-            
             if (sm.Author.IsBot)
                 return;
 
@@ -183,6 +182,8 @@ namespace dmHaggisBot
                     else
                         await sm.Channel.SendMessageAsync("No universe file loaded");
                     break;
+                default:
+                    break;
             }
         }
 
@@ -238,7 +239,7 @@ namespace dmHaggisBot
                     : g.Split(" ").Length == 1
                         ? new Grid(Int32.Parse(g), Int32.Parse(g))
                         : new Grid(Int32.Parse(g.Split(" ")[0]), Int32.Parse(g.Split(" ")[1])),
-                Overwrite = o
+                Overwrite = o.ToUpper() == "Y" ? true : false
             };
 
 
@@ -382,7 +383,8 @@ namespace dmHaggisBot
 
                 var timeDiff = (timeEnd - timeStart).Seconds;
 
-                await sm.Channel.SendMessageAsync(charDef.Count + " new character(s) created in " + _universe.Name + " in " + timeDiff + " seconds.");
+                await sm.Channel.SendMessageAsync(charDef.Count + " new character(s) created in " + _universe.Name +
+                                                  " in " + timeDiff + " seconds.");
                 await SetGameStatus();
             }
             catch (FileNotFoundException e)
@@ -752,6 +754,7 @@ namespace dmHaggisBot
         /// <returns></returns>
         private static async Task PrintGrid(SocketMessage sm)
         {
+            GridCreation.CreateGrid(_universe.Grid);
             var sb = new StringBuilder();
             sb.Append(_universe.Name);
             sb.Append("```\n");

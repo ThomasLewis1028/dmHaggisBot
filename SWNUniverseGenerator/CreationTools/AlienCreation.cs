@@ -36,7 +36,7 @@ namespace SWNUniverseGenerator.CreationTools
                     continue;
 
                 alien.BodyTraits = new List<string>();
-                
+
                 // Alien Body Traits
                 if (bCount > 0)
                 {
@@ -100,21 +100,21 @@ namespace SWNUniverseGenerator.CreationTools
                     while (sCounter < sCount)
                     {
                         var type = alienData.SocialStructures[Rand.Next(0, alienData.SocialStructures.Count)].Type;
-                        if(!alien.SocialStructures.Contains(type))
+                        if (!alien.SocialStructures.Contains(type))
                             alien.SocialStructures.Add(type);
                         else continue;
 
                         sCounter++;
                     }
                 }
-                
+
                 universe.Aliens.Add(alien);
-                
+
                 aCount++;
             }
 
             universe.Aliens = universe.Aliens.OrderBy(a => a.Id).ToList();
-            
+
             return universe;
         }
     }

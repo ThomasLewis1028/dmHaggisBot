@@ -1,10 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using SWNUniverseGenerator.CreationTools;
 
 namespace SWNUniverseGenerator.DefaultSettings
 {
     public class ShipDefaultSettings
     {
+        public ShipDefaultSettings()
+        {
+            Count = -1;
+            Id = null;
+            Name = null;
+            CreateCrew = true;
+            CaptainId = null;
+            PilotId = null;
+            EngineerId = null;
+            CommsId = null;
+            GunnerId = null;
+            CrewId = null;
+            Type = null;
+            HomeId = null;
+            LocationId = null;
+        }
+        
         public Int32 Count { get; set; }
 
         public String Id { get; set; }

@@ -98,7 +98,7 @@ namespace SWNUniverseGenerator
             if (File.Exists(path.ToString()))
             {
                 // If the Overwrite Tag says "Y" then overwrite the file
-                if (universeDefaultSettings.Overwrite.ToUpper() == "Y")
+                if (universeDefaultSettings.Overwrite)
                     File.Delete(path.ToString());
                 // Otherwise throw an exception to be caught
                 else

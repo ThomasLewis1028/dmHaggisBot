@@ -7,6 +7,12 @@ namespace SWNUniverseGenerator.DefaultSettings
     /// </summary>
     public class StarDefaultSettings
     {
+        public StarDefaultSettings()
+        {
+            StarCount = -1;
+            Name = null;
+        }
+        
         /// <summary>
         /// Store the number of stars you want to create
         /// </summary>

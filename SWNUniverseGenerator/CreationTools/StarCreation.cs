@@ -32,9 +32,7 @@ namespace SWNUniverseGenerator.CreationTools
 
             // Set the number of stars to create. The default is 1d10+20 
             var starLen = starData.Stars.Count;
-            var starCount = starDefaultSettings.StarCount < 0
-                ? Rand.Next(0, 10) + 20
-                : starDefaultSettings.StarCount;
+            var starCount = starDefaultSettings.StarCount;
 
             var sCount = 0;
             while (sCount < starCount)

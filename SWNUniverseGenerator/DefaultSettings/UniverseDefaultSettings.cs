@@ -14,6 +14,13 @@ namespace SWNUniverseGenerator.DefaultSettings
             Grid = new Grid(8, 10);
             Overwrite = true;
         }
+
+        public UniverseDefaultSettings(String name)
+        {
+            Name = name;
+            Grid = new Grid(8, 10);
+            Overwrite = true;
+        }
         
         /// <summary>
         ///     This value should be the name of your universe

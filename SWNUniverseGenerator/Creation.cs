@@ -362,5 +362,10 @@ namespace SWNUniverseGenerator
 
             return JsonConvert.DeserializeObject<T>(data.ToString());
         }
+
+        ~Creation()
+        {
+            Console.Out.WriteLine("Destructor called");
+        }
     }
 }

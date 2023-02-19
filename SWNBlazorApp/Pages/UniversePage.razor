@@ -1,0 +1,46 @@
+﻿@page "/universes"
+@using SWNBlazorApp.Data
+@using SWNUniverseGenerator
+@using SWNUniverseGenerator.DefaultSettings
+@using SWNUniverseGenerator.Models
+
+<PageTitle>Universes</PageTitle>
+
+@inject UniverseService UniverseService
+@inject CreationService CreationService
+@inject Universe CurrentUniverse
+@inject Persistence Persistence
+@inject SerializeClass SerializeClass
+
+<h1>Universes</h1>
+
+<p role="status">Current universe: @GetUniverseName()</p>
+
+<button class="btn btn-primary" @onclick="CreateUniverse">Create New Universe</button>
+
+@code {
+    
+    private void CreateUniverse()
+    {
+        Creation creation = CreationService.GetCreationAsync().Result;
+
+        CurrentUniverse = creation.CreateUniverse(new UniverseDefaultSettings
+        {
+            Name = "Test",
+            Overwrite = true
+        });
+        creation.CreateStars(CurrentUniverse, new StarDefaultSettings());
+        creation.CreatePlanets(CurrentUniverse, new PlanetDefaultSettings());
+        creation.CreateShips(CurrentUniverse, new ShipDefaultSettings());
+        creation.CreateCharacter(CurrentUniverse, new CharacterDefaultSettings());
+
+        Persistence.CurrentUniverseName = CurrentUniverse.Name;
+        SerializeClass.SerializeData(Persistence);
+        
+    }
+
+    private string GetUniverseName()
+    {
+        return UniverseService.GetUniverseAsync().Result.Name;
+    }
+}

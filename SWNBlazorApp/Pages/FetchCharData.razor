@@ -1,0 +1,61 @@
+﻿@page "/fetchchardata"
+
+<PageTitle>Character Data</PageTitle>
+
+@using SWNBlazorApp.Data
+@using SWNUniverseGenerator.Models
+@using Newtonsoft.Json.Linq
+@using Newtonsoft.Json
+@inject CharacterService CharacterService
+@inject UniverseService UniverseService
+@inject Universe CurrentUniverse
+@inject Persistence Persistence
+@inject SerializeClass SerializeClass
+
+<h1>Character Data</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (characters == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Title</th>
+            <th>Age</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var character in characters)
+        {
+            <tr>
+                <td>@character.Id</td>
+                <td>@character.Name</td>
+                <td>@character.Gender</td>
+                <td>@character.Title</td>
+                <td>@character.Age</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Character>? characters;
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUniverse = UniverseService.GetUniverseAsync().Result;
+        characters = await CharacterService.GetCharactersAsync(CurrentUniverse);
+    }
+
+}

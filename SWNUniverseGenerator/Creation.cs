@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -20,40 +21,41 @@ namespace SWNUniverseGenerator
     /// </summary>
     public class Creation
     {
-        private readonly string _universePath;
-        public static ShipData ShipData;
-        private static WorldInfo _worldInfo;
-        private static StarData _starData;
-        private static CharData _charData;
-        public static PoiData PoiData;
-        public static ProblemData ProblemData;
-        public static SocietyData SocietyData;
-        public static AlienData AlienData;
+        private static readonly string _localPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        private readonly string _universePath = _localPath + "/UniverseFiles/";
+        private readonly string _dataPath = _localPath + "/Data/";
+        public ShipData ShipData;
+        private WorldInfo _worldInfo;
+        private StarData _starData;
+        private CharData _charData;
+        public PoiData PoiData;
+        public ProblemData ProblemData;
+        public SocietyData SocietyData;
+        public AlienData AlienData;
 
-        public static NameGeneration MaleFirstNameGeneration;
-        public static NameGeneration FemaleFirstNameGeneration;
-        public static NameGeneration LastNameGeneration;
-        public static List<NameGeneration> CharacterNameGenerations = new();
+        public NameGeneration MaleFirstNameGeneration;
+        public NameGeneration FemaleFirstNameGeneration;
+        public NameGeneration LastNameGeneration;
+        public List<NameGeneration> CharacterNameGenerations = new();
 
-        public static NameGeneration PlanetNameGeneration;
-        public static NameGeneration StarNameGeneration;
+        public NameGeneration PlanetNameGeneration;
+        public NameGeneration StarNameGeneration;
 
         /// <summary>
         /// Default constructor that requires a path to be passed in
         /// </summary>
         /// <param name="path"></param>
-        public Creation(string path)
+        public Creation()
         {
-            _universePath = path;
-            ShipData = LoadData<ShipData>(@"Data/shipData.json");
-            _worldInfo = LoadData<WorldInfo>(@"Data/worldTags.json");
-            _starData = LoadData<StarData>(@"Data/starData.json");
-            _charData = LoadData<CharData>(@"Data/characterData.json");
-            PoiData = LoadData<PoiData>(@"Data/pointsOfInterest.json");
-            ProblemData = LoadData<ProblemData>(@"Data/problemData.json");
-            // SocietyData = LoadData<SocietyData>(@"Data/societyData.json");
+            ShipData = LoadData<ShipData>(@"shipData.json");
+            _worldInfo = LoadData<WorldInfo>(@"worldTags.json");
+            _starData = LoadData<StarData>(@"starData.json");
+            _charData = LoadData<CharData>(@"characterData.json");
+            PoiData = LoadData<PoiData>(@"pointsOfInterest.json");
+            ProblemData = LoadData<ProblemData>(@"problemData.json");
+            // SocietyData = LoadData<SocietyData>(@"societyData.json");
             SocietyData = null;
-            AlienData = LoadData<AlienData>(@"Data/alienData.json");
+            AlienData = LoadData<AlienData>(@"alienData.json");
 
             MaleFirstNameGeneration = new NameGeneration();
             MaleFirstNameGeneration.GenerateChain(_charData.MaleName);
@@ -354,18 +356,15 @@ namespace SWNUniverseGenerator
         /// <param name="path"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        private static T LoadData<T>(String path)
+        private T LoadData<T>(String path)
         {
+            path = _dataPath + path;
+
             var data =
                 JObject.Parse(
                     File.ReadAllText(path));
 
             return JsonConvert.DeserializeObject<T>(data.ToString());
-        }
-
-        ~Creation()
-        {
-            Console.Out.WriteLine("Destructor called");
         }
     }
 }

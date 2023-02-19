@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWNConsole", "SWNConsole\SW
 		{E5DB0444-9A60-4650-9455-6585D691901A} = {E5DB0444-9A60-4650-9455-6585D691901A}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWNBlazorApp", "SWNBlazorApp\SWNBlazorApp.csproj", "{D8AE2EEC-F88B-4749-AFF7-A99015743F81}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E5DB0444-9A60-4650-9455-6585D691901A} = {E5DB0444-9A60-4650-9455-6585D691901A}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,5 +32,9 @@ Global
 		{EA72B4B9-58D6-43CE-AC14-2EE08E61C7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA72B4B9-58D6-43CE-AC14-2EE08E61C7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA72B4B9-58D6-43CE-AC14-2EE08E61C7C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8AE2EEC-F88B-4749-AFF7-A99015743F81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8AE2EEC-F88B-4749-AFF7-A99015743F81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8AE2EEC-F88B-4749-AFF7-A99015743F81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8AE2EEC-F88B-4749-AFF7-A99015743F81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

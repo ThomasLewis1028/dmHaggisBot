@@ -49,15 +49,15 @@ namespace SWNUniverseGenerator.CreationTools
 
                 // Set sheet bounds including sheet# and row count.
                 // Must be done here to randomly select the sheet
-                var gender = characterDefaultSettings.Gender != Character.GenderEnum.Undefined
-                    ? characterDefaultSettings.Gender == Character.GenderEnum.Male ? 0 : 1
-                    : Rand.Next(0, 2);
-
+                var gender = characterDefaultSettings.Gender == Character.GenderEnum.Undefined
+                    ? Rand.Next(0, 2)
+                    : (int) characterDefaultSettings.Gender;
+                
                 // Get the list of names for the specified gender
                 var firstNameList = gender == 0 ? charData.MaleName : charData.FemaleName;
                 var nameGeneration = gender == 0 ? nameGenerations[0] : nameGenerations[1];
                 // var lastNameGeneration = nameGenerations[2];
-                
+
                 // Set the number of items in each list to be used for the max value in rand.Next()
                 var firstCount = firstNameList.Count;
                 var lastCount = charData.LastName.Count;
@@ -99,16 +99,16 @@ namespace SWNUniverseGenerator.CreationTools
                 var eyeSwitch = Rand.Next(0, 100);
                 character.EyeCol = string.IsNullOrEmpty(characterDefaultSettings.EyeCol)
                     ? character.EyeCol = eyeSwitch switch
-                        {
-                            { } n when (n > 0 && n < 45) => charData.EyeColor[0],
-                            { } n when (n >= 45 && n < 72) => charData.EyeColor[1],
-                            { } n when (n >= 72 && n < 90) => charData.EyeColor[2],
-                            { } n when (n >= 90 && n < 99) => charData.EyeColor[3],
-                            { } n when (n >= 99) => charData.EyeColor[Rand.Next(4, eyeColorCount - 4)],
-                            _ => charData.EyeColor[0]
-                        }
+                    {
+                        { } n when (n > 0 && n < 45) => charData.EyeColor[0],
+                        { } n when (n >= 45 && n < 72) => charData.EyeColor[1],
+                        { } n when (n >= 72 && n < 90) => charData.EyeColor[2],
+                        { } n when (n >= 90 && n < 99) => charData.EyeColor[3],
+                        { } n when (n >= 99) => charData.EyeColor[Rand.Next(4, eyeColorCount)],
+                        _ => charData.EyeColor[0]
+                    }
                     : characterDefaultSettings.EyeCol;
-                
+
                 // Skin color
                 // character.SkinCol = string.IsNullOrEmpty(characterDefaultSettings.SkinCol)
                 //     ? charData.SkinColor[Rand.Next(0, SkinColorCount)]
@@ -117,7 +117,7 @@ namespace SWNUniverseGenerator.CreationTools
                 // character.Height = string.IsNullOrEmpty(characterDefaultSettings.Height)
                 //     ? Rand.Next(50, 200)
                 //     : Rand.Next(characterDefaultSettings.Height[0], characterDefaultSettings.Height[1]);
-                
+
                 // Character title
                 character.Title = string.IsNullOrEmpty(characterDefaultSettings.Title)
                     ? null
@@ -146,9 +146,9 @@ namespace SWNUniverseGenerator.CreationTools
                 character.InitialReaction = (Rand.Next(0, 6) + Rand.Next(0, 6)) switch
                 {
                     0 => charData.InitialReactions[0],
-                    {} n when (n >= 1 && n <= 3) => charData.InitialReactions[1],
-                    {} n when (n >= 4 && n <= 6) => charData.InitialReactions[2],
-                    {} n when (n >= 7 && n <= 9) => charData.InitialReactions[3],
+                    { } n when (n >= 1 && n <= 3) => charData.InitialReactions[1],
+                    { } n when (n >= 4 && n <= 6) => charData.InitialReactions[2],
+                    { } n when (n >= 7 && n <= 9) => charData.InitialReactions[3],
                     10 => charData.InitialReactions[4],
                     _ => charData.InitialReactions[2]
                 };

@@ -9,6 +9,12 @@ namespace SWNUniverseGenerator.Models
     /// </summary>
     public class Universe
     {
+        public Universe()
+        {
+            Name = null;
+            Grid = null;
+        }
+        
         /// <summary>
         /// All Universes must be instantiated with a Name and a Grid to create all other information
         /// </summary>

@@ -19,6 +19,7 @@ namespace SWNUniverseGenerator.DefaultSettings
             SkinCol = null;
             Height = null;
             Title = null;
+            Gender = Character.GenderEnum.Undefined;
             Count = -1;
             CrimeChance = null;
             ShipId = null;

@@ -11,19 +11,10 @@ namespace SWNConsole
         private const string TerminalHeader = "swnconsole>";
         private static Creation? _creation;
 
-        private static string UniversePath
-        {
-            get
-            {
-                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-                var uri = new UriBuilder(codeBase!);
-                var path = Uri.UnescapeDataString(uri.Path);
-                if (!Directory.Exists(Path.GetDirectoryName(path) + "/UniverseFiles/"))
-                    Directory.CreateDirectory(Path.GetDirectoryName(path) + "/UniverseFiles/");
-                return Path.GetDirectoryName(path) + "/UniverseFiles/";
-            }
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
         private static async Task Main(string[] args)
         {
             try
@@ -108,9 +99,9 @@ namespace SWNConsole
 
         private static void CreateUniverse(string universeName)
         {
-            _creation = new Creation(UniversePath);
+            _creation = new Creation();
 
-            Universe universe = _creation.CreateUniverse(new UniverseDefaultSettings(universeName));
+            Universe universe = _creation.CreateUniverse(new UniverseDefaultSettings{Name = universeName, Overwrite = true});
 
             _creation.CreateStars(universe, new StarDefaultSettings());
             _creation.CreatePlanets(universe, new PlanetDefaultSettings());
@@ -129,6 +120,14 @@ namespace SWNConsole
 
         private static void LoadUniverse(string universeName)
         {
+            _creation = new Creation();
+
+            Universe universe = _creation.LoadUniverse(universeName);
+            
+            Console.Write($"{universe.Name}> \n");
+            
+            Console.WriteLine($"{universe.Characters.First().Name}\n{universe.Characters.First().Id}");
+            
         }
     }
 }

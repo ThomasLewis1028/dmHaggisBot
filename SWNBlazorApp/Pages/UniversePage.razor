@@ -14,29 +14,95 @@
 
 <h1>Universes</h1>
 
-<p role="status">Current universe: @GetUniverseName()</p>
+<MudText Typo="Typo.h5">Current Universe: @GetUniverseName()</MudText>
+
+<MudGrid>
+    <MudItem xs="12" sm="7">
+        <MudPaper Class="pa-4">
+            <MudForm @ref="form" @bind-Errors="@errors">
+                <MudTextField T="String" Label="Universe Name" Required="false" @bind-Value="universeName"/>
+                <MudTextField T="int" Label="Grid X" @bind-Value="gridX"></MudTextField>
+                <MudTextField T="int" Label="Grid Y" @bind-Value="gridY"></MudTextField>
+                <div class="d-flex align-center justify-space-between">
+                    <MudCheckBox T="bool" Label="Overwrite Existing Universe?" @bind-Checked="overwrite"></MudCheckBox>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CreateUniverse())">Create Universe</MudButton>
+                </div>
+            </MudForm>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="5">
+        <MudPaper Class="pa-4 mud-height-full">
+            <MudText Typo="Typo.subtitle2">@($"Errors ({errors.Length})")</MudText>
+            @foreach (var error in errors)
+            {
+                <MudText Color="@Color.Error">@error</MudText>
+            }
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="12">
+        <MudTable Items="@UniverseRows" Hover="true" SortLabel="Sort By" @bind-SelectedItem="selectedUniverse">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Universe List</MudText>
+                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<UniverseService.UniverseRow, object>(x => x.Name)">ID</MudTableSortLabel>
+                </MudTh>
+                <MudTd>Grid Size</MudTd>
+                <MudTd>Star Count</MudTd>
+                <MudTd>Planet Count</MudTd>
+                <MudTd>Ship Count</MudTd>
+                <MudTd>Character Count</MudTd>
+                <MudTd>Load Universe</MudTd>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Grid">@($"{context.GridX}/{context.GridY}")</MudTd>
+                <MudTd DataLabel="StarCount">@context.StarCount</MudTd>
+                <MudTd DataLabel="PlanetCount">@context.PlanetCount</MudTd>
+                <MudTd DataLabel="ShipCount">@context.ShipCount</MudTd>
+                <MudTd DataLabel="CharCount">@context.CharCount</MudTd>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => LoadUniverse(context.Name))">Load</MudButton>
+            </RowTemplate>
+        </MudTable>
+    </MudItem>
+</MudGrid>
 
 @if (_createdNew)
 {
     <p role="status">Universe Created in @((_end - _start).TotalMilliseconds)ms</p>
 }
 
-<button class="btn btn-primary" @onclick="CreateUniverse">Create New Universe</button>
-
 @code {
     private bool _createdNew;
+    private bool overwrite;
     private DateTime _start;
     private DateTime _end;
-    
-    private void CreateUniverse()
+    private int gridX = 8;
+    private int gridY = 10;
+    MudForm form;
+    String[] errors = {};
+    String universeName;
+    List<UniverseService.UniverseRow> UniverseRows = new();
+    private UniverseService.UniverseRow selectedUniverse;
+    private string searchString;
+
+    protected override async Task OnInitializedAsync()
+    {
+        UniverseRows = await UniverseService.GetUniverseListAsync();
+    }
+
+    private async void CreateUniverse()
     {
         _start = DateTime.Now;
         Creation creation = CreationService.GetCreationAsync().Result;
 
         CurrentUniverse = creation.CreateUniverse(new UniverseDefaultSettings
         {
-            Name = "Test",
-            Overwrite = true
+            Name = universeName,
+            Overwrite = overwrite,
+            Grid = (new Grid(gridX, gridY))
         });
         creation.CreateStars(CurrentUniverse, new StarDefaultSettings());
         creation.CreatePlanets(CurrentUniverse, new PlanetDefaultSettings());
@@ -48,6 +114,7 @@
 
         _end = DateTime.Now;
         _createdNew = true;
+        await OnInitializedAsync();
     }
 
     private string GetUniverseName()
@@ -56,4 +123,12 @@
         String currentUniverseName = task == null ? "None" : task.Result.Name;
         return currentUniverseName;
     }
+
+    private async void LoadUniverse(String universeName)
+    {
+        Persistence.CurrentUniverseName = universeName;
+        SerializeClass.SerializeData(Persistence);
+        await OnInitializedAsync();
+    }
+
 }

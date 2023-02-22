@@ -29,4 +29,46 @@ public class UniverseService
         
         return Task.FromResult(universe);
     }
+
+    public Task<List<UniverseRow>> GetUniverseListAsync()
+    {
+        List<UniverseRow> universeRows = new();
+
+        if (Directory.Exists(dataPath + "/UniverseFiles/"))
+        {
+            string[] fileEntries = Directory.GetFiles(dataPath + "/UniverseFiles/");
+            foreach(string fileName in fileEntries)
+            {
+                var univ = JObject.Parse(File.ReadAllText(fileName));
+                Universe universe = JsonConvert.DeserializeObject<Universe>(univ.ToString());
+                UniverseRow universeRow = new UniverseRow()
+                {
+                    Name = universe.Name,
+                    GridX = universe.Grid.X,
+                    GridY = universe.Grid.Y,
+                    StarCount = universe.Stars.Count,
+                    PlanetCount = universe.Planets.Count,
+                    ShipCount = universe.Ships.Count,
+                    CharCount = universe.Characters.Count
+                };
+                universeRows.Add(universeRow);
+            }
+        }
+
+        return Task.FromResult(universeRows);
+    }
+    
+    public class UniverseRow
+     {
+         public String Name { get; set; }
+     
+         public int GridX;
+         public int GridY;
+     
+         public int StarCount;
+         public int PlanetCount;
+         public int ShipCount;
+         public int CharCount;
+     }
 }
+

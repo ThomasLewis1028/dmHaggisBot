@@ -16,12 +16,21 @@
 
 <p role="status">Current universe: @GetUniverseName()</p>
 
+@if (_createdNew)
+{
+    <p role="status">Universe Created in @((_end - _start).TotalMilliseconds)ms</p>
+}
+
 <button class="btn btn-primary" @onclick="CreateUniverse">Create New Universe</button>
 
 @code {
+    private bool _createdNew;
+    private DateTime _start;
+    private DateTime _end;
     
     private void CreateUniverse()
     {
+        _start = DateTime.Now;
         Creation creation = CreationService.GetCreationAsync().Result;
 
         CurrentUniverse = creation.CreateUniverse(new UniverseDefaultSettings
@@ -36,7 +45,9 @@
 
         Persistence.CurrentUniverseName = CurrentUniverse.Name;
         SerializeClass.SerializeData(Persistence);
-        
+
+        _end = DateTime.Now;
+        _createdNew = true;
     }
 
     private string GetUniverseName()

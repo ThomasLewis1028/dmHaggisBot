@@ -23,19 +23,27 @@
 }
 else
 {
-    <div class="row">
-        <div class="col">
+    <MudGrid>
+        <MudItem xs="8">
             <MudTable Items="@characters" Hover="true" SortLabel="Sort By" Filter="new Func<Character, bool>(CharacterFilterFunc)" @bind-SelectedItem="currentCharacter">
                 <ToolBarContent>
                     <MudText Typo="Typo.h6">Character List</MudText>
-                    <MudSpacer />
+                    <MudSpacer/>
                     <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                 </ToolBarContent>
                 <HeaderContent>
-                    <MudTh><MudTableSortLabel SortBy="new Func<Character,object>(x=>x.Id)">ID</MudTableSortLabel></MudTh>
-                    <MudTh><MudTableSortLabel SortBy="new Func<Character,object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
-                    <MudTh><MudTableSortLabel SortBy="new Func<Character,object>(x=>x.Title)">Title</MudTableSortLabel></MudTh>
-                    <MudTh><MudTableSortLabel SortBy="new Func<Character,object>(x=>x.ShipId)">Ship ID</MudTableSortLabel></MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Id)">ID</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Name)">Name</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Title)">Title</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.ShipId)">Ship ID</MudTableSortLabel>
+                    </MudTh>
                 </HeaderContent>
                 <RowTemplate>
                     <MudTd DataLabel="Id">@context.Id</MudTd>
@@ -44,36 +52,29 @@ else
                     <MudTd DataLabel="Ship Id">@context.ShipId</MudTd>
                 </RowTemplate>
                 <PagerContent>
-                    <MudTablePager PageSizeOptions="new []{10, 15, 20, 25, 50, 75, 100, int.MaxValue}"/>
+                    <MudTablePager PageSizeOptions="new[] {10, 15, 20, 25, 50, 75, 100, int.MaxValue}"/>
                 </PagerContent>
             </MudTable>
-        </div>
-        @*Individual Character Display*@
-        <div class="col">
+        </MudItem>
+
+        <MudItem xs="4">
+            @*Individual Character Display*@
             @if (currentCharacter != null)
             {
-                <label>Name: @currentCharacter.Name</label>
-                <br>
-                if(currentCharacter.ShipId != null)
-                {
-                    <label>Title: @currentCharacter.Title</label>
-                    <br>
-                    <label>Ship ID: @currentCharacter.ShipId - @GetShipname(currentCharacter.ShipId)</label>
-                    <br>
-                }
-                <label>ID: @currentCharacter.Id</label>
-                <br>
-                <label>Birth Planet: @currentCharacter.BirthPlanet - @GetPlanetName(currentCharacter.BirthPlanet)</label>
-                <br>
-                <label>Current Planet: @currentCharacter.CurrentLocation - @GetPlanetName(currentCharacter.CurrentLocation)</label>
-                <br>
-                <label>Crime Chance: @currentCharacter.CrimeChance%</label>
-                <br>
-                <label>Initial Reaction: @currentCharacter.InitialReaction</label>
-                <br>
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6">@currentCharacter.Name</MudText>
+                            <MudText Typo="Typo.body2">@currentCharacter.Id</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudText Typo="Typo.body1">@currentCharacter.Title</MudText>
+                    </MudCardContent>
+                </MudCard>
             }
-        </div>
-    </div>
+        </MudItem>
+    </MudGrid>
 }
 
 @code {
@@ -105,16 +106,16 @@ else
     }
 
     private bool CharacterFilterFunc(Character character) => CharacterFilter(character, searchString);
-    
+
     private bool CharacterFilter(Character character, string searchString)
     {
-        if(string.IsNullOrWhiteSpace(searchString))
+        if (string.IsNullOrWhiteSpace(searchString))
             return true;
         if (character.Name.Contains(this.searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (character.Id.Contains(this.searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
-    } 
+    }
 
 }

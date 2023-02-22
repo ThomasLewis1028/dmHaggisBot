@@ -20,7 +20,7 @@ namespace SWNUniverseGenerator.CreationTools
 
             // Set the number of ships you want to create. Default is 1
             var count = shipDefaultSettings.Count < 0
-                ? 1
+                ? 100
                 : shipDefaultSettings.Count;
 
             var homeId = string.IsNullOrEmpty(shipDefaultSettings.HomeId)

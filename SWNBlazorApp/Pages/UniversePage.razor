@@ -41,6 +41,8 @@
 
     private string GetUniverseName()
     {
-        return UniverseService.GetUniverseAsync().Result.Name;
+        Task<Universe> task = UniverseService.GetUniverseAsync();
+        String currentUniverseName = task == null ? "None" : task.Result.Name;
+        return currentUniverseName;
     }
 }

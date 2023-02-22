@@ -21,6 +21,9 @@ public class UniverseService
         var pers = JObject.Parse(File.ReadAllText(dataPath + "/persistence.json"));
         Persistence persistence = JsonConvert.DeserializeObject<Persistence>(pers.ToString());
 
+        if (persistence.CurrentUniverseName == null)
+            return null;
+
         var univ = JObject.Parse(File.ReadAllText(dataPath + "/UniverseFiles/" + persistence.CurrentUniverseName + ".json"));
         Universe universe = JsonConvert.DeserializeObject<Universe>(univ.ToString());
         

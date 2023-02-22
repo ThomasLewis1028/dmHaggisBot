@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 using SWNBlazorApp.Areas.Identity;
 using SWNBlazorApp.Data;
 using SWNUniverseGenerator.Models;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services
     .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+builder.Services.AddMudServices();
 builder.Services.AddSingleton<CharacterService>();
 builder.Services.AddSingleton<CreationService>();
 builder.Services.AddSingleton<UniverseService>();

@@ -31,7 +31,7 @@ namespace SWNUniverseGenerator.CreationTools
 
             // Set the number of characters you want to create. Default is 1.
             var count = characterDefaultSettings.Count < 0
-                ? 1
+                ? 100
                 : characterDefaultSettings.Count;
 
             var cCount = 0;
@@ -100,10 +100,10 @@ namespace SWNUniverseGenerator.CreationTools
                 character.EyeCol = string.IsNullOrEmpty(characterDefaultSettings.EyeCol)
                     ? character.EyeCol = eyeSwitch switch
                     {
-                        { } n when (n > 0 && n < 45) => charData.EyeColor[0],
-                        { } n when (n >= 45 && n < 72) => charData.EyeColor[1],
-                        { } n when (n >= 72 && n < 90) => charData.EyeColor[2],
-                        { } n when (n >= 90 && n < 99) => charData.EyeColor[3],
+                        { } n when n is > 0 and < 45 => charData.EyeColor[0],
+                        { } n when n is >= 45 and < 72 => charData.EyeColor[1],
+                        { } n when n is >= 72 and < 90 => charData.EyeColor[2],
+                        { } n when n is >= 90 and < 99 => charData.EyeColor[3],
                         { } n when (n >= 99) => charData.EyeColor[Rand.Next(4, eyeColorCount)],
                         _ => charData.EyeColor[0]
                     }
@@ -160,7 +160,7 @@ namespace SWNUniverseGenerator.CreationTools
             }
 
             // Re-order the list of Characters by their first name.
-            universe.Characters = universe.Characters.OrderBy(c => c.First).ToList();
+            // universe.Characters = universe.Characters.OrderBy(c => c.Id).ToList();
 
             return universe;
         }

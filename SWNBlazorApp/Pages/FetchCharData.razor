@@ -7,8 +7,10 @@
 @using SWNUniverseGenerator.DefaultSettings
 @using SWNUniverseGenerator.Models
 @inject CharacterService CharacterService
+@inject CreationService CreationService
 @inject UniverseService UniverseService
 @inject Universe CurrentUniverse
+@inject IDialogService DialogService
 
 <h1>Character Data</h1>
 
@@ -23,6 +25,78 @@
 else
 {
     <MudGrid>
+        <MudItem xs="12">
+            <MudExpansionPanels>
+                @* Character Creation *@
+                <MudExpansionPanel Text="Character Creation">
+                    <MudItem xs="12" sm="6">
+                        <MudPaper Class="pa-4">
+                            <MudForm @ref="form">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudTextField T="String" Label="First Name" Required="false" @bind-Value="newCharFirstName"/>
+                                    </MudItem>
+                                    <MudItem xs="4">
+                                        <MudTextField T="String" Label="Last Name" Required="false" @bind-Value="newCharLastName"/>
+                                    </MudItem>
+                                    <MudItem xs="1">
+                                        <MudTextField T="int" Label="Age" Required="false" @bind-Value="newCharAge"/>
+                                    </MudItem>
+                                    <MudItem xs="3">
+                                        <MudSelect T="Character.GenderEnum" Label="Gender" Required="true" @bind-Value="newCharGender">
+                                            <MudSelectItem Value="@Character.GenderEnum.Undefined"/>
+                                            <MudSelectItem Value="@Character.GenderEnum.Male"/>
+                                            <MudSelectItem Value="@Character.GenderEnum.Female"/>
+                                        </MudSelect>
+                                    </MudItem>
+
+                                    <MudItem xs="4">
+                                        <MudTextField T="String" Label="Hair Color" Required="false" @bind-Value="newCharHairColor"/>
+                                    </MudItem>
+                                    <MudItem xs="4">
+                                        <MudTextField T="String" Label="Hair Style" Required="false" @bind-Value="newCharHairStyle"/>
+                                    </MudItem>
+                                    <MudItem xs="4">
+                                        <MudTextField T="String" Label="Eye Color" Required="false" @bind-Value="newCharEyeColor"/>
+                                    </MudItem>
+
+                                    <MudItem xs="6">
+                                        <MudTextField T="String" Label="Title" Required="false" @bind-Value="newCharTitle"/>
+                                    </MudItem>
+                                    <MudItem xs="6">
+                                        <MudTextField T="String" Label="Ship Id" Required="false" @bind-Value="newCharShipId"/>
+                                    </MudItem>
+
+                                    <MudItem xs="6">
+                                        <MudTextField T="String" Label="Birth Planet ID" Required="false" @bind-Value="newCharBirthPlanetId"/>
+                                    </MudItem>
+                                    <MudItem xs="6">
+                                        <MudTextField T="String" Label="Current Planet ID" Required="false" @bind-Value="newCharCurrPlanetId"/>
+                                    </MudItem>
+
+                                    <MudItem xs="2">
+                                        <MudTextField T="int" Label="Crime Chance %" Required="false" @bind-Value="newCharCrimeChance"/>
+                                    </MudItem>
+                                    <MudItem xs="10">
+                                        <MudTextField T="String" Label="Initial Reaction" Required="false" @bind-Value="newCharInitialReaction"/>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudForm>
+                        </MudPaper>
+                        <MudPaper Class="pa-4 mt-4">
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CreateCharacter())">Create Character</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" OnClick="@(() => form.Reset())" Class="mx-2">Reset</MudButton>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudPaper Class="pa-4 mud-height-full">
+
+                        </MudPaper>
+                    </MudItem>
+                </MudExpansionPanel>
+            </MudExpansionPanels>
+        </MudItem>
+        @* Character List *@
         <MudItem xs="8">
             <MudTable Items="@characters" Hover="true" SortLabel="Sort By" Filter="new Func<Character, bool>(CharacterFilterFunc)" @bind-SelectedItem="currentCharacter">
                 <ToolBarContent>
@@ -45,10 +119,10 @@ else
                     </MudTh>
                 </HeaderContent>
                 <RowTemplate>
-                    <MudTd DataLabel="Id">@context.Id</MudTd>
-                    <MudTd DataLabel="Name">@context.Name</MudTd>
-                    <MudTd DataLabel="Title">@context.Title</MudTd>
-                    <MudTd DataLabel="Ship Id">@context.ShipId</MudTd>
+                    <MudTd DataLabel="Id" class="cursor-pointer">@context.Id</MudTd>
+                    <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
+                    <MudTd DataLabel="Title" class="cursor-pointer">@context.Title</MudTd>
+                    <MudTd DataLabel="Ship Id" class="cursor-pointer">@context.ShipId</MudTd>
                 </RowTemplate>
                 <PagerContent>
                     <MudTablePager PageSizeOptions="new[] {10, 15, 20, 25, 50, 75, 100, int.MaxValue}"/>
@@ -80,16 +154,26 @@ else
     private List<Character>? characters;
     private Character currentCharacter;
     private string searchString;
+    MudForm form;
+
+    private string newCharFirstName;
+    private string newCharLastName;
+    private int newCharAge;
+    private Character.GenderEnum newCharGender = Character.GenderEnum.Undefined;
+    private string newCharTitle;
+    private string newCharShipId;
+    private string newCharHairColor;
+    private string newCharHairStyle;
+    private string newCharEyeColor;
+    private string newCharBirthPlanetId;
+    private string newCharCurrPlanetId;
+    private int newCharCrimeChance;
+    private string newCharInitialReaction;
 
     protected override async Task OnInitializedAsync()
     {
         CurrentUniverse = UniverseService.GetUniverseAsync().Result;
         characters = await CharacterService.GetCharactersAsync(CurrentUniverse);
-    }
-
-    private void SetCurrentCharacter(Character character)
-    {
-        currentCharacter = character;
     }
 
     private String GetPlanetName(String planetId)
@@ -102,6 +186,32 @@ else
     {
         string[] array = {shipId};
         return Search.SearchUniverseList(UniverseService.GetUniverseAsync().Result, new SearchDefaultSettings() {Id = array}).First().Name;
+    }
+
+    private void CreateCharacters()
+    {
+    }
+
+    private void CreateCharacter()
+    {
+        Creation creation = CreationService.GetCreationAsync().Result;
+        Universe universe = UniverseService.GetUniverseAsync().Result;
+
+        creation.CreateCharacter(universe, new CharacterDefaultSettings()
+        {
+            First = newCharFirstName,
+            Last = newCharLastName,
+            Gender = newCharGender,
+            Age = new[] {newCharAge, newCharAge},
+            HairStyle = newCharHairStyle,
+            HairCol = newCharHairColor,
+            EyeCol = newCharEyeColor,
+            Title = newCharTitle,
+            Count = 1,
+            CrimeChance = new[] {newCharCrimeChance, newCharCrimeChance},
+            ShipId = newCharShipId
+        });
+        OnInitializedAsync();
     }
 
     private bool CharacterFilterFunc(Character character) => CharacterFilter(character, searchString);

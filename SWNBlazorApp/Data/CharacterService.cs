@@ -10,12 +10,11 @@ public class CharacterService
         return Task.FromResult(universe.Characters);
     }
 
-    public Task<bool> CreateCharacterAsync()
+    public Task<bool> CreateCharacterAsync(int count = -1)
     {
-        CreationService creationService = new CreationService();
-        Creation creation = creationService.GetCreationAsync().Result;
+        // CreationService creationService = new CreationService();
+        // Creation creation = creationService.GetCreationAsync().Result;
 
-        // UniverseService
         
         return Task.FromResult(true);
     } 

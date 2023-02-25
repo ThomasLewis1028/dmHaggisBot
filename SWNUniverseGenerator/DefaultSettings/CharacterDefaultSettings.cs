@@ -92,5 +92,15 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// This value should be a specific ShipID that you wish you tie a character to
         /// </summary>
         public String ShipId { get; set; }
+        
+        /// <summary>
+        /// This value should be a specific PlanetID that you wish to set as the character's birth planet
+        /// </summary>
+        public String BirthPlanetId { get; set; }
+        
+        /// <summary>
+        /// This value should be a specific PlanetID that you wish to set as the character's current planet
+        /// </summary>
+        public String CurrentPlanetId { get; set; }
     }
 }

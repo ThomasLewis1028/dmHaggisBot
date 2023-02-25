@@ -52,7 +52,7 @@ namespace SWNUniverseGenerator.CreationTools
                 var gender = characterDefaultSettings.Gender == Character.GenderEnum.Undefined
                     ? Rand.Next(0, 2)
                     : (int) characterDefaultSettings.Gender;
-                
+
                 // Get the list of names for the specified gender
                 var firstNameList = gender == 0 ? charData.MaleName : charData.FemaleName;
                 var nameGeneration = gender == 0 ? nameGenerations[0] : nameGenerations[1];
@@ -123,11 +123,15 @@ namespace SWNUniverseGenerator.CreationTools
                     ? null
                     : characterDefaultSettings.Title;
                 // Character birth planet
-                character.BirthPlanet = universe.Planets?[Rand.Next(0, universe.Planets.Count)].Id;
-                // Character current planet
-                character.CurrentLocation = Rand.Next(0, 100) < 5
+                character.BirthPlanet = string.IsNullOrEmpty(characterDefaultSettings.BirthPlanetId)
                     ? universe.Planets?[Rand.Next(0, universe.Planets.Count)].Id
-                    : character.BirthPlanet;
+                    : characterDefaultSettings.BirthPlanetId;
+                // Character current planet
+                character.CurrentLocation = string.IsNullOrEmpty(characterDefaultSettings.CurrentPlanetId)
+                    ? Rand.Next(0, 100) < 5
+                        ? universe.Planets?[Rand.Next(0, universe.Planets.Count)].Id
+                        : character.BirthPlanet
+                    : characterDefaultSettings.CurrentPlanetId;
                 // Character crime chance
                 character.CrimeChance = characterDefaultSettings.CrimeChance == null ||
                                         characterDefaultSettings.CrimeChance.Length == 0 ||

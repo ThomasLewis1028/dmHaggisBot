@@ -57,6 +57,17 @@ public class UniverseService
 
         return Task.FromResult(universeRows);
     }
+
+    public Task<bool> DeleteUniverseAsync(string universeName)
+    {
+        if (File.Exists(dataPath + "/UniverseFiles/" + universeName + ".json"))
+        {
+            File.Delete(dataPath + "/UniverseFiles/" + universeName + ".json");
+            return Task.FromResult(true);
+        }
+
+        return Task.FromResult(false);
+    }
     
     public class UniverseRow
      {

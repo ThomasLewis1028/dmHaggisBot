@@ -1,0 +1,160 @@
+﻿@page "/universes"
+@using SWNBlazorApp.Data
+@using SWNUniverseGenerator
+@using SWNUniverseGenerator.DefaultSettings
+@using SWNUniverseGenerator.Models
+
+<PageTitle>Universes</PageTitle>
+
+@inject UniverseService UniverseService
+@inject CreationService CreationService
+@inject Universe CurrentUniverse
+@inject Persistence Persistence
+@inject SerializeClass SerializeClass
+
+<h1>Universes</h1>
+
+<MudText Typo="Typo.h5">Current Universe: @GetUniverseName()</MudText>
+
+<MudGrid>
+    <MudItem xs="12" sm="7">
+        <MudPaper Class="pa-4">
+            <MudForm @ref="form" @bind-Errors="@errors">
+                <MudGrid>
+                    <MudItem xs="8">
+                        <MudTextField T="String" Label="Universe Name" Required="false" @bind-Value="universeName"/>
+                    </MudItem>
+                    <MudItem xs="2">
+                        <MudTextField T="int" Label="Grid X" @bind-Value="gridX"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="2">
+                        <MudTextField T="int" Label="Grid Y" @bind-Value="gridY"></MudTextField>
+                    </MudItem>
+                    
+                    <MudItem xs="4">
+                        <MudCheckBox T="bool" Label="Overwrite Existing Universe?" @bind-Checked="overwrite"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CreateUniverse())">Create Universe</MudButton>
+                    </MudItem>
+                </MudGrid>
+            </MudForm>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="5">
+        <MudPaper Class="pa-4 mud-height-full">
+            <MudText Typo="Typo.subtitle2">@($"Errors ({errors.Length})")</MudText>
+            @foreach (var error in errors)
+            {
+                <MudText Color="@Color.Error">@error</MudText>
+            }
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="12">
+        <MudTable Items="@UniverseRows" Hover="true" SortLabel="Sort By" @bind-SelectedItem="selectedUniverse">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Universe List</MudText>
+                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<UniverseService.UniverseRow, object>(x => x.Name)">Universe Name</MudTableSortLabel>
+                </MudTh>
+                <MudTh>Grid Size</MudTh>
+                <MudTh>Star Count</MudTh>
+                <MudTh>Planet Count</MudTh>
+                <MudTh>Ship Count</MudTh>
+                <MudTh>Character Count</MudTh>
+                <MudTh>Load Universe</MudTh>
+                <MudTh>Delete Universe</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Grid">@($"{context.GridX}/{context.GridY}")</MudTd>
+                <MudTd DataLabel="StarCount">@context.StarCount</MudTd>
+                <MudTd DataLabel="PlanetCount">@context.PlanetCount</MudTd>
+                <MudTd DataLabel="ShipCount">@context.ShipCount</MudTd>
+                <MudTd DataLabel="CharCount">@context.CharCount</MudTd>
+                <MudTd><MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => LoadUniverse(context.Name))">Load</MudButton></MudTd>
+                <MudTd><MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteUniverse(context.Name))">Delete</MudButton></MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudItem>
+</MudGrid>
+
+@if (_createdNew)
+{
+    <p role="status">Universe Created in @((_end - _start).TotalMilliseconds)ms</p>
+}
+
+@code {
+    private bool _createdNew;
+    private bool overwrite;
+    private DateTime _start;
+    private DateTime _end;
+    private int gridX = 8;
+    private int gridY = 10;
+    MudForm form;
+    String[] errors = {};
+    String universeName;
+    List<UniverseService.UniverseRow> UniverseRows = new();
+    private UniverseService.UniverseRow selectedUniverse;
+    private string searchString;
+
+    protected override async Task OnInitializedAsync()
+    {
+        UniverseRows = await UniverseService.GetUniverseListAsync();
+    }
+
+    private async void CreateUniverse()
+    {
+        _start = DateTime.Now;
+        Creation creation = CreationService.GetCreationAsync().Result;
+
+        CurrentUniverse = creation.CreateUniverse(new UniverseDefaultSettings
+        {
+            Name = universeName,
+            Overwrite = overwrite,
+            Grid = (new Grid(gridX, gridY))
+        });
+        creation.CreateStars(CurrentUniverse, new StarDefaultSettings());
+        creation.CreatePlanets(CurrentUniverse, new PlanetDefaultSettings());
+        creation.CreateShips(CurrentUniverse, new ShipDefaultSettings());
+        creation.CreateCharacter(CurrentUniverse, new CharacterDefaultSettings());
+
+        Persistence.CurrentUniverseName = CurrentUniverse.Name;
+        SerializeClass.SerializeData(Persistence);
+
+        _end = DateTime.Now;
+        _createdNew = true;
+        await OnInitializedAsync();
+    }
+
+    private string GetUniverseName()
+    {
+        Task<Universe> task = UniverseService.GetUniverseAsync();
+        String currentUniverseName = task == null ? "None" : task.Result.Name;
+        return currentUniverseName;
+    }
+
+    private async void LoadUniverse(String universeName)
+    {
+        Persistence.CurrentUniverseName = universeName;
+        SerializeClass.SerializeData(Persistence);
+        await OnInitializedAsync();
+    }
+
+    private async void DeleteUniverse(String universeName)
+    {
+        if (Persistence.CurrentUniverseName == universeName)
+        {
+            Persistence.CurrentUniverseName = null;
+            SerializeClass.SerializeData(Persistence);
+        }
+        
+        UniverseService.DeleteUniverseAsync(universeName);
+        
+        await OnInitializedAsync();
+    }
+
+}

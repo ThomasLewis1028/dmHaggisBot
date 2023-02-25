@@ -84,7 +84,7 @@ namespace SWNUniverseGenerator.Models
         public String Contact { get; set; }
 
         public Society Society { get; set; }
-
+        
         public Ruler Ruler { get; set; }
 
         public Ruled Ruled { get; set; }
@@ -95,33 +95,33 @@ namespace SWNUniverseGenerator.Models
     public class Society
     {
         public String PriorCulture { get; set; }
-
+    
         public String OtherSociety { get; set; }
-
+    
         public String MainRemnant { get; set; }
-
+    
         public String SocietyAge { get; set; }
-
+    
         public String ImportantResource { get; set; }
-
+    
         public String FoundingReason { get; set; }
     }
-
+    
     public class Ruler
     {
         public String GeneralSecurity { get; set; }
-
+    
         public String LegitimacySource { get; set; }
-
+    
         public String MainRulerConflict { get; set; }
-
+    
         public String RuleCompletion { get; set; }
-
+    
         public String RuleForm { get; set; }
-
+    
         public String MainPopConflict { get; set; }
     }
-
+    
     public class Ruled
     {
         public String Contentment { get; set; }
@@ -142,15 +142,15 @@ namespace SWNUniverseGenerator.Models
         public String BasicFlavor { get; set; }
         
         public String OutsiderTreatment { get; set; }
-
+    
         public String PrimaryVirtue { get; set; }
-
+    
         public String PrimaryVice { get; set; }
-
+    
         public String XenophiliaDegree { get; set; }
-
+    
         public String PossiblePatron { get; set; }
-
+    
         public String Customs { get; set; }
     }
 }

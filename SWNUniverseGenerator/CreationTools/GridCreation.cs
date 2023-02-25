@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.CreationTools
@@ -16,16 +17,17 @@ namespace SWNUniverseGenerator.CreationTools
         private static readonly float Cosign = (float) Math.Cos(IntRadians); // cos(30)
         private static readonly float Sine = (float) Math.Sin(IntRadians); // sin(30)
 
-        public Universe CreateGrid(Universe universe)
+        public void CreateGrid(Universe universe)
         {
             int width =
                 (int) ((universe.Grid.X * ((Hypotenuse * Sine) + Hypotenuse)) + (Hypotenuse * Sine) + Hypotenuse);
             int height = (int) ((universe.Grid.Y * (2 * Hypotenuse * Cosign)) + (Hypotenuse * Cosign) + Hypotenuse);
-            float penThickness = Hypotenuse * 0.05F;
+            float gridPenThickness = Hypotenuse * 0.05F;
             float starSize = Hypotenuse * 0.175F;
             float planetSize = Hypotenuse * 0.075F;
             float orbitSize = starSize;
             float orbitThickness = Hypotenuse * 0.001F;
+            float bgStarThickness = Hypotenuse * 0.001F;
 
             while (width * height > 500000000)
             {
@@ -35,26 +37,36 @@ namespace SWNUniverseGenerator.CreationTools
                     (int) ((universe.Grid.X * ((Hypotenuse * Sine) + Hypotenuse)) + (Hypotenuse * Sine) + Hypotenuse);
                 height = (int) ((universe.Grid.Y * (2 * Hypotenuse * Cosign)) + (Hypotenuse * Cosign) + Hypotenuse);
 
-                penThickness = Hypotenuse * 0.05F;
+                gridPenThickness = Hypotenuse * 0.05F;
                 starSize = Hypotenuse * 0.25F;
                 planetSize = Hypotenuse * 0.1F;
                 orbitSize = starSize;
                 orbitThickness = Hypotenuse * 0.001F;
+                bgStarThickness = Hypotenuse * 0.001F;
             }
-
 
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage(bmp);
-            g.Clear(Color.FromArgb(19, 21, 64));
-            Pen pen = new Pen(Color.White, penThickness);
+            g.Clear(Color.FromArgb(8, 8, 17));
+            Pen gridPen = new Pen(Color.White, gridPenThickness);
             Pen orbitPen = new Pen(Color.White, orbitThickness);
-            Brush starBrush = new SolidBrush(Color.FromArgb(255, 241, 104));
+
+            Brush bgStarBrush = new SolidBrush(Color.White);
+            Brush blueStarBrush = new SolidBrush(Color.FromArgb(21, 167, 255));
+            Brush whiteStarBrush = new SolidBrush(Color.WhiteSmoke);
+            Brush yellowStarBrush = new SolidBrush(Color.FromArgb(255, 241, 104));
+            Brush lightOrangeStarBrush = new SolidBrush(Color.FromArgb(255, 185, 50));
+            Brush orangeRedStarBrush = new SolidBrush(Color.FromArgb(255, 134, 47));
+            Brush yellowWhiteStarBrush = new SolidBrush(Color.FromArgb(255, 251, 174));
+            Brush blueWhiteStarBrush = new SolidBrush(Color.FromArgb(150, 219, 255));
+
             Brush textBrush = new SolidBrush(Color.White);
-            Brush planetBrush = new SolidBrush(Color.DarkGreen);
+            Brush planetBrush = new SolidBrush(Color.FromArgb(0, 66, 7));
 
             List<Hex> hexList = new();
             PointF startingPoint = new PointF(Hypotenuse / 2, Hypotenuse / 2);
 
+            // Create the hex grid
             for (int x = 0; x < universe.Grid.X; x++)
             {
                 for (int y = 0; y < universe.Grid.Y; y++)
@@ -66,12 +78,31 @@ namespace SWNUniverseGenerator.CreationTools
                 startingPoint = x % 2 != 0 ? hexList[^universe.Grid.Y].TopRight : hexList[^universe.Grid.Y].MidRight;
             }
 
+
+            // Generate background stars
+            var bgStarCount = (width * height) * .01;
+
+            for (int i = 0; i < bgStarCount; i++)
+            {
+                var variation = new Random().Next(0, 100) * .001;
+
+                RectangleF starRect = CircleToRectangle(new PointF()
+                {
+                    X = new Random().Next(0, width),
+                    Y = new Random().Next(0, height)
+                },(float) (bgStarThickness * variation));
+
+                g.FillEllipse(bgStarBrush, starRect);
+            }
+
+            // Generate stars and planets
             foreach (var hex in hexList)
             {
-                g.DrawPolygon(pen, hex.Points.ToArray());
+                g.DrawPolygon(gridPen, hex.Points.ToArray());
 
                 Zone zone = universe.Zones.Find(z => z.X == hex.X && z.Y == hex.Y);
 
+                // Planets
                 if (zone != null && zone.Planets.Count > 0)
                 {
                     for (int i = 1; i <= zone.Planets.Count; i++)
@@ -82,7 +113,6 @@ namespace SWNUniverseGenerator.CreationTools
                         RectangleF orbitRect = CircleToRectangle(hex.MidPoint, currentOrbit);
 
                         g.DrawEllipse(orbitPen, orbitRect);
-
 
                         int angle = new Random().Next(0, 360);
                         double radian = (angle * (Math.PI / 180));
@@ -96,9 +126,25 @@ namespace SWNUniverseGenerator.CreationTools
                     }
                 }
 
+                // Stars
                 if (zone is {StarId: { }})
                 {
+                    Star star = universe.Stars.Find(s => s.Id == zone.StarId);
+                    Brush starBrush = orangeRedStarBrush;
+
                     RectangleF starRect = CircleToRectangle(hex.MidPoint, starSize);
+
+                    starBrush = star.StarColor switch
+                    {
+                        Star.StarColorEnum.Blue => blueStarBrush,
+                        Star.StarColorEnum.BlueWhite => blueWhiteStarBrush,
+                        Star.StarColorEnum.White => whiteStarBrush,
+                        Star.StarColorEnum.YellowWhite => yellowWhiteStarBrush,
+                        Star.StarColorEnum.Yellow => yellowStarBrush,
+                        Star.StarColorEnum.LightOrange => lightOrangeStarBrush,
+                        Star.StarColorEnum.OrangeRed => orangeRedStarBrush,
+                        _ => starBrush
+                    };
 
                     g.FillEllipse(starBrush, starRect);
                     g.DrawString(zone.StarId,
@@ -108,8 +154,11 @@ namespace SWNUniverseGenerator.CreationTools
                 }
             }
 
-            universe.StarMap = ImageToBase64String(bmp);
-            return universe;
+            bmp.Save(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) 
+                     + "/UniverseFiles/" 
+                     + universe.Name 
+                     + ".png", 
+                ImageFormat.Png);
         }
 
         /// <summary>

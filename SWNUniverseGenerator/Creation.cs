@@ -312,15 +312,18 @@ namespace SWNUniverseGenerator
             return universe;
         }
 
-        public Universe CreateStarMap(Universe universe)
+        /// <summary>
+        /// This method receives a universe file and generates an image in the background
+        /// </summary>
+        /// <param name="universe"></param>
+        /// <exception cref="FileNotFoundException"></exception>
+        public void CreateStarMap(Universe universe)
         {
             // If there are no Planets or Locations for the Problems to be tied to then throw an exception
             if (universe.Planets == null || universe.Planets.Count == 0)
                 throw new FileNotFoundException("No locations have been loaded.");
 
-            universe = new GridCreation().CreateGrid(universe);
-            SerializeData(universe);
-            return universe;
+            new GridCreation().CreateGrid(universe);
         }
 
         /// <summary>

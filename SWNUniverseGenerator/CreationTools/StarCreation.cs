@@ -62,8 +62,23 @@ namespace SWNUniverseGenerator.CreationTools
                 if (universe.Stars.Exists(a => a.Name == star.Name))
                     continue;
 
-                // Set the type of Star
-                star.StarType = starData.StarTypes[Rand.Next(0, 8) + Rand.Next(0, 8) + Rand.Next(0, 8)];
+                // Set the color of the Star
+                int starRand = Rand.Next(0, 100);
+                int starClass = starDefaultSettings.StarClass == Star.StarClassEnum.Undefined
+                    ? starRand switch
+                    {
+                        >= 0 and < 1 => (int) Star.StarClassEnum.O,
+                        >= 1 and < 2 => (int) Star.StarClassEnum.B,
+                        >= 2 and < 3 => (int) Star.StarClassEnum.A,
+                        >= 3 and < 6 => (int) Star.StarClassEnum.F,
+                        >= 6 and < 13 => (int) Star.StarClassEnum.G,
+                        >= 13 and < 25 => (int) Star.StarClassEnum.K,
+                        _ => (int) Star.StarClassEnum.M
+                    }
+                    : (int) starDefaultSettings.StarClass;
+                
+                star.StarClass = (Star.StarClassEnum) starClass;
+                star.StarColor = (Star.StarColorEnum) starClass;
 
                 // Add the Star to the Universe
                 universe.Stars.Add(star);

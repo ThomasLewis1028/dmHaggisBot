@@ -85,11 +85,6 @@ namespace SWNUniverseGenerator.Models
         /// The list of all Points of Interest in the Universe
         /// </summary>
         public List<PointOfInterest> PointsOfInterest { get; set; }
-        
-        /// <summary>
-        /// A single Bitmap for the StarMap as a whole
-        /// </summary>
-        public String StarMap { get; set; }
     }
 
     public class Zone : IEntity

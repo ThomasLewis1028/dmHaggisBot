@@ -14,45 +14,39 @@ namespace SWNUniverseGenerator.CreationTools
         private const double IntRadians = IntAngle * (Math.PI / 180); // degrees to radians
         private static readonly float Cosign = (float) Math.Cos(IntRadians); // cos(30)
         private static readonly float Sine = (float) Math.Sin(IntRadians); // sin(30)
-        // private static float PenThickness = Hypotenuse * 0.05F;
-        // private static float StarSize = Hypotenuse * 0.25F;
-        // private static float PlanetSize = Hypotenuse * 0.1F;
-        // private static float OrbitSize = StarSize;
-        // private static float DistFromStar = Hypotenuse * 0.1F;
-        // private static float OrbitThickness = Hypotenuse * 0.001F;
 
         public static void CreateGrid(Universe universe)
         {
-            int width = (int) ((universe.Grid.X * ((Hypotenuse * Sine) + Hypotenuse)) + (Hypotenuse * Sine) + Hypotenuse);
+            int width =
+                (int) ((universe.Grid.X * ((Hypotenuse * Sine) + Hypotenuse)) + (Hypotenuse * Sine) + Hypotenuse);
             int height = (int) ((universe.Grid.Y * (2 * Hypotenuse * Cosign)) + (Hypotenuse * Cosign) + Hypotenuse);
-            float PenThickness = Hypotenuse * 0.05F;
-            float StarSize = Hypotenuse * 0.25F;
-            float PlanetSize = Hypotenuse * 0.1F;
-            float OrbitSize = StarSize;
-            float DistFromStar = Hypotenuse * 0.1F;
-            float OrbitThickness = Hypotenuse * 0.001F;
+            float penThickness = Hypotenuse * 0.05F;
+            float starSize = Hypotenuse * 0.175F;
+            float planetSize = Hypotenuse * 0.075F;
+            float orbitSize = starSize;
+            float orbitThickness = Hypotenuse * 0.001F;
 
-            while (width * height > 500000000) 
+            while (width * height > 500000000)
             {
                 Hypotenuse -= 10;
-                
-                width = (int) ((universe.Grid.X * ((Hypotenuse * Sine) + Hypotenuse)) + (Hypotenuse * Sine) + Hypotenuse);
+
+                width =
+                    (int) ((universe.Grid.X * ((Hypotenuse * Sine) + Hypotenuse)) + (Hypotenuse * Sine) + Hypotenuse);
                 height = (int) ((universe.Grid.Y * (2 * Hypotenuse * Cosign)) + (Hypotenuse * Cosign) + Hypotenuse);
-                
-                PenThickness = Hypotenuse * 0.05F;
-                StarSize = Hypotenuse * 0.25F;
-                PlanetSize = Hypotenuse * 0.1F;
-                OrbitSize = StarSize;
-                DistFromStar = Hypotenuse * 0.1F;
-                OrbitThickness = Hypotenuse * 0.001F;
+
+                penThickness = Hypotenuse * 0.05F;
+                starSize = Hypotenuse * 0.25F;
+                planetSize = Hypotenuse * 0.1F;
+                orbitSize = starSize;
+                orbitThickness = Hypotenuse * 0.001F;
             }
 
 
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage(bmp);
             g.Clear(Color.FromArgb(19, 21, 64));
-            Pen pen = new Pen(Color.White, PenThickness);
-            Pen orbitPen = new Pen(Color.White, OrbitThickness);
+            Pen pen = new Pen(Color.White, penThickness);
+            Pen orbitPen = new Pen(Color.White, orbitThickness);
             Brush starBrush = new SolidBrush(Color.FromArgb(255, 241, 104));
             Brush textBrush = new SolidBrush(Color.White);
             Brush planetBrush = new SolidBrush(Color.DarkGreen);
@@ -77,46 +71,39 @@ namespace SWNUniverseGenerator.CreationTools
 
                 Zone zone = universe.Zones.Find(z => z.X == hex.X && z.Y == hex.Y);
 
+                if (zone != null && zone.Planets.Count > 0)
+                {
+                    for (int i = 1; i <= zone.Planets.Count; i++)
+                    {
+                        float modifer = i == 1 ? 2F : i * 1.5F;
+                        float currentOrbit = orbitSize * modifer;
+
+                        RectangleF orbitRect = CircleToRectangle(hex.MidPoint, currentOrbit);
+
+                        g.DrawEllipse(orbitPen, orbitRect);
+
+
+                        int angle = new Random().Next(0, 360);
+                        double radian = (angle * (Math.PI / 180));
+
+                        PointF planetPoint = new PointF(hex.MidPoint.X + (currentOrbit * (float) Math.Cos(radian)),
+                            hex.MidPoint.Y + (currentOrbit * (float) Math.Sin(radian)));
+                        
+                        RectangleF planetRect = CircleToRectangle(planetPoint, planetSize);
+
+                        g.FillEllipse(planetBrush, planetRect); 
+                    }
+                }
+                
                 if (zone is {StarId: { }})
                 {
-                    RectangleF starRect = new RectangleF(
-                        hex.MidPoint.X - StarSize / 2,
-                        hex.MidPoint.Y - StarSize / 2,
-                        StarSize,
-                        StarSize);
+                    RectangleF starRect = CircleToRectangle(hex.MidPoint, starSize);
 
                     g.FillEllipse(starBrush, starRect);
                     g.DrawString(zone.StarId,
                         new Font("Cascadia Mono", Hypotenuse * 0.13F, FontStyle.Bold),
                         textBrush,
                         hex.TextLocation);
-                }
-
-                if (zone != null && zone.Planets.Count > 0)
-                {
-                    for (int i = 1; i <= zone.Planets.Count; i++)
-                    {
-                        float currentOrbit = i == 1 ? OrbitSize * 2F : OrbitSize * (i * 1.5F);
-                        
-                        RectangleF orbitRect = new RectangleF(
-                            hex.MidPoint.X - (currentOrbit / 2),
-                            hex.MidPoint.Y - (currentOrbit / 2),
-                            currentOrbit,
-                            currentOrbit);
-
-                        g.DrawEllipse(orbitPen, orbitRect);
-
-                        // center + (radius * cosine(angle))
-                        // center + (radius * sine(angle))
-                        RectangleF rectangleF = new RectangleF(
-                            hex.MidPoint.X + (currentOrbit / 2) * (float) Math.Cos(new Random().Next()),
-                            hex.MidPoint.Y + (currentOrbit / 2) * (float) Math.Sin(new Random().Next()),
-                            PlanetSize,
-                            PlanetSize);
-
-
-                        g.FillEllipse(planetBrush, rectangleF);
-                    }
                 }
             }
 
@@ -161,6 +148,14 @@ namespace SWNUniverseGenerator.CreationTools
             hexes.Add(hex);
 
             return hex;
+        }
+
+        public static RectangleF CircleToRectangle(PointF midpoint, float radius)
+        {
+            return new RectangleF(midpoint.X - radius,
+                midpoint.Y - radius,
+                radius * 2,
+                radius * 2);
         }
 
         private class Hex

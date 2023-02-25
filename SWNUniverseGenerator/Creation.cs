@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
@@ -24,6 +25,8 @@ namespace SWNUniverseGenerator
         private static readonly string _localPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         private readonly string _universePath = _localPath + "/UniverseFiles/";
         private readonly string _dataPath = _localPath + "/Data/";
+        public const string universeExt = ".universe";
+
         public ShipData ShipData;
         private WorldInfo _worldInfo;
         private StarData _starData;
@@ -94,7 +97,7 @@ namespace SWNUniverseGenerator
 
             // Set the name of the file from the name specified above
             var path = new StringBuilder();
-            path.Append(_universePath + "\\" + name + ".json");
+            path.Append(_universePath + "\\" + name + universeExt);
 
             // Look for the file based on the path above
             if (File.Exists(path.ToString()))
@@ -332,7 +335,7 @@ namespace SWNUniverseGenerator
         {
             // Set the path to the name
             var path = new StringBuilder();
-            path.Append(_universePath + "/" + name + ".json");
+            path.Append(_universePath + "/" + name + universeExt);
 
             // If none exists throw an exception
             if (!File.Exists(path.ToString()))
@@ -347,6 +350,19 @@ namespace SWNUniverseGenerator
             return JsonConvert.DeserializeObject<Universe>(univ.ToString());
         }
 
+        public void DeleteUniverse(string universeName)
+        {
+            // Set the path to the name
+            var path = new StringBuilder();
+            path.Append(_universePath + "/" + universeName + universeExt);
+            
+            // If none exists throw an exception
+            if (!File.Exists(path.ToString()))
+                throw new FileNotFoundException(path + " not found.");
+            
+            File.Delete(path.ToString());
+        }
+
         /// <summary>
         /// Method should receive a Universe that it will serialize to a file
         /// </summary>
@@ -354,7 +370,7 @@ namespace SWNUniverseGenerator
         private void SerializeData(Universe universe)
         {
             // Set the path to the file and write it, overwriting the previous file if it exists.
-            var path = _universePath + universe.Name + ".json";
+            var path = _universePath + universe.Name + universeExt;
             using var file =
                 File.CreateText(path);
             var serializer = new JsonSerializer();
@@ -376,6 +392,52 @@ namespace SWNUniverseGenerator
                     File.ReadAllText(path));
 
             return JsonConvert.DeserializeObject<T>(data.ToString());
+        }
+
+        /// <summary>
+        /// Retrieve all universe files on disk
+        /// </summary>
+        /// <returns></returns>
+        public List<UniverseInfo> GetUniverseList()
+        {
+            List<UniverseInfo> universeInfos = new();
+            string[] fileListFullPath = Directory.GetFiles(_universePath, "*" + universeExt);
+
+            foreach (var fullPath in fileListFullPath)
+            {
+                var filename = Path.GetFileName(fullPath).Replace(universeExt, "");
+                
+                Universe universe = LoadUniverse(filename);
+                UniverseInfo universeInfo = new UniverseInfo()
+                {
+                    Name = universe.Name,
+                    GridX = universe.Grid.X,
+                    GridY = universe.Grid.Y,
+                    StarCount = universe.Stars.Count,
+                    PlanetCount = universe.Planets.Count,
+                    ShipCount = universe.Ships.Count,
+                    CharCount = universe.Characters.Count
+                };
+                universeInfos.Add(universeInfo);
+            }
+
+            return universeInfos;
+        }
+
+        /// <summary>
+        /// Class to hold information for brief display.
+        /// </summary>
+        public class UniverseInfo
+        {
+            public String Name { get; set; }
+
+            public int GridX;
+            public int GridY;
+
+            public int StarCount;
+            public int PlanetCount;
+            public int ShipCount;
+            public int CharCount;
         }
     }
 }

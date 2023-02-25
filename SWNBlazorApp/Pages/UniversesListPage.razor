@@ -11,6 +11,7 @@
 @inject Universe CurrentUniverse
 @inject Persistence Persistence
 @inject SerializeClass SerializeClass
+@inject IMenuService MenuService
 
 <h1>Universes</h1>
 
@@ -58,7 +59,7 @@
             </ToolBarContent>
             <HeaderContent>
                 <MudTh>
-                    <MudTableSortLabel SortBy="new Func<UniverseService.UniverseRow, object>(x => x.Name)">Universe Name</MudTableSortLabel>
+                    <MudTableSortLabel SortBy="new Func<Creation.UniverseInfo, object>(x => x.Name)">Universe Name</MudTableSortLabel>
                 </MudTh>
                 <MudTh>Grid Size</MudTh>
                 <MudTh>Star Count</MudTh>
@@ -97,13 +98,14 @@
     MudForm form;
     String[] errors = {};
     String universeName;
-    List<UniverseService.UniverseRow> UniverseRows = new();
-    private UniverseService.UniverseRow selectedUniverse;
+    List<Creation.UniverseInfo> UniverseRows = new();
+    private Creation.UniverseInfo selectedUniverse;
     private string searchString;
 
     protected override async Task OnInitializedAsync()
     {
         UniverseRows = await UniverseService.GetUniverseListAsync();
+        MenuService.NotifyChanged();
     }
 
     private async void CreateUniverse()
@@ -134,7 +136,7 @@
     private string GetUniverseName()
     {
         Task<Universe> task = UniverseService.GetUniverseAsync();
-        String currentUniverseName = task == null ? "None" : task.Result.Name;
+        String currentUniverseName = task.Result == null ? "None" : task.Result.Name;
         return currentUniverseName;
     }
 
@@ -153,7 +155,7 @@
             SerializeClass.SerializeData(Persistence);
         }
         
-        UniverseService.DeleteUniverseAsync(universeName);
+        await UniverseService.DeleteUniverseAsync(universeName);
         
         await OnInitializedAsync();
     }

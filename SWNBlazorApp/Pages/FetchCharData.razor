@@ -98,7 +98,7 @@ else
         </MudItem>
         @* Character List *@
         <MudItem xs="8">
-            <MudTable Items="@characters" Hover="true" SortLabel="Sort By" Filter="new Func<Character, bool>(CharacterFilterFunc)" @bind-SelectedItem="currentCharacter">
+            <MudTable Items="@characters.OrderBy(c => c.Id)" Hover="true" SortLabel="Sort By" Filter="new Func<Character, bool>(CharacterFilterFunc)" @bind-SelectedItem="currentCharacter">
                 <ToolBarContent>
                     <MudText Typo="Typo.h6">Character List</MudText>
                     <MudSpacer/>
@@ -142,7 +142,26 @@ else
                         </CardHeaderContent>
                     </MudCardHeader>
                     <MudCardContent>
-                        <MudText Typo="Typo.body1">@currentCharacter.Title</MudText>
+                        @if(currentCharacter.Title != null)
+                        {
+                            <MudText Typo="Typo.body1">Title: @currentCharacter.Title</MudText>
+                        }
+                        @if (currentCharacter.ShipId != null)
+                        {
+                            <MudText Typo="Typo.body1">Ship Name: @GetShipName(currentCharacter.ShipId)</MudText>
+                            <MudText Typo="Typo.body1">Ship ID: @currentCharacter.ShipId</MudText>
+                        }
+                        <MudText Typo="Typo.body1">Gender: @currentCharacter.Gender</MudText>
+                        <MudText Typo="Typo.body1">Skin Color: @currentCharacter.SkinCol</MudText>
+                        <MudText Typo="Typo.body1">Hair Style: @currentCharacter.HairStyle</MudText>
+                        <MudText Typo="Typo.body1">Hair Color: @currentCharacter.HairCol</MudText>
+                        <MudText Typo="Typo.body1">Eye Color: @currentCharacter.EyeCol</MudText>
+                        <MudText Typo="Typo.body1">Height: @currentCharacter.Height</MudText>
+                        <MudText Typo="Typo.body1">Birth Planet: @currentCharacter.BirthPlanet - @GetPlanetName(@currentCharacter.BirthPlanet)</MudText>
+                        <MudText Typo="Typo.body1">Current Planet: @currentCharacter.CurrentLocation - @GetPlanetName(@currentCharacter.CurrentLocation)</MudText>
+                        <MudText Typo="Typo.body1">Initial Reaction: @currentCharacter.InitialReaction</MudText>
+                        <MudText Typo="Typo.body1">Crime Chance: @currentCharacter.CrimeChance%</MudText>
+
                     </MudCardContent>
                 </MudCard>
             }
@@ -182,7 +201,7 @@ else
         return Search.SearchUniverseList(UniverseService.GetUniverseAsync().Result, new SearchDefaultSettings() {Id = array}).First().Name;
     }
 
-    private String GetShipname(String shipId)
+    private String GetShipName(String shipId)
     {
         string[] array = {shipId};
         return Search.SearchUniverseList(UniverseService.GetUniverseAsync().Result, new SearchDefaultSettings() {Id = array}).First().Name;

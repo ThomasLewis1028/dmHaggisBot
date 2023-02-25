@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using MudBlazor.Services;
 using SWNBlazorApp.Areas.Identity;
 using SWNBlazorApp.Data;
@@ -31,13 +32,16 @@ builder.Services.AddSingleton<UniverseService>();
 builder.Services.AddSingleton<Universe>();
 builder.Services.AddSingleton<Persistence>();
 builder.Services.AddSingleton<SerializeClass>();
+builder.Services.AddScoped<IMenuService, MenuService>();
 
 var app = builder.Build();
+app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    app.UseStaticFiles();
 }
 else
 {
@@ -46,9 +50,14 @@ else
     app.UseHsts();
 }
 
-if (!File.Exists(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/persistence.json"))
+if (!File.Exists(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Data/persistence.json"))
 {
     new SerializeClass().SerializeData(new Persistence());
+}
+
+if (!Directory.Exists("wwwroot\\images\\starmaps"))
+{
+    Directory.CreateDirectory("wwwroot\\images\\starmaps");
 }
 
 app.UseHttpsRedirection();

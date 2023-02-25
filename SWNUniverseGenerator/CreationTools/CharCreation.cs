@@ -88,8 +88,16 @@ namespace SWNUniverseGenerator.CreationTools
                     : Rand.Next(characterDefaultSettings.Age[0], characterDefaultSettings.Age[1]);
                 character.Gender = (Character.GenderEnum) gender;
                 // Hair color
+                var hairColSwitch = Rand.Next(0, 100);
                 character.HairCol = string.IsNullOrEmpty(characterDefaultSettings.HairCol)
-                    ? charData.HairColor[Rand.Next(0, hairColorCount)]
+                    ? character.HairCol = hairColSwitch switch
+                    {
+                        {} n when n is > 0 and < 75 => charData.HairColor[Rand.Next(0, 4)],
+                        {} n when n is >= 75 and < 90 => charData.HairColor[Rand.Next(4, 9)],
+                        {} n when n is >= 90 and < 95 => charData.HairColor[Rand.Next(9, 10)],
+                        {} n when (n >= 95) => charData.HairColor[Rand.Next(10, 16)],
+                        _ => charData.HairColor[0]
+                    }
                     : characterDefaultSettings.HairCol;
                 // Hair style
                 character.HairStyle = string.IsNullOrEmpty(characterDefaultSettings.HairStyle)
@@ -163,8 +171,8 @@ namespace SWNUniverseGenerator.CreationTools
                 cCount++;
             }
 
-            // Re-order the list of Characters by their first name.
-            // universe.Characters = universe.Characters.OrderBy(c => c.Id).ToList();
+            // Re-order the list of Characters by their Id.
+            universe.Characters = universe.Characters.OrderBy(c => c.Id).ToList();
 
             return universe;
         }

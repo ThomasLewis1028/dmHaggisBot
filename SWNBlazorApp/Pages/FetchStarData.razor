@@ -1,0 +1,218 @@
+﻿@page "/fetchstardata"
+
+<PageTitle>Star Data</PageTitle>
+
+@using SWNBlazorApp.Data
+@using SWNUniverseGenerator
+@using SWNUniverseGenerator.DefaultSettings
+@using SWNUniverseGenerator.Models
+@inject CreationService CreationService
+@inject UniverseService UniverseService
+@inject Universe CurrentUniverse
+
+<h1>Star Data</h1>
+
+<p>All stars in the current universe</p>
+
+@if (zones == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <MudGrid>
+        @* <MudItem xs="12"> *@
+        @*     <MudExpansionPanels> *@
+        @*         $1$ Star Creation #1# *@
+        @*         <MudExpansionPanel Text="Star Creation Creation"> *@
+        @*             <MudItem xs="12" sm="6"> *@
+        @*                 <MudPaper Class="pa-4"> *@
+        @*                     <MudForm @ref="form"> *@
+        @*                         <MudGrid> *@
+        @*                             <MudItem xs="4"> *@
+        @*                                 <MudTextField T="String" Label="First Name" Required="false" @bind-Value="newCharFirstName"/> *@
+        @*                             </MudItem> *@
+        @*                             <MudItem xs="4"> *@
+        @*                                 <MudTextField T="String" Label="Last Name" Required="false" @bind-Value="newCharLastName"/> *@
+        @*                             </MudItem> *@
+        @*                             <MudItem xs="1"> *@
+        @*                                 <MudTextField T="int" Label="Age" Required="false" @bind-Value="newCharAge"/> *@
+        @*                             </MudItem> *@
+        @*                             <MudItem xs="3"> *@
+        @*                                 <MudSelect T="Character.GenderEnum" Label="Gender" Required="true" @bind-Value="newCharGender"> *@
+        @*                                     <MudSelectItem Value="@Character.GenderEnum.Undefined"/> *@
+        @*                                     <MudSelectItem Value="@Character.GenderEnum.Male"/> *@
+        @*                                     <MudSelectItem Value="@Character.GenderEnum.Female"/> *@
+        @*                                 </MudSelect> *@
+        @*                             </MudItem> *@
+        @* *@
+        @*                             <MudItem xs="4"> *@
+        @*                                 <MudTextField T="String" Label="Hair Color" Required="false" @bind-Value="newCharHairColor"/> *@
+        @*                             </MudItem> *@
+        @*                             <MudItem xs="4"> *@
+        @*                                 <MudTextField T="String" Label="Hair Style" Required="false" @bind-Value="newCharHairStyle"/> *@
+        @*                             </MudItem> *@
+        @*                             <MudItem xs="4"> *@
+        @*                                 <MudTextField T="String" Label="Eye Color" Required="false" @bind-Value="newCharEyeColor"/> *@
+        @*                             </MudItem> *@
+        @* *@
+        @*                             <MudItem xs="6"> *@
+        @*                                 <MudTextField T="String" Label="Title" Required="false" @bind-Value="newCharTitle"/> *@
+        @*                             </MudItem> *@
+        @*                             <MudItem xs="6"> *@
+        @*                                 <MudTextField T="String" Label="Ship Id" Required="false" @bind-Value="newCharShipId"/> *@
+        @*                             </MudItem> *@
+        @* *@
+        @*                             <MudItem xs="6"> *@
+        @*                                 <MudTextField T="String" Label="Birth Planet ID" Required="false" @bind-Value="newCharBirthPlanetId"/> *@
+        @*                             </MudItem> *@
+        @*                             <MudItem xs="6"> *@
+        @*                                 <MudTextField T="String" Label="Current Planet ID" Required="false" @bind-Value="newCharCurrPlanetId"/> *@
+        @*                             </MudItem> *@
+        @* *@
+        @*                             <MudItem xs="2"> *@
+        @*                                 <MudTextField T="int" Label="Crime Chance %" Required="false" @bind-Value="newCharCrimeChance"/> *@
+        @*                             </MudItem> *@
+        @*                             <MudItem xs="10"> *@
+        @*                                 <MudTextField T="String" Label="Initial Reaction" Required="false" @bind-Value="newCharInitialReaction"/> *@
+        @*                             </MudItem> *@
+        @*                         </MudGrid> *@
+        @*                     </MudForm> *@
+        @*                 </MudPaper> *@
+        @*                 <MudPaper Class="pa-4 mt-4"> *@
+        @*                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CreateCharacter())">Create Character</MudButton> *@
+        @*                     <MudButton Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" OnClick="@(() => form.Reset())" Class="mx-2">Reset</MudButton> *@
+        @*                 </MudPaper> *@
+        @*             </MudItem> *@
+        @*             <MudItem xs="12" sm="6"> *@
+        @*                 <MudPaper Class="pa-4 mud-height-full"> *@
+        @* *@
+        @*                 </MudPaper> *@
+        @*             </MudItem> *@
+        @*         </MudExpansionPanel> *@
+        @*     </MudExpansionPanels> *@
+        @* </MudItem> *@
+        @* Character List *@
+        <MudItem xs="8">
+            <MudTable Items="@stars.OrderBy(c => c.Id)" Hover="true" SortLabel="Sort By" Filter="new Func<Star, bool>(StarFilterFunc)" @bind-SelectedItem="currentStar">
+                <ToolBarContent>
+                    <MudText Typo="Typo.h6">Star List</MudText>
+                    <MudSpacer/>
+                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Star, object>(x => x.Id)">ID</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Star, object>(x => x.Name)">Name</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>Grid Location</MudTh>
+                    <MudTh>
+                        Planets
+                    </MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Id" class="cursor-pointer">@context.Id</MudTd>
+                    <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
+                    <MudTd DataLabel="Name" class="cursor-pointer">
+                        @(GetZone(context.Id).X 
+                          + "/" 
+                          + GetZone(context.Id).Y)
+                    </MudTd>
+                    <MudTd DataLabel="Name" class="cursor-pointer">@(GetZone(context.Id).Planets.Count)</MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager PageSizeOptions="new[] {10, 15, 20, 25, 50, 75, 100, int.MaxValue}"/>
+                </PagerContent>
+            </MudTable>
+        </MudItem>
+
+        <MudItem xs="4">
+            @*Individual Character Display*@
+            @if (currentStar != null)
+            {
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h4">@currentStar.Name</MudText>
+                            <MudText Typo="Typo.body2">ID: @currentStar.Id</MudText>
+                            <MudText Typo="Typo.body2">Type: @currentStar.StarType</MudText>
+                            <MudText Typo="Typo.body2"> Location: 
+                                @(GetZone(currentStar.Id).X
+                                  + "/"
+                                  + GetZone(currentStar.Id).Y)
+                            </MudText>
+
+                            @if (GetZone(currentStar.Id).Planets.Any())
+                            {
+                                <MudText Typo="Typo.h6">Planets:</MudText>
+                                foreach (var planet in GetZone(currentStar.Id).Planets)
+                                {
+                                    <MudText Typo="Typo.body2">@planet - @GetPlanetName(planet)</MudText>
+                                }
+                            }
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+
+                    </MudCardContent>
+                </MudCard>
+            }
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+    private List<Zone>? zones;
+    private List<Star>? stars;
+    private Star currentStar;
+    private string searchString;
+    MudForm form;
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUniverse = UniverseService.GetUniverseAsync().Result;
+        zones = await StarService.GetZonesAsync(CurrentUniverse);
+        stars = await StarService.GetStarsAsync(CurrentUniverse);
+    }
+
+    private String GetPlanetName(String planetId)
+    {
+        string[] array = {planetId};
+        return Search.SearchUniverseList(UniverseService.GetUniverseAsync().Result, new SearchDefaultSettings() {Id = array}).First().Name;
+    }
+
+
+    private void CreateStars()
+    {
+        Creation creation = CreationService.GetCreationAsync().Result;
+        Universe universe = UniverseService.GetUniverseAsync().Result;
+
+        creation.CreateStars(universe, new StarDefaultSettings()
+        {
+        });
+        OnInitializedAsync();
+    }
+
+    private Zone GetZone(string starId)
+    {
+        return zones.Find(z => z.StarId == starId);
+    }
+
+    private bool StarFilterFunc(Star star) => StarFilter(star, searchString);
+
+    private bool StarFilter(Star star, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (star.Name.Contains(this.searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (star.Id.Contains(this.searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+}

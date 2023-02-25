@@ -14,19 +14,22 @@
 
 
 <MudGrid>
-    <MudItem xs="12">
-        <MudImage Src="@(CurrentUniverse.Name + ".png")" Elevation="25" Alt="Starmap"/>
+    <MudItem xs="4">
+        <img src="@(starmapPath + "\\" + CurrentUniverse.Name + ".png")" style="height:100%; width: 100%; object-fit: contain" xs="5"/>
+        @* <MudImage Src="@(starmapPath + "\\" + CurrentUniverse.Name + ".png")" Class="starmap-image" Alt="Starmap"/> *@
     </MudItem>
 </MudGrid>
 
+
 @code {
-    private String dataPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+    private static String wwwrootPath = "wwwroot";
+    private static String starmapPath = "\\images\\starmaps";
 
     protected override async Task OnInitializedAsync()
     {
         CurrentUniverse = UniverseService.GetUniverseAsync().Result;
 
-        if (!File.Exists($"{CurrentUniverse.Name}.png"))
+        if (!File.Exists($"{wwwrootPath+starmapPath}\\{CurrentUniverse.Name}.png"))
         {
             GenerateImage();
         }
@@ -36,6 +39,6 @@
     {
         GridCreation gd = new GridCreation();
         Image starmap = gd.ImageFromBase64String(CurrentUniverse.StarMap);
-        starmap.Save($"{CurrentUniverse.Name}.png");
+        starmap.Save($"{wwwrootPath+starmapPath}\\{CurrentUniverse.Name}.png");
     }
 }

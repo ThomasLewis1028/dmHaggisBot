@@ -1,6 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SWNBlazorApp.Data
+@using SWNUniverseGenerator.Models
 @namespace SWNBlazorApp.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+@inject UniverseService UniverseService
+@inject Universe CurrentUniverse
 
 <!DOCTYPE html>
 <html lang="en">

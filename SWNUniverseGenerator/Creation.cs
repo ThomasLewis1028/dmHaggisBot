@@ -309,6 +309,17 @@ namespace SWNUniverseGenerator
             return universe;
         }
 
+        public Universe CreateStarMap(Universe universe)
+        {
+            // If there are no Planets or Locations for the Problems to be tied to then throw an exception
+            if (universe.Planets == null || universe.Planets.Count == 0)
+                throw new FileNotFoundException("No locations have been loaded.");
+
+            universe = new GridCreation().CreateGrid(universe);
+            SerializeData(universe);
+            return universe;
+        }
+
         /// <summary>
         /// This method receives the name of a Universe and deserializes it into a Universe object
         /// </summary>

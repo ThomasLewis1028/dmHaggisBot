@@ -1,36 +1,41 @@
 ﻿@using SWNBlazorApp.Data
 @using SWNUniverseGenerator.CreationTools
 @using SWNUniverseGenerator.Models
+@using System.Drawing
+@using System.Reflection
 @page "/universe"
 
 <PageTitle>@CurrentUniverse.Name</PageTitle>
 
 @inject UniverseService UniverseService
-@inject CreationService CreationService
 @inject Universe CurrentUniverse
-@inject Persistence Persistence
-@inject SerializeClass SerializeClass
 
 <h1>@CurrentUniverse.Name</h1>
 
 
 <MudGrid>
-    <MudItem xs="12" sm="7">
-        <MudPaper Class="pa-4">
-            <MudButton OnClick="@(() => GridCreate())" Color="Color.Primary">Create Grid</MudButton>
-        </MudPaper>
+    <MudItem xs="12">
+        <MudImage Src="@(CurrentUniverse.Name + ".png")" Elevation="25" Alt="Starmap"/>
     </MudItem>
 </MudGrid>
 
 @code {
+    private String dataPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
     protected override async Task OnInitializedAsync()
     {
         CurrentUniverse = UniverseService.GetUniverseAsync().Result;
+
+        if (!File.Exists($"{CurrentUniverse.Name}.png"))
+        {
+            GenerateImage();
+        }
     }
 
-    public void GridCreate()
+    public void GenerateImage()
     {
-        GridCreation.CreateGrid(CurrentUniverse);
+        GridCreation gd = new GridCreation();
+        Image starmap = gd.ImageFromBase64String(CurrentUniverse.StarMap);
+        starmap.Save($"{CurrentUniverse.Name}.png");
     }
 }

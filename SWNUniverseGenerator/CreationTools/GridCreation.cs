@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using SWNUniverseGenerator.Models;
 
@@ -15,7 +16,7 @@ namespace SWNUniverseGenerator.CreationTools
         private static readonly float Cosign = (float) Math.Cos(IntRadians); // cos(30)
         private static readonly float Sine = (float) Math.Sin(IntRadians); // sin(30)
 
-        public static void CreateGrid(Universe universe)
+        public Universe CreateGrid(Universe universe)
         {
             int width =
                 (int) ((universe.Grid.X * ((Hypotenuse * Sine) + Hypotenuse)) + (Hypotenuse * Sine) + Hypotenuse);
@@ -88,13 +89,13 @@ namespace SWNUniverseGenerator.CreationTools
 
                         PointF planetPoint = new PointF(hex.MidPoint.X + (currentOrbit * (float) Math.Cos(radian)),
                             hex.MidPoint.Y + (currentOrbit * (float) Math.Sin(radian)));
-                        
+
                         RectangleF planetRect = CircleToRectangle(planetPoint, planetSize);
 
-                        g.FillEllipse(planetBrush, planetRect); 
+                        g.FillEllipse(planetBrush, planetRect);
                     }
                 }
-                
+
                 if (zone is {StarId: { }})
                 {
                     RectangleF starRect = CircleToRectangle(hex.MidPoint, starSize);
@@ -107,7 +108,8 @@ namespace SWNUniverseGenerator.CreationTools
                 }
             }
 
-            bmp.Save(@"C:\Users\thoma\Desktop\grid.png", ImageFormat.Png);
+            universe.StarMap = ImageToBase64String(bmp);
+            return universe;
         }
 
         /// <summary>
@@ -156,6 +158,23 @@ namespace SWNUniverseGenerator.CreationTools
                 midpoint.Y - radius,
                 radius * 2,
                 radius * 2);
+        }
+
+        public string ImageToBase64String(Image image)
+        {
+            MemoryStream memory = new MemoryStream();
+            image.Save(memory, ImageFormat.Png);
+            string base64 = Convert.ToBase64String(memory.ToArray());
+            memory.Close();
+            return base64;
+        }
+
+        public Image ImageFromBase64String(string base64)
+        {
+            MemoryStream memory = new MemoryStream(Convert.FromBase64String(base64));
+            Image result = Image.FromStream(memory);
+            memory.Close();
+            return result;
         }
 
         private class Hex

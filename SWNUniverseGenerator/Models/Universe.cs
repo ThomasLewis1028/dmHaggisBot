@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text.Json.Serialization;
 
 namespace SWNUniverseGenerator.Models
@@ -9,6 +10,9 @@ namespace SWNUniverseGenerator.Models
     /// </summary>
     public class Universe
     {
+        /// <summary>
+        /// Default constructor to create a blank universe
+        /// </summary>
         public Universe()
         {
             Name = null;
@@ -81,6 +85,11 @@ namespace SWNUniverseGenerator.Models
         /// The list of all Points of Interest in the Universe
         /// </summary>
         public List<PointOfInterest> PointsOfInterest { get; set; }
+        
+        /// <summary>
+        /// A single Bitmap for the StarMap as a whole
+        /// </summary>
+        public String StarMap { get; set; }
     }
 
     public class Zone : IEntity

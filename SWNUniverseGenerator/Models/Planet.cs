@@ -83,13 +83,13 @@ namespace SWNUniverseGenerator.Models
         /// </summary>
         public String Contact { get; set; }
 
-        public Society Society { get; set; }
-        
-        public Ruler Ruler { get; set; }
-
-        public Ruled Ruled { get; set; }
-        
-        public Flavor Flavor { get; set; }
+        // public Society Society { get; set; }
+        //
+        // public Ruler Ruler { get; set; }
+        //
+        // public Ruled Ruled { get; set; }
+        //
+        // public Flavor Flavor { get; set; }
     }
 
     public class Society

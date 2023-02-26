@@ -35,7 +35,7 @@ namespace SWNUniverseGenerator.CreationTools
                 if (universe.Aliens.Exists(a => a.Id == alien.Id))
                     continue;
 
-                alien.BodyTraits = new List<string>();
+                alien.BodyTraits = "";
 
                 // Alien Body Traits
                 if (bCount > 0)
@@ -46,7 +46,7 @@ namespace SWNUniverseGenerator.CreationTools
                     {
                         var trait = alienData.BodyTraits[Rand.Next(0, alienData.BodyTraits.Count)];
                         if (!alien.BodyTraits.Contains(trait))
-                            alien.BodyTraits.Add(trait);
+                            alien.BodyTraits += (trait + "|");
                         else continue;
 
                         bCounter++;
@@ -58,7 +58,7 @@ namespace SWNUniverseGenerator.CreationTools
                     {
                         var trait = alienData.BodyTraits[Rand.Next(0, alienData.BodyTraits.Count)];
                         if (!alien.BodyTraits.Contains(trait))
-                            alien.BodyTraits.Add(trait);
+                            alien.BodyTraits += (trait + "|");
                         else continue;
 
                         if (Rand.Next(0, 6) == 0)
@@ -67,9 +67,9 @@ namespace SWNUniverseGenerator.CreationTools
                     }
                 }
 
-                alien.Lenses = new List<string>();
+                alien.Lenses = "";
                 // Alien Lenses
-                if (alienDefaultSettings.Lenses == null || alienDefaultSettings.Lenses.Count == 0)
+                if (alienDefaultSettings.Lenses == null || alienDefaultSettings.Lenses != null)
                 {
                     var lCount = Rand.Next(0, 2) + 1;
                     var lCounter = 0;
@@ -78,7 +78,7 @@ namespace SWNUniverseGenerator.CreationTools
                     {
                         var lens = alienData.Lenses[Rand.Next(0, alienData.Lenses.Count)].Type;
                         if (!alien.Lenses.Contains(lens))
-                            alien.Lenses.Add(lens);
+                            alien.Lenses += (lens + "|");
                         else continue;
 
                         lCounter++;
@@ -87,11 +87,11 @@ namespace SWNUniverseGenerator.CreationTools
                 else
                     alien.Lenses = alienDefaultSettings.Lenses;
 
-                alien.SocialStructures = new List<string>();
+                alien.SocialStructures = "";
                 // Alien Social Structure
                 if (Rand.Next(0, 2) == 0)
-                    alien.SocialStructures.Add(alienData
-                        .SocialStructures[Rand.Next(0, alienData.SocialStructures.Count)].Type);
+                    alien.SocialStructures += (alienData
+                        .SocialStructures[Rand.Next(0, alienData.SocialStructures.Count)].Type) + "|";
                 else
                 {
                     var sCounter = 0;
@@ -101,7 +101,7 @@ namespace SWNUniverseGenerator.CreationTools
                     {
                         var type = alienData.SocialStructures[Rand.Next(0, alienData.SocialStructures.Count)].Type;
                         if (!alien.SocialStructures.Contains(type))
-                            alien.SocialStructures.Add(type);
+                            alien.SocialStructures += (type + "|");
                         else continue;
 
                         sCounter++;

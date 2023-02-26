@@ -15,7 +15,8 @@ public class DatabaseTests
         Universe universe = new Universe()
         {
             Name = "TestCreateUniverse",
-            Grid = new Grid(8, 10)
+            GridX = 8,
+            GridY = 10
         };
 
         UniverseContext uc = new UniverseContext();

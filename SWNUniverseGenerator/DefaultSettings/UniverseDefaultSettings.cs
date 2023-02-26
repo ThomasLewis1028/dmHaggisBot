@@ -11,7 +11,8 @@ namespace SWNUniverseGenerator.DefaultSettings
         public UniverseDefaultSettings()
         {
             Name = null;
-            Grid = new Grid(8, 10);
+            GridX = 8;
+            GridY = 10;
             Overwrite = false;
         }
 
@@ -21,9 +22,14 @@ namespace SWNUniverseGenerator.DefaultSettings
         public String Name { get; set; }
 
         /// <summary>
-        ///     This value should be a string x y that will be your X Y grid
+        ///     This value should be an integer X for your width
         /// </summary>
-        public Grid Grid { get; set; }
+        public Int32? GridX { get; set; }
+        
+        /// <summary>
+        ///     This value should be an integer Y for your height
+        /// </summary>
+        public Int32? GridY { get; set; }
 
         /// <summary>
         ///     Flag for overwriting a previous universe file

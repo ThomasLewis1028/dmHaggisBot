@@ -122,25 +122,25 @@ namespace SWNUniverseGenerator.CreationTools
                 // Set the weapons
                 if (preset.Weapons != null)
                 {
-                    ship.Weapons = new List<String>();
+                    ship.Weapons = new List<ShipWeapon>();
                     foreach (var w in preset.Weapons)
-                        ship.Weapons.Add(shipData.Weapons[w].Type);
+                        ship.Weapons.Add(new ShipWeapon(shipData.Weapons[w].Type));
                 }
 
                 // Set the defenses
                 if (preset.Defenses != null)
                 {
-                    ship.Defenses = new List<String>();
+                    ship.Defenses = new List<ShipDefense>();
                     foreach (var d in preset.Defenses)
-                        ship.Defenses.Add(shipData.Defenses[d].Type);
+                        ship.Defenses.Add(new ShipDefense(shipData.Defenses[d].Type));
                 }
 
                 // Set the fittings
                 if (preset.Fittings != null)
                 {
-                    ship.Fittings = new List<String>();
+                    ship.Fittings = new List<ShipFitting>();
                     foreach (var f in preset.Fittings)
-                        ship.Fittings.Add(shipData.Fittings[f].Type);
+                        ship.Fittings.Add(new ShipFitting(shipData.Fittings[f].Type));
                 }
 
                 // Set the crew if the CrewId is not null
@@ -206,9 +206,9 @@ namespace SWNUniverseGenerator.CreationTools
                 }
 
                 // If the ship has the Ship Bay/Fighter fitting, generate a ship to go in that space
-                if (ship.Fittings.Contains("Ship bay/fighter"))
+                if (ship.Fittings.Any(f => f.Name == "Ship bay/fighter"))
                 {
-                    var fighterHangarCount = ship.Fittings.FindAll(f => f.Contains("Ship bay/fighter")).Count;
+                    var fighterHangarCount = ship.Fittings.FindAll(f => f.Name == "Ship bay/fighter").Count;
 
                     ShipCreation shipCreation = new ShipCreation();
 
@@ -231,9 +231,9 @@ namespace SWNUniverseGenerator.CreationTools
                 }
 
                 // If the ship has the Ship Bay/Frigate fitting, generate a ship to go in that space
-                if (ship.Fittings.Contains("Ship bay/frigate"))
+                if (ship.Fittings.Any(f => f.Name == "Ship bay/frigate"))
                 {
-                    var frigateHangarCount = ship.Fittings.FindAll(f => f.Contains("Ship bay/frigate")).Count;
+                    var frigateHangarCount = ship.Fittings.FindAll(f => f.Name == "Ship bay/frigate").Count;
 
                     ShipCreation shipCreation = new ShipCreation();
 

@@ -20,8 +20,8 @@ namespace SWNUniverseGenerator.CreationTools
         public void CreateGrid(Universe universe)
         {
             int width =
-                (int) ((universe.Grid.X * ((Hypotenuse * Sine) + Hypotenuse)) + (Hypotenuse * Sine) + Hypotenuse);
-            int height = (int) ((universe.Grid.Y * (2 * Hypotenuse * Cosign)) + (Hypotenuse * Cosign) + Hypotenuse);
+                (int) ((universe.GridX * ((Hypotenuse * Sine) + Hypotenuse)) + (Hypotenuse * Sine) + Hypotenuse);
+            int height = (int) ((universe.GridY * (2 * Hypotenuse * Cosign)) + (Hypotenuse * Cosign) + Hypotenuse);
             float gridPenThickness = Hypotenuse * 0.05F;
             float starSize = Hypotenuse * 0.175F;
             float planetSize = Hypotenuse * 0.075F;
@@ -34,8 +34,8 @@ namespace SWNUniverseGenerator.CreationTools
                 Hypotenuse -= 10;
 
                 width =
-                    (int) ((universe.Grid.X * ((Hypotenuse * Sine) + Hypotenuse)) + (Hypotenuse * Sine) + Hypotenuse);
-                height = (int) ((universe.Grid.Y * (2 * Hypotenuse * Cosign)) + (Hypotenuse * Cosign) + Hypotenuse);
+                    (int) ((universe.GridX * ((Hypotenuse * Sine) + Hypotenuse)) + (Hypotenuse * Sine) + Hypotenuse);
+                height = (int) ((universe.GridY * (2 * Hypotenuse * Cosign)) + (Hypotenuse * Cosign) + Hypotenuse);
 
                 gridPenThickness = Hypotenuse * 0.05F;
                 starSize = Hypotenuse * 0.25F;
@@ -67,15 +67,17 @@ namespace SWNUniverseGenerator.CreationTools
             PointF startingPoint = new PointF(Hypotenuse / 2, Hypotenuse / 2);
 
             // Create the hex grid
-            for (int x = 0; x < universe.Grid.X; x++)
+            for (int x = 0; x < universe.GridX; x++)
             {
-                for (int y = 0; y < universe.Grid.Y; y++)
+                for (int y = 0; y < universe.GridY; y++)
                 {
                     var hex = CreateHex(startingPoint, hexList, (x, y));
                     startingPoint = hex.BottomLeft;
                 }
 
-                startingPoint = x % 2 != 0 ? hexList[^universe.Grid.Y].TopRight : hexList[^universe.Grid.Y].MidRight;
+                startingPoint = x % 2 != 0 
+                    ? hexList[^universe.GridY].TopRight 
+                    : hexList[^universe.GridY].MidRight;
             }
 
 

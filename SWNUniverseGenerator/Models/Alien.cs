@@ -9,11 +9,11 @@ namespace SWNUniverseGenerator.Models
         
         public String Name { get; set; }
         
-        public List<String> BodyTraits { get; set; }
+        public String BodyTraits { get; set; }
         
-        public List<String> Lenses { get; set; }
+        public String Lenses { get; set; }
         
-        public List<String> SocialStructures { get; set; }
+        public String SocialStructures { get; set; }
         
         public String MultiPolarType { get; set; }
     }

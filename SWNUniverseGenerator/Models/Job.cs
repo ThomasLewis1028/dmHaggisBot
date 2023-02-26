@@ -1,10 +1,14 @@
-﻿namespace SWNUniverseGenerator.Models
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+
+namespace SWNUniverseGenerator.Models
 {
     public class Job
     {
-        private Item _cargo;
-        private Character _contact;
-        private Planet _dest;
-        private int _pay;
+        public String JobId { get; set; }
+        public Item Cargo { get; set; }
+        public Character Contact { get; set; }
+        public Planet Dest { get; set; }
+        public int Pay { get; set; }
     }
 }

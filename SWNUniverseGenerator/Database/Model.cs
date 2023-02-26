@@ -11,13 +11,13 @@ namespace SWNUniverseGenerator.Database
         public DbSet<Universe> Universes { get; set; }
         public DbSet<Star> Stars { get; set; }
         public DbSet<Zone> Zones { get; set; }
-        public DbSet<Grid> Grids { get; set; }
         public DbSet<Planet> Planets { get; set; }
         public DbSet<PointOfInterest> PointsOfInterest { get; set; }
         public DbSet<Problem> Problems { get; set; }
         public DbSet<Ship> Ships { get; set; }
         public DbSet<Character> Characters { get; set; }
-        
+        public DbSet<Job> Jobs { get; set; }
+
         public string DbPath { get; }
 
         public UniverseContext()

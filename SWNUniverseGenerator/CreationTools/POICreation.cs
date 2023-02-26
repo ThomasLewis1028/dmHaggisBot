@@ -43,13 +43,13 @@ namespace SWNUniverseGenerator.CreationTools
 
                         // Set the POI information with randomized data
                         poi.StarId = star.Id;
-                        universe.Zones.Single(a => a.StarId == star.Id).PointsOfInterest.Add(poi.Id);
                         poi.Name = star.Name + " " + ToRoman(poiCount + 1);
                         var type = poiData.PointsOfInterest[Rand.Next(0, poiData.PointsOfInterest.Count)];
                         poi.Type = type.Type;
                         poi.OccupiedBy = type.OccupiedBy[Rand.Next(0, type.OccupiedBy.Count)];
                         poi.Situation = type.Situation[Rand.Next(0, type.Situation.Count)];
 
+                        universe.Zones.Single(a => a.StarId == star.Id).PointsOfInterest.Add(poi);
                         universe.PointsOfInterest.Add(poi);
 
                         poiCount++;
@@ -83,13 +83,13 @@ namespace SWNUniverseGenerator.CreationTools
 
                     // Set the POI information with randomized data
                     poi.StarId = starId;
-                    universe.Zones.Single(a => a.StarId == starId).PointsOfInterest.Add(poi.Id);
                     poi.Name = universe.Stars.Single(a => a.Id == starId).Name + " " + ToRoman(poiCount + 1);
                     var type = poiData.PointsOfInterest[Rand.Next(0, poiData.PointsOfInterest.Count)];
                     poi.Type = type.Type;
                     poi.OccupiedBy = type.OccupiedBy[Rand.Next(0, type.OccupiedBy.Count)];
                     poi.Situation = type.Situation[Rand.Next(0, type.Situation.Count)];
 
+                    universe.Zones.Single(a => a.StarId == starId).PointsOfInterest.Add(poi);
                     universe.PointsOfInterest.Add(poi);
 
                     poiCount++;

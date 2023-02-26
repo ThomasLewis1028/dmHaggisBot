@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
 using System.Text.Json.Serialization;
 
@@ -16,7 +18,8 @@ namespace SWNUniverseGenerator.Models
         public Universe()
         {
             Name = null;
-            Grid = null;
+            GridX = -1;
+            GridY = -1;
         }
         
         /// <summary>
@@ -24,23 +27,30 @@ namespace SWNUniverseGenerator.Models
         /// </summary>
         /// <param name="name"></param>
         /// <param name="grid"></param>
-        public Universe(string name, Grid grid)
+        public Universe(string name, int x, int y)
         {
             Name = name;
-            Grid = grid;
+            GridX = x;
+            GridY = y;
         }
 
         /// <summary>
         /// The Name of a Universe
         /// To be used with setting a fileName.
         /// </summary>
+        [Key]
         public String Name { get; set; }
 
         /// <summary>
-        /// The Grid size of the Universe
+        /// The Grid Width of the Universe
         /// </summary>
-        public Grid Grid { get; set; }
-
+        public Int32 GridX { get; set; }
+        
+        /// <summary>
+        /// The Grid Height of the Universe
+        /// </summary>
+        public Int32 GridY { get; set; }
+        
         /// <summary>
         /// A list of all zones in the universe
         /// </summary>
@@ -102,33 +112,9 @@ namespace SWNUniverseGenerator.Models
         public Int32 Y { get; set; }
 
         public String StarId { get; set; }
+        
+        public List<Planet> Planets { get; set; }
 
-        public List<String> Planets { get; set; }
-
-        public List<String> PointsOfInterest { get; set; }
-    }
-
-    public class Grid
-    {
-        /// <summary>
-        /// Constructor requires an X and Y value to create the grid
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public Grid(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
-
-        /// <summary>
-        /// The X length of a grid
-        /// </summary>
-        public Int32 X { get; set; }
-
-        /// <summary>
-        /// The Y length of a grid
-        /// </summary>
-        public Int32 Y { get; set; }
+        public List<PointOfInterest> PointsOfInterest { get; set; }
     }
 }

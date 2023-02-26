@@ -114,10 +114,11 @@ namespace SWNUniverseGenerator
             File.Create(path.ToString()).Close();
 
             // Set the grid to the specified values or the default [8, 10]
-            var grid = universeDefaultSettings.Grid ?? new Grid(8, 10);
+            var gridX = universeDefaultSettings.GridX ?? 8;
+            var gridY = universeDefaultSettings.GridY ?? 10;
 
             // Create the Universe.
-            var universe = new Universe(name, grid)
+            var universe = new Universe(name, gridX, gridY)
             {
                 Zones = new List<Zone>(),
                 Stars = new List<Star>(),
@@ -130,13 +131,13 @@ namespace SWNUniverseGenerator
             };
 
             // Add the Zones to the Universe
-            for (var i = 0; i < grid.Y; i++)
+            for (var i = 0; i < gridY; i++)
             {
-                for (var j = 0; j < grid.X; j++)
+                for (var j = 0; j < gridX; j++)
                 {
                     Zone zone = new Zone
                     {
-                        X = j, Y = i, Planets = new List<string>(), PointsOfInterest = new List<string>()
+                        X = j, Y = i, Planets = new List<Planet>(), PointsOfInterest = new List<PointOfInterest>()
                     };
                     IdGen.GenerateId(zone);
                     universe.Zones.Add(zone);
@@ -162,7 +163,7 @@ namespace SWNUniverseGenerator
         public Universe CreateStars(Universe universe, StarDefaultSettings starDefaultSettings)
         {
             // If there is no Grid for the Stars to be placed in then throw an exception
-            if (universe.Grid == null)
+            if (universe.GridX == null || universe.GridY == null)
                 throw new FileNotFoundException("No grid has been set for the universe");
 
             // Set the Universe to the Universe returned from StarCreation.AddStars and serialize/return it
@@ -414,8 +415,8 @@ namespace SWNUniverseGenerator
                 UniverseInfo universeInfo = new UniverseInfo()
                 {
                     Name = universe.Name,
-                    GridX = universe.Grid.X,
-                    GridY = universe.Grid.Y,
+                    GridX = universe.GridX,
+                    GridY = universe.GridY,
                     StarCount = universe.Stars.Count,
                     PlanetCount = universe.Planets.Count,
                     ShipCount = universe.Ships.Count,
@@ -434,8 +435,8 @@ namespace SWNUniverseGenerator
         {
             public String Name { get; set; }
 
-            public int GridX;
-            public int GridY;
+            public int? GridX;
+            public int? GridY;
 
             public int StarCount;
             public int PlanetCount;

@@ -25,13 +25,14 @@ namespace SWNUniverseGenerator.Migrations
                 name: "Universes",
                 columns: table => new
                 {
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
                     GridX = table.Column<int>(type: "INTEGER", nullable: false),
                     GridY = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Universes", x => x.Name);
+                    table.PrimaryKey("PK_Universes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,16 +45,16 @@ namespace SWNUniverseGenerator.Migrations
                     Lenses = table.Column<string>(type: "TEXT", nullable: true),
                     SocialStructures = table.Column<string>(type: "TEXT", nullable: true),
                     MultiPolarType = table.Column<string>(type: "TEXT", nullable: true),
-                    UniverseName = table.Column<string>(type: "TEXT", nullable: true)
+                    UniverseId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Alien", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Alien_Universes_UniverseName",
-                        column: x => x.UniverseName,
+                        name: "FK_Alien_Universes_UniverseId",
+                        column: x => x.UniverseId,
                         principalTable: "Universes",
-                        principalColumn: "Name");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -75,17 +76,17 @@ namespace SWNUniverseGenerator.Migrations
                     Gender = table.Column<int>(type: "INTEGER", nullable: false),
                     CrimeChance = table.Column<int>(type: "INTEGER", nullable: false),
                     ShipId = table.Column<string>(type: "TEXT", nullable: true),
-                    InitialReaction = table.Column<string>(type: "TEXT", nullable: true),
-                    UniverseName = table.Column<string>(type: "TEXT", nullable: true)
+                    UniverseId = table.Column<string>(type: "TEXT", nullable: true),
+                    InitialReaction = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Characters", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Characters_Universes_UniverseName",
-                        column: x => x.UniverseName,
+                        name: "FK_Characters_Universes_UniverseId",
+                        column: x => x.UniverseId,
                         principalTable: "Universes",
-                        principalColumn: "Name");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -99,16 +100,16 @@ namespace SWNUniverseGenerator.Migrations
                     Focus = table.Column<string>(type: "TEXT", nullable: true),
                     Restraint = table.Column<string>(type: "TEXT", nullable: true),
                     Twist = table.Column<string>(type: "TEXT", nullable: true),
-                    UniverseName = table.Column<string>(type: "TEXT", nullable: true)
+                    UniverseId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Problems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Problems_Universes_UniverseName",
-                        column: x => x.UniverseName,
+                        name: "FK_Problems_Universes_UniverseId",
+                        column: x => x.UniverseId,
                         principalTable: "Universes",
-                        principalColumn: "Name");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -127,16 +128,16 @@ namespace SWNUniverseGenerator.Migrations
                     Cp = table.Column<int>(type: "INTEGER", nullable: false),
                     HomeId = table.Column<string>(type: "TEXT", nullable: true),
                     LocationId = table.Column<string>(type: "TEXT", nullable: true),
-                    UniverseName = table.Column<string>(type: "TEXT", nullable: true)
+                    UniverseId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Ships", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ships_Universes_UniverseName",
-                        column: x => x.UniverseName,
+                        name: "FK_Ships_Universes_UniverseId",
+                        column: x => x.UniverseId,
                         principalTable: "Universes",
-                        principalColumn: "Name");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -144,19 +145,19 @@ namespace SWNUniverseGenerator.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
+                    UniverseId = table.Column<string>(type: "TEXT", nullable: true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     StarColor = table.Column<int>(type: "INTEGER", nullable: false),
-                    StarClass = table.Column<int>(type: "INTEGER", nullable: false),
-                    UniverseName = table.Column<string>(type: "TEXT", nullable: true)
+                    StarClass = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Stars", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Stars_Universes_UniverseName",
-                        column: x => x.UniverseName,
+                        name: "FK_Stars_Universes_UniverseId",
+                        column: x => x.UniverseId,
                         principalTable: "Universes",
-                        principalColumn: "Name");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -167,16 +168,16 @@ namespace SWNUniverseGenerator.Migrations
                     X = table.Column<int>(type: "INTEGER", nullable: false),
                     Y = table.Column<int>(type: "INTEGER", nullable: false),
                     StarId = table.Column<string>(type: "TEXT", nullable: true),
-                    UniverseName = table.Column<string>(type: "TEXT", nullable: true)
+                    UniverseId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Zones", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Zones_Universes_UniverseName",
-                        column: x => x.UniverseName,
+                        name: "FK_Zones_Universes_UniverseId",
+                        column: x => x.UniverseId,
                         principalTable: "Universes",
-                        principalColumn: "Name");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -236,6 +237,7 @@ namespace SWNUniverseGenerator.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     StarId = table.Column<string>(type: "TEXT", nullable: true),
+                    UniverseId = table.Column<string>(type: "TEXT", nullable: true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     FirstWorldTag = table.Column<string>(type: "TEXT", nullable: true),
                     SecondWorldTag = table.Column<string>(type: "TEXT", nullable: true),
@@ -248,17 +250,16 @@ namespace SWNUniverseGenerator.Migrations
                     Origin = table.Column<string>(type: "TEXT", nullable: true),
                     Relationship = table.Column<string>(type: "TEXT", nullable: true),
                     Contact = table.Column<string>(type: "TEXT", nullable: true),
-                    UniverseName = table.Column<string>(type: "TEXT", nullable: true),
                     ZoneId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Planets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Planets_Universes_UniverseName",
-                        column: x => x.UniverseName,
+                        name: "FK_Planets_Universes_UniverseId",
+                        column: x => x.UniverseId,
                         principalTable: "Universes",
-                        principalColumn: "Name");
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Planets_Zones_ZoneId",
                         column: x => x.ZoneId,
@@ -276,17 +277,17 @@ namespace SWNUniverseGenerator.Migrations
                     OccupiedBy = table.Column<string>(type: "TEXT", nullable: true),
                     Situation = table.Column<string>(type: "TEXT", nullable: true),
                     StarId = table.Column<string>(type: "TEXT", nullable: true),
-                    UniverseName = table.Column<string>(type: "TEXT", nullable: true),
+                    UniverseId = table.Column<string>(type: "TEXT", nullable: true),
                     ZoneId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PointsOfInterest", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PointsOfInterest_Universes_UniverseName",
-                        column: x => x.UniverseName,
+                        name: "FK_PointsOfInterest_Universes_UniverseId",
+                        column: x => x.UniverseId,
                         principalTable: "Universes",
-                        principalColumn: "Name");
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PointsOfInterest_Zones_ZoneId",
                         column: x => x.ZoneId,
@@ -303,7 +304,7 @@ namespace SWNUniverseGenerator.Migrations
                     ContactId = table.Column<string>(type: "TEXT", nullable: true),
                     DestId = table.Column<string>(type: "TEXT", nullable: true),
                     Pay = table.Column<int>(type: "INTEGER", nullable: false),
-                    UniverseName = table.Column<string>(type: "TEXT", nullable: true)
+                    UniverseId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -324,21 +325,21 @@ namespace SWNUniverseGenerator.Migrations
                         principalTable: "Planets",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Jobs_Universes_UniverseName",
-                        column: x => x.UniverseName,
+                        name: "FK_Jobs_Universes_UniverseId",
+                        column: x => x.UniverseId,
                         principalTable: "Universes",
-                        principalColumn: "Name");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Alien_UniverseName",
+                name: "IX_Alien_UniverseId",
                 table: "Alien",
-                column: "UniverseName");
+                column: "UniverseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Characters_UniverseName",
+                name: "IX_Characters_UniverseId",
                 table: "Characters",
-                column: "UniverseName");
+                column: "UniverseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Jobs_CargoItemId",
@@ -356,14 +357,14 @@ namespace SWNUniverseGenerator.Migrations
                 column: "DestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Jobs_UniverseName",
+                name: "IX_Jobs_UniverseId",
                 table: "Jobs",
-                column: "UniverseName");
+                column: "UniverseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Planets_UniverseName",
+                name: "IX_Planets_UniverseId",
                 table: "Planets",
-                column: "UniverseName");
+                column: "UniverseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Planets_ZoneId",
@@ -371,9 +372,9 @@ namespace SWNUniverseGenerator.Migrations
                 column: "ZoneId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PointsOfInterest_UniverseName",
+                name: "IX_PointsOfInterest_UniverseId",
                 table: "PointsOfInterest",
-                column: "UniverseName");
+                column: "UniverseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PointsOfInterest_ZoneId",
@@ -381,9 +382,9 @@ namespace SWNUniverseGenerator.Migrations
                 column: "ZoneId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Problems_UniverseName",
+                name: "IX_Problems_UniverseId",
                 table: "Problems",
-                column: "UniverseName");
+                column: "UniverseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShipDefense_ShipId",
@@ -396,9 +397,9 @@ namespace SWNUniverseGenerator.Migrations
                 column: "ShipId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ships_UniverseName",
+                name: "IX_Ships_UniverseId",
                 table: "Ships",
-                column: "UniverseName");
+                column: "UniverseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShipWeapon_ShipId",
@@ -406,14 +407,14 @@ namespace SWNUniverseGenerator.Migrations
                 column: "ShipId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Stars_UniverseName",
+                name: "IX_Stars_UniverseId",
                 table: "Stars",
-                column: "UniverseName");
+                column: "UniverseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Zones_UniverseName",
+                name: "IX_Zones_UniverseId",
                 table: "Zones",
-                column: "UniverseName");
+                column: "UniverseId");
         }
 
         /// <inheritdoc />

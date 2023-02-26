@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
 namespace SWNUniverseGenerator.Models
@@ -8,6 +9,11 @@ namespace SWNUniverseGenerator.Models
     /// </summary>
     public class Character : IEntity
     {
+        public Character()
+        {
+            Id = this.GenerateId();
+        }
+        
         /// <summary>
         /// An Enum for a list of Genders. Undefined should never be used.
         /// </summary>
@@ -89,7 +95,9 @@ namespace SWNUniverseGenerator.Models
         /// <summary>
         /// Returns the concatenation of the First and Last name without storing it in the Json
         /// </summary>
-        [JsonIgnore] public String Name => First + " " + Last;
+        [JsonIgnore] 
+        [NotMapped]
+        public String Name => First + " " + Last;
         
         /// <summary>
         /// An integer representation of the likelihood a character will aide in some shady matter
@@ -100,6 +108,11 @@ namespace SWNUniverseGenerator.Models
         /// A string value for the ship a given character is tied to
         /// </summary>
         public String ShipId { get; set; }
+ 
+        /// <summary>
+        /// A string value for the universe a given character is tied to
+        /// </summary>
+        public String UniverseId { get; set; }
         
         /// <summary>
         /// A string value for a character's initial reaction to the players

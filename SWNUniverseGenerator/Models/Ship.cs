@@ -6,6 +6,12 @@ namespace SWNUniverseGenerator.Models
 {
     public class Ship : IEntity
     {
+        
+        public Ship()
+        {
+            Id = this.GenerateId();
+        }
+        
         public String Id { get; set; }
 
         public String Name { get; set; }
@@ -35,6 +41,11 @@ namespace SWNUniverseGenerator.Models
         public String HomeId { get; set; }
         
         public String LocationId { get; set; }
+        
+        /// <summary>
+        /// A string value for the universe a given ship is tied to
+        /// </summary>
+        public String UniverseId { get; set; }
     }
 
     public class ShipWeapon

@@ -8,6 +8,12 @@ namespace SWNUniverseGenerator.Models
     /// </summary>
     public class Planet : ILocation
     {
+        
+        public Planet()
+        {
+            Id = this.GenerateId();
+        }
+        
         /// <summary>
         /// Implemented from ILocation. Will be the unique ID for a Planet
         /// </summary>
@@ -18,6 +24,11 @@ namespace SWNUniverseGenerator.Models
         /// but still allows you to tie planets to Stars
         /// </summary>
         public String StarId { get; set; }
+        
+        /// <summary>
+        /// A string value for the universe a given planet is tied to
+        /// </summary>
+        public String UniverseId { get; set; }
 
         /// <summary>
         /// Implemented from ILocation. This should be a unique name for a Planet

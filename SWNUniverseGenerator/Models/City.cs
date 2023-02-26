@@ -4,13 +4,19 @@ namespace SWNUniverseGenerator.Models
 {
     public class City : ILocation
     {
-        public String Id { get; set; }
-
+        public City()
+        {
+            Id = this.GenerateId();
+        }
+        
         public City(String name, String planetId)
         {
+            Id = this.GenerateId();
             Name = name;
             PlanetId = planetId;
-        }
+        }   
+        
+        public String Id { get; set; }
 
         public String Name { get; set; }
 

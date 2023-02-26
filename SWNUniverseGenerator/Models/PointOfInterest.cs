@@ -7,6 +7,12 @@ namespace SWNUniverseGenerator.Models
     /// </summary>
     public class PointOfInterest : ILocation
     {
+        
+        public PointOfInterest()
+        {
+            Id = this.GenerateId();
+        }
+        
         /// <summary>
         /// The ID of the point of interest
         /// </summary>
@@ -36,5 +42,10 @@ namespace SWNUniverseGenerator.Models
         /// The star system in which this point of interest may reside
         /// </summary>
         public String StarId { get; set; }
+        
+        /// <summary>
+        /// A string value for the universe a given PointOfInterest is tied to
+        /// </summary>
+        public String UniverseId { get; set; }
     }
 }

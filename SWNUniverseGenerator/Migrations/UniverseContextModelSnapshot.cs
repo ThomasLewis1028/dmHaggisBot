@@ -46,12 +46,12 @@ namespace SWNUniverseGenerator.Migrations
                     b.Property<string>("SocialStructures")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UniverseName")
+                    b.Property<string>("UniverseId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UniverseName");
+                    b.HasIndex("UniverseId");
 
                     b.ToTable("Alien");
                 });
@@ -106,12 +106,12 @@ namespace SWNUniverseGenerator.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UniverseName")
+                    b.Property<string>("UniverseId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UniverseName");
+                    b.HasIndex("UniverseId");
 
                     b.ToTable("Characters");
                 });
@@ -133,7 +133,7 @@ namespace SWNUniverseGenerator.Migrations
                     b.Property<int>("Pay")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("UniverseName")
+                    b.Property<string>("UniverseId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("JobId");
@@ -144,7 +144,7 @@ namespace SWNUniverseGenerator.Migrations
 
                     b.HasIndex("DestId");
 
-                    b.HasIndex("UniverseName");
+                    b.HasIndex("UniverseId");
 
                     b.ToTable("Jobs");
                 });
@@ -193,7 +193,7 @@ namespace SWNUniverseGenerator.Migrations
                     b.Property<string>("Temperature")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UniverseName")
+                    b.Property<string>("UniverseId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ZoneId")
@@ -201,7 +201,7 @@ namespace SWNUniverseGenerator.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UniverseName");
+                    b.HasIndex("UniverseId");
 
                     b.HasIndex("ZoneId");
 
@@ -228,7 +228,7 @@ namespace SWNUniverseGenerator.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UniverseName")
+                    b.Property<string>("UniverseId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ZoneId")
@@ -236,7 +236,7 @@ namespace SWNUniverseGenerator.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UniverseName");
+                    b.HasIndex("UniverseId");
 
                     b.HasIndex("ZoneId");
 
@@ -266,12 +266,12 @@ namespace SWNUniverseGenerator.Migrations
                     b.Property<string>("Twist")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UniverseName")
+                    b.Property<string>("UniverseId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UniverseName");
+                    b.HasIndex("UniverseId");
 
                     b.ToTable("Problems");
                 });
@@ -314,12 +314,12 @@ namespace SWNUniverseGenerator.Migrations
                     b.Property<string>("PilotId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UniverseName")
+                    b.Property<string>("UniverseId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UniverseName");
+                    b.HasIndex("UniverseId");
 
                     b.ToTable("Ships");
                 });
@@ -383,19 +383,19 @@ namespace SWNUniverseGenerator.Migrations
                     b.Property<int>("StarColor")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("UniverseName")
+                    b.Property<string>("UniverseId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UniverseName");
+                    b.HasIndex("UniverseId");
 
                     b.ToTable("Stars");
                 });
 
             modelBuilder.Entity("SWNUniverseGenerator.Models.Universe", b =>
                 {
-                    b.Property<string>("Name")
+                    b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("GridX")
@@ -404,7 +404,10 @@ namespace SWNUniverseGenerator.Migrations
                     b.Property<int>("GridY")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Universes");
                 });
@@ -417,7 +420,7 @@ namespace SWNUniverseGenerator.Migrations
                     b.Property<string>("StarId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UniverseName")
+                    b.Property<string>("UniverseId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("X")
@@ -428,7 +431,7 @@ namespace SWNUniverseGenerator.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UniverseName");
+                    b.HasIndex("UniverseId");
 
                     b.ToTable("Zones");
                 });
@@ -437,14 +440,14 @@ namespace SWNUniverseGenerator.Migrations
                 {
                     b.HasOne("SWNUniverseGenerator.Models.Universe", null)
                         .WithMany("Aliens")
-                        .HasForeignKey("UniverseName");
+                        .HasForeignKey("UniverseId");
                 });
 
             modelBuilder.Entity("SWNUniverseGenerator.Models.Character", b =>
                 {
                     b.HasOne("SWNUniverseGenerator.Models.Universe", null)
                         .WithMany("Characters")
-                        .HasForeignKey("UniverseName");
+                        .HasForeignKey("UniverseId");
                 });
 
             modelBuilder.Entity("SWNUniverseGenerator.Models.Job", b =>
@@ -463,7 +466,7 @@ namespace SWNUniverseGenerator.Migrations
 
                     b.HasOne("SWNUniverseGenerator.Models.Universe", null)
                         .WithMany("Jobs")
-                        .HasForeignKey("UniverseName");
+                        .HasForeignKey("UniverseId");
 
                     b.Navigation("Cargo");
 
@@ -476,7 +479,7 @@ namespace SWNUniverseGenerator.Migrations
                 {
                     b.HasOne("SWNUniverseGenerator.Models.Universe", null)
                         .WithMany("Planets")
-                        .HasForeignKey("UniverseName");
+                        .HasForeignKey("UniverseId");
 
                     b.HasOne("SWNUniverseGenerator.Models.Zone", null)
                         .WithMany("Planets")
@@ -487,7 +490,7 @@ namespace SWNUniverseGenerator.Migrations
                 {
                     b.HasOne("SWNUniverseGenerator.Models.Universe", null)
                         .WithMany("PointsOfInterest")
-                        .HasForeignKey("UniverseName");
+                        .HasForeignKey("UniverseId");
 
                     b.HasOne("SWNUniverseGenerator.Models.Zone", null)
                         .WithMany("PointsOfInterest")
@@ -498,14 +501,14 @@ namespace SWNUniverseGenerator.Migrations
                 {
                     b.HasOne("SWNUniverseGenerator.Models.Universe", null)
                         .WithMany("Problems")
-                        .HasForeignKey("UniverseName");
+                        .HasForeignKey("UniverseId");
                 });
 
             modelBuilder.Entity("SWNUniverseGenerator.Models.Ship", b =>
                 {
                     b.HasOne("SWNUniverseGenerator.Models.Universe", null)
                         .WithMany("Ships")
-                        .HasForeignKey("UniverseName");
+                        .HasForeignKey("UniverseId");
                 });
 
             modelBuilder.Entity("SWNUniverseGenerator.Models.ShipDefense", b =>
@@ -533,14 +536,14 @@ namespace SWNUniverseGenerator.Migrations
                 {
                     b.HasOne("SWNUniverseGenerator.Models.Universe", null)
                         .WithMany("Stars")
-                        .HasForeignKey("UniverseName");
+                        .HasForeignKey("UniverseId");
                 });
 
             modelBuilder.Entity("SWNUniverseGenerator.Models.Zone", b =>
                 {
                     b.HasOne("SWNUniverseGenerator.Models.Universe", null)
                         .WithMany("Zones")
-                        .HasForeignKey("UniverseName");
+                        .HasForeignKey("UniverseId");
                 });
 
             modelBuilder.Entity("SWNUniverseGenerator.Models.Ship", b =>

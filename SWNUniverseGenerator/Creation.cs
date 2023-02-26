@@ -118,8 +118,11 @@ namespace SWNUniverseGenerator
             var gridY = universeDefaultSettings.GridY ?? 10;
 
             // Create the Universe.
-            var universe = new Universe(name, gridX, gridY)
+            var universe = new Universe()
             {
+                Name = name,
+                GridX = gridX,
+                GridY = gridY,
                 Zones = new List<Zone>(),
                 Stars = new List<Star>(),
                 Planets = new List<Planet>(),

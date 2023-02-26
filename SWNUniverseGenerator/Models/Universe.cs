@@ -1,44 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Drawing;
-using System.Text.Json.Serialization;
 
 namespace SWNUniverseGenerator.Models
 {
     /// <summary>
     /// The Universe class that holds all information about a Universe
     /// </summary>
-    public class Universe
+    public class Universe: IEntity
     {
         /// <summary>
         /// Default constructor to create a blank universe
         /// </summary>
         public Universe()
         {
+            Id = this.GenerateId();
             Name = null;
             GridX = -1;
             GridY = -1;
-        }
-        
-        /// <summary>
-        /// All Universes must be instantiated with a Name and a Grid to create all other information
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="grid"></param>
-        public Universe(string name, int x, int y)
-        {
-            Name = name;
-            GridX = x;
-            GridY = y;
         }
 
         /// <summary>
         /// The Name of a Universe
         /// To be used with setting a fileName.
         /// </summary>
-        [Key]
+        public String Id { get; set; }
+        
+        /// <summary>
+        /// The Name of a Universe
+        /// To be used with setting a fileName.
+        /// </summary>
         public String Name { get; set; }
 
         /// <summary>
@@ -94,27 +84,6 @@ namespace SWNUniverseGenerator.Models
         /// <summary>
         /// The list of all Points of Interest in the Universe
         /// </summary>
-        public List<PointOfInterest> PointsOfInterest { get; set; }
-    }
-
-    public class Zone : IEntity
-    {
-        [JsonIgnore]
-        public String GetHex => (X < 10 ? "0" + X : X.ToString()) +
-                            (Y < 10 ? "0" + Y : Y.ToString());
-
-        public String Id { get; set; }
-        
-        [JsonIgnore] public String Name => GetHex;
-
-        public Int32 X { get; set; }
-
-        public Int32 Y { get; set; }
-
-        public String StarId { get; set; }
-        
-        public List<Planet> Planets { get; set; }
-
         public List<PointOfInterest> PointsOfInterest { get; set; }
     }
 }

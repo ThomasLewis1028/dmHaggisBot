@@ -6,7 +6,7 @@ namespace SWNUniverseGenerator
     /// <summary>
     /// This class and method handles the creation of randomly generated ID for each IEntity in the Generator
     /// </summary>
-    internal class IdGen
+    public class IdGen
     {
         /// <summary>
         /// This method receives an generic IEntity item and then creates an ID based on its type and assigns it to
@@ -22,6 +22,7 @@ namespace SWNUniverseGenerator
             // Set the ID based on the type of Object
             id = item switch
             {
+                Universe _ => ("UN-" + id),
                 Planet _ => ("P-" + id),
                 Star _ => ("S-" + id),
                 Character _ => ("U-" + id),

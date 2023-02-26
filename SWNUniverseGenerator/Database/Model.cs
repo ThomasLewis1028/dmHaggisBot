@@ -28,7 +28,8 @@ namespace SWNUniverseGenerator.Database
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options) =>
-            options.UseSqlite($"Data Source={DbPath}");
+            options
+                .UseSqlite($"Data Source={DbPath}");
     }
 
     public class DataAccessLayer

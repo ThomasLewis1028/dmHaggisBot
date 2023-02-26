@@ -6,3 +6,6 @@ https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotn
 
 # Unit Testing links
 https://learn.microsoft.com/en-us/visualstudio/test/using-microsoft-visualstudio-testtools-unittesting-members-in-unit-tests?view=vs-2022
+
+# Repository Factory Method
+https://codingblast.com/entity-framework-core-generic-repository/

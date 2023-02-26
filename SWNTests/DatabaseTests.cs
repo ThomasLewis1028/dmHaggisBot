@@ -32,14 +32,14 @@ public class DatabaseTests
     public static async Task ClassCleanup()
     {
     }
-    
-    
+
+
     [TestMethod, TestCategory("DatabaseTest")]
-    [DataRow ("TestUniverse", "Bob", "Bobber", false)]
-    [DataRow ("Other Test Universe", "Ron", "Burgundy", false)]
+    [DataRow("Test Universe Context", "Bob", "Bobber", false)]
+    [DataRow("Test Universe Context 2", "Ron", "Burgundy", false)]
     public void TestCreate(String universeName, String first, String last, bool cleanup)
     {
-        using (var uc = new UniverseContext())
+        using (var context = new UniverseContext())
         {
             //Add Universe
             Universe universe = new Universe()
@@ -50,10 +50,10 @@ public class DatabaseTests
             };
             //IdGen.GenerateId(universe);
             var universeId = universe.Id;
-            uc.Universes.Add(universe);
-            uc.SaveChanges();
+            context.Universes.Add(universe);
+            context.SaveChanges();
 
-            Universe ucGet = uc.Universes.First(u => u.Id == universeId);
+            Universe ucGet = context.Universes.First(u => u.Id == universeId);
             Assert.AreEqual(ucGet.Name, universe.Name);
             Assert.AreEqual(ucGet.Id, universeId);
 
@@ -68,30 +68,31 @@ public class DatabaseTests
                     First = first,
                     Last = last
                 };
-                uc.Characters.Add(c);
+                context.Characters.Add(c);
             }
 
-            uc.SaveChanges();
+            context.SaveChanges();
 
             //Check Character Create
-            var charCount = uc.Characters.Count(c => c.UniverseId == ucGet.Id);
+            var charCount = context.Characters.Count(c => c.UniverseId == ucGet.Id);
             Assert.AreEqual(3, charCount);
-            var ageCount = uc.Characters.Count(c => c.UniverseId == ucGet.Id && c.Age == 26);
+            var ageCount = context.Characters.Count(c => c.UniverseId == ucGet.Id && c.Age == 26);
             Assert.AreEqual(1, ageCount);
 
             //Select stuff
-            var query1 = from ucUniverse in uc.Universes where ucUniverse.Id == ucGet.Id select ucUniverse.Name;
+            var query1 = from ucUniverse in context.Universes where ucUniverse.Id == ucGet.Id select ucUniverse.Name;
             Assert.AreEqual(query1.First(), universeName);
-            
-            var query = from ucUniverse in uc.Universes where ucUniverse.Id == ucGet.Id select ucUniverse;
+
+            var query = from ucUniverse in context.Universes where ucUniverse.Id == ucGet.Id select ucUniverse;
             Assert.AreEqual(query.First().Id, universeId);
             Assert.AreEqual(query.First().Name, universeName);
-            
+
             //Join Query
-            var joinquery = 
-                from u in uc.Universes
-                join c in uc.Characters on u.Id equals c.UniverseId 
-                where u.Id == ucGet.Id select new { u.Name, c.First, c.Last };
+            var joinquery =
+                from u in context.Universes
+                join c in context.Characters on u.Id equals c.UniverseId
+                where u.Id == ucGet.Id
+                select new { u.Name, c.First, c.Last };
             var result = joinquery.First();
             Assert.AreEqual(result.Name, universeName);
             Assert.AreEqual(result.First, first);
@@ -100,20 +101,58 @@ public class DatabaseTests
             if (cleanup)
             {
                 //Cleanup
-                foreach (var character in uc.Characters.Where(c => c.UniverseId == universeId))
+                foreach (var character in context.Characters.Where(c => c.UniverseId == universeId))
                 {
-                    uc.Characters.Remove(character);
+                    context.Characters.Remove(character);
                 }
 
-                uc.Universes.Remove(uc.Universes.First(c => c.Id == universeId));
+                context.Universes.Remove(context.Universes.First(c => c.Id == universeId));
 
-                uc.SaveChanges();
+                context.SaveChanges();
 
                 //Check Cleanup
-                Assert.AreEqual(0, uc.Universes.Count(u => u.Id == universeId));
-                Assert.AreEqual(0, uc.Characters.Count(u => u.UniverseId == universeId));
+                Assert.AreEqual(0, context.Universes.Count(u => u.Id == universeId));
+                Assert.AreEqual(0, context.Characters.Count(u => u.UniverseId == universeId));
             }
         }
+    }
 
+    [TestMethod, TestCategory("DatabaseTest")]
+    [DataRow ("Test Universe Repository", "Ron", "Burgundy")]
+    public void TestRepositoryCreate(String universeName, String first, String last)
+    {
+        using (var context = new UniverseContext())
+        {
+            string universeId = "";
+            using (var uc = new Repository<Universe>(context))
+            {
+                //Add Universe
+                Universe universe = new Universe()
+                {
+                    Name = universeName,
+                    GridX = Rand.Next(5, 10),
+                    GridY = Rand.Next(5, 10)
+                };
+                //IdGen.GenerateId(universe);
+                universeId = universe.Id;
+                uc.Add(universe);
+
+                Universe unAdd = uc.GetById(universeId);
+                Assert.AreEqual(unAdd.Name, universe.Name);
+                Assert.AreEqual(unAdd.Id, universeId);
+
+                universe.Name = "TestUpdate";
+                uc.Update(universe);
+                Universe unUpdate = uc.GetById(universeId);
+                Assert.AreNotEqual(unUpdate.Name, unAdd.Name);
+                Assert.AreEqual(universe.Name, unUpdate.Name);
+
+                uc.Delete(universeId);
+                Universe unDelete = uc.GetById(universeId);
+                Assert.AreEqual(null, unDelete);
+            }
+
+        }
+        
     }
 }

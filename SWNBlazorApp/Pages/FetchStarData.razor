@@ -157,7 +157,7 @@ else
                                 <MudText Typo="Typo.h6">Planets:</MudText>
                                 foreach (var planet in GetZone(currentStar.Id).Planets)
                                 {
-                                    <MudText Typo="Typo.body2">@planet - @GetPlanetName(planet)</MudText>
+                                    <MudText Typo="Typo.body2">@planet - @GetPlanetName(planet.Id)</MudText>
                                 }
                             }
                         </CardHeaderContent>

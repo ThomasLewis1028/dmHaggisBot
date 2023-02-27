@@ -23,7 +23,7 @@ namespace SWNUniverseGenerator.Database
         public DbSet<ShipDefense> ShipDefense { get; set; }
         public DbSet<ShipHull> ShipHull { get; set; }
         public DbSet<ShipFitting> ShipFitting { get; set; }
-
+        public DbSet<Naming> Naming { get; set; }
         public string DbPath { get; }
 
         public UniverseContext()
@@ -102,13 +102,9 @@ namespace SWNUniverseGenerator.Database
                 .WithMany()
                 .HasForeignKey(p => p.UniverseId)
                 .IsRequired();
-
-            modelBuilder.Entity<Universe>().HasData(new Universe()
-            {
-                Name = "AutoInsert",
-                GridY = 5,
-                GridX = 5
-            });
+            
+            modelBuilder.Entity<Naming>().HasKey(t => new { t.NameType, t.Name });
+            
             new DbInitializer().Seed(modelBuilder);
         }
 

@@ -23,9 +23,6 @@
       <Resource Include="Migrations\SeedData\alienData.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Migrations\SeedData\characterData.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
       <Resource Include="Migrations\SeedData\pointsOfInterest.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
@@ -88,6 +85,42 @@
       </EmbeddedResource>
       <None Remove="Migrations\SeedData\ShipWeapon.json" />
       <EmbeddedResource Include="Migrations\SeedData\ShipWeapon.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\StarNames.json" />
+      <EmbeddedResource Include="Migrations\SeedData\StarNames.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\PlanetNames.json" />
+      <EmbeddedResource Include="Migrations\SeedData\PlanetNames.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\EyeColor.json" />
+      <EmbeddedResource Include="Migrations\SeedData\EyeColor.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\FemaleName.json" />
+      <EmbeddedResource Include="Migrations\SeedData\FemaleName.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\HairColor.json" />
+      <EmbeddedResource Include="Migrations\SeedData\HairColor.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\HairStyle.json" />
+      <EmbeddedResource Include="Migrations\SeedData\HairStyle.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\InitialReactions.json" />
+      <EmbeddedResource Include="Migrations\SeedData\InitialReactions.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\LastName.json" />
+      <EmbeddedResource Include="Migrations\SeedData\LastName.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\MaleName.json" />
+      <EmbeddedResource Include="Migrations\SeedData\MaleName.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>

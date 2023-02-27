@@ -36,4 +36,11 @@ public class SeedDataTests
         List<ShipWeapon> hulls = new DbInitializer().GetShipWeaponData();
         Assert.IsTrue(hulls.Count > 0);
     }
+    
+    [TestMethod, TestCategory("SeedData")]
+    public void TestGetNamingData()
+    {
+        List<Naming> hulls = new DbInitializer().GetNamingData();
+        Assert.IsTrue(hulls.Count > 0);
+    }
 }

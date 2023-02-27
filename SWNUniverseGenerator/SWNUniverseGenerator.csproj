@@ -26,9 +26,6 @@
       <Resource Include="Migrations\SeedData\pointsOfInterest.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Migrations\SeedData\starData.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
       <Resource Include="Migrations\SeedData\worldTags.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>

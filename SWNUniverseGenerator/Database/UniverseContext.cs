@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using SWNUniverseGenerator.DeserializedObjects;
+using SWNUniverseGenerator.Migrations;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.Database
@@ -95,6 +97,11 @@ namespace SWNUniverseGenerator.Database
                 .WithMany()
                 .HasForeignKey(p => p.UniverseId)
                 .IsRequired();
+
+            modelBuilder.Entity<ShipHull>().HasData(SeedData.GetShipHullData());
+            modelBuilder.Entity<ShipFitting>().HasData(SeedData.GetShipFittingData());
+            modelBuilder.Entity<ShipDefense>().HasData(SeedData.GetShipDefenseData());
+            modelBuilder.Entity<ShipWeapon>().HasData(SeedData.GetShipWeaponData());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options) =>

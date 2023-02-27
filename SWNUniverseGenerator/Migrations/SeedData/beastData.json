@@ -1,0 +1,229 @@
+﻿{
+  "BeastTypes": [
+    {
+      "Type": "Small Vicious Beast",
+      "HD": 0,
+      "AC": 14,
+      "Attack": 1,
+      "Damage": "1d2",
+      "AttackMult": 1,
+      "Move": 10,
+      "Morale": 7,
+      "Skills": 1,
+      "Saves": 15
+    },
+    {
+      "Type": "Small Pack Hunter",
+      "HD": 1,
+      "AC": 13,
+      "Attack": 1,
+      "Damage": "1d4",
+      "AttackMult": 1,
+      "Move": 15,
+      "Morale": 8,
+      "Skills": 1,
+      "Saves": 15
+    },
+    {
+      "Type": "Large Pack Hunter",
+      "HD": 2,
+      "AC": 14,
+      "Attack": 2,
+      "Damage": "1d6",
+      "AttackMult": 1,
+      "Move": 15,
+      "Morale": 9,
+      "Skills": 1,
+      "Saves": 14
+    },
+    {
+      "Type": "Large Aggressive Prey Animal",
+      "HD": 5,
+      "AC": 13,
+      "Attack": 4,
+      "Damage": "1d10",
+      "AttackMult": 1,
+      "Move": 15,
+      "Morale": 8,
+      "Skills": 1,
+      "Saves": 12
+    },
+    {
+      "Type": "Lesser Lone Predator",
+      "HD": 3,
+      "AC": 14,
+      "Attack": 4,
+      "Damage": "1d8",
+      "AttackMult": 2,
+      "Move": 15,
+      "Morale": 8,
+      "Skills": 2,
+      "Saves": 14
+    },
+    {
+      "Type": "Greater Lone Predator",
+      "HD": 5,
+      "AC": 15,
+      "Attack": 6,
+      "Damage": "1d10",
+      "AttackMult": 2,
+      "Move": 10,
+      "Morale": 9,
+      "Skills": 2,
+      "Saves": 12
+    },
+    {
+      "Type": "Terrifying Apex Predator",
+      "HD": 8,
+      "AC": 16,
+      "Attack": 8,
+      "Damage": "1d10",
+      "AttackMult": 2,
+      "Move": 20,
+      "Morale": 9,
+      "Skills": 2,
+      "Saves": 11
+    },
+    {
+      "Type": "Gengineered Murder Beast",
+      "HD": 10,
+      "AC": 18,
+      "Attack": 10,
+      "Damage": "1d10",
+      "AttackMult": 4,
+      "Move": 20,
+      "Morale": 11,
+      "Skills": 3,
+      "Saves": 10
+    }
+  ],
+  "BasicFeatures": [
+    "Amphibian, froggish or newtlike",
+    "Bird, winged and feathered",
+    "Fish, scaled and torpedo-bodied",
+    "Insect, beetle-like or fly-winged",
+    "Mammal, hairy and fanged",
+    "Reptile, lizardlike and long-bodied",
+    "Spider, many-legged and fat",
+    "Exotic, made of wholly alien elements"
+  ],
+  "BodyPlans": [
+    "Humanoid",
+    "Quadruped",
+    "Many-legged",
+    "Bulbous",
+    "Amorphous"
+  ],
+  "LimbNovelties": [
+    "Wings",
+    "Many joints",
+    "Tentacles",
+    "Opposable thumbs",
+    "Retractable",
+    "Varying sizes"
+  ],
+  "SkinNovelties": [
+    "Hard shell",
+    "Exoskeleton",
+    "Odd texture",
+    "Molts regularly",
+    "Harmful to touch",
+    "Wet or slimy"
+  ],
+  "MainWeapons": [
+    "Teeth of mandibles",
+    "Claws",
+    "Poison",
+    "Harmful discharge",
+    "Pincers",
+    "Horns"
+  ],
+  "Sizes": [
+    "Cat-sized",
+    "Wolf-sized",
+    "Calf-sized",
+    "Bull-sized",
+    "Hippo-sized",
+    "Elephant-sized"
+  ],
+  "Traits": [
+    {
+      "Predators": [
+        "Hunts in kin-group packs",
+        "Favors ambush attacks",
+        "Cripples prey and waits for death",
+        "Pack supports alpha-beast attack",
+        "Lures or drives prey into danger",
+        "Hunts as a lone, powerful hunter",
+        "Only is predator at certain times",
+        "Mindlessly attacks humans"
+      ]
+    },
+    {
+      "Prey": [
+        "Moves in vigilant herds",
+        "Exists in small family groups",
+        "They all team up on a single foe",
+        "They go berserk when near death",
+        "They're violent in certain seasons",
+        "They're vicious if threatened",
+        "Symbiotic creature protects them",
+        "Breeds at tremendous rates"
+      ]
+    },
+    {
+      "Scavengers": [
+        "Never attacks unwounded prey",
+        "Use other beasts as harriers",
+        "Always flees if significantly hurt",
+        "Poisons prey, waits for it to die",
+        "Disguises itself as its prey",
+        "Remarkably stealthy",
+        "Summons predators to weak prey",
+        "Steals prey form weaker predator"
+      ]
+    }
+  ],
+  "HarmfulDischarges": [
+    "Acidic spew doing its damage on a hit",
+    "Toxic spittle or cloud, use adjacent chart",
+    "Super-heated or super-chilled spew",
+    "Sonic drill or other disabling noise",
+    "Natural laser or plasma discharge",
+    "Nauseating stench or disabling chemical",
+    "Equipment-melting corrosive",
+    "Explosive pellets or chemical catalysts"
+  ],
+  "Poisons": [
+    {
+      "Types": [
+        "Death",
+        "Paralysis",
+        "1d4 dmg per onset interval",
+        "Convulsions",
+        "Blindness",
+        "Hallucinations"
+      ]
+    },
+    {
+      "Onsets": [
+        "Instant",
+        "1 round",
+        "1d6 rounds",
+        "1 minute",
+        "1d6 minutes",
+        "1 hour"
+      ]
+    },
+    {
+      "Durations": [
+        "1d6 rounds",
+        "1 minute",
+        "10 minutes",
+        "1 hour",
+        "1d6 hours",
+        "1d6 days"
+      ]
+    }
+  ]
+}

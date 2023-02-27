@@ -1,0 +1,101 @@
+[
+  {
+    "Type": "Ablative Hull Compartments",
+    "Cost": 100000,
+    "CostExtra": true,
+    "Power": 5,
+    "Mass": 2,
+    "MassExtra": true,
+    "Class": "Capital",
+    "Effect": "+1 AC, +20 maximum hit points",
+    "Description": "By sacrificing empty hull space in a complex system of ablative blast baffles, a capital-class ship can have a large amount of its total mass shot away without actually impinging on its normal function. This grants it a +1 AC bonus and 20 extra maximum hit points."
+  },
+  {
+    "Type": "Augmented Plating",
+    "Cost": 25000,
+    "CostExtra": true,
+    "Power": 0,
+    "Mass": 1,
+    "MassExtra": true,
+    "Class": "Fighter",
+    "Effect": "+2 AC, -1 speed",
+    "Description": "At the cost of a certain amount of speed and maneuverability, a ship can have its armor plating reinforced against glancing hits, gaining a +2 bonus to its AC. This augmentation can decrease a ship’s Speed below 0, meaning it will be applied as a penalty to all Pilot tests."
+  },
+  {
+    "Type": "Boarding Countermeasures",
+    "Cost": 25000,
+    "CostExtra": true,
+    "Power": 2,
+    "Mass": 1,
+    "MassExtra": true,
+    "Class": "Frigate",
+    "Effect": "Makes enemy boarding more difficult",
+    "Description": "The ship has hardened bulkheads, reinforced hatches, and specially-designed automated kill corridors for wiping out intruders. Provided that the ship’s bridge is still under control, the operator can prevent entry to the ship by any force that lacks shipyard-grade tools, weapons capable of melting hull plating, or specialized military breaching implements. If intruders do get inside, only well-equipped, specially-trained marines have any real chance of breaching the defenses. Ordinary space pirates or more casual invaders have only a 1 in 6 chance of threatening the bridge crew, though they may cause significant damage in their dying."
+  },
+  {
+    "Type": "Burst ECM Generator",
+    "Cost": 25000,
+    "CostExtra": true,
+    "Power": 2,
+    "Mass": 1,
+    "MassExtra": true,
+    "Class": "Frigate",
+    "Effect": "Negate one successful hit",
+    "Description": "A high-powered secondary ECM generator can be activated to negate any one otherwise-successful hit against the ship. This generator can be activated after the damage has been rolled, but enemy ships rapidly compensate for the new ECM source, and so the generator can only be used effectively once per engagement"
+  },
+  {
+    "Type": "Foxer Drones",
+    "Cost": 10000,
+    "CostExtra": true,
+    "Power": 2,
+    "Mass": 1,
+    "MassExtra": true,
+    "Class": "Cruiser",
+    "Effect": "+2 AC for one round when fired, ammo 5",
+    "Description": "These drones are invariably short-lived due to the enormous energy signatures they produce, but until the ship’s next turn they grant a +2 AC bonus as their emissions confuse foes. Foxer drones are cheaply constructed and essentially free; the only limit on their number is the amount of free space set aside for holding them."
+  },
+  {
+    "Type": "Grav Eddy Displacer",
+    "Cost": 50000,
+    "CostExtra": true,
+    "Power": 5,
+    "Mass": 2,
+    "MassExtra": true,
+    "Class": "Frigate",
+    "Effect": "1 in 6 change of any given attack missing",
+    "Description": "This system links with a ship’s navigational subsystem and randomizes the motion vectors in sympathy with metadimensional gravitic currents. This agility gives any hit on the ship a 1 in 6 chance of being negated entirely."
+  },
+  {
+    "Type": "Hardened Polyceramic Overlay",
+    "Cost": 25000,
+    "CostExtra": true,
+    "Power": 0,
+    "Mass": 1,
+    "MassExtra": true,
+    "Class": "Fighter",
+    "Effect": "AP quality of attacking weapons reduced by 5",
+    "Description": "A complex glazing process can harden the surface of a ship’s armor to more effectively shed incoming attacks, decreasing the armor-piercing quality of any hit by 5."
+  },
+  {
+    "Type": "Planetary Defense Array",
+    "Cost": 50000,
+    "CostExtra": true,
+    "Power": 4,
+    "Mass": 2,
+    "MassExtra": true,
+    "Class": "Frigate",
+    "Effect": "Anti-impact and anti-nuke surface defenses",
+    "Description": "The ship is equipped with an array of gravitic braker guns and an upgraded nuke snuffer field. While useless in conventional ship-to-ship combat, the array can deflect or dampen meteor impacts, dropped penetrator rods, or other non-powered bombardment techniques, and the snuffer field is powerful enough to prevent nuclear fission reactions over a hemisphere-sized area. A single ship with a PDA can protect against any natural meteor strikes and deny easy terror bombardment of a planet’s population. The PDA cannot fully protect against orbital strikes by powered penetrators, but it can nudge them off course and make pinpoint strikes impractical. Most developed planets have much more powerful and effective ground installations, but a PDA-equipped ship is a useful emergency stopgap for poor or primitive worlds."
+  },
+  {
+    "Type": "Point Defense Array",
+    "Cost": 10000,
+    "CostExtra": true,
+    "Power": 3,
+    "Mass": 2,
+    "MassExtra": true,
+    "Class": "Frigate",
+    "Effect": "+2 AC versus weapons that use ammo",
+    "Description": "Too small to damage ships, these point defense lasers can detonate or melt incoming munitions, improving the ship’s defenses against torpedoes, fractal impact charges, and other ammunition-based weapons."
+  }
+]

@@ -3,14 +3,13 @@ using System.Collections.Generic;
 
 namespace SWNUniverseGenerator.Models
 {
-    public class Alien : IEntity
+    public class Alien : BaseEntity
     {
         public Alien()
         {
             Id = this.GenerateId();
         }
-        public String Id { get; set; }
-        
+
         public String Name { get; set; }
         
         public String BodyTraits { get; set; }

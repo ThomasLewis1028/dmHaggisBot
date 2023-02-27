@@ -5,19 +5,9 @@ namespace SWNUniverseGenerator.Models
     /// <summary>
     /// This class stores all of the necessary information about a Point of Interest
     /// </summary>
-    public class PointOfInterest : ILocation
+    public class PointOfInterest : BaseEntity, ILocation
     {
-        
-        public PointOfInterest()
-        {
-            Id = this.GenerateId();
-        }
-        
-        /// <summary>
-        /// The ID of the point of interest
-        /// </summary>
-        public String Id { get; set; }
-        
+
         /// <summary>
         /// The name of the point of interest
         /// </summary>

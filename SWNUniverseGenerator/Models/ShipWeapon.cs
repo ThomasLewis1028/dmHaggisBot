@@ -1,7 +1,7 @@
 ﻿using System;
 using SWNUniverseGenerator.Models;
 
-namespace SWNUniverseGenerator.DeserializedObjects
+namespace SWNUniverseGenerator.Models
 {
     public class ShipWeapon : BaseEntity
     {

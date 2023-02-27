@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using SWNUniverseGenerator.Models;
 
-namespace SWNUniverseGenerator.DeserializedObjects
+namespace SWNUniverseGenerator.Models
 {
     public class ShipPresets : BaseEntity
     {

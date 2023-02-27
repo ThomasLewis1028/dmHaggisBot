@@ -2,15 +2,8 @@
 
 namespace SWNUniverseGenerator.Models
 {
-    public class Problem : IEntity
+    public class Problem : BaseEntity
     {
-        
-        public Problem()
-        {
-            Id = this.GenerateId();
-        }
-        
-        public String Id { get; set; }
         
         public String Name => Id;
 

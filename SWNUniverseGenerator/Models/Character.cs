@@ -9,13 +9,9 @@ namespace SWNUniverseGenerator.Models
     /// Character object that stores all of the necessary information about a Character
     /// </summary>
     [Table("Characters")]
-    public class Character : IEntity
+    public class Character : BaseEntity
     {
-        public Character()
-        {
-            Id = this.GenerateId();
-        }
-        
+
         /// <summary>
         /// An Enum for a list of Genders. Undefined should never be used.
         /// </summary>
@@ -25,13 +21,6 @@ namespace SWNUniverseGenerator.Models
             Female,
             Undefined
         }
-        
-        //private Ship ship;
-
-        /// <summary>
-        /// The unique String ID of a Character. This should be randomly generated to assure uniqueness.
-        /// </summary>
-        public String Id { get; set; }
         
         /// <summary>
         /// First name of the Character

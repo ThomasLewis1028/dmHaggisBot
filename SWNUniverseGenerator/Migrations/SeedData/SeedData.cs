@@ -3,17 +3,54 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Resources;
-using Microsoft.Extensions.FileProviders;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using SWNUniverseGenerator.DeserializedObjects;
+using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.Migrations
 {
-    public class SeedData
+    public class DbInitializer
     {
-        public static string ReadManifestData<TSource>(string embeddedFileName) where TSource : class
+        
+
+        public DbInitializer()
+        {
+        }
+        
+        public void Seed(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ShipHull>().HasData(GetShipHullData());
+            modelBuilder.Entity<ShipFitting>().HasData(GetShipFittingData());
+            modelBuilder.Entity<ShipDefense>().HasData(GetShipDefenseData());
+            modelBuilder.Entity<ShipWeapon>().HasData(GetShipWeaponData());
+        }
+
+        public List<ShipHull> GetShipHullData()
+        {
+            var result = JsonConvert.DeserializeObject<List<ShipHull>>(ReadManifestData<ShipHull>("ShipHull.json"));
+            return result;
+        }
+        
+        public List<ShipFitting> GetShipFittingData()
+        {
+            var result = JsonConvert.DeserializeObject<List<ShipFitting>>(ReadManifestData<ShipFitting>("ShipFitting.json"));
+            return result;
+        }
+        
+        public List<ShipDefense> GetShipDefenseData()
+        {
+            var result = JsonConvert.DeserializeObject<List<ShipDefense>>(ReadManifestData<ShipDefense>("ShipDefense.json"));
+            return result;
+        }
+        
+        public List<ShipWeapon> GetShipWeaponData()
+        {
+            var result = JsonConvert.DeserializeObject<List<ShipWeapon>>(ReadManifestData<ShipWeapon>("ShipWeapon.json"));
+            return result;
+        }
+        
+        private string ReadManifestData<TSource>(string embeddedFileName) where TSource : class
         {
             var assembly = typeof(TSource).GetTypeInfo().Assembly;
             var resourceName = assembly.GetManifestResourceNames().First(s =>
@@ -31,34 +68,6 @@ namespace SWNUniverseGenerator.Migrations
                     return reader.ReadToEnd();
                 }
             }
-        }
-
-        public static List<ShipHull> GetShipHullData()
-        {
-            var result = new List<ShipHull>();
-            result = JsonConvert.DeserializeObject<List<ShipHull>>(ReadManifestData<ShipHull>("ShipHull.json"));
-            return result;
-        }
-        
-        public static List<ShipFitting> GetShipFittingData()
-        {
-            var result = new List<ShipFitting>();
-            result = JsonConvert.DeserializeObject<List<ShipFitting>>(ReadManifestData<ShipFitting>("ShipFitting.json"));
-            return result;
-        }
-        
-        public static List<ShipDefense> GetShipDefenseData()
-        {
-            var result = new List<ShipDefense>();
-            result = JsonConvert.DeserializeObject<List<ShipDefense>>(ReadManifestData<ShipDefense>("ShipDefense.json"));
-            return result;
-        }
-        
-        public static List<ShipWeapon> GetShipWeaponData()
-        {
-            var result = new List<ShipWeapon>();
-            result = JsonConvert.DeserializeObject<List<ShipWeapon>>(ReadManifestData<ShipWeapon>("ShipWeapon.json"));
-            return result;
         }
     }
 }

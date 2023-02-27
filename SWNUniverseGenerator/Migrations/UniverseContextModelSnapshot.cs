@@ -17,7 +17,7 @@ namespace SWNUniverseGenerator.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
 
-            modelBuilder.Entity("SWNUniverseGenerator.DeserializedObjects.ShipDefense", b =>
+            modelBuilder.Entity("SWNUniverseGenerator.Models.ShipDefense", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -56,7 +56,7 @@ namespace SWNUniverseGenerator.Migrations
                     b.ToTable("ShipDefense");
                 });
 
-            modelBuilder.Entity("SWNUniverseGenerator.DeserializedObjects.ShipFitting", b =>
+            modelBuilder.Entity("SWNUniverseGenerator.Models.ShipFitting", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -101,7 +101,7 @@ namespace SWNUniverseGenerator.Migrations
                     b.ToTable("ShipFitting");
                 });
 
-            modelBuilder.Entity("SWNUniverseGenerator.DeserializedObjects.ShipHull", b =>
+            modelBuilder.Entity("SWNUniverseGenerator.Models.ShipHull", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -150,7 +150,7 @@ namespace SWNUniverseGenerator.Migrations
                     b.ToTable("ShipHull");
                 });
 
-            modelBuilder.Entity("SWNUniverseGenerator.DeserializedObjects.ShipWeapon", b =>
+            modelBuilder.Entity("SWNUniverseGenerator.Models.ShipWeapon", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -551,21 +551,21 @@ namespace SWNUniverseGenerator.Migrations
                     b.ToTable("Zones");
                 });
 
-            modelBuilder.Entity("SWNUniverseGenerator.DeserializedObjects.ShipDefense", b =>
+            modelBuilder.Entity("SWNUniverseGenerator.Models.ShipDefense", b =>
                 {
                     b.HasOne("SWNUniverseGenerator.Models.Ship", null)
                         .WithMany("Defenses")
                         .HasForeignKey("ShipId");
                 });
 
-            modelBuilder.Entity("SWNUniverseGenerator.DeserializedObjects.ShipFitting", b =>
+            modelBuilder.Entity("SWNUniverseGenerator.Models.ShipFitting", b =>
                 {
                     b.HasOne("SWNUniverseGenerator.Models.Ship", null)
                         .WithMany("Fittings")
                         .HasForeignKey("ShipId");
                 });
 
-            modelBuilder.Entity("SWNUniverseGenerator.DeserializedObjects.ShipWeapon", b =>
+            modelBuilder.Entity("SWNUniverseGenerator.Models.ShipWeapon", b =>
                 {
                     b.HasOne("SWNUniverseGenerator.Models.Ship", null)
                         .WithMany("Weapons")
@@ -643,7 +643,7 @@ namespace SWNUniverseGenerator.Migrations
 
             modelBuilder.Entity("SWNUniverseGenerator.Models.Ship", b =>
                 {
-                    b.HasOne("SWNUniverseGenerator.DeserializedObjects.ShipHull", "Hull")
+                    b.HasOne("SWNUniverseGenerator.Models.ShipHull", "Hull")
                         .WithMany()
                         .HasForeignKey("HullId");
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Migrations;
@@ -18,7 +19,10 @@ namespace SWNUniverseGenerator.Database
         public DbSet<Problem> Problems { get; set; }
         public DbSet<Ship> Ships { get; set; }
         public DbSet<Character> Characters { get; set; }
-        public DbSet<Job> Jobs { get; set; }
+        public DbSet<ShipWeapon> ShipWeapon { get; set; }
+        public DbSet<ShipDefense> ShipDefense { get; set; }
+        public DbSet<ShipHull> ShipHull { get; set; }
+        public DbSet<ShipFitting> ShipFitting { get; set; }
 
         public string DbPath { get; }
 
@@ -31,6 +35,7 @@ namespace SWNUniverseGenerator.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             // ZONES
             modelBuilder.Entity<Zone>()
                 .HasOne<Universe>()
@@ -98,23 +103,18 @@ namespace SWNUniverseGenerator.Database
                 .HasForeignKey(p => p.UniverseId)
                 .IsRequired();
 
-            modelBuilder.Entity<ShipHull>().HasData(SeedData.GetShipHullData());
-            modelBuilder.Entity<ShipFitting>().HasData(SeedData.GetShipFittingData());
-            modelBuilder.Entity<ShipDefense>().HasData(SeedData.GetShipDefenseData());
-            modelBuilder.Entity<ShipWeapon>().HasData(SeedData.GetShipWeaponData());
+            modelBuilder.Entity<Universe>().HasData(new Universe()
+            {
+                Name = "AutoInsert",
+                GridY = 5,
+                GridX = 5
+            });
+            new DbInitializer().Seed(modelBuilder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options) =>
             options
                 .UseSqlite($"Data Source={DbPath}");
     }
-
-    public class DataAccessLayer
-    {
-        public List<Universe> GetUniverse()
-        {
-            UniverseContext uc = new UniverseContext();
-            return uc.Universes.Where(u => u.Name == "Pyrus").ToList();
-        }
-    }
+    
 }

@@ -23,12 +23,6 @@ namespace SWNUniverseGenerator.Models
         /// The Name of a Universe
         /// To be used with setting a fileName.
         /// </summary>
-        public String Id { get; set; }
-        
-        /// <summary>
-        /// The Name of a Universe
-        /// To be used with setting a fileName.
-        /// </summary>
         public String Name { get; set; }
 
         /// <summary>

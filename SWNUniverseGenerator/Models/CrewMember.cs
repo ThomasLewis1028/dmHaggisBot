@@ -3,14 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SWNUniverseGenerator.Models
 {
-    public class CrewMember : IEntity
+    public class CrewMember : BaseEntity
     {
         public CrewMember()
         {
             Id = this.GenerateId();
         }
-        
-        public String Id { get; set; }
 
         public String ShipId { get; set; }
         

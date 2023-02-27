@@ -6,18 +6,8 @@ namespace SWNUniverseGenerator.Models
     /// <summary>
     /// Planet object that stores all of the necessary information about a Planet
     /// </summary>
-    public class Planet : ILocation
+    public class Planet : BaseEntity, ILocation
     {
-        
-        public Planet()
-        {
-            Id = this.GenerateId();
-        }
-        
-        /// <summary>
-        /// Implemented from ILocation. Will be the unique ID for a Planet
-        /// </summary>
-        public String Id { get; set; }
 
         /// <summary>
         /// This is the Zone in which a planet lies

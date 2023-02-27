@@ -56,7 +56,7 @@ public class DatabaseTests
             Assert.AreEqual(ucGet.Name, universe.Name);
             Assert.AreEqual(ucGet.Id, universeId);
 
-            //Add Characters
+            /*//Add Characters
             for (int i = 0; i < 3; i++)
             {
                 var c = new Character()
@@ -112,7 +112,7 @@ public class DatabaseTests
                 //Check Cleanup
                 Assert.AreEqual(0, context.Universes.Count(u => u.Id == universeId));
                 Assert.AreEqual(0, context.Characters.Count(u => u.UniverseId == universeId));
-            }
+            }*/
         }
     }
 

@@ -8,19 +8,9 @@ namespace SWNUniverseGenerator.Models
     /// <summary>
     /// This holds all of the necessary information about a Star
     /// </summary>
-    public class Star : ILocation
+    public class Star : BaseEntity, ILocation
     {
-        
-        public Star()
-        {
-            Id = this.GenerateId();
-        }
-        
-        /// <summary>
-        /// A unique ID that will be generated when creating a Star
-        /// </summary>
-        public String Id { get; set; }
-        
+
         /// <summary>
         /// A string value for the universe a given star is tied to
         /// </summary>

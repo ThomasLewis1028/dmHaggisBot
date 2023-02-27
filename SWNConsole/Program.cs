@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using SWNUniverseGenerator;
+using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
 
@@ -52,17 +53,17 @@ namespace SWNConsole
 
                             break;
                         // Load Universe
-                        case var _ when RegularExpressions.LoadUniverseName.IsMatch(input):
-                            if (RegularExpressions.LoadUniverse.IsMatch(input))
-                                LoadUniverse();
-                            else
-                            {
-                                string universeName = new string(input.SkipWhile(c => c != '"')
-                                    .Skip(1)
-                                    .TakeWhile(c => c != '"')
-                                    .ToArray()).Trim();
-                                LoadUniverse(universeName);
-                            }
+                        // case var _ when RegularExpressions.LoadUniverseName.IsMatch(input):
+                        //     if (RegularExpressions.LoadUniverse.IsMatch(input))
+                        //         LoadUniverse();
+                        //     else
+                        //     {
+                        //         string universeName = new string(input.SkipWhile(c => c != '"')
+                        //             .Skip(1)
+                        //             .TakeWhile(c => c != '"')
+                        //             .ToArray()).Trim();
+                        //         LoadUniverse(universeName);
+                        //     }
 
                             break;
                         // List commands
@@ -99,17 +100,32 @@ namespace SWNConsole
 
         private static void CreateUniverse(string universeName)
         {
-            _creation = new Creation();
+            using (var context = new UniverseContext())
+            {
+                string universeId = "";
+                using (var uc = new Repository<Universe>(context))
+                {
+                    //Add Universe
+                    Universe universe = new Universe()
+                    {
+                        Name = universeName,
+                        GridX = 8,
+                        GridY = 10
+                    };
+                    uc.Add(universe);
+                }
+            }
+            //_creation = new Creation();
 
-            Universe universe = _creation.CreateUniverse(new UniverseDefaultSettings{Name = universeName, Overwrite = true});
-
-            _creation.CreateStars(universe, new StarDefaultSettings());
-            _creation.CreatePlanets(universe, new PlanetDefaultSettings());
-            _creation.CreateShips(universe, new ShipDefaultSettings());
-            _creation.CreateCharacter(universe, new CharacterDefaultSettings());
+            // Universe universe = _creation.CreateUniverse(new UniverseDefaultSettings{Name = universeName, Overwrite = true});
+            //
+            // _creation.CreateStars(universe, new StarDefaultSettings());
+            // _creation.CreatePlanets(universe, new PlanetDefaultSettings());
+            // _creation.CreateShips(universe, new ShipDefaultSettings());
+            // _creation.CreateCharacter(universe, new CharacterDefaultSettings());
         }
 
-        private static void LoadUniverse()
+        /*private static void LoadUniverse()
         {
             Console.Clear();
             Console.Write("loaduniverse> ");
@@ -128,6 +144,6 @@ namespace SWNConsole
             
             Console.WriteLine($"{universe.Characters.First().Name}\n{universe.Characters.First().Id}");
             
-        }
+        }*/
     }
 }

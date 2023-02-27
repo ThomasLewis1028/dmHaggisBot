@@ -20,10 +20,9 @@ namespace SWNUniverseGenerator.Models
         public String Id { get; set; }
 
         /// <summary>
-        /// This is the parent Star that a Planet orbits. This allows for a partially non-relational database
-        /// but still allows you to tie planets to Stars
+        /// This is the Zone in which a planet lies
         /// </summary>
-        public String StarId { get; set; }
+        public String ZoneId { get; set; }
         
         /// <summary>
         /// A string value for the universe a given planet is tied to

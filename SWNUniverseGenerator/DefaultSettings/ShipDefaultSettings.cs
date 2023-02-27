@@ -1,26 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using SWNUniverseGenerator.CreationTools;
+using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.DefaultSettings
 {
     public class ShipDefaultSettings
     {
-        public ShipDefaultSettings()
+        public ShipDefaultSettings(Int32 count = 100, 
+            String homeId = null, 
+            String locationId = null,
+            String type = null
+            )
         {
-            Count = -1;
+            Count = count;
             Id = null;
             Name = null;
             CreateCrew = true;
-            CaptainId = null;
-            PilotId = null;
-            EngineerId = null;
-            CommsId = null;
-            GunnerId = null;
-            CrewId = null;
-            Type = null;
-            HomeId = null;
-            LocationId = null;
+            Captain = null;
+            Pilot = null;
+            Engineer = null;
+            Comms = null;
+            Gunner = null;
+            CrewMembers = null;
+            Type = type;
+            HomeId = homeId;
+            LocationId = locationId;
         }
         
         public Int32 Count { get; set; }
@@ -31,17 +36,17 @@ namespace SWNUniverseGenerator.DefaultSettings
         
         public Boolean CreateCrew { get; set; }
 
-        public String CaptainId { get; set; }
+        public Character Captain { get; set; }
         
-        public String PilotId { get; set; }
+        public Character Pilot { get; set; }
         
-        public String EngineerId { get; set; }
+        public Character Engineer { get; set; }
         
-        public String CommsId { get; set; }
+        public Character Comms { get; set; }
         
-        public String GunnerId { get; set; }
+        public Character Gunner { get; set; }
         
-        public List<String> CrewId { get; set; }
+        public List<Character> CrewMembers { get; set; }
         
         public String Type { get; set; }
         

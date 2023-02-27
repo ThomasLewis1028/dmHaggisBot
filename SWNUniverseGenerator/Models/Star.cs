@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Newtonsoft.Json;
 
@@ -24,6 +25,11 @@ namespace SWNUniverseGenerator.Models
         /// A string value for the universe a given star is tied to
         /// </summary>
         public String UniverseId { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public String ZoneId { get; set; }
 
         /// <summary>
         /// The string Name of a Star

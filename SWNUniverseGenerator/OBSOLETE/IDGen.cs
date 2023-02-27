@@ -14,7 +14,7 @@ namespace SWNUniverseGenerator
         /// </summary>
         /// <param name="item"></param>
         /// <typeparam name="T"></typeparam>
-        public static void GenerateId<T>(T item) where T : IEntity
+        public static void DEADGenerateId<T>(T item) where T : IEntity
         {
             // Create a Guid and chop everything from the first hyphen and on
             var id = Guid.NewGuid().ToString().Substring(0, 8).ToUpper();

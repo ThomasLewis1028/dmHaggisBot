@@ -1,5 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.Database
@@ -9,6 +11,12 @@ namespace SWNUniverseGenerator.Database
     {
         IQueryable<TEntity> GetAll();
 
+        IEnumerable<IEntity> Search(Expression<System.Func<TEntity, Boolean>> query);
+
+        Boolean Any(Expression<System.Func<TEntity, Boolean>> query);
+
+        Int32 Count(Expression<System.Func<TEntity, Boolean>> query);
+        
         TEntity GetById(string id);
 
         bool Add(TEntity entity);

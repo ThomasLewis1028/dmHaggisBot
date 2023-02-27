@@ -120,44 +120,42 @@ namespace SWNUniverseGenerator
             var includeShips = t.Contains("sh") || t.Length == 0;
             var includeAliens = t.Contains("a") || t.Length == 0;
 
-            return (from p in universe.Planets
-                    where (Regex.IsMatch(p.Name, nrgx, RegexOptions.IgnoreCase) ||
-                           Regex.IsMatch(p.Id, idrgx, RegexOptions.IgnoreCase)) &&
-                          includePlanets
-                    select (IEntity) p)
-                .Union(from ch in universe.Characters
-                    where (Regex.IsMatch(ch.Name, nrgx, RegexOptions.IgnoreCase) ||
-                           Regex.IsMatch(ch.Id, idrgx, RegexOptions.IgnoreCase) ||
-                           Regex.IsMatch(ch.CurrentLocation, lrgx, RegexOptions.IgnoreCase)) &&
-                          includeChars
-                    select (IEntity) ch)
-                .Union(from s in universe.Stars
-                    where (Regex.IsMatch(s.Name, nrgx, RegexOptions.IgnoreCase) ||
-                           Regex.IsMatch(s.Id, idrgx, RegexOptions.IgnoreCase)) &&
-                          includeStars
-                    select (IEntity) s)
-                .Union(from pr in universe.Problems
-                    where Regex.IsMatch(pr.Id, idrgx, RegexOptions.IgnoreCase) &&
-                          includeProbs
-                    select (IEntity) pr)
-                .Union(from poi in universe.PointsOfInterest
-                    where (Regex.IsMatch(poi.Id, idrgx, RegexOptions.IgnoreCase) ||
-                           Regex.IsMatch(poi.StarId, lrgx, RegexOptions.IgnoreCase)) &&
-                          includePoi
-                    select (IEntity) poi)
-                .Union(from ship in universe.Ships
-                    where Regex.IsMatch(ship.Id, idrgx, RegexOptions.IgnoreCase) &&
-                          includeShips
-                    select (IEntity) ship)
-                .Union(from alien in universe.Aliens
-                    where Regex.IsMatch(alien.Id, idrgx, RegexOptions.IgnoreCase) && includeAliens
-                    select (IEntity) alien)
-                .Union(from z in universe.Zones
-                    where Regex.IsMatch(z.Id, idrgx, RegexOptions.IgnoreCase) ||
-                          Regex.IsMatch(z.Name, nrgx, RegexOptions.IgnoreCase) &&
-                          includeZones
-                    select (IEntity) z)
-                .AsQueryable();
+            return null;
+            // return (from p in universe.Planets
+            //         where (Regex.IsMatch(p.Name, nrgx, RegexOptions.IgnoreCase) ||
+            //                Regex.IsMatch(p.Id, idrgx, RegexOptions.IgnoreCase)) &&
+            //               includePlanets
+            //         select (IEntity) p)
+            //     .Union(from ch in universe.Characters
+            //         where (Regex.IsMatch(ch.Name, nrgx, RegexOptions.IgnoreCase) ||
+            //                Regex.IsMatch(ch.Id, idrgx, RegexOptions.IgnoreCase)) &&
+            //               includeChars
+            //         select (IEntity) ch)
+            //     .Union(from s in universe.Stars
+            //         where (Regex.IsMatch(s.Name, nrgx, RegexOptions.IgnoreCase) ||
+            //                Regex.IsMatch(s.Id, idrgx, RegexOptions.IgnoreCase)) &&
+            //               includeStars
+            //         select (IEntity) s)
+            //     .Union(from pr in universe.Problems
+            //         where Regex.IsMatch(pr.Id, idrgx, RegexOptions.IgnoreCase) &&
+            //               includeProbs
+            //         select (IEntity) pr)
+            //     .Union(from poi in universe.PointsOfInterest
+            //         where (Regex.IsMatch(poi.Id, idrgx, RegexOptions.IgnoreCase)) &&
+            //               includePoi
+            //         select (IEntity) poi)
+            //     .Union(from ship in universe.Ships
+            //         where Regex.IsMatch(ship.Id, idrgx, RegexOptions.IgnoreCase) &&
+            //               includeShips
+            //         select (IEntity) ship)
+            //     .Union(from alien in universe.Aliens
+            //         where Regex.IsMatch(alien.Id, idrgx, RegexOptions.IgnoreCase) && includeAliens
+            //         select (IEntity) alien)
+            //     .Union(from z in universe.Zones
+            //         where Regex.IsMatch(z.Id, idrgx, RegexOptions.IgnoreCase) &&
+            //               includeZones
+            //         select (IEntity) z)
+            //     .AsQueryable();
         }
     }
 }

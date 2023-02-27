@@ -14,7 +14,7 @@ namespace SWNTests;
 public class DatabaseTests
 {
     private static readonly Random Rand = new Random();
-    
+
     /// <summary>
     /// Runs 1 time prior to all tests for setup 
     /// </summary>
@@ -22,7 +22,6 @@ public class DatabaseTests
     [ClassInitialize]
     public static async Task ClassInitialize(TestContext testContext)
     {
-        
     }
 
     /// <summary>
@@ -92,7 +91,7 @@ public class DatabaseTests
                 from u in context.Universes
                 join c in context.Characters on u.Id equals c.UniverseId
                 where u.Id == ucGet.Id
-                select new { u.Name, c.First, c.Last };
+                select new {u.Name, c.First, c.Last};
             var result = joinquery.First();
             Assert.AreEqual(result.Name, universeName);
             Assert.AreEqual(result.First, first);
@@ -118,7 +117,7 @@ public class DatabaseTests
     }
 
     [TestMethod, TestCategory("DatabaseTest")]
-    [DataRow ("Test Universe Repository", "Ron", "Burgundy")]
+    [DataRow("Test Universe Repository", "Ron", "Burgundy")]
     public void TestRepositoryCreate(String universeName, String first, String last)
     {
         using (var context = new UniverseContext())
@@ -151,8 +150,6 @@ public class DatabaseTests
                 Universe unDelete = uc.GetById(universeId);
                 Assert.AreEqual(null, unDelete);
             }
-
         }
-        
     }
 }

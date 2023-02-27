@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
@@ -7,6 +8,7 @@ namespace SWNUniverseGenerator.Models
     /// <summary>
     /// Character object that stores all of the necessary information about a Character
     /// </summary>
+    [Table("Characters")]
     public class Character : IEntity
     {
         public Character()
@@ -49,13 +51,13 @@ namespace SWNUniverseGenerator.Models
         /// <summary>
         /// A unique String ID of a Planet to mark the Character's birth planet
         /// </summary>
-        public String BirthPlanet { get; set; }
+        public String BirthPlanetId { get; set; }
         
         /// <summary>
-        /// A unique String ID of a Planet to mark the Character's current Location.
+        /// A unique String ID of an ILocation to mark the Character's current Location.
         /// Location can be a planet, a city, or other various location types. 
         /// </summary>
-        public String CurrentLocation { get; set; }
+        public String CurrentLocationId { get; set; }
         
         /// <summary>
         /// A string value of a Character's HairStyle
@@ -86,7 +88,7 @@ namespace SWNUniverseGenerator.Models
         /// A string value of a Character's Title
         /// </summary>
         public String Title { get; set; }
-        
+
         /// <summary>
         /// A Enum for the Character's Gender.
         /// </summary>
@@ -103,12 +105,7 @@ namespace SWNUniverseGenerator.Models
         /// An integer representation of the likelihood a character will aide in some shady matter
         /// </summary>
         public Int32 CrimeChance { get; set; }
-        
-        /// <summary>
-        /// A string value for the ship a given character is tied to
-        /// </summary>
-        public String ShipId { get; set; }
- 
+
         /// <summary>
         /// A string value for the universe a given character is tied to
         /// </summary>

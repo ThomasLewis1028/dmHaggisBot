@@ -96,11 +96,11 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// <summary>
         /// This value should be a specific PlanetID that you wish to set as the character's birth planet
         /// </summary>
-        public String BirthPlanetId { get; set; }
+        public Planet BirthPlanetId { get; set; }
         
         /// <summary>
         /// This value should be a specific PlanetID that you wish to set as the character's current planet
         /// </summary>
-        public String CurrentPlanetId { get; set; }
+        public Planet CurrentPlanetId { get; set; }
     }
 }

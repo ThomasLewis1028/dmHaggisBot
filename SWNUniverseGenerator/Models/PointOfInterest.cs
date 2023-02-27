@@ -39,13 +39,10 @@ namespace SWNUniverseGenerator.Models
         public String Situation { get; set; }
 
         /// <summary>
-        /// The star system in which this point of interest may reside
-        /// </summary>
-        public String StarId { get; set; }
-        
-        /// <summary>
         /// A string value for the universe a given PointOfInterest is tied to
         /// </summary>
         public String UniverseId { get; set; }
+        
+        public String ZoneId { get; set; }
     }
 }

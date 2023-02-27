@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SWNUniverseGenerator.Models;
@@ -20,6 +22,26 @@ namespace SWNUniverseGenerator.Database
         {
             return _dbContext.Set<TEntity>();
         }
+
+        public IEnumerable<IEntity> Search(Expression<System.Func<TEntity, Boolean>> query)
+        {
+            return _dbContext.Set<TEntity>()
+                .Where(query);
+        }
+
+        public Boolean Any(Expression<System.Func<TEntity, Boolean>> query)
+        {
+            return _dbContext.Set<TEntity>()
+                .Any(query);
+        }
+        
+       
+        public Int32 Count(Expression<System.Func<TEntity, Boolean>> query)
+        {
+            return _dbContext.Set<TEntity>()
+                .Count(query);
+        } 
+        
         public TEntity GetById(string id)
         {
             return _dbContext.Set<TEntity>()

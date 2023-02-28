@@ -5,11 +5,6 @@ namespace SWNUniverseGenerator.Models
 {
     public class CrewMember : BaseEntity
     {
-        public CrewMember()
-        {
-            Id = this.GenerateId();
-        }
-
         public String ShipId { get; set; }
         
         public String CharacterId { get; set; }

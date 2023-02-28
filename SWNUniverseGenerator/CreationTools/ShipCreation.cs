@@ -31,7 +31,7 @@ namespace SWNUniverseGenerator.CreationTools
                     {
                         var ship = new Ship();
 
-                        ShipHull shipHull;
+                        ShipHullObject shipHullObject;
 
                         // Set the type of ship
                         if (string.IsNullOrEmpty(type))
@@ -39,7 +39,7 @@ namespace SWNUniverseGenerator.CreationTools
                             var hullSwitch = Rand.Next(0, 100);
                             
                             // Weighted chances for each hull type
-                            shipHull = hullSwitch switch
+                            shipHullObject = hullSwitch switch
                             {
                                 { } n when (n >= 0 && n < 10) => shipData.Hulls[0],
                                 { } n when (n >= 10 && n < 25) => shipData.Hulls[1],
@@ -57,7 +57,7 @@ namespace SWNUniverseGenerator.CreationTools
                             };
                         }
                         else if (shipData.Hulls.Exists(h => h.Type == type))
-                            shipHull = shipData.Hulls.Find(h => h.Type == type);
+                            shipHullObject = shipData.Hulls.Find(h => h.Type == type);
                         else
                             throw new FileLoadException("No ship of this type exists");
 
@@ -96,11 +96,11 @@ namespace SWNUniverseGenerator.CreationTools
                             }
                         }
 
-                        ship.Hull = shipHull;
+                        // ship.Hull = shipHull;
                         ship.HomeId = homeId;
                         ship.LocationId = locId;
 
-                        ShipPresets shipPresets = shipData.Presets.Find(a => a.HullType == shipHull.Type);
+                        ShipPresets shipPresets = shipData.Presets.Find(a => a.HullType == shipHullObject.Type);
                         ShipPreset shipPreset = shipPresets.ListPresets[Rand.Next(0, shipPresets.ListPresets.Count)];
                         ship.CrewSkill = shipPreset.CrewSkill;
                         ship.Cp = shipPreset.Cp;
@@ -108,7 +108,7 @@ namespace SWNUniverseGenerator.CreationTools
                         // Set the weapons
                         if (shipPreset.Weapons != null)
                         {
-                            ship.Weapons = new List<ShipWeapon>();
+                            // ship.Weapons = new List<ShipWeapon>();
                             // foreach (var w in shipPreset.Weapons)
                                 // ship.Weapons.Add(new shipData.Weapons[w]);
                         }
@@ -116,7 +116,7 @@ namespace SWNUniverseGenerator.CreationTools
                         // Set the defenses
                         if (shipPreset.Defenses != null)
                         {
-                            ship.Defenses = new List<ShipDefense>();
+                            // ship.Defenses = new List<ShipDefense>();
                             // foreach (var d in shipPreset.Defenses)
                                 // ship.Defenses.Add(new ShipDefense(shipData.Defenses[d]));
                         }
@@ -124,7 +124,7 @@ namespace SWNUniverseGenerator.CreationTools
                         // Set the fittings
                         if (shipPreset.Fittings != null)
                         {
-                            ship.Fittings = new List<ShipFitting>();
+                            // ship.Fittings = new List<ShipFitting>();
                             // foreach (var f in shipPreset.Fittings)
                                 // ship.Fittings.Add(new ShipFitting(shipData.Fittings[f]));
                         }

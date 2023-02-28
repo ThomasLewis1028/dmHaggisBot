@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -21,34 +22,34 @@ namespace SWNUniverseGenerator.Migrations
         
         public void Seed(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ShipHull>().HasData(GetShipHullData());
-            modelBuilder.Entity<ShipFitting>().HasData(GetShipFittingData());
-            modelBuilder.Entity<ShipDefense>().HasData(GetShipDefenseData());
-            modelBuilder.Entity<ShipWeapon>().HasData(GetShipWeaponData());
+            modelBuilder.Entity<ShipHullObject>().HasData(GetShipHullData());
+            modelBuilder.Entity<ShipFittingObject>().HasData(GetShipFittingData());
+            modelBuilder.Entity<ShipDefenseObject>().HasData(GetShipDefenseData());
+            modelBuilder.Entity<ShipWeaponObject>().HasData(GetShipWeaponData());
             modelBuilder.Entity<Naming>().HasData(GetNamingData());
         }
 
-        public List<ShipHull> GetShipHullData()
+        public List<ShipHullObject> GetShipHullData()
         {
-            var result = JsonConvert.DeserializeObject<List<ShipHull>>(ReadManifestData<UniverseContext>("ShipHull.json"));
+            var result = JsonConvert.DeserializeObject<List<ShipHullObject>>(ReadManifestData<UniverseContext>("ShipHull.json"));
             return result;
         }
         
-        public List<ShipFitting> GetShipFittingData()
+        public List<ShipFittingObject> GetShipFittingData()
         {
-            var result = JsonConvert.DeserializeObject<List<ShipFitting>>(ReadManifestData<UniverseContext>("ShipFitting.json"));
+            var result = JsonConvert.DeserializeObject<List<ShipFittingObject>>(ReadManifestData<UniverseContext>("ShipFitting.json"));
             return result;
         }
         
-        public List<ShipDefense> GetShipDefenseData()
+        public List<ShipDefenseObject> GetShipDefenseData()
         {
-            var result = JsonConvert.DeserializeObject<List<ShipDefense>>(ReadManifestData<UniverseContext>("ShipDefense.json"));
+            var result = JsonConvert.DeserializeObject<List<ShipDefenseObject>>(ReadManifestData<UniverseContext>("ShipDefense.json"));
             return result;
         }
         
-        public List<ShipWeapon> GetShipWeaponData()
+        public List<ShipWeaponObject> GetShipWeaponData()
         {
-            var result = JsonConvert.DeserializeObject<List<ShipWeapon>>(ReadManifestData<UniverseContext>("ShipWeapon.json"));
+            var result = JsonConvert.DeserializeObject<List<ShipWeaponObject>>(ReadManifestData<UniverseContext>("ShipWeapon.json"));
             return result;
         }
         

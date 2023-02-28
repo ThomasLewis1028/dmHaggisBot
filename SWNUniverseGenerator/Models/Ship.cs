@@ -11,13 +11,13 @@ namespace SWNUniverseGenerator.Models
     {
         public String Name { get; set; }
 
-        public ShipHull Hull { get; set; }
+        public String HullId { get; set; }
 
-        public List<ShipFitting> Fittings { get; set; }
+        // public List<String> ShipFittingsIds { get; set; }
 
-        public List<ShipDefense> Defenses { get; set; }
-
-        public List<ShipWeapon> Weapons { get; set; }
+        // public List<ShipDefense> ShipDefensesIds { get; set; }
+        //
+        // public List<ShipWeapon> ShipWeaponsIds { get; set; }
 
         public Int32 CrewSkill { get; set; }
 

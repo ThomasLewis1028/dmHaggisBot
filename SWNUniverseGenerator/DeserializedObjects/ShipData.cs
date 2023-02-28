@@ -5,13 +5,13 @@ namespace SWNUniverseGenerator.DeserializedObjects
 {
     public class ShipData : BaseEntity
     {
-        public List<ShipHull> Hulls { get; set; }
+        public List<ShipHullObject> Hulls { get; set; }
 
-        public List<ShipFitting> Fittings { get; set; }
+        public List<ShipFittingObject> Fittings { get; set; }
 
-        public List<ShipDefense> Defenses { get; set; }
+        public List<ShipDefenseObject> Defenses { get; set; }
 
-        public List<ShipWeapon> Weapons { get; set; }
+        public List<ShipWeaponObject> Weapons { get; set; }
 
         public List<ShipPresets> Presets { get; set; }
 

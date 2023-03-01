@@ -13,7 +13,7 @@
     "Description": "Twinned assay and penetration lasers modulate the frequency of this beam for remarkable armor penetration. These weapons are popular choices for fighters intended for frigate or cruiser engagement."
   },
   {
-    "Type": "Reaper battery",
+    "Type": "Reaper Battery",
     "Cost": 100000,
     "AmmoCost": null,
     "Dmg": "3d4",

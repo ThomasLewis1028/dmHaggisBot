@@ -33,7 +33,7 @@ public class SeedDataTests
     [TestMethod, TestCategory("SeedData")]
     public void TestGetShipWeaponData()
     {
-        List<Armament> hulls = new DbInitializer().GetShipWeaponData();
+        List<Armament> hulls = new DbInitializer().GetShipArmamentData();
         Assert.IsTrue(hulls.Count > 0);
     }
     
@@ -42,5 +42,64 @@ public class SeedDataTests
     {
         List<Naming> hulls = new DbInitializer().GetNamingData();
         Assert.IsTrue(hulls.Count > 0);
+    }
+
+    [TestMethod, TestCategory("SeedData")]
+    public void TestGetSpecHullData()
+    {
+        var dbInit = new DbInitializer();
+
+        var shipSpec = dbInit.Deserialize<ShipSpec>("ShipSpec.json");
+        
+        var hullData = dbInit.GetShipHullData();
+        List<Spec> specData = dbInit.GetSpecData(hullData, shipSpec);
+        Assert.IsTrue(specData.Count > 0);
+    }
+    
+    [TestMethod, TestCategory("SeedData")]
+    public void TestGetSpecArmamentData()
+    {
+        var dbInit = new DbInitializer();
+
+        var shipSpec = dbInit.Deserialize<ShipSpec>("ShipSpec.json");
+        var hullData = dbInit.GetShipHullData();
+        var specData = dbInit.GetSpecData(hullData, shipSpec);
+        
+        var armamentData = dbInit.GetShipArmamentData();
+        
+        List<SpecArmament> specArmamentData = dbInit.GetSpecArmamentData(specData, armamentData, shipSpec);
+        Assert.IsTrue(specData.Count > 0);
+    }
+    
+    
+    [TestMethod, TestCategory("SeedData")]
+    public void TestGetSpecDefenseData()
+    {
+        var dbInit = new DbInitializer();
+
+        var shipSpec = dbInit.Deserialize<ShipSpec>("ShipSpec.json");
+        var hullData = dbInit.GetShipHullData();
+        var specData = dbInit.GetSpecData(hullData, shipSpec);
+        
+        var defenseData = dbInit.GetShipDefenseData();
+        
+        List<SpecDefense> specDefenseDataData = dbInit.GetSpecDefenseData(specData, defenseData, shipSpec);
+        Assert.IsTrue(specData.Count > 0);
+    }
+    
+        
+    [TestMethod, TestCategory("SeedData")]
+    public void TestGetSpecFittingData()
+    {
+        var dbInit = new DbInitializer();
+
+        var shipSpec = dbInit.Deserialize<ShipSpec>("ShipSpec.json");
+        var hullData = dbInit.GetShipHullData();
+        var specData = dbInit.GetSpecData(hullData, shipSpec);
+        
+        var fittingData = dbInit.GetShipFittingData();
+        
+        List<SpecFitting> specFittingData = dbInit.GetSpecFittingData(specData, fittingData, shipSpec);
+        Assert.IsTrue(specData.Count > 0);
     }
 }

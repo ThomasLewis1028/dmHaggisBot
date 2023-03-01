@@ -5,6 +5,8 @@ namespace SWNUniverseGenerator.Models
 {
     public class Defense : BaseEntity
     {
+        public String Type { get; set; }
+        
         public Int32 Cost { get; set; }
 
         public Boolean CostExtra { get; set; }

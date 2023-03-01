@@ -136,6 +136,10 @@
       <EmbeddedResource Include="Migrations\SeedData\Animal.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
+      <None Remove="Migrations\SeedData\ShipSpec.json" />
+      <EmbeddedResource Include="Migrations\SeedData\ShipSpec.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>

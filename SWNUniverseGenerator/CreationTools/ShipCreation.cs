@@ -101,12 +101,12 @@ namespace SWNUniverseGenerator.CreationTools
                         ship.LocationId = locId;
 
                         ShipPresets shipPresets = shipData.Presets.Find(a => a.HullType == shipHullObject.Type);
-                        ShipPreset shipPreset = shipPresets.ListPresets[Rand.Next(0, shipPresets.ListPresets.Count)];
-                        ship.CrewSkill = shipPreset.CrewSkill;
-                        ship.Cp = shipPreset.Cp;
+                        ShipSpec shipSpec = shipPresets.ListPresets[Rand.Next(0, shipPresets.ListPresets.Count)];
+                        // ship.CrewSkill = shipSpec.CrewSkill;
+                        // ship.Cp = shipSpec.Cp;
 
                         // Set the weapons
-                        if (shipPreset.Weapons != null)
+                        if (shipSpec.Weapons != null)
                         {
                             // ship.Weapons = new List<ShipWeapon>();
                             // foreach (var w in shipPreset.Weapons)
@@ -114,7 +114,7 @@ namespace SWNUniverseGenerator.CreationTools
                         }
 
                         // Set the defenses
-                        if (shipPreset.Defenses != null)
+                        if (shipSpec.Defenses != null)
                         {
                             // ship.Defenses = new List<ShipDefense>();
                             // foreach (var d in shipPreset.Defenses)
@@ -122,7 +122,7 @@ namespace SWNUniverseGenerator.CreationTools
                         }
 
                         // Set the fittings
-                        if (shipPreset.Fittings != null)
+                        if (shipSpec.Fittings != null)
                         {
                             // ship.Fittings = new List<ShipFitting>();
                             // foreach (var f in shipPreset.Fittings)

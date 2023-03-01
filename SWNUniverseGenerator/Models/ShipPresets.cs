@@ -8,6 +8,6 @@ namespace SWNUniverseGenerator.Models
     {
         public String HullType { get; set; }
 
-        public List<ShipPreset> ListPresets { get; set; }
+        public List<ShipSpec> ListPresets { get; set; }
     }
 }

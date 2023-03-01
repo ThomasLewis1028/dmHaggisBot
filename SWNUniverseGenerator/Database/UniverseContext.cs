@@ -117,41 +117,41 @@ namespace SWNUniverseGenerator.Database
             // SPEC
             modelBuilder.Entity<Spec>()
                 .HasOne<Hull>()
-                .WithOne()
-                .HasForeignKey<Spec>(s => s.HullId);
+                .WithMany()
+                .HasForeignKey(s => s.HullId);
 
             // SPEC ARMAMENT
             modelBuilder.Entity<SpecArmament>()
                 .HasOne<Spec>()
-                .WithOne()
-                .HasForeignKey<SpecArmament>(sf => sf.SpecId);
+                .WithMany()
+                .HasForeignKey(sf => sf.SpecId);
 
             modelBuilder.Entity<SpecArmament>()
                 .HasOne<Armament>()
-                .WithOne()
-                .HasForeignKey<SpecArmament>(sf => sf.ArmamentId);
+                .WithMany()
+                .HasForeignKey(sf => sf.ArmamentId);
                         
             // SPEC DEFENSE
             modelBuilder.Entity<SpecDefense>()
                 .HasOne<Spec>()
-                .WithOne()
-                .HasForeignKey<SpecDefense>(sf => sf.SpecId);
+                .WithMany()
+                .HasForeignKey(sf => sf.SpecId);
 
             modelBuilder.Entity<SpecDefense>()
                 .HasOne<Defense>()
-                .WithOne()
-                .HasForeignKey<SpecDefense>(sf => sf.DefenseId);
+                .WithMany()
+                .HasForeignKey(sf => sf.DefenseId);
             
             // SPEC FITTING
             modelBuilder.Entity<SpecFitting>()
                 .HasOne<Spec>()
-                .WithOne()
-                .HasForeignKey<SpecFitting>(sf => sf.SpecId);
+                .WithMany()
+                .HasForeignKey(sf => sf.SpecId);
 
             modelBuilder.Entity<SpecFitting>()
                 .HasOne<Fitting>()
-                .WithOne()
-                .HasForeignKey<SpecFitting>(sf => sf.FittingId);
+                .WithMany()
+                .HasForeignKey(sf => sf.FittingId);
 
             // CHARACTERS
             modelBuilder.Entity<Character>()

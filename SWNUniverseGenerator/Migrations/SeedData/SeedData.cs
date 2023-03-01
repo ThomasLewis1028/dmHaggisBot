@@ -28,7 +28,7 @@ namespace SWNUniverseGenerator.Migrations
 
             var defenseData = GetShipDefenseData();
             modelBuilder.Entity<Defense>().HasData(defenseData);
-            
+
             var fittingData = GetShipFittingData();
             modelBuilder.Entity<Fitting>().HasData(fittingData);
 
@@ -192,7 +192,7 @@ namespace SWNUniverseGenerator.Migrations
         {
             foreach (var spec in shipSpec)
             {
-                if(spec.Weapons != null)
+                if (spec.Weapons != null)
                 {
                     foreach (var weapon in spec.Weapons)
                     {
@@ -213,7 +213,7 @@ namespace SWNUniverseGenerator.Migrations
         {
             foreach (var spec in shipSpec)
             {
-                if(spec.Defenses != null)
+                if (spec.Defenses != null)
                 {
                     foreach (var defense in spec.Defenses)
                     {
@@ -234,7 +234,7 @@ namespace SWNUniverseGenerator.Migrations
         {
             foreach (var spec in shipSpec)
             {
-                if(spec.Fittings != null)
+                if (spec.Fittings != null)
                 {
                     foreach (var fitting in spec.Fittings)
                     {

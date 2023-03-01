@@ -19,14 +19,17 @@ namespace SWNUniverseGenerator.Database
         public DbSet<Problem> Problems { get; set; }
         public DbSet<Ship> Ships { get; set; }
         public DbSet<Character> Characters { get; set; }
-        public DbSet<ShipWeaponObject> ShipWeaponObject { get; set; }
-        public DbSet<ShipWeapon> ShipWeapon { get; set; }
-        public DbSet<ShipDefenseObject> ShipDefenseObject { get; set; }
+        public DbSet<Hull> Hull { get; set; }
+        public DbSet<Armament> Armament { get; set; }
+        public DbSet<Defense> Defense { get; set; }
+        public DbSet<Fitting> Fitting { get; set; }
+        public DbSet<ShipArmament> ShipArmament { get; set; }
         public DbSet<ShipDefense> ShipDefense { get; set; }
-        public DbSet<ShipHullObject> ShipHullObject { get; set; }
-        public DbSet<ShipHull> ShipHull { get; set; }
-        public DbSet<ShipFittingObject> ShipFittingObject { get; set; }
         public DbSet<ShipFitting> ShipFitting { get; set; }
+        public DbSet<Spec> Spec { get; set; }
+        public DbSet<SpecArmament> SpecArmament { get; set; }
+        public DbSet<SpecDefense> SpecDefense { get; set; }
+        public DbSet<SpecFitting> SpecFitting { get; set; }
         public DbSet<Naming> Naming { get; set; }
         public string DbPath { get; }
 
@@ -76,17 +79,34 @@ namespace SWNUniverseGenerator.Database
                 .HasForeignKey(sh => sh.UniverseId)
                 .IsRequired();
 
-            // SHIP HULLS
-            modelBuilder.Entity<ShipHull>()
+            modelBuilder.Entity<Ship>()
+                .HasOne<Spec>()
+                .WithMany()
+                .HasForeignKey(sh => sh.SpecId)
+                .IsRequired();
+
+            // SHIP ARMAMENT
+            modelBuilder.Entity<ShipArmament>()
                 .HasOne<Ship>()
                 .WithOne()
-                .HasForeignKey<ShipHull>(sh => sh.ShipId);
-            
-            modelBuilder.Entity<ShipHull>()
-                .HasOne<ShipHullObject>()
-                .WithOne()
-                .HasForeignKey<ShipHull>(sh => sh.ShipHullId);
+                .HasForeignKey<ShipArmament>(sf => sf.ShipId);
 
+            modelBuilder.Entity<ShipArmament>()
+                .HasOne<Armament>()
+                .WithOne()
+                .HasForeignKey<ShipArmament>(sf => sf.ArmamentId);
+            
+            // SHIP DEFENSE
+            modelBuilder.Entity<ShipDefense>()
+                .HasOne<Ship>()
+                .WithOne()
+                .HasForeignKey<ShipDefense>(sf => sf.ShipId);
+            
+            modelBuilder.Entity<ShipDefense>()
+                .HasOne<Defense>()
+                .WithOne()
+                .HasForeignKey<ShipDefense>(sf => sf.DefenseId);
+            
             // SHIP FITTING
             modelBuilder.Entity<ShipFitting>()
                 .HasOne<Ship>()
@@ -94,31 +114,48 @@ namespace SWNUniverseGenerator.Database
                 .HasForeignKey<ShipFitting>(sf => sf.ShipId);
 
             modelBuilder.Entity<ShipFitting>()
-                .HasOne<ShipFittingObject>()
+                .HasOne<Fitting>()
                 .WithOne()
-                .HasForeignKey<ShipFitting>(sf => sf.ShipFittingId);
+                .HasForeignKey<ShipFitting>(sf => sf.FittingId);
+            
+            // SPEC
+            modelBuilder.Entity<Spec>()
+                .HasOne<Hull>()
+                .WithOne()
+                .HasForeignKey<Spec>(s => s.HullId);
 
-            // SHIP WEAPON
-            modelBuilder.Entity<ShipWeapon>()
-                .HasOne<Ship>()
+            // SPEC ARMAMENT
+            modelBuilder.Entity<SpecArmament>()
+                .HasOne<Spec>()
                 .WithOne()
-                .HasForeignKey<ShipWeapon>(sf => sf.ShipId);
+                .HasForeignKey<SpecArmament>(sf => sf.SpecId);
 
-            modelBuilder.Entity<ShipWeapon>()
-                .HasOne<ShipWeaponObject>()
+            modelBuilder.Entity<SpecArmament>()
+                .HasOne<Armament>()
                 .WithOne()
-                .HasForeignKey<ShipWeapon>(sf => sf.ShipWeaponId);
+                .HasForeignKey<SpecArmament>(sf => sf.ArmamentId);
                         
-            // SHIP DEFENSE
-            modelBuilder.Entity<ShipDefense>()
-                .HasOne<Ship>()
+            // SPEC DEFENSE
+            modelBuilder.Entity<SpecDefense>()
+                .HasOne<Spec>()
                 .WithOne()
-                .HasForeignKey<ShipDefense>(sf => sf.ShipId);
+                .HasForeignKey<SpecDefense>(sf => sf.SpecId);
 
-            modelBuilder.Entity<ShipDefense>()
-                .HasOne<ShipDefenseObject>()
+            modelBuilder.Entity<SpecDefense>()
+                .HasOne<Defense>()
                 .WithOne()
-                .HasForeignKey<ShipDefense>(sf => sf.ShipDefenseId);
+                .HasForeignKey<SpecDefense>(sf => sf.DefenseId);
+            
+            // SPEC FITTING
+            modelBuilder.Entity<SpecFitting>()
+                .HasOne<Spec>()
+                .WithOne()
+                .HasForeignKey<SpecFitting>(sf => sf.SpecId);
+
+            modelBuilder.Entity<SpecFitting>()
+                .HasOne<Fitting>()
+                .WithOne()
+                .HasForeignKey<SpecFitting>(sf => sf.FittingId);
 
             // CHARACTERS
             modelBuilder.Entity<Character>()

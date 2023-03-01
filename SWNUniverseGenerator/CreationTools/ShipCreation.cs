@@ -31,7 +31,7 @@ namespace SWNUniverseGenerator.CreationTools
                     {
                         var ship = new Ship();
 
-                        ShipHullObject shipHullObject;
+                        Hull shipHullObject;
 
                         // Set the type of ship
                         if (string.IsNullOrEmpty(type))

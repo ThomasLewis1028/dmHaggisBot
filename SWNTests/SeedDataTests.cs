@@ -12,28 +12,28 @@ public class SeedDataTests
     [TestMethod, TestCategory("SeedData")]
     public void TestShipHullSeedData()
     {
-        List<ShipHullObject> hulls = new DbInitializer().GetShipHullData();
+        List<Hull> hulls = new DbInitializer().GetShipHullData();
         Assert.IsTrue(hulls.Count > 0);
     }
     
     [TestMethod, TestCategory("SeedData")]
     public void TestShipFitingSeedData()
     {
-        List<ShipFittingObject> hulls = new DbInitializer().GetShipFittingData();
+        List<Fitting> hulls = new DbInitializer().GetShipFittingData();
         Assert.IsTrue(hulls.Count > 0);
     }
     
     [TestMethod, TestCategory("SeedData")]
     public void TestGetShipDefenseData()
     {
-        List<ShipDefenseObject> hulls = new DbInitializer().GetShipDefenseData();
+        List<Defense> hulls = new DbInitializer().GetShipDefenseData();
         Assert.IsTrue(hulls.Count > 0);
     }
     
     [TestMethod, TestCategory("SeedData")]
     public void TestGetShipWeaponData()
     {
-        List<ShipWeaponObject> hulls = new DbInitializer().GetShipWeaponData();
+        List<Armament> hulls = new DbInitializer().GetShipWeaponData();
         Assert.IsTrue(hulls.Count > 0);
     }
     

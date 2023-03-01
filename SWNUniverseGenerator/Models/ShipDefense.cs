@@ -6,6 +6,6 @@ namespace SWNUniverseGenerator.Models
     {
         public String ShipId { get; set; }
         
-        public String ShipDefenseId { get; set; }
+        public String DefenseId { get; set; }
     }
 }

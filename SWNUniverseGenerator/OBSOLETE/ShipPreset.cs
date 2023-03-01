@@ -12,10 +12,10 @@ namespace SWNUniverseGenerator.Models
 
         public Int32 Cp { get; set; }
 
-        public List<Int32> Weapons { get; set; }
+        public List<String> Weapons { get; set; }
 
-        public List<Int32> Defenses { get; set; }
+        public List<String> Defenses { get; set; }
 
-        public List<Int32> Fittings { get; set; }
+        public List<String> Fittings { get; set; }
     }
 }

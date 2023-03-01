@@ -156,7 +156,7 @@
     "Description": "Drills along a known spike drive route have no chance of failure so long as the route is no longer than twice the operating pilot’s skill level and does not involve course trimming. Thus, a navigator with Pilot-1 skill would always succeed in making a drill of two hexes or less, provided the route was a known one. The drill course regulator requires a sophisticated technical base and compatible metadimensional energy conditions in a given sector; many sectors no longer have this technology or lack the right environment to use it. If the GM prefers a campaign where space travel is always at least somewhat dangerous, they may deny access to this fitting. Ships piloted by exceptionally talented navigators may choose not to mount it even then."
   },
   {
-    "Type": "Drive-1",
+    "Type": "Spike Drive-1",
     "Cost": 0,
     "CostExtra": true,
     "Power": 0,
@@ -168,7 +168,7 @@
     "Description": "A ship can improve its standard-issue drive-1 spike drive with additional phase filters and power throughput refinements. A captain needs buy only the final grade of drive desired. He does not have to buy upgrades sequentially. Drives of rating 4 and higher are generally TL5 artifacts that cannot be built most modern worlds."
   },
   {
-    "Type": "Drive-2 upgrade",
+    "Type": "Spike Drive-2",
     "Cost": 10000,
     "CostExtra": true,
     "Power": 1,
@@ -180,7 +180,7 @@
     "Description": "A ship can improve its standard-issue drive-1 spike drive with additional phase filters and power throughput refinements. A captain needs buy only the final grade of drive desired. He does not have to buy upgrades sequentially. Drives of rating 4 and higher are generally TL5 artifacts that cannot be built most modern worlds."
   },
   {
-    "Type": "Drive-3 upgrade",
+    "Type": "Spike Drive-3",
     "Cost": 20000,
     "CostExtra": true,
     "Power": 2,
@@ -192,7 +192,7 @@
     "Description": "A ship can improve its standard-issue drive-1 spike drive with additional phase filters and power throughput refinements. A captain needs buy only the final grade of drive desired. He does not have to buy upgrades sequentially. Drives of rating 4 and higher are generally TL5 artifacts that cannot be built most modern worlds."
   },
   {
-    "Type": "Drive-4 upgrade",
+    "Type": "Spike Drive-4",
     "Cost": 40000,
     "CostExtra": true,
     "Power": 2,
@@ -204,7 +204,7 @@
     "Description": "A ship can improve its standard-issue drive-1 spike drive with additional phase filters and power throughput refinements. A captain needs buy only the final grade of drive desired. He does not have to buy upgrades sequentially. Drives of rating 4 and higher are generally TL5 artifacts that cannot be built most modern worlds."
   },
   {
-    "Type": "Drive-5 upgrade",
+    "Type": "Spike Drive-5",
     "Cost": 100000,
     "CostExtra": true,
     "Power": 3,
@@ -216,7 +216,7 @@
     "Description": "A ship can improve its standard-issue drive-1 spike drive with additional phase filters and power throughput refinements. A captain needs buy only the final grade of drive desired. He does not have to buy upgrades sequentially. Drives of rating 4 and higher are generally TL5 artifacts that cannot be built most modern worlds."
   },
   {
-    "Type": "Drive-6 upgrade",
+    "Type": "Spike Drive-6",
     "Cost": 500000,
     "CostExtra": true,
     "Power": 3,
@@ -300,7 +300,7 @@
     "Description": "A normal complement of ship’s stores can keep the maximum crew size supplied for two months. Each selection of Extended Stores doubles that time, and can be fitted multiple times."
   },
   {
-    "Type": "Fuel bunkers",
+    "Type": "Fuel bunker",
     "Cost": 2500,
     "CostExtra": true,
     "Power": 0,

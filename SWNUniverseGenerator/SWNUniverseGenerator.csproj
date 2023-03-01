@@ -120,6 +120,22 @@
       <EmbeddedResource Include="Migrations\SeedData\MaleName.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Preset.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Preset.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Noun.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Noun.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Adjective.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Adjective.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Animal.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Animal.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 
 </Project>

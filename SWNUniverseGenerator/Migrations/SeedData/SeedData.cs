@@ -84,6 +84,18 @@ namespace SWNUniverseGenerator.Migrations
             names = JsonConvert.DeserializeObject<List<String>>(ReadManifestData<UniverseContext>("InitialReactions.json"));
             AddNames(names, result, "InitialReaction");
             
+            names = JsonConvert.DeserializeObject<List<String>>(ReadManifestData<UniverseContext>("Animal.json"));
+            AddNames(names, result, "Animal");
+     
+            names = JsonConvert.DeserializeObject<List<String>>(ReadManifestData<UniverseContext>("Noun.json"));
+            AddNames(names, result, "Noun");
+            
+            names = JsonConvert.DeserializeObject<List<String>>(ReadManifestData<UniverseContext>("Adjective.json"));
+            AddNames(names, result, "Adjective");
+            
+            names = JsonConvert.DeserializeObject<List<String>>(ReadManifestData<UniverseContext>("Preset.json"));
+            AddNames(names, result, "Preset");
+            
             return result;
         }
 

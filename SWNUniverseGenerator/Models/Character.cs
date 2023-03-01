@@ -84,6 +84,15 @@ namespace SWNUniverseGenerator.Models
         public GenderEnum Gender { get; set; }
 
         /// <summary>
+        /// This will return the string values stored in Gender as opposed to an index integer
+        /// </summary>
+        /// <returns>String value of the Gender</returns>
+        public String GetGender()
+        {
+            return Gender.ToString();
+        }
+
+        /// <summary>
         /// Returns the concatenation of the First and Last name without storing it in the Json
         /// </summary>
         [JsonIgnore] 

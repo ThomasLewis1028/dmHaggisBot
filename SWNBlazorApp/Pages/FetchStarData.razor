@@ -6,7 +6,6 @@
 @using SWNUniverseGenerator
 @using SWNUniverseGenerator.DefaultSettings
 @using SWNUniverseGenerator.Models
-@using MudBlazor.Extensions
 @inject CreationService CreationService
 @inject UniverseService UniverseService
 @inject Universe CurrentUniverse
@@ -114,20 +113,16 @@ else
                     <MudTh>
                         Planets
                     </MudTh>
-                    <MudTh>
-                        Class
-                    </MudTh>
                 </HeaderContent>
                 <RowTemplate>
                     <MudTd DataLabel="Id" class="cursor-pointer">@context.Id</MudTd>
                     <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
-                    <MudTd DataLabel="Grid" class="cursor-pointer">
+                    <MudTd DataLabel="Name" class="cursor-pointer">
                         @(GetZone(context.Id).X 
                           + "/" 
                           + GetZone(context.Id).Y)
                     </MudTd>
-                    <MudTd DataLabel="Planets" class="cursor-pointer">@(GetZone(context.Id).Planets.Count)</MudTd>
-                    <MudTd DataLabel="Class" class="cursor-pointer">@context.StarClass</MudTd>
+                    <MudTd DataLabel="Name" class="cursor-pointer">@(GetZone(context.Id).Planets.Count)</MudTd>
                 </RowTemplate>
                 <PagerContent>
                     <MudTablePager PageSizeOptions="new[] {10, 15, 20, 25, 50, 75, 100, int.MaxValue}"/>
@@ -144,8 +139,7 @@ else
                         <CardHeaderContent>
                             <MudText Typo="Typo.h4">@currentStar.Name</MudText>
                             <MudText Typo="Typo.body2">ID: @currentStar.Id</MudText>
-                            <MudText Typo="Typo.body2">Classification: @currentStar.StarClass</MudText>
-                            <MudText Typo="Typo.body2">Color: @currentStar.StarColor.ToDescriptionString()</MudText>
+                            <MudText Typo="Typo.body2">Type: @currentStar.StarType</MudText>
                             <MudText Typo="Typo.body2"> Location: 
                                 @(GetZone(currentStar.Id).X
                                   + "/"

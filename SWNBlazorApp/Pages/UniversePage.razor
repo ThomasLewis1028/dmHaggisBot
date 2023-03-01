@@ -15,7 +15,7 @@
 
 <MudGrid>
     <MudItem xs="4">
-        <img src="@(starmapPath + "\\" + CurrentUniverse.Name + ".png")" class="w3-round" style="height:100%; width: 100%; object-fit: contain" xs="5"/>
+        <img src="@(starmapPath + "\\" + CurrentUniverse.Name + ".png")" style="height:100%; width: 100%; object-fit: contain" xs="5"/>
         @* <MudImage Src="@(starmapPath + "\\" + CurrentUniverse.Name + ".png")" Class="starmap-image" Alt="Starmap"/> *@
     </MudItem>
 </MudGrid>
@@ -31,13 +31,14 @@
 
         if (!File.Exists($"{wwwrootPath+starmapPath}\\{CurrentUniverse.Name}.png"))
         {
-            GrabStarmap();
+            GenerateImage();
         }
     }
 
-    public void GrabStarmap()
+    public void GenerateImage()
     {
-        File.Copy($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/UniverseFiles/{CurrentUniverse.Name}.png", 
-            $"{wwwrootPath+starmapPath}\\{CurrentUniverse.Name}.png");
+        GridCreation gd = new GridCreation();
+        Image starmap = gd.ImageFromBase64String(CurrentUniverse.StarMap);
+        starmap.Save($"{wwwrootPath+starmapPath}\\{CurrentUniverse.Name}.png");
     }
 }

@@ -138,4 +138,9 @@
       </EmbeddedResource>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Migrations\20230301021722_1.cs" />
+      <Compile Remove="Migrations\20230301021722_1.Designer.cs" />
+    </ItemGroup>
+
 </Project>

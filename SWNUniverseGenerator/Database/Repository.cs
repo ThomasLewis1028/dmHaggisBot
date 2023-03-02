@@ -23,7 +23,7 @@ namespace SWNUniverseGenerator.Database
             return _dbContext.Set<TEntity>();
         }
 
-        public IEnumerable<TEntity> Search(Expression<System.Func<TEntity, Boolean>> query)
+        public IEnumerable<IEntity> Search(Expression<System.Func<TEntity, Boolean>> query)
         {
             return _dbContext.Set<TEntity>()
                 .Where(query);

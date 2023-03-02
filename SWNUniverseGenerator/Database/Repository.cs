@@ -22,8 +22,14 @@ namespace SWNUniverseGenerator.Database
         {
             return _dbContext.Set<TEntity>();
         }
+        
+        public IEnumerable<TEntity> Search(System.Func<TEntity, Boolean> query)
+        {
+            return _dbContext.Set<TEntity>()
+                .Where(query);
+        }
 
-        public IEnumerable<IEntity> Search(Expression<System.Func<TEntity, Boolean>> query)
+        public IEnumerable<TEntity> Search(Expression<System.Func<TEntity, Boolean>> query)
         {
             return _dbContext.Set<TEntity>()
                 .Where(query);
@@ -56,6 +62,15 @@ namespace SWNUniverseGenerator.Database
             _dbContext.Entry(entity).State = EntityState.Detached;
             return result == 1;
         }
+        
+        public bool AddRange(List<TEntity> entity)
+        {
+            int count = entity.Count;
+            _dbContext.Set<TEntity>().AddRange(entity);
+            int result = _dbContext.SaveChanges();
+            _dbContext.Entry(entity).State = EntityState.Detached;
+            return result == count;
+        }
 
         public bool Update(TEntity entity)
         {
@@ -64,7 +79,16 @@ namespace SWNUniverseGenerator.Database
             _dbContext.Entry(entity).State = EntityState.Detached;
             return result == 1;
         }
-
+        
+        public bool UpdateRange(List<TEntity> entity)
+        {
+            int count = entity.Count;
+            _dbContext.Set<TEntity>().UpdateRange(entity);
+            int result = _dbContext.SaveChanges();
+            _dbContext.Entry(entity).State = EntityState.Detached;
+            return result == count;
+        }
+        
         public bool Delete(string id)
         {
             var entity = GetById(id);
@@ -72,6 +96,23 @@ namespace SWNUniverseGenerator.Database
             int result = _dbContext.SaveChanges();
             _dbContext.Entry(entity).State = EntityState.Detached;
             return result == 1;
+        }
+
+        public bool Delete(TEntity entity)
+        {
+            _dbContext.Set<TEntity>().Remove(entity);
+            int result = _dbContext.SaveChanges();
+            _dbContext.Entry(entity).State = EntityState.Detached;
+            return result == 1;
+        }
+        
+        public bool DeleteRange(List<TEntity> entity)
+        {
+            int count = entity.Count;
+            _dbContext.Set<TEntity>().RemoveRange(entity);
+            int result = _dbContext.SaveChanges();
+            _dbContext.Entry(entity).State = EntityState.Detached;
+            return result == count;
         }
 
         public void Dispose()

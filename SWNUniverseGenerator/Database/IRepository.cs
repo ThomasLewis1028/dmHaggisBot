@@ -11,7 +11,9 @@ namespace SWNUniverseGenerator.Database
     {
         IQueryable<TEntity> GetAll();
 
-        IEnumerable<IEntity> Search(Expression<System.Func<TEntity, Boolean>> query);
+        IEnumerable<TEntity> Search(System.Func<TEntity, Boolean> query);
+        
+        IEnumerable<TEntity> Search(Expression<System.Func<TEntity, Boolean>> query);
 
         Boolean Any(Expression<System.Func<TEntity, Boolean>> query);
 
@@ -20,9 +22,17 @@ namespace SWNUniverseGenerator.Database
         TEntity GetById(string id);
 
         bool Add(TEntity entity);
+        
+        bool AddRange(List<TEntity> entity);
 
         bool Update(TEntity entity);
+        
+        bool UpdateRange(List<TEntity> entity);
 
         bool Delete(string id);
+        
+        bool Delete(TEntity entity);
+        
+        bool DeleteRange(List<TEntity> entity);
     }
 }

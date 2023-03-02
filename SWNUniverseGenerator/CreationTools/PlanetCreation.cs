@@ -29,16 +29,12 @@ namespace SWNUniverseGenerator.CreationTools
         /// <returns>
         /// The newly updated Universe
         /// </returns>
-        public void AddPlanets(String universeId, PlanetDefaultSettings planetDefaultSettings, WorldInfo worldInfo,
-            StarData starData, SocietyData societyData, NameGeneration nameGeneration)
+        public void AddPlanets(String universeId, PlanetDefaultSettings planetDefaultSettings)
         {
             using (var context = new UniverseContext())
             {
                 using (var planetRepo = new Repository<Planet>(context))
                 {
-                    // Get the number of Planet Names from starData
-                    var planLen = starData.Planets.Count;
-
                     List<IEntity> stars;
 
                     using (var starRepo = new Repository<Star>(context))
@@ -66,6 +62,7 @@ namespace SWNUniverseGenerator.CreationTools
                         {
                             var planet = new Planet
                             {
+                                UniverseId = universeId
                                 // Society = new Society(), Ruler = new Ruler(), Ruled = new Ruled(), Flavor = new Flavor()
                             };
 
@@ -73,9 +70,13 @@ namespace SWNUniverseGenerator.CreationTools
                             while (true)
                             {
                                 // Pick a random name out of the list of Planets
-                                planet.Name = Rand.Next(0, 4) == 2
-                                    ? nameGeneration.GenerateName()
-                                    : starData.Planets[Rand.Next(0, planLen)];
+                                // planet.Name = Rand.Next(0, 4) == 2
+                                //     ? nameGeneration.GenerateName()
+                                //     : starData.Planets[Rand.Next(0, planLen)];
+                                var planetNameCount = context.Naming.Count(n => n.NameType == "Planet");
+                                planet.Name =
+                                    context.Naming.Where(n => n.NameType == "Planet").ToList()[Rand.Next(0, planetNameCount)]
+                                        .Name;
 
                                 // No planets can share a name
                                 if (!planetRepo.Any(a => a.Name == planet.Name))
@@ -84,6 +85,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                             // Set the Planet information from either a randomized value or specified information
                             planet.ZoneId = star.ZoneId;
+                            
                             // planet.FirstWorldTag = worldInfo.WorldTags[Rand.Next(0, 100)].Type;
                             // planet.SecondWorldTag = worldInfo.WorldTags[Rand.Next(0, 100)].Type;
                             // planet.Atmosphere = worldInfo.Atmospheres[Rand.Next(0, 6) + Rand.Next(0, 6)].Type;
@@ -98,9 +100,9 @@ namespace SWNUniverseGenerator.CreationTools
                             else
                             {
                                 // Non-primary world information
-                                planet.Origin = worldInfo.OwOrigins[Rand.Next(0, 8)];
-                                planet.Relationship = worldInfo.OwRelationships[Rand.Next(0, 8)];
-                                planet.Contact = worldInfo.OwContacts[Rand.Next(0, 8)];
+                                // planet.Origin = worldInfo.OwOrigins[Rand.Next(0, 8)];
+                                // planet.Relationship = worldInfo.OwRelationships[Rand.Next(0, 8)];
+                                // planet.Contact = worldInfo.OwContacts[Rand.Next(0, 8)];
                                 planet.IsPrimary = false;
                             }
 

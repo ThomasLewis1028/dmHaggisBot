@@ -28,7 +28,7 @@ namespace SWNUniverseGenerator.Database
             return _dbContext.Set<TEntity>()
                 .Where(query);
         }
-
+        
         public Boolean Any(Expression<System.Func<TEntity, Boolean>> query)
         {
             return _dbContext.Set<TEntity>()

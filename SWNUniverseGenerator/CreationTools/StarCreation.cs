@@ -22,58 +22,65 @@ namespace SWNUniverseGenerator.CreationTools
         /// </summary>
         /// <param name="universeId"></param>
         /// <param name="starDefaultSettings"></param>
+        /// <param name="repository"></param>
+        /// <param name="context"></param>
         /// <param name="starData"></param>
         /// <param name="nameGeneration"></param>
         /// <returns>
         /// A newly modified Universe
         /// </returns>
-        public void AddStars(String universeId, StarDefaultSettings starDefaultSettings, StarData starData,
-            NameGeneration nameGeneration)
+        public void AddStars(string universeId, StarDefaultSettings starDefaultSettings)
         {
             using (var context = new UniverseContext())
             {
                 using (var starRepo = new Repository<Star>(context))
                 {
-
                     // Set the number of stars to create. The default is 1d10+20 
-                    var starLen = starData.Stars.Count;
+                    var starLen = starRepo.Count(s => s.UniverseId == universeId);
                     var starCount = starDefaultSettings.StarCount;
 
                     var sCount = 0;
                     while (sCount < starCount)
                     {
-                        var star = new Star();
+                        var star = new Star()
+                        {
+                            UniverseId = universeId
+                        };
 
                         // Set Zone of the Star
                         using (var zoneRepo = new Repository<Zone>(context))
                         {
                             List<IEntity> zones = zoneRepo.Search(z => z.UniverseId == universeId).ToList();
-                            
-                            while(true)
+
+                            while (true)
                             {
                                 var zoneId = zones[Rand.Next(0, zones.Count)].Id;
 
-                                if (starRepo.Search(s => s.ZoneId == zoneId).Any()) 
+                                if (starRepo.Search(s => s.ZoneId == zoneId).Any())
                                     continue;
-                                
+
                                 star.ZoneId = zoneId;
                                 break;
                             }
                         }
-                        
+
                         // Name the Star
                         while (true)
                         {
                             // Pick a random Name for the Star
-                            star.Name = Rand.Next(0, 4) == 2
-                                ? nameGeneration.GenerateName()
-                                : starData.Stars[Rand.Next(0, starLen - 1)];
+                            // star.Name = Rand.Next(0, 4) == 2
+                            //     ? nameGeneration.GenerateName()
+                            //     : starData.Stars[Rand.Next(0, starLen - 1)];
+                            var starNameCount = context.Naming.Count(n => n.NameType == "Star");
+                            star.Name =
+                                context.Naming.Where(n => n.NameType == "Star").ToList()[Rand.Next(0, starNameCount)]
+                                    .Name;
 
                             // If that Name exists roll a new one 
-                            if (!starRepo.Any(a => a.Name == star.Name))
+                            if (!starRepo.Any(a => a.Name == star.Name && a.UniverseId == universeId))
                                 break;
                         }
-                        
+
                         // Set the color of the Star
                         int starRand = Rand.Next(0, 100);
                         int starClass = starDefaultSettings.StarClass == Star.StarClassEnum.Undefined

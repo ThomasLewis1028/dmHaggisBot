@@ -34,8 +34,8 @@ public class DatabaseTests
 
 
     [TestMethod, TestCategory("DatabaseTest")]
-    [DataRow("Test Universe Context", "Bob", "Bobber", false)]
-    [DataRow("Test Universe Context 2", "Ron", "Burgundy", false)]
+    [DataRow("Test Universe Context", "Bob", "Bobber", true)]
+    [DataRow("Test Universe Context 2", "Ron", "Burgundy", true)]
     public void TestCreate(String universeName, String first, String last, bool cleanup)
     {
         using (var context = new UniverseContext())

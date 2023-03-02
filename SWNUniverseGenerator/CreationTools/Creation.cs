@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator.CreationTools;
@@ -60,46 +61,44 @@ namespace SWNUniverseGenerator
             // SocietyData = null;
             // AlienData = LoadData<AlienData>(@"alienData.json");
 
-            MaleFirstNameGeneration = new NameGeneration();
-            MaleFirstNameGeneration.GenerateChain(_charData.MaleName);
-
-            FemaleFirstNameGeneration = new NameGeneration();
-            FemaleFirstNameGeneration.GenerateChain(_charData.FemaleName);
-
-            StarNameGeneration = new NameGeneration();
-            StarNameGeneration.GenerateChain(_starData.Stars);
-
-            PlanetNameGeneration = new NameGeneration();
-            PlanetNameGeneration.GenerateChain(_starData.Planets);
+            // MaleFirstNameGeneration = new NameGeneration();
+            // MaleFirstNameGeneration.GenerateChain(_charData.MaleName);
+            //
+            // FemaleFirstNameGeneration = new NameGeneration();
+            // FemaleFirstNameGeneration.GenerateChain(_charData.FemaleName);
+            //
+            // StarNameGeneration = new NameGeneration();
+            // StarNameGeneration.GenerateChain(_starData.Stars);
+            //
+            // PlanetNameGeneration = new NameGeneration();
+            // PlanetNameGeneration.GenerateChain(_starData.Planets);
 
             // LastNameGeneration = new NameGeneration();
             // LastNameGeneration.GenerateChain(_charData.LastName);
 
-            CharacterNameGenerations.Add(MaleFirstNameGeneration);
-            CharacterNameGenerations.Add(FemaleFirstNameGeneration);
+            // CharacterNameGenerations.Add(MaleFirstNameGeneration);
+            // CharacterNameGenerations.Add(FemaleFirstNameGeneration);
             // CharacterNameGenerations.Add(LastNameGeneration);
         }
 
         /// <summary>
         /// This requires a set of UniverseDefaultSettings to create a Universe
-        ///
+        /// 
         /// If no names or grids are set use the defaults of "Universe" and [8, 10]
         /// </summary>
         /// <param name="universeDefaultSettings"></param>
+        /// <param name="context"></param>
         /// <returns>The newly created Universe</returns>
         /// <exception cref="IOException"></exception>
-        public bool CreateUniverse(UniverseDefaultSettings universeDefaultSettings)
+        public string CreateUniverse(UniverseDefaultSettings universeDefaultSettings, UniverseContext context)
         {
-            using (var context = new UniverseContext())
-            {
-                string universeId;
-                
-                universeId = GenerateUniverse(universeDefaultSettings, context);
-
-                GenerateZones(universeDefaultSettings, context, universeId);
-            }
+            string universeId;
             
-            return true;
+            universeId = GenerateUniverse(universeDefaultSettings, context);
+
+            GenerateZones(universeDefaultSettings, context, universeId);
+
+            return universeId;
         }
 
         /// <summary>
@@ -166,6 +165,7 @@ namespace SWNUniverseGenerator
         /// </summary>
         /// <param name="universeId"></param>
         /// <param name="starDefaultSettings"></param>
+        /// <param name="context"></param>
         /// <returns>
         /// True at the end
         /// </returns>
@@ -173,7 +173,7 @@ namespace SWNUniverseGenerator
         public bool CreateStars(String universeId, StarDefaultSettings starDefaultSettings)
         {
             // Set the Universe to the Universe returned from StarCreation.AddStars and serialize/return it
-            new StarCreation().AddStars(universeId, starDefaultSettings, _starData, StarNameGeneration);
+            new StarCreation().AddStars(universeId, starDefaultSettings);
             
             return true;
         }
@@ -192,8 +192,7 @@ namespace SWNUniverseGenerator
         public bool CreatePlanets(String universeId, PlanetDefaultSettings planetDefaultSettings)
         {
             // Set the Universe to the Universe returned from PlanetCreation.AddPlanets and serialize/return it
-            new PlanetCreation().AddPlanets(universeId, planetDefaultSettings, _worldInfo, _starData,
-                SocietyData, PlanetNameGeneration);
+            new PlanetCreation().AddPlanets(universeId, planetDefaultSettings);
             
             return true;
         }

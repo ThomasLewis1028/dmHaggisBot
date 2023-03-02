@@ -1,7 +1,9 @@
 ﻿using System;
+using LibGit2Sharp;
 using Microsoft.EntityFrameworkCore;
 using SWNUniverseGenerator.Migrations;
 using SWNUniverseGenerator.Models;
+using Tag = SWNUniverseGenerator.Models.Tag;
 
 namespace SWNUniverseGenerator.Database
 {
@@ -27,6 +29,13 @@ namespace SWNUniverseGenerator.Database
         public DbSet<SpecDefense> SpecDefense { get; set; }
         public DbSet<SpecFitting> SpecFitting { get; set; }
         public DbSet<Naming> Naming { get; set; }
+        public DbSet<Tag> Tag { get; set; }
+        public DbSet<WorldEnemy> WorldEnemy { get; set; }
+        public DbSet<WorldFriend> WorldFriend { get; set; }
+        public DbSet<WorldComplication> WorldComplication { get; set; }
+        public DbSet<WorldPlace> WorldPlace { get; set; }
+        public DbSet<WorldThing> WorldThing { get; set; }
+
         public string DbPath { get; }
 
         public UniverseContext()
@@ -68,6 +77,58 @@ namespace SWNUniverseGenerator.Database
                 .HasForeignKey(p => p.ZoneId)
                 .IsRequired();
 
+            // POINTS OF INTEREST
+            modelBuilder.Entity<PointOfInterest>()
+                .HasOne<Universe>()
+                .WithMany()
+                .HasForeignKey(p => p.UniverseId)
+                .IsRequired();
+            
+            ShipModelCreating(modelBuilder);
+            CharacterModelCreating(modelBuilder);
+            TagModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Naming>().HasKey(t => new {t.NameType, t.Name});
+
+
+            new DbInitializer().Seed(modelBuilder);
+        }
+
+        private void TagModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<WorldEnemy>()
+                .HasOne<Tag>()
+                .WithMany()
+                .HasForeignKey(we => we.TagId)
+                .IsRequired();
+            
+            modelBuilder.Entity<WorldFriend>()
+                .HasOne<Tag>()
+                .WithMany()
+                .HasForeignKey(wf => wf.TagId)
+                .IsRequired();
+            
+            modelBuilder.Entity<WorldComplication>()
+                .HasOne<Tag>()
+                .WithMany()
+                .HasForeignKey(wc => wc.TagId)
+                .IsRequired();
+            
+            modelBuilder.Entity<WorldPlace>()
+                .HasOne<Tag>()
+                .WithMany()
+                .HasForeignKey(wp => wp.TagId)
+                .IsRequired();
+            
+            modelBuilder.Entity<WorldThing>()
+                .HasOne<Tag>()
+                .WithMany()
+                .HasForeignKey(wt => wt.TagId)
+                .IsRequired();
+        }
+        
+        private void ShipModelCreating(ModelBuilder modelBuilder)
+        {
             // SHIPS
             modelBuilder.Entity<Ship>()
                 .HasOne<Universe>()
@@ -152,7 +213,10 @@ namespace SWNUniverseGenerator.Database
                 .HasOne<Fitting>()
                 .WithMany()
                 .HasForeignKey(sf => sf.FittingId);
+        }
 
+        private void CharacterModelCreating(ModelBuilder modelBuilder)
+        {
             // CHARACTERS
             modelBuilder.Entity<Character>()
                 .HasOne<Universe>()
@@ -176,18 +240,6 @@ namespace SWNUniverseGenerator.Database
                 .HasOne<Ship>()
                 .WithOne()
                 .HasForeignKey<CrewMember>(s => s.ShipId);
-
-            // POINTS OF INTEREST
-            modelBuilder.Entity<PointOfInterest>()
-                .HasOne<Universe>()
-                .WithMany()
-                .HasForeignKey(p => p.UniverseId)
-                .IsRequired();
-
-            modelBuilder.Entity<Naming>().HasKey(t => new {t.NameType, t.Name});
-
-
-            new DbInitializer().Seed(modelBuilder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options) =>

@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator.DeserializedObjects;
+using SWNUniverseGenerator.Models;
 
 /*
  * This is mostly obsolete. I used this function to copy/paste the descriptions from the Stars Without Number rulebook
@@ -89,13 +90,13 @@ namespace SWNUniverseGenerator.OBSOLETE
                     var input2 = Regex.Split(input, "\n[E,F,C,T,P] ");
 
                     //Set the data to its proper place and replace all newlines, returns and ctrl+Z's
-                    tag.Description = input2[0].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "");
-                    tag.Enemies = input2[1].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
-                    tag.Friends = input2[2].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
-                    tag.Complications =
-                        input2[3].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
-                    tag.Things = input2[4].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
-                    tag.Places = input2[5].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
+                    // tag.Description = input2[0].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "");
+                    // tag.Enemies = input2[1].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
+                    // tag.Friends = input2[2].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
+                    // tag.Complications =
+                    //     input2[3].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
+                    // tag.Things = input2[4].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
+                    // tag.Places = input2[5].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
                 }
 
                 tags.WorldTags.Add(tag);

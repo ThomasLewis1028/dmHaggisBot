@@ -1,0 +1,32 @@
+﻿{
+  "OWOrigins": [
+    "Recent colony from the primary world",
+    "Refuge for exiles from primary",
+    "Founded ages ago by a different group",
+    "Founded long before the primary world",
+    "Lost ancient colony of the primary",
+    "Colony recently torn free of the primary",
+    "Long-standing cooperative colony world",
+    "Recent interstellar colony from elsewhere"
+  ],
+  "OWRelationships": [
+    "Confirmed hatred of each other",
+    "Active cold war between them",
+    "Old grudges or resentments",
+    "Cultural disgust and avoidance",
+    "Polite interchange and trade",
+    "Cultural admiration for primary",
+    "Long-standing friendship",
+    "Unflinching mutual loyalty"
+  ],
+  "OWContacts": [
+    "Trade in vital goods",
+    "Shared religion",
+    "Mutual language",
+    "Entertainment content",
+    "Shared research",
+    "Threat to both of them",
+    "Shared elite families",
+    "Exploiting shared resource"
+  ]
+}

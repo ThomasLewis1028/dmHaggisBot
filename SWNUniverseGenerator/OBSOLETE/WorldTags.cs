@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SWNUniverseGenerator.DeserializedObjects;
+using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.OBSOLETE
 {

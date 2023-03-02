@@ -26,9 +26,9 @@
       <Resource Include="Migrations\SeedData\pointsOfInterest.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Migrations\SeedData\worldTags.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
+      <EmbeddedResource Include="Migrations\SeedData\Origins.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
       <None Remove="Data\StarData.json" />
       <EmbeddedResource Include="Data\starData.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -138,6 +138,30 @@
       </EmbeddedResource>
       <None Remove="Migrations\SeedData\ShipSpec.json" />
       <EmbeddedResource Include="Migrations\SeedData\ShipSpec.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Atmosphere.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Atmosphere.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Biosphere.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Biosphere.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Population.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Population.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\TechLevel.json" />
+      <EmbeddedResource Include="Migrations\SeedData\TechLevel.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Temperature.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Temperature.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\WorldTag.json" />
+      <EmbeddedResource Include="Migrations\SeedData\WorldTag.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>

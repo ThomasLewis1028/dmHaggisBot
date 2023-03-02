@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.JavaScript;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SWNUniverseGenerator.Database;
@@ -42,6 +40,164 @@ namespace SWNUniverseGenerator.Migrations
             modelBuilder.Entity<SpecFitting>().HasData(GetSpecFittingData(specData, fittingData, shipSpecs));
 
             modelBuilder.Entity<Naming>().HasData(GetNamingData());
+
+            var worldTagData = Deserialize<WorldTag>("WorldTag.json");
+            var tagData = GetTagData(worldTagData);
+            
+            modelBuilder.Entity<Tag>().HasData(tagData);
+            modelBuilder.Entity<WorldEnemy>().HasData(GetWorldEnemyData(worldTagData, tagData));
+            modelBuilder.Entity<WorldFriend>().HasData(GetWorldFriendData(worldTagData, tagData));
+            modelBuilder.Entity<WorldComplication>().HasData(GetWorldComplicationData(worldTagData, tagData));
+            modelBuilder.Entity<WorldPlace>().HasData(GetWorldPlaceData(worldTagData, tagData));
+            modelBuilder.Entity<WorldThing>().HasData(GetWorldThingData(worldTagData, tagData));
+            
+            modelBuilder.Entity<TechLevel>().HasData(GetTechLevelData());
+            modelBuilder.Entity<Temperature>().HasData(GetTemperatureData());
+            modelBuilder.Entity<Population>().HasData(GetPopulationData());
+            modelBuilder.Entity<Atmosphere>().HasData(GetAtmosphereData());
+            modelBuilder.Entity<Biosphere>().HasData(GetBiosphereData());
+        }
+
+        public List<WorldEnemy> GetWorldEnemyData(List<WorldTag> worldTagData, List<Tag> tagData)
+        {
+            var result = new List<WorldEnemy>();
+
+            foreach (var wtd in worldTagData)
+            {
+                foreach(var ene in wtd.Enemies)
+                {
+                    result.Add(new WorldEnemy()
+                    {
+                        TagId = tagData.Find(t => t.Type == wtd.Type).Id,
+                        Enemy = ene
+                    });
+                }
+            }
+
+            return result;
+        }
+
+        public List<WorldFriend> GetWorldFriendData(List<WorldTag> worldTagData, List<Tag> tagData)
+        {
+            var result = new List<WorldFriend>();
+
+            foreach (var wtd in worldTagData)
+            {
+                foreach(var friend in wtd.Friends)
+                {
+                    result.Add(new WorldFriend()
+                    {
+                        TagId = tagData.Find(t => t.Type == wtd.Type).Id,
+                        Friend = friend
+                    });
+                }
+            }
+
+            return result;
+        }
+        
+        public List<WorldComplication> GetWorldComplicationData(List<WorldTag> worldTagData, List<Tag> tagData)
+        {
+            var result = new List<WorldComplication>();
+
+            foreach (var wtd in worldTagData)
+            {
+                foreach(var complication in wtd.Complications)
+                {
+                    result.Add(new WorldComplication()
+                    {
+                        TagId = tagData.Find(t => t.Type == wtd.Type).Id,
+                        Complication = complication
+                    });
+                }
+            }
+
+            return result;
+        }
+        
+        public List<WorldPlace> GetWorldPlaceData(List<WorldTag> worldTagData, List<Tag> tagData)
+        {
+            var result = new List<WorldPlace>();
+
+            foreach (var wtd in worldTagData)
+            {
+                foreach(var place in wtd.Places)
+                {
+                    result.Add(new WorldPlace()
+                    {
+                        TagId = tagData.Find(t => t.Type == wtd.Type).Id,
+                        Place = place
+                    });
+                }
+            }
+
+            return result;
+        }
+        
+        public List<WorldThing> GetWorldThingData(List<WorldTag> worldTagData, List<Tag> tagData)
+        {
+            var result = new List<WorldThing>();
+
+            foreach (var wtd in worldTagData)
+            {
+                foreach(var thing in wtd.Things)
+                {
+                    result.Add(new WorldThing()
+                    {
+                        TagId = tagData.Find(t => t.Type == wtd.Type).Id,
+                        Thing = thing
+                    });
+                }
+            }
+
+            return result;
+        }
+        
+        public List<Tag> GetTagData(List<WorldTag> worldTagData)
+        {
+            var result = new List<Tag>();
+            
+            foreach (var wtd in worldTagData)
+            {
+                result.Add(new Tag()
+                {
+                    Type = wtd.Type,
+                    WorldTagId = wtd.Id,
+                    Description = wtd.Description
+                });
+            }
+
+            return result;
+        }
+
+        public List<Biosphere> GetBiosphereData()
+        {
+            var result = Deserialize<Biosphere>("Biosphere.json");
+            return result;
+        }
+        
+        public List<Atmosphere> GetAtmosphereData()
+        {
+            var result = Deserialize<Atmosphere>("Atmosphere.json");
+            return result;
+        }
+        
+        public List<Population> GetPopulationData()
+        {
+            var result = Deserialize<Population>("Population.json");
+            return result;
+        }
+        
+        public List<Temperature> GetTemperatureData()
+        {
+            var result = Deserialize<Temperature>("Temperature.json");
+            return result;
+        }
+        
+        public List<TechLevel> GetTechLevelData()
+        {
+            var result = Deserialize<TechLevel>("TechLevel.json");
+            return result;
         }
 
         public List<Hull> GetShipHullData()

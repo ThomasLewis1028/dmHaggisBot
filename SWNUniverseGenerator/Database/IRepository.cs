@@ -11,8 +11,6 @@ namespace SWNUniverseGenerator.Database
     {
         IQueryable<TEntity> GetAll();
 
-        IEnumerable<TEntity> Search(System.Func<TEntity, Boolean> query);
-        
         IEnumerable<TEntity> Search(Expression<System.Func<TEntity, Boolean>> query);
 
         Boolean Any(Expression<System.Func<TEntity, Boolean>> query);

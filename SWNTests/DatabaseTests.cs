@@ -215,7 +215,7 @@ public class DatabaseTests
                 Dictionary<string, string> addIds = new Dictionary<string, string>();
                 List<Universe> universes = new List<Universe>();
 
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 50; i++)
                 {
                     Universe universe = new Universe()
                     {
@@ -227,7 +227,8 @@ public class DatabaseTests
                     universes.Add(universe);                    
                 }
                 //Add Universe Range
-                uc.AddRange(universes);
+                var addResult = uc.AddRange(universes);
+                Assert.IsTrue(addResult);
 
                 //Update Universe Range
                 universes.Clear();
@@ -242,7 +243,8 @@ public class DatabaseTests
                      updateIds.Add(universe.Id, universe.Name);
                      universes.Add(universe);
                 }
-                uc.UpdateRange(universes);
+                var updateResult = uc.UpdateRange(universes);
+                Assert.IsTrue(updateResult);
                 
                 //Check Update Universe Range
                 universes.Clear();
@@ -256,7 +258,8 @@ public class DatabaseTests
                 }
                 
                 //Delete Universe Range
-                uc.DeleteRange(universes);
+                var deleteResult = uc.DeleteRange(universes);
+                Assert.IsTrue(deleteResult);
                 foreach (var id in updateIds)
                 {
                     Universe unDelete = uc.GetById(id.Key);

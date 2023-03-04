@@ -94,6 +94,21 @@ namespace SWNUniverseGenerator.Database
             return result == count;
         }
 
+        public async Task AddAsync(TEntity entity)
+        {
+            await _dbContext.Set<TEntity>().AddAsync(entity);
+            await  _dbContext.SaveChangesAsync();
+            _dbContext.Entry(entity).State = EntityState.Detached;
+        }
+
+        public async Task AddRangeAsync(List<TEntity> entity)
+        {
+            await _dbContext.Set<TEntity>().AddRangeAsync(entity);
+            await  _dbContext.SaveChangesAsync();
+            foreach (var e in entity)
+                _dbContext.Entry(e).State = EntityState.Detached;
+        }
+
         public bool Update(TEntity entity)
         {
             _dbContext.Set<TEntity>().Update(entity);
@@ -110,6 +125,21 @@ namespace SWNUniverseGenerator.Database
             foreach (var e in entity)
                 _dbContext.Entry(e).State = EntityState.Detached;
             return result == count;
+        }
+
+        public async Task UpdateAsync(TEntity entity)
+        {
+            _dbContext.Set<TEntity>().Update(entity);
+            await  _dbContext.SaveChangesAsync();
+            _dbContext.Entry(entity).State = EntityState.Detached;
+        }
+
+        public async Task UpdateRangeAsync(List<TEntity> entity)
+        {
+            _dbContext.Set<TEntity>().UpdateRange(entity);
+            await  _dbContext.SaveChangesAsync();
+            foreach (var e in entity)
+                _dbContext.Entry(e).State = EntityState.Detached;
         }
 
         public bool Delete(string id)
@@ -137,6 +167,31 @@ namespace SWNUniverseGenerator.Database
             foreach (var e in entity)
                 _dbContext.Entry(e).State = EntityState.Detached;
             return result == count;
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            var entity = _dbContext.Set<TEntity>()
+                .AsNoTracking()
+                .FirstOrDefault(e => e.Id == id);
+            _dbContext.Set<TEntity>().Remove(entity);
+            await _dbContext.SaveChangesAsync();
+            _dbContext.Entry(entity).State = EntityState.Detached;
+        }
+
+        public async Task DeleteAsync(TEntity entity)
+        {
+            _dbContext.Set<TEntity>().Remove(entity);
+            await _dbContext.SaveChangesAsync();
+            _dbContext.Entry(entity).State = EntityState.Detached;
+        }
+
+        public async Task DeleteRangeAsync(List<TEntity> entity)
+        {
+            _dbContext.Set<TEntity>().RemoveRange(entity);
+            await _dbContext.SaveChangesAsync();
+            foreach (var e in entity)
+                _dbContext.Entry(e).State = EntityState.Detached;
         }
 
         public void Dispose()

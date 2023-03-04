@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.Database
@@ -26,15 +27,27 @@ namespace SWNUniverseGenerator.Database
         bool Add(TEntity entity);
         
         bool AddRange(List<TEntity> entity);
+        
+        Task AddAsync(TEntity entity);
+        
+        Task AddRangeAsync(List<TEntity> entity);
 
         bool Update(TEntity entity);
         
         bool UpdateRange(List<TEntity> entity);
+        
+        Task UpdateAsync(TEntity entity);
+        
+        Task UpdateRangeAsync(List<TEntity> entity);
 
         bool Delete(string id);
         
         bool Delete(TEntity entity);
         
         bool DeleteRange(List<TEntity> entity);
+        
+        Task DeleteAsync(string id);
+        
+        Task DeleteAsync(TEntity entity);
     }
 }

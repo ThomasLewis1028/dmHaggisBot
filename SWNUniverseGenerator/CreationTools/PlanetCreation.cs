@@ -37,9 +37,7 @@ namespace SWNUniverseGenerator.CreationTools
                     List<IEntity> stars;
 
                     using (var repo = new Repository<Star>(context))
-                    {
                         stars = repo.Search(s => s.UniverseId == universeId).ToList();
-                    }
 
                     // Iterate through each star and add planets
                     foreach (var entity in stars)

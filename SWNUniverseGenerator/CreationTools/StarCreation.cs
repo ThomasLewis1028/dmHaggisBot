@@ -38,7 +38,6 @@ namespace SWNUniverseGenerator.CreationTools
                     List<Star> stars = new ();
                     
                     // Set the number of stars to create. The default is 1d10+20 
-                    var starLen = starRepo.Count(s => s.UniverseId == universeId);
                     var starCount = starDefaultSettings.StarCount;
 
                     var sCount = 0;
@@ -52,11 +51,9 @@ namespace SWNUniverseGenerator.CreationTools
                         // Set Zone of the Star
                         using (var zoneRepo = new Repository<Zone>(context))
                         {
-                            List<IEntity> zones = zoneRepo.Search(z => z.UniverseId == universeId).ToList();
-
                             while (true)
                             {
-                                var zoneId = zones[Rand.Next(0, zones.Count)].Id;
+                                var zoneId = ((Zone) zoneRepo.Random(z => z.UniverseId == universeId)).Id;
 
                                 if (starRepo.Search(s => s.ZoneId == zoneId).Any())
                                     continue;
@@ -73,10 +70,8 @@ namespace SWNUniverseGenerator.CreationTools
                             // star.Name = Rand.Next(0, 4) == 2
                             //     ? nameGeneration.GenerateName()
                             //     : starData.Stars[Rand.Next(0, starLen - 1)];
-                            var starNameCount = context.Naming.Count(n => n.NameType == "Star");
-                            star.Name =
-                                context.Naming.Where(n => n.NameType == "Star").ToList()[Rand.Next(0, starNameCount)]
-                                    .Name;
+                            using (var nameRepo = new Repository<Naming>(context))
+                                star.Name = ((Naming) nameRepo.Random(n => n.NameType == "Star")).Name;
 
                             // If that Name exists roll a new one 
                             if (!starRepo.Any(a => a.Name == star.Name && a.UniverseId == universeId))

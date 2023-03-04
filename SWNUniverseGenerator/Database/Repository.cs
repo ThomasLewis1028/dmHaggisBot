@@ -87,7 +87,8 @@ namespace SWNUniverseGenerator.Database
             int count = entity.Count;
             _dbContext.Set<TEntity>().AddRange(entity.AsEnumerable());
             int result = _dbContext.SaveChanges();
-            _dbContext.Entry(entity.First()).State = EntityState.Detached;
+            foreach (var e in entity)
+                _dbContext.Entry(e).State = EntityState.Detached;
             return result == count;
         }
 
@@ -104,7 +105,8 @@ namespace SWNUniverseGenerator.Database
             int count = entity.Count;
             _dbContext.Set<TEntity>().UpdateRange(entity);
             int result = _dbContext.SaveChanges();
-            _dbContext.Entry(entity).State = EntityState.Detached;
+            foreach (var e in entity)
+                _dbContext.Entry(e).State = EntityState.Detached;
             return result == count;
         }
 
@@ -130,7 +132,8 @@ namespace SWNUniverseGenerator.Database
             int count = entity.Count;
             _dbContext.Set<TEntity>().RemoveRange(entity);
             int result = _dbContext.SaveChanges();
-            _dbContext.Entry(entity).State = EntityState.Detached;
+            foreach (var e in entity)
+                _dbContext.Entry(e).State = EntityState.Detached;
             return result == count;
         }
 

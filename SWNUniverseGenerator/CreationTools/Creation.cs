@@ -51,16 +51,6 @@ namespace SWNUniverseGenerator
         /// </summary>
         public Creation()
         {
-            // ShipData = LoadData<ShipData>(@"shipData.json");
-            // _worldInfo = LoadData<WorldInfo>(@"worldTags.json");
-            // _starData = LoadData<StarData>(@"starData.json");
-            // _charData = LoadData<CharData>(@"characterData.json");
-            // PoiData = LoadData<PoiData>(@"pointsOfInterest.json");
-            // ProblemData = LoadData<ProblemData>(@"problemData.json");
-            // // SocietyData = LoadData<SocietyData>(@"societyData.json");
-            // SocietyData = null;
-            // AlienData = LoadData<AlienData>(@"alienData.json");
-
             // MaleFirstNameGeneration = new NameGeneration();
             // MaleFirstNameGeneration.GenerateChain(_charData.MaleName);
             //
@@ -249,17 +239,17 @@ namespace SWNUniverseGenerator
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        // public Universe CreateProblems(Universe universe, ProblemDefaultSettings problemDefaultSettings)
-        // {
-        //     // If there are no Planets or Locations for the Problems to be tied to then throw an exception
-        //     if (universe.Planets == null || universe.Planets.Count == 0)
-        //         throw new FileNotFoundException("No locations have been loaded.");
-        //
-        //     // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
-        //     universe = new ProblemCreation().AddProblems(universe, problemDefaultSettings, ProblemData);
-        //     SerializeData(universe);
-        //     return universe;
-        // }
+        public Universe CreateProblems(Universe universe, ProblemDefaultSettings problemDefaultSettings)
+        {
+            // If there are no Planets or Locations for the Problems to be tied to then throw an exception
+            // if (universe.Planets == null || universe.Planets.Count == 0)
+            //     throw new FileNotFoundException("No locations have been loaded.");
+            //
+            // // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
+            // universe = new ProblemCreation().AddProblems(universe, problemDefaultSettings, ProblemData);
+            // SerializeData(universe);
+            return universe;
+        }
         
         /// <summary>
         /// This method should receive the Universe to add Points of Interest to and a set of POIDefaultSettings
@@ -272,17 +262,17 @@ namespace SWNUniverseGenerator
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        // public Universe CreatePoi(Universe universe, PoiDefaultSettings poiDefaultSettings)
-        // {
-        //     // If there are no Planets or Locations for the Problems to be tied to then throw an exception
-        //     if (universe.Stars == null || universe.Stars.Count == 0)
-        //         throw new FileNotFoundException("No locations have been loaded.");
-        //
-        //     // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
-        //     universe = new PoiCreation().AddPoi(universe, poiDefaultSettings, PoiData);
-        //     SerializeData(universe);
-        //     return universe;
-        // }
+        public Universe CreatePoi(Universe universe, PoiDefaultSettings poiDefaultSettings)
+        {
+            // // If there are no Planets or Locations for the Problems to be tied to then throw an exception
+            // if (universe.Stars == null || universe.Stars.Count == 0)
+            //     throw new FileNotFoundException("No locations have been loaded.");
+            //
+            // // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
+            // universe = new PoiCreation().AddPoi(universe, poiDefaultSettings, PoiData);
+            // SerializeData(universe);
+            return universe;
+        }
         
         /// <summary>
         /// This method should receive the Universe to add Aliens to and a set of AlienDefaultSettings
@@ -295,31 +285,31 @@ namespace SWNUniverseGenerator
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        // public Universe CreateAliens(Universe universe, AlienDefaultSettings alienDefaultSettings)
-        // {
-        //     // If there are no Planets or Locations for the Problems to be tied to then throw an exception
-        //     if (universe.Stars == null || universe.Stars.Count == 0)
-        //         throw new FileNotFoundException("No locations have been loaded.");
-        //
-        //     // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
-        //     universe = new AlienCreation().AddAliens(universe, alienDefaultSettings, AlienData);
-        //     SerializeData(universe);
-        //     return universe;
-        // }
+        public Universe CreateAliens(Universe universe, AlienDefaultSettings alienDefaultSettings)
+        {
+            // // If there are no Planets or Locations for the Problems to be tied to then throw an exception
+            // if (universe.Stars == null || universe.Stars.Count == 0)
+            //     throw new FileNotFoundException("No locations have been loaded.");
+            //
+            // // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
+            // universe = new AlienCreation().AddAliens(universe, alienDefaultSettings, AlienData);
+            // SerializeData(universe);
+            return universe;
+        }
         
         /// <summary>
         /// This method receives a universe file and generates an image in the background
         /// </summary>
         /// <param name="universe"></param>
         /// <exception cref="FileNotFoundException"></exception>
-        // public void CreateStarMap(Universe universe)
-        // {
-        //     // If there are no Planets or Locations for the Problems to be tied to then throw an exception
-        //     if (universe.Planets == null || universe.Planets.Count == 0)
-        //         throw new FileNotFoundException("No locations have been loaded.");
-        //
-        //     new GridCreation().CreateGrid(universe);
-        // }
+        public void CreateStarMap(Universe universe)
+        {
+            // // If there are no Planets or Locations for the Problems to be tied to then throw an exception
+            // if (universe.Planets == null || universe.Planets.Count == 0)
+            //     throw new FileNotFoundException("No locations have been loaded.");
+            //
+            // new GridCreation().CreateGrid(universe);
+        }
         
         /// <summary>
         /// This method receives the name of a Universe and deserializes it into a Universe object
@@ -329,38 +319,65 @@ namespace SWNUniverseGenerator
         /// The universe that matches the name specified
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        // public Universe LoadUniverse(string name)
-        // {
-        //     // Set the path to the name
-        //     var path = new StringBuilder();
-        //     path.Append(_universePath + "/" + name + universeExt);
-        //
-        //     // If none exists throw an exception
-        //     if (!File.Exists(path.ToString()))
-        //         throw new FileNotFoundException(path + " not found.");
-        //
-        //     // Parse the file into a JObject
-        //     var univ =
-        //         JObject.Parse(
-        //             File.ReadAllText(path.ToString()));
-        //
-        //     // Deserialize the JObject into a Universe and return it
-        //     return JsonConvert.DeserializeObject<Universe>(univ.ToString());
-        // }
+        public Universe LoadUniverse(string name)
+        {
+            // Set the path to the name
+            var path = new StringBuilder();
+            path.Append(_universePath + "/" + name + universeExt);
         
-        // public void DeleteUniverse(string universeName)
-        // {
-        //     // Set the path to the name
-        //     var path = new StringBuilder();
-        //     path.Append(_universePath + "/" + universeName + universeExt);
-        //
-        //     // If none exists throw an exception
-        //     if (!File.Exists(path.ToString()))
-        //         throw new FileNotFoundException(path + " not found.");
-        //
-        //     File.Delete(path.ToString());
-        // }
+            // If none exists throw an exception
+            if (!File.Exists(path.ToString()))
+                throw new FileNotFoundException(path + " not found.");
         
+            // Parse the file into a JObject
+            var univ =
+                JObject.Parse(
+                    File.ReadAllText(path.ToString()));
+        
+            // Deserialize the JObject into a Universe and return it
+            return JsonConvert.DeserializeObject<Universe>(univ.ToString());
+        }
+        
+        /// <summary>
+        /// This method receives the ID for a universe and deletes the entire universe as needed
+        /// </summary>
+        /// <param name="universeId"></param>
+        public void DeleteUniverse(String universeId)
+        {
+            using (var context = new UniverseContext())
+            {
+                using (var crewRepo = new Repository<CrewMember>(context))
+                    crewRepo.DeleteRange(context.CrewMember.Where(c => c.UniverseId == universeId).ToList());
+
+                using (var charRepo = new Repository<Character>(context))
+                    charRepo.DeleteRange(context.Characters.Where(c => c.UniverseId == universeId).ToList());
+
+                using (var armaRepo = new Repository<ShipArmament>(context))
+                    armaRepo.DeleteRange(context.ShipArmament.Where(c => c.UniverseId == universeId).ToList());
+
+                using (var defRepo = new Repository<ShipDefense>(context))
+                    defRepo.DeleteRange(context.ShipDefense.Where(c => c.UniverseId == universeId).ToList());
+
+                using (var fitRepo = new Repository<ShipFitting>(context))
+                    fitRepo.DeleteRange(context.ShipFitting.Where(c => c.UniverseId == universeId).ToList());
+
+                using (var shipRepo = new Repository<Ship>(context))
+                    shipRepo.DeleteRange(context.Ships.Where(c => c.UniverseId == universeId).ToList());
+
+                using (var planRepo = new Repository<Planet>(context))
+                    planRepo.DeleteRange(context.Planets.Where(c => c.UniverseId == universeId).ToList());
+
+                using (var starRepo = new Repository<Star>(context))
+                    starRepo.DeleteRange(context.Stars.Where(c => c.UniverseId == universeId).ToList());
+
+                using (var zoneRepo = new Repository<Zone>(context))
+                    zoneRepo.DeleteRange(context.Zones.Where(c => c.UniverseId == universeId).ToList());
+
+                using (var uniRepo = new Repository<Universe>(context))
+                    uniRepo.Delete(universeId);
+            }
+        }
+
         /// <summary>
         /// Method should receive a Universe that it will serialize to a file
         /// </summary>

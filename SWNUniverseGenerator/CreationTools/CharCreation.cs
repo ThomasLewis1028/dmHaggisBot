@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
-using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.CreationTools
@@ -142,14 +140,26 @@ namespace SWNUniverseGenerator.CreationTools
                                   : Rand.Next(1, 26) + Rand.Next(0, 25)) // 25% Additional crime roll chance
                             : Rand.Next(characterDefaultSettings.CrimeChance[0],
                                 characterDefaultSettings.CrimeChance[1] + 1);
+                        
+                        charRepo.Add(character);
 
-                        // // Character ship ID
-                        // var crewRank = new CrewMember();
-                        // character.Rank = string.IsNullOrEmpty(characterDefaultSettings.ShipId)
-                        //     ? null
-                        //     : crewRank.;
+                        // Character ship ID
+                        if(!String.IsNullOrEmpty(characterDefaultSettings.ShipId))
+                        {
+                            using (var crewRepo = new Repository<CrewMember>(context))
+                            {
+                                var crewMember = new CrewMember()
+                                {
+                                    ShipId = characterDefaultSettings.ShipId,
+                                    CharacterId = character.Id,
+                                    UniverseId = universeId
+                                };
 
-                        // Character initial reaction towards players
+                                crewRepo.Add(crewMember);
+                            }
+                        }
+
+                        // // Character initial reaction towards players
                         // character.InitialReaction = (Rand.Next(0, 6) + Rand.Next(0, 6)) switch
                         // {
                         //     0 => charData.InitialReactions[0],
@@ -161,9 +171,8 @@ namespace SWNUniverseGenerator.CreationTools
                         // };
 
                         using (var repo = new Repository<Naming>(context))
-                        {
                             character.InitialReaction = ((Naming) repo.Random(n => n.NameType == "InitialReaction")).Name;
-                        }
+                        
 
                         // Add the Character to the list of Characters in the universe
                         characters.Add(character);
@@ -171,7 +180,7 @@ namespace SWNUniverseGenerator.CreationTools
                         cCount++;
                     }
 
-                    charRepo.AddRange(characters);
+                    charRepo.UpdateRange(characters);
                     characters.Clear();
                 }
             }

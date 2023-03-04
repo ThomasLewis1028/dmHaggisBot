@@ -7,7 +7,7 @@ namespace SWNUniverseGenerator.DefaultSettings
 {
     public class ShipDefaultSettings
     {
-        public ShipDefaultSettings(Int32 count = 100, 
+        public ShipDefaultSettings(Int32 count = 10, 
             String homeId = null, 
             String locationId = null,
             String type = null
@@ -17,12 +17,12 @@ namespace SWNUniverseGenerator.DefaultSettings
             Id = null;
             Name = null;
             CreateCrew = true;
-            Captain = null;
-            Pilot = null;
-            Engineer = null;
-            Comms = null;
-            Gunner = null;
-            CrewMembers = null;
+            CaptainId = null;
+            PilotId = null;
+            EngineerId = null;
+            CommunicationsId = null;
+            GunnerId = null;
+            CrewMemberIds = null;
             Type = type;
             HomeId = homeId;
             LocationId = locationId;
@@ -36,17 +36,17 @@ namespace SWNUniverseGenerator.DefaultSettings
         
         public Boolean CreateCrew { get; set; }
 
-        public Character Captain { get; set; }
+        public String CaptainId { get; set; }
         
-        public Character Pilot { get; set; }
+        public String PilotId { get; set; }
         
-        public Character Engineer { get; set; }
+        public String EngineerId { get; set; }
         
-        public Character Comms { get; set; }
+        public String CommunicationsId { get; set; }
         
-        public Character Gunner { get; set; }
+        public String GunnerId { get; set; }
         
-        public List<Character> CrewMembers { get; set; }
+        public List<String> CrewMemberIds { get; set; }
         
         public String Type { get; set; }
         

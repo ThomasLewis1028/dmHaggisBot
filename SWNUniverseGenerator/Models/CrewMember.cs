@@ -21,5 +21,7 @@ namespace SWNUniverseGenerator.Models
             Crew,
             Undefined
         }
+        
+        public String UniverseId { get; set; }
     }
 }

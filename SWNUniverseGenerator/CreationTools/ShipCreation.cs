@@ -20,6 +20,9 @@ namespace SWNUniverseGenerator.CreationTools
                 using (var shipRepo = new Repository<Ship>(context))
                 {
                     List<Ship> ships = new();
+                    List<ShipArmament> shipArmaments = new();
+                    List<ShipDefense> shipDefenses = new();
+                    List<ShipFitting> shipFittings = new();
                     // Set the defaults
                     var count = shipDefaultSettings.Count;
 
@@ -30,10 +33,12 @@ namespace SWNUniverseGenerator.CreationTools
                         {
                             UniverseId = universeId
                         };
-
+                        
                         using (var specRepo = new Repository<Spec>(context))
                             ship.SpecId = specRepo.Random().Id;
 
+                        shipRepo.Add(ship);
+                        
                         // Set the type of ship
                         // if (string.IsNullOrEmpty(shipDefaultSettings.Type))
                         // {
@@ -63,6 +68,7 @@ namespace SWNUniverseGenerator.CreationTools
                         // else
                         //     throw new FileLoadException("No ship of this type exists");
 
+                        // Set the name of the ship based on whatever math I came up with
                         if (string.IsNullOrEmpty(shipDefaultSettings.Name))
                         {
                             while (true)
@@ -116,35 +122,57 @@ namespace SWNUniverseGenerator.CreationTools
                         // ship.CrewSkill = shipSpec.CrewSkill;
                         // ship.Cp = shipSpec.Cp;
 
-                        // // Set the weapons
-                        // if (shipSpec.Weapons != null)
-                        // {
-                        //     // ship.Weapons = new List<ShipWeapon>();
-                        //     // foreach (var w in shipPreset.Weapons)
-                        //         // ship.Weapons.Add(new shipData.Weapons[w]);
-                        // }
-                        //
-                        // // Set the defenses
-                        // if (shipSpec.Defenses != null)
-                        // {
-                        //     // ship.Defenses = new List<ShipDefense>();
-                        //     // foreach (var d in shipPreset.Defenses)
-                        //         // ship.Defenses.Add(new ShipDefense(shipData.Defenses[d]));
-                        // }
-                        //
-                        // // Set the fittings
-                        // if (shipSpec.Fittings != null)
-                        // {
-                        //     // ship.Fittings = new List<ShipFitting>();
-                        //     // foreach (var f in shipPreset.Fittings)
-                        //         // ship.Fittings.Add(new ShipFitting(shipData.Fittings[f]));
-                        // }
-                        //
-                        // // Set the crew if the CrewId is not null
-                        // if (shipDefaultSettings.CrewMembers != null)
-                        //     foreach (var c in shipDefaultSettings.CrewMembers)
-                        //         universe.Characters.Find(a => a == c).ShipId = ship.Id;
+                        // Set the armaments
+                        using (var armaRepo = new Repository<ShipArmament>(context))
+                        {
+                            foreach (var specArmament in context.SpecArmament.Where(s => s.SpecId == ship.SpecId))
+                            {
+                                var shipArmament = new ShipArmament()
+                                {
+                                    ArmamentId = specArmament.ArmamentId,
+                                    ShipId = ship.Id,
+                                    UniverseId = universeId
+                                };
+                                shipArmaments.Add(shipArmament);
+                            }
+                            
+                            armaRepo.AddRange(shipArmaments);
+                        }
 
+                        // Set the defenses
+                        using (var defRepo = new Repository<ShipDefense>(context))
+                        {
+                            foreach (var specDefense in context.SpecDefense.Where(s => s.SpecId == ship.SpecId))
+                            {
+                                var shipDefense = new ShipDefense()
+                                {
+                                    DefenseId = specDefense.DefenseId,
+                                    ShipId = ship.Id,
+                                    UniverseId = universeId
+                                };
+                                shipDefenses.Add(shipDefense);
+                            }
+                            
+                            defRepo.AddRange(shipDefenses);
+                        }
+
+                        // Set the fittings
+                        using (var fitRepo = new Repository<ShipFitting>(context))
+                        {
+                            foreach (var specFitting in context.SpecFitting.Where(s => s.SpecId == ship.SpecId))
+                            {
+                                var shipFitting = new ShipFitting()
+                                {
+                                    FittingId = specFitting.FittingId,
+                                    ShipId = ship.Id,
+                                    UniverseId = universeId
+                                };
+                                shipFittings.Add(shipFitting);
+                            }
+                            
+                            fitRepo.AddRange(shipFittings);
+                        }
+                        
 
                         // Create the crew for the ship
                         if (shipDefaultSettings.CreateCrew)
@@ -165,58 +193,53 @@ namespace SWNUniverseGenerator.CreationTools
                                         new CharacterDefaultSettings
                                         {
                                             Count = Rand.Next(hullCrewMin,
-                                                hullCrewMax + 1 - (shipDefaultSettings.CrewMembers?.Count ?? 0)),
+                                                hullCrewMax + 1 - (shipDefaultSettings.CrewMemberIds?.Count ?? 0)),
                                             ShipId = ship.Id
                                         });
                                 }
                             }
 
-                            //     using (var crewRepo = new Repository<CrewMember>(context))
-                            //     {
-                            //         var crewMembers = crewRepo.Search(c => c.ShipId == ship.Id);
-                            //
-                            //         
-                            //     }
-                            //
-                            //
-                            // var crewList = (from c in universe.Characters where c.ShipId == ship.Id select c).ToList();
-                            //
-                            //     ship.Captain = shipDefaultSettings.Captain != null
-                            //         ? crewList[0] != null ? null : crewList[0]
-                            //         : shipDefaultSettings.Captain;
-                            //     ship.Pilot = shipDefaultSettings.Pilot != null
-                            //         ? crewList.Count < 2
-                            //             ? null
-                            //             : crewList[1]
-                            //         : shipDefaultSettings.Pilot;
-                            //     ship.Gunner = shipDefaultSettings.Gunner != null
-                            //         ? crewList.Count < 3
-                            //             ? null
-                            //             : crewList[2]
-                            //         : shipDefaultSettings.Gunner;
-                            //     ship.Engineer = shipDefaultSettings.Engineer != null
-                            //         ? crewList.Count < 4
-                            //             ? null
-                            //             : crewList[3]
-                            //         : shipDefaultSettings.Engineer;
-                            //     ship.Comms = shipDefaultSettings.Comms != null
-                            //         ? crewList.Count < 5
-                            //             ? null
-                            //             : crewList[4]
-                            //         : shipDefaultSettings.Comms;
-                            //
-                            //
-                            // // Tie the main crew to the ship
-                            // if (ship.Captain != null)
-                            //     universe.Characters.Find(c => c == ship.Captain).Title = "Captain";
-                            // if (ship.Pilot != null)
-                            //     universe.Characters.Find(c => c == ship.Pilot).Title = "Pilot";
-                            // if (ship.Gunner != null)
-                            //     universe.Characters.Find(c => c == ship.Gunner).Title = "Gunner";
-                            // if (ship.Engineer != null)
-                            //     universe.Characters.Find(c => c == ship.Engineer).Title = "Engineer";
-                            // if (ship.Comms != null)
-                            //     universe.Characters.Find(c => c == ship.Comms).Title = "Comms Expert";
+                            // Set the crewType on the crewMembers
+                            using (var crewRepo = new Repository<CrewMember>(context))
+                            {
+                                List<CrewMember> crewMembers = new();
+                                for (int i = 0; i < crewRepo.Count(c => c.ShipId == ship.Id); i++)
+                                {
+                                    CrewMember crew;
+
+                                    switch (i)
+                                    {
+                                        case 0:
+                                            crew = context.CrewMember.Skip(i).Take(1).First();
+                                            crew.CrewType = CrewMember.CrewEnum.Captain;
+                                            break;
+                                        case 1:
+                                            crew = context.CrewMember.Skip(i).Take(1).First();
+                                            crew.CrewType = CrewMember.CrewEnum.Pilot;
+                                            break;
+                                        case 2:
+                                            crew = context.CrewMember.Skip(i).Take(1).First();
+                                            crew.CrewType = CrewMember.CrewEnum.Gunner;
+                                            break;
+                                        case 3:
+                                            crew = context.CrewMember.Skip(i).Take(1).First();
+                                            crew.CrewType = CrewMember.CrewEnum.Engineer;
+                                            break;
+                                        case 4:
+                                            crew = context.CrewMember.Skip(i).Take(1).First();
+                                            crew.CrewType = CrewMember.CrewEnum.Communications;
+                                            break;
+                                        default:
+                                            crew = context.CrewMember.Skip(i).Take(1).First();
+                                            crew.CrewType = CrewMember.CrewEnum.Crew;
+                                            break;
+                                    }
+
+                                    crewMembers.Add(crew);
+                                }
+
+                                crewRepo.UpdateRange(crewMembers);
+                            }
                         }
 
                         // If the ship has the Ship Bay/Fighter fitting, generate a ship to go in that space
@@ -270,12 +293,20 @@ namespace SWNUniverseGenerator.CreationTools
                         // }
 
                         ships.Add(ship);
+                        
+                        shipArmaments.Clear();
+                        shipDefenses.Clear();
+                        shipFittings.Clear();
 
                         sCount++;
                     }
 
-                    shipRepo.AddRange(ships);
+                    shipRepo.UpdateRange(ships);
+
                     ships.Clear();
+                    shipArmaments.Clear();
+                    shipDefenses.Clear();
+                    shipFittings.Clear();
                 }
             }
         }

@@ -7,5 +7,7 @@ namespace SWNUniverseGenerator.Models
         public String ShipId { get; set; }
         
         public String FittingId { get; set; }
+        
+        public String UniverseId { get; set; }
     }
 }

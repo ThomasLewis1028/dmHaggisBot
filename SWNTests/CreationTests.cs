@@ -19,41 +19,29 @@ public class CreationTests
         {
             Creation creation = new Creation();
 
-            string universeId = creation.CreateUniverse(new UniverseDefaultSettings(){Name = universeName}, context);
+            string universeId = "";
+
+            universeId =
+                creation.CreateUniverse(new UniverseDefaultSettings() {Name = universeName}, context);
 
             creation.CreateStars(universeId, new StarDefaultSettings());
             creation.CreatePlanets(universeId, new PlanetDefaultSettings());
             creation.CreateCharacter(universeId, new CharacterDefaultSettings());
             creation.CreateShips(universeId, new ShipDefaultSettings());
-            
-            Assert.IsTrue(context.Universes.Count(u => u.Id == universeId ) > 0);
+
+            Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) > 0);
             Assert.IsTrue(context.Zones.Count(s => s.UniverseId == universeId) > 0);
             Assert.IsTrue(context.Stars.Count(s => s.UniverseId == universeId) > 0);
             Assert.IsTrue(context.Planets.Count(s => s.UniverseId == universeId) > 0);
             Assert.IsTrue(context.Characters.Count(s => s.UniverseId == universeId) > 0);
             Assert.IsTrue(context.Ships.Count(s => s.UniverseId == universeId) > 0);
 
+
             if (cleanup)
             {
-                using (var starRepo = new Repository<Star>(context))
-                    starRepo.DeleteRange(context.Stars.Where(c => c.UniverseId == universeId).ToList());
+                creation.DeleteUniverse(universeId);
 
-                using (var planRepo = new Repository<Planet>(context))
-                    planRepo.DeleteRange(context.Planets.Where(c => c.UniverseId == universeId).ToList());
-
-                using (var zoneRepo = new Repository<Zone>(context))
-                    zoneRepo.DeleteRange(context.Zones.Where(c => c.UniverseId == universeId).ToList());
-
-                using (var uniRepo = new Repository<Universe>(context))
-                    uniRepo.Delete(universeId);
-
-                using (var charRepo = new Repository<Character>(context))
-                    charRepo.DeleteRange(context.Characters.Where(c => c.UniverseId == universeId).ToList());
-                
-                using (var shipRepo = new Repository<Ship>(context))
-                    shipRepo.DeleteRange(context.Ships.Where(c => c.UniverseId == universeId).ToList());
-
-                Assert.IsTrue(context.Universes.Count(u => u.Id == universeId ) == 0);
+                Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) == 0);
                 Assert.IsTrue(context.Zones.Count(s => s.UniverseId == universeId) == 0);
                 Assert.IsTrue(context.Stars.Count(s => s.UniverseId == universeId) == 0);
                 Assert.IsTrue(context.Planets.Count(s => s.UniverseId == universeId) == 0);
@@ -61,6 +49,5 @@ public class CreationTests
                 Assert.IsTrue(context.Ships.Count(s => s.UniverseId == universeId) == 0);
             }
         }
-        
     }
 }

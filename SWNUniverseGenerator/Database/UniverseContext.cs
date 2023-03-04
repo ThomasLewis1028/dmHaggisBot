@@ -9,32 +9,38 @@ namespace SWNUniverseGenerator.Database
 {
     public class UniverseContext : DbContext
     {
-        public DbSet<Universe> Universes { get; set; }
-        public DbSet<Star> Stars { get; set; }
-        public DbSet<Zone> Zones { get; set; }
-        public DbSet<Planet> Planets { get; set; }
-        public DbSet<PointOfInterest> PointsOfInterest { get; set; }
-        public DbSet<Problem> Problems { get; set; }
-        public DbSet<Ship> Ships { get; set; }
-        public DbSet<Character> Characters { get; set; }
-        public DbSet<Hull> Hull { get; set; }
         public DbSet<Armament> Armament { get; set; }
+        public DbSet<Atmosphere> Atmosphere { get; set; }
+        public DbSet<Biosphere> Biosphere { get; set; }
+        public DbSet<Character> Characters { get; set; }
+        public DbSet<CrewMember> CrewMember { get; set; }
         public DbSet<Defense> Defense { get; set; }
         public DbSet<Fitting> Fitting { get; set; }
+        public DbSet<Hull> Hull { get; set; }
+        public DbSet<Naming> Naming { get; set; }
+        public DbSet<Planet> Planets { get; set; }
+        public DbSet<PointOfInterest> PointsOfInterest { get; set; }
+        public DbSet<Population> Population { get; set; }
+        public DbSet<Problem> Problems { get; set; }
         public DbSet<ShipArmament> ShipArmament { get; set; }
         public DbSet<ShipDefense> ShipDefense { get; set; }
         public DbSet<ShipFitting> ShipFitting { get; set; }
+        public DbSet<Ship> Ships { get; set; }
         public DbSet<Spec> Spec { get; set; }
         public DbSet<SpecArmament> SpecArmament { get; set; }
         public DbSet<SpecDefense> SpecDefense { get; set; }
         public DbSet<SpecFitting> SpecFitting { get; set; }
-        public DbSet<Naming> Naming { get; set; }
+        public DbSet<Star> Stars { get; set; }
         public DbSet<Tag> Tag { get; set; }
+        public DbSet<TechLevel> TechLevel { get; set; }
+        public DbSet<Temperature> Temperature { get; set; }
+        public DbSet<Universe> Universes { get; set; }
+        public DbSet<WorldComplication> WorldComplication { get; set; }
         public DbSet<WorldEnemy> WorldEnemy { get; set; }
         public DbSet<WorldFriend> WorldFriend { get; set; }
-        public DbSet<WorldComplication> WorldComplication { get; set; }
         public DbSet<WorldPlace> WorldPlace { get; set; }
         public DbSet<WorldThing> WorldThing { get; set; }
+        public DbSet<Zone> Zones { get; set; }
 
         public string DbPath { get; }
 
@@ -145,35 +151,29 @@ namespace SWNUniverseGenerator.Database
             // SHIP ARMAMENT
             modelBuilder.Entity<ShipArmament>()
                 .HasOne<Ship>()
-                .WithOne()
-                .HasForeignKey<ShipArmament>(sf => sf.ShipId);
+                .WithMany();
 
             modelBuilder.Entity<ShipArmament>()
                 .HasOne<Armament>()
-                .WithOne()
-                .HasForeignKey<ShipArmament>(sf => sf.ArmamentId);
+                .WithMany();
             
             // SHIP DEFENSE
             modelBuilder.Entity<ShipDefense>()
                 .HasOne<Ship>()
-                .WithOne()
-                .HasForeignKey<ShipDefense>(sf => sf.ShipId);
+                .WithMany();
             
             modelBuilder.Entity<ShipDefense>()
                 .HasOne<Defense>()
-                .WithOne()
-                .HasForeignKey<ShipDefense>(sf => sf.DefenseId);
+                .WithMany();
             
             // SHIP FITTING
             modelBuilder.Entity<ShipFitting>()
                 .HasOne<Ship>()
-                .WithOne()
-                .HasForeignKey<ShipFitting>(sf => sf.ShipId);
+                .WithMany();
 
             modelBuilder.Entity<ShipFitting>()
                 .HasOne<Fitting>()
-                .WithOne()
-                .HasForeignKey<ShipFitting>(sf => sf.FittingId);
+                .WithMany();
             
             // SPEC
             modelBuilder.Entity<Spec>()
@@ -184,35 +184,29 @@ namespace SWNUniverseGenerator.Database
             // SPEC ARMAMENT
             modelBuilder.Entity<SpecArmament>()
                 .HasOne<Spec>()
-                .WithMany()
-                .HasForeignKey(sf => sf.SpecId);
+                .WithMany();
 
             modelBuilder.Entity<SpecArmament>()
                 .HasOne<Armament>()
-                .WithMany()
-                .HasForeignKey(sf => sf.ArmamentId);
+                .WithMany();
                         
             // SPEC DEFENSE
             modelBuilder.Entity<SpecDefense>()
                 .HasOne<Spec>()
-                .WithMany()
-                .HasForeignKey(sf => sf.SpecId);
+                .WithMany();
 
             modelBuilder.Entity<SpecDefense>()
                 .HasOne<Defense>()
-                .WithMany()
-                .HasForeignKey(sf => sf.DefenseId);
+                .WithMany();
             
             // SPEC FITTING
             modelBuilder.Entity<SpecFitting>()
                 .HasOne<Spec>()
-                .WithMany()
-                .HasForeignKey(sf => sf.SpecId);
+                .WithMany();
 
             modelBuilder.Entity<SpecFitting>()
                 .HasOne<Fitting>()
-                .WithMany()
-                .HasForeignKey(sf => sf.FittingId);
+                .WithMany();
         }
 
         private void CharacterModelCreating(ModelBuilder modelBuilder)
@@ -233,13 +227,12 @@ namespace SWNUniverseGenerator.Database
             // CREW MEMBER
             modelBuilder.Entity<CrewMember>()
                 .HasOne<Character>()
-                .WithOne()
-                .HasForeignKey<CrewMember>(c => c.CharacterId);
+                .WithMany()
+                .HasForeignKey(c => c.CharacterId);
 
             modelBuilder.Entity<CrewMember>()
                 .HasOne<Ship>()
-                .WithOne()
-                .HasForeignKey<CrewMember>(s => s.ShipId);
+                .WithMany();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options) =>

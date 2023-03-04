@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.DeserializedObjects
 {
+    [Obsolete]
     public class ShipData : BaseEntity
     {
         public List<Hull> Hulls { get; set; }

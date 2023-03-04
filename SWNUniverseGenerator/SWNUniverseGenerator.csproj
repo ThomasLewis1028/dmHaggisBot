@@ -30,31 +30,10 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
       <None Remove="Data\StarData.json" />
-      <EmbeddedResource Include="Data\starData.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
       <None Remove="Data\worldTags.json" />
-      <EmbeddedResource Include="Data\worldTags.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
       <None Remove="Data\characterData.json" />
-      <EmbeddedResource Include="Data\characterData.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <None Update="Data\problemData.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Remove="Data\pointsOfInterest.json" />
-      <EmbeddedResource Include="Data\pointsOfInterest.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <None Update="Data\shipData.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Remove="Data\alienData.json" />
-      <EmbeddedResource Include="Data\alienData.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
       <None Remove="Migrations\SeedData\beastData.json" />
       <Resource Include="Migrations\SeedData\beastData.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

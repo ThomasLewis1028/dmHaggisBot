@@ -103,7 +103,7 @@ namespace SWNUniverseGenerator.Database
         public bool UpdateRange(List<TEntity> entity)
         {
             int count = entity.Count;
-            _dbContext.Set<TEntity>().UpdateRange(entity);
+            _dbContext.Set<TEntity>().UpdateRange(entity.AsEnumerable());
             int result = _dbContext.SaveChanges();
             foreach (var e in entity)
                 _dbContext.Entry(e).State = EntityState.Detached;
@@ -130,7 +130,7 @@ namespace SWNUniverseGenerator.Database
         public bool DeleteRange(List<TEntity> entity)
         {
             int count = entity.Count;
-            _dbContext.Set<TEntity>().RemoveRange(entity);
+            _dbContext.Set<TEntity>().RemoveRange(entity.AsEnumerable());
             int result = _dbContext.SaveChanges();
             foreach (var e in entity)
                 _dbContext.Entry(e).State = EntityState.Detached;

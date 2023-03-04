@@ -38,7 +38,6 @@ public class CreationTests
                 using (var starRepo = new Repository<Star>(context))
                     foreach (var star in context.Stars.Where(s => s.UniverseId == universeId))
                         starRepo.Delete(star);
-                
 
                 using (var planRepo = new Repository<Planet>(context))
                     foreach (var planet in context.Planets.Where(s => s.UniverseId == universeId))

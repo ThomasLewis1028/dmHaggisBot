@@ -13,6 +13,10 @@ namespace SWNUniverseGenerator.Database
 
         IEnumerable<IEntity> Search(Expression<System.Func<TEntity, Boolean>> query);
 
+        IEntity Random(Expression<System.Func<TEntity, Boolean>> query);
+        
+        IEntity Random();
+
         Boolean Any(Expression<System.Func<TEntity, Boolean>> query);
 
         Int32 Count(Expression<System.Func<TEntity, Boolean>> query);

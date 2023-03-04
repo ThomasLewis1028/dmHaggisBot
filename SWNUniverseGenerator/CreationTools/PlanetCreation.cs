@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
-using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
-using Ruled = SWNUniverseGenerator.Models.Ruled;
 
 namespace SWNUniverseGenerator.CreationTools
 {
@@ -35,11 +33,12 @@ namespace SWNUniverseGenerator.CreationTools
             {
                 using (var planetRepo = new Repository<Planet>(context))
                 {
+                    List<Planet> planets = new();
                     List<IEntity> stars;
 
-                    using (var starRepo = new Repository<Star>(context))
+                    using (var repo = new Repository<Star>(context))
                     {
-                        stars = starRepo.Search(s => s.UniverseId == universeId).ToList();
+                        stars = repo.Search(s => s.UniverseId == universeId).ToList();
                     }
 
                     // Iterate through each star and add planets
@@ -73,11 +72,10 @@ namespace SWNUniverseGenerator.CreationTools
                                 // planet.Name = Rand.Next(0, 4) == 2
                                 //     ? nameGeneration.GenerateName()
                                 //     : starData.Planets[Rand.Next(0, planLen)];
-                                var planetNameCount = context.Naming.Count(n => n.NameType == "Planet");
-                                planet.Name =
-                                    context.Naming.Where(n => n.NameType == "Planet").ToList()[Rand.Next(0, planetNameCount)]
-                                        .Name;
-
+                                
+                                using (var repo = new Repository<Naming>(context))
+                                    planet.Name = ((Naming) repo.Random(n => n.NameType == "Planet")).Name;
+                                
                                 // No planets can share a name
                                 if (!planetRepo.Any(a => a.Name == planet.Name))
                                     break;
@@ -85,15 +83,34 @@ namespace SWNUniverseGenerator.CreationTools
 
                             // Set the Planet information from either a randomized value or specified information
                             planet.ZoneId = star.ZoneId;
-                            
-                            // planet.FirstWorldTag = worldInfo.WorldTags[Rand.Next(0, 100)].Type;
-                            // planet.SecondWorldTag = worldInfo.WorldTags[Rand.Next(0, 100)].Type;
-                            // planet.Atmosphere = worldInfo.Atmospheres[Rand.Next(0, 6) + Rand.Next(0, 6)].Type;
-                            // planet.Temperature = worldInfo.Temperatures[Rand.Next(0, 6) + Rand.Next(0, 6)].Type;
-                            // planet.Biosphere = worldInfo.Biospheres[Rand.Next(0, 6) + Rand.Next(0, 6)].Type;
-                            // planet.Population = worldInfo.Populations[Rand.Next(0, 6) + Rand.Next(0, 6)].Type;
-                            // planet.TechLevel = worldInfo.TechLevels[Rand.Next(0, 6) + Rand.Next(0, 6)].Type;
 
+                            using(var repo = new Repository<Tag>(context))
+                            {
+                                planet.FirstWorldTag = repo.Random().Id;
+
+                                while (String.IsNullOrEmpty(planet.SecondWorldTag) ||
+                                       planet.SecondWorldTag == planet.FirstWorldTag)
+                                {
+                                    
+                                    planet.SecondWorldTag = repo.Random().Id;
+                                }
+                            }
+
+                            using (var repo = new Repository<Atmosphere>(context))
+                                planet.Atmosphere = repo.Random().Id;
+
+                            using (var repo = new Repository<Temperature>(context))
+                                planet.Temperature = repo.Random().Id;
+
+                            using (var repo = new Repository<Biosphere>(context))
+                                planet.Biosphere = repo.Random().Id;
+
+                            using (var repo = new Repository<Population>(context))
+                                planet.Population = repo.Random().Id;
+                            
+                            using (var repo = new Repository<TechLevel>(context))
+                                planet.TechLevel = repo.Random().Id;
+                            
                             // Set primary world
                             if (pCount == 0)
                                 planet.IsPrimary = true;
@@ -107,9 +124,12 @@ namespace SWNUniverseGenerator.CreationTools
                             }
 
                             // Add the Planet to the current Universe
-                            planetRepo.Add(planet);
+                            planets.Add(planet);
                             pCount++;
                         }
+                        
+                        planetRepo.AddRange(planets);
+                        planets.Clear();
                     }
                 }
             }

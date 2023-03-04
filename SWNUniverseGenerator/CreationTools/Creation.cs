@@ -140,10 +140,11 @@ namespace SWNUniverseGenerator
         {
             using (var zoneRepo = new Repository<Zone>(context))
             {
+                List<Zone> zones = new();
                 // Add the Zones to the Universe
                 for (var i = 0; i < universeDefaultSettings.GridX; i++)
                 {
-                    for (var j = 0; j < universeDefaultSettings.GridX; j++)
+                    for (var j = 0; j < universeDefaultSettings.GridY; j++)
                     {
                         Zone zone = new Zone
                         {
@@ -152,9 +153,11 @@ namespace SWNUniverseGenerator
                             UniverseId = universeId
                         };
 
-                        zoneRepo.Add(zone);
+                        zones.Add(zone);
                     }
                 }
+                
+                zoneRepo.AddRange(zones);
             }
         }
 
@@ -211,9 +214,8 @@ namespace SWNUniverseGenerator
         public bool CreateShips(String universeId, ShipDefaultSettings shipDefaultSettings)
         {
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
-            new ShipCreation().AddShips(universeId, shipDefaultSettings, ShipData, _charData,
-                CharacterNameGenerations);
-
+            new ShipCreation().AddShips(universeId, shipDefaultSettings);
+        
             return true;
         }
 
@@ -228,30 +230,25 @@ namespace SWNUniverseGenerator
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        // public Universe CreateCharacter(Universe universe, CharacterDefaultSettings characterDefaultSettings)
-        // {
-        //     // If there are no Planets for the Characters to be tied to then throw an exception
-        //     if (universe.Planets == null || universe.Planets.Count == 0)
-        //         throw new FileNotFoundException("No planets have been created for the universe");
-        //
-        //     // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
-        //     universe = new CharCreation().AddCharacters(universe, characterDefaultSettings, _charData,
-        //         CharacterNameGenerations);
-        //     SerializeData(universe);
-        //     return universe;
-        // }
-        //
-        // /// <summary>
-        // /// This method should receive the Universe to add Problems to and a set of ProblemDefaultSettings
-        // ///
-        // /// Default values are handled in ProblemCreation.AddProblems
-        // /// </summary>
-        // /// <param name="universe"></param>
-        // /// <param name="problemDefaultSettings"></param>
-        // /// <returns>
-        // /// Return the newly edited Universe
-        // /// </returns>
-        // /// <exception cref="FileNotFoundException"></exception>
+        public bool CreateCharacter(String universeId, CharacterDefaultSettings characterDefaultSettings)
+        {
+            // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
+            new CharCreation().AddCharacters(universeId, characterDefaultSettings);
+            
+            return true;
+        }
+        
+        /// <summary>
+        /// This method should receive the Universe to add Problems to and a set of ProblemDefaultSettings
+        ///
+        /// Default values are handled in ProblemCreation.AddProblems
+        /// </summary>
+        /// <param name="universe"></param>
+        /// <param name="problemDefaultSettings"></param>
+        /// <returns>
+        /// Return the newly edited Universe
+        /// </returns>
+        /// <exception cref="FileNotFoundException"></exception>
         // public Universe CreateProblems(Universe universe, ProblemDefaultSettings problemDefaultSettings)
         // {
         //     // If there are no Planets or Locations for the Problems to be tied to then throw an exception
@@ -263,18 +260,18 @@ namespace SWNUniverseGenerator
         //     SerializeData(universe);
         //     return universe;
         // }
-        //
-        // /// <summary>
-        // /// This method should receive the Universe to add Points of Interest to and a set of POIDefaultSettings
-        // ///
-        // /// Default values are handled in POICreation.AddPOI
-        // /// </summary>
-        // /// <param name="universe"></param>
-        // /// <param name="poiDefaultSettings"></param>
-        // /// <returns>
-        // /// Return the newly edited Universe
-        // /// </returns>
-        // /// <exception cref="FileNotFoundException"></exception>
+        
+        /// <summary>
+        /// This method should receive the Universe to add Points of Interest to and a set of POIDefaultSettings
+        ///
+        /// Default values are handled in POICreation.AddPOI
+        /// </summary>
+        /// <param name="universe"></param>
+        /// <param name="poiDefaultSettings"></param>
+        /// <returns>
+        /// Return the newly edited Universe
+        /// </returns>
+        /// <exception cref="FileNotFoundException"></exception>
         // public Universe CreatePoi(Universe universe, PoiDefaultSettings poiDefaultSettings)
         // {
         //     // If there are no Planets or Locations for the Problems to be tied to then throw an exception
@@ -286,18 +283,18 @@ namespace SWNUniverseGenerator
         //     SerializeData(universe);
         //     return universe;
         // }
-        //
-        // /// <summary>
-        // /// This method should receive the Universe to add Aliens to and a set of AlienDefaultSettings
-        // ///
-        // /// Default values are handled in AlienCreation.AddAliens
-        // /// </summary>
-        // /// <param name="universe"></param>
-        // /// <param name="alienDefaultSettings"></param>
-        // /// <returns>
-        // /// Return the newly edited Universe
-        // /// </returns>
-        // /// <exception cref="FileNotFoundException"></exception>
+        
+        /// <summary>
+        /// This method should receive the Universe to add Aliens to and a set of AlienDefaultSettings
+        ///
+        /// Default values are handled in AlienCreation.AddAliens
+        /// </summary>
+        /// <param name="universe"></param>
+        /// <param name="alienDefaultSettings"></param>
+        /// <returns>
+        /// Return the newly edited Universe
+        /// </returns>
+        /// <exception cref="FileNotFoundException"></exception>
         // public Universe CreateAliens(Universe universe, AlienDefaultSettings alienDefaultSettings)
         // {
         //     // If there are no Planets or Locations for the Problems to be tied to then throw an exception
@@ -309,12 +306,12 @@ namespace SWNUniverseGenerator
         //     SerializeData(universe);
         //     return universe;
         // }
-        //
-        // /// <summary>
-        // /// This method receives a universe file and generates an image in the background
-        // /// </summary>
-        // /// <param name="universe"></param>
-        // /// <exception cref="FileNotFoundException"></exception>
+        
+        /// <summary>
+        /// This method receives a universe file and generates an image in the background
+        /// </summary>
+        /// <param name="universe"></param>
+        /// <exception cref="FileNotFoundException"></exception>
         // public void CreateStarMap(Universe universe)
         // {
         //     // If there are no Planets or Locations for the Problems to be tied to then throw an exception
@@ -323,15 +320,15 @@ namespace SWNUniverseGenerator
         //
         //     new GridCreation().CreateGrid(universe);
         // }
-        //
-        // /// <summary>
-        // /// This method receives the name of a Universe and deserializes it into a Universe object
-        // /// </summary>
-        // /// <param name="name"></param>
-        // /// <returns>
-        // /// The universe that matches the name specified
-        // /// </returns>
-        // /// <exception cref="FileNotFoundException"></exception>
+        
+        /// <summary>
+        /// This method receives the name of a Universe and deserializes it into a Universe object
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>
+        /// The universe that matches the name specified
+        /// </returns>
+        /// <exception cref="FileNotFoundException"></exception>
         // public Universe LoadUniverse(string name)
         // {
         //     // Set the path to the name
@@ -350,7 +347,7 @@ namespace SWNUniverseGenerator
         //     // Deserialize the JObject into a Universe and return it
         //     return JsonConvert.DeserializeObject<Universe>(univ.ToString());
         // }
-        //
+        
         // public void DeleteUniverse(string universeName)
         // {
         //     // Set the path to the name
@@ -363,11 +360,11 @@ namespace SWNUniverseGenerator
         //
         //     File.Delete(path.ToString());
         // }
-        //
-        // /// <summary>
-        // /// Method should receive a Universe that it will serialize to a file
-        // /// </summary>
-        // /// <param name="universe"></param>
+        
+        /// <summary>
+        /// Method should receive a Universe that it will serialize to a file
+        /// </summary>
+        /// <param name="universe"></param>
         // private void SerializeData(Universe universe)
         // {
         //     // Set the path to the file and write it, overwriting the previous file if it exists.
@@ -377,13 +374,13 @@ namespace SWNUniverseGenerator
         //     var serializer = new JsonSerializer();
         //     serializer.Serialize(file, universe);
         // }
-        //
-        // /// <summary>
-        // /// Receive the path to a data type and return the deserialized version of that data
-        // /// </summary>
-        // /// <param name="path"></param>
-        // /// <typeparam name="T"></typeparam>
-        // /// <returns></returns>
+        
+        /// <summary>
+        /// Receive the path to a data type and return the deserialized version of that data
+        /// </summary>
+        /// <param name="path"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         // private T LoadData<T>(String path)
         // {
         //     path = _dataPath + path;
@@ -394,11 +391,11 @@ namespace SWNUniverseGenerator
         //
         //     return JsonConvert.DeserializeObject<T>(data.ToString());
         // }
-        //
-        // /// <summary>
-        // /// Retrieve all universe files on disk
-        // /// </summary>
-        // /// <returns></returns>
+        
+        /// <summary>
+        /// Retrieve all universe files on disk
+        /// </summary>
+        /// <returns></returns>
         // public List<UniverseInfo> GetUniverseList()
         // {
         //     List<UniverseInfo> universeInfos = new();

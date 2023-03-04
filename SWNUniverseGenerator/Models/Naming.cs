@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SWNUniverseGenerator.Models
 {
-    public class Naming
+    public class Naming : BaseEntity
     {
         public string NameType { get; set; }
         public string Name { get; set; }

@@ -35,6 +35,8 @@ namespace SWNUniverseGenerator.CreationTools
             {
                 using (var starRepo = new Repository<Star>(context))
                 {
+                    List<Star> stars = new ();
+                    
                     // Set the number of stars to create. The default is 1d10+20 
                     var starLen = starRepo.Count(s => s.UniverseId == universeId);
                     var starCount = starDefaultSettings.StarCount;
@@ -100,10 +102,12 @@ namespace SWNUniverseGenerator.CreationTools
                         star.StarColor = (Star.StarColorEnum) starClass;
 
                         // Add the Star to the Universe
-                        starRepo.Add(star);
+                        stars.Add(star);
 
                         sCount++;
                     }
+                    
+                    starRepo.AddRange(stars);
                 }
             }
         }

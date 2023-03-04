@@ -17,7 +17,7 @@ namespace SWNUniverseGenerator.Database
         {
             _dbContext = dbContext;
         }
-        
+
         public IQueryable<TEntity> GetAll()
         {
             return _dbContext.Set<TEntity>();
@@ -28,27 +28,52 @@ namespace SWNUniverseGenerator.Database
             return _dbContext.Set<TEntity>()
                 .Where(query);
         }
-        
+
+        public IEntity Random()
+        {
+            var count = _dbContext.Set<TEntity>().Count();
+            var rand = new Random().Next(0, count);
+            return _dbContext.Set<TEntity>()
+                .AsEnumerable()
+                .ElementAt(rand);
+        }
+
+        public IEntity Random(Expression<System.Func<TEntity, Boolean>> query)
+        {
+            var count = _dbContext.Set<TEntity>()
+                .Where(query)
+                .Count();
+            return _dbContext.Set<TEntity>()
+                .Where(query)
+                .AsEnumerable()
+                .ElementAt(new Random().Next(0, count));
+        }
+
         public Boolean Any(Expression<System.Func<TEntity, Boolean>> query)
         {
             return _dbContext.Set<TEntity>()
                 .Any(query);
         }
-        
-       
+
+
         public Int32 Count(Expression<System.Func<TEntity, Boolean>> query)
         {
             return _dbContext.Set<TEntity>()
                 .Count(query);
-        } 
-        
+        }
+
         public TEntity GetById(string id)
         {
             return _dbContext.Set<TEntity>()
                 .AsNoTracking()
                 .FirstOrDefault(e => e.Id == id);
         }
-        
+
+        /// <summary>
+        /// Add an entity to a list of entities
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public bool Add(TEntity entity)
         {
             _dbContext.Set<TEntity>().Add(entity);
@@ -56,13 +81,13 @@ namespace SWNUniverseGenerator.Database
             _dbContext.Entry(entity).State = EntityState.Detached;
             return result == 1;
         }
-        
+
         public bool AddRange(List<TEntity> entity)
         {
             int count = entity.Count;
-            _dbContext.Set<TEntity>().AddRange(entity);
+            _dbContext.Set<TEntity>().AddRange(entity.AsEnumerable());
             int result = _dbContext.SaveChanges();
-            _dbContext.Entry(entity).State = EntityState.Detached;
+            _dbContext.Entry(entity.First()).State = EntityState.Detached;
             return result == count;
         }
 
@@ -73,7 +98,7 @@ namespace SWNUniverseGenerator.Database
             _dbContext.Entry(entity).State = EntityState.Detached;
             return result == 1;
         }
-        
+
         public bool UpdateRange(List<TEntity> entity)
         {
             int count = entity.Count;
@@ -82,7 +107,7 @@ namespace SWNUniverseGenerator.Database
             _dbContext.Entry(entity).State = EntityState.Detached;
             return result == count;
         }
-        
+
         public bool Delete(string id)
         {
             var entity = GetById(id);
@@ -99,7 +124,7 @@ namespace SWNUniverseGenerator.Database
             _dbContext.Entry(entity).State = EntityState.Detached;
             return result == 1;
         }
-        
+
         public bool DeleteRange(List<TEntity> entity)
         {
             int count = entity.Count;

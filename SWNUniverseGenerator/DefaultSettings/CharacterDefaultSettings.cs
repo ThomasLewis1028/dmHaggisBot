@@ -23,6 +23,8 @@ namespace SWNUniverseGenerator.DefaultSettings
             Count = -1;
             CrimeChance = null;
             ShipId = null;
+            BirthPlanetId = null;
+            CurrentPlanetId = null;
         }
         
         /// <summary>
@@ -96,11 +98,11 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// <summary>
         /// This value should be a specific PlanetID that you wish to set as the character's birth planet
         /// </summary>
-        public Planet BirthPlanetId { get; set; }
+        public String BirthPlanetId { get; set; }
         
         /// <summary>
         /// This value should be a specific PlanetID that you wish to set as the character's current planet
         /// </summary>
-        public Planet CurrentPlanetId { get; set; }
+        public String CurrentPlanetId { get; set; }
     }
 }

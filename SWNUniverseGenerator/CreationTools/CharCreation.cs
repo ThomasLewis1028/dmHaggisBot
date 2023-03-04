@@ -172,6 +172,7 @@ namespace SWNUniverseGenerator.CreationTools
                     }
 
                     charRepo.AddRange(characters);
+                    characters.Clear();
                 }
             }
         }

@@ -7,7 +7,7 @@ namespace SWNUniverseGenerator.Models
             public static string GenerateId(this IEntity myInterface)
             {
                 // Create a Guid and chop everything from the first hyphen and on
-                var id = Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
+                var id = Guid.NewGuid().ToString().ToUpper();
                 
                 // Set the ID based on the type of Object
                 id = myInterface switch

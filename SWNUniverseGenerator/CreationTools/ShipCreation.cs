@@ -19,6 +19,7 @@ namespace SWNUniverseGenerator.CreationTools
             {
                 using (var shipRepo = new Repository<Ship>(context))
                 {
+                    List<Ship> ships = new();
                     // Set the defaults
                     var count = shipDefaultSettings.Count;
 
@@ -148,19 +149,18 @@ namespace SWNUniverseGenerator.CreationTools
                         // Create the crew for the ship
                         if (shipDefaultSettings.CreateCrew)
                         {
-
                             using (var hullRepo = new Repository<Hull>(context))
                             {
                                 using (var specRepo = new Repository<Spec>(context))
                                 {
+                                    var hullId = ((Spec) specRepo.Search(s => s.Id == ship.SpecId).First()).HullId;
+
                                     var hullCrewMin = ((Hull) hullRepo.Search(h =>
-                                        h.Id == specRepo.Search(s
-                                            => s.Id == ship.SpecId).First().Id)).CrewMin;
+                                        h.Id == hullId).First()).CrewMin;
 
                                     var hullCrewMax = ((Hull) hullRepo.Search(h =>
-                                        h.Id == specRepo.Search(s
-                                            => s.Id == ship.SpecId).First().Id)).CrewMax;
-                                    
+                                        h.Id == hullId).First()).CrewMax;
+
                                     new CharCreation().AddCharacters(universeId,
                                         new CharacterDefaultSettings
                                         {
@@ -269,10 +269,13 @@ namespace SWNUniverseGenerator.CreationTools
                         //     }
                         // }
 
-                        shipRepo.Add(ship);
+                        ships.Add(ship);
 
                         sCount++;
                     }
+
+                    shipRepo.AddRange(ships);
+                    ships.Clear();
                 }
             }
         }

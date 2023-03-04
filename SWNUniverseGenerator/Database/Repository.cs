@@ -34,8 +34,9 @@ namespace SWNUniverseGenerator.Database
             var count = _dbContext.Set<TEntity>().Count();
             var rand = new Random().Next(0, count);
             return _dbContext.Set<TEntity>()
-                .AsEnumerable()
-                .ElementAt(rand);
+                .Skip(new Random().Next(0, count))
+                .Take(1)
+                .First();
         }
 
         public IEntity Random(Expression<System.Func<TEntity, Boolean>> query)
@@ -45,8 +46,9 @@ namespace SWNUniverseGenerator.Database
                 .Count();
             return _dbContext.Set<TEntity>()
                 .Where(query)
-                .AsEnumerable()
-                .ElementAt(new Random().Next(0, count));
+                .Skip(new Random().Next(0, count))
+                .Take(1)
+                .First();
         }
 
         public Boolean Any(Expression<System.Func<TEntity, Boolean>> query)

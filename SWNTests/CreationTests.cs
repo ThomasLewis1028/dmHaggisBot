@@ -1,10 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SWNUniverseGenerator;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
-using SWNUniverseGenerator.Models;
 
 namespace SWNTests;
 
@@ -35,8 +35,11 @@ public class CreationTests
             Assert.IsTrue(context.Planets.Count(s => s.UniverseId == universeId) > 0);
             Assert.IsTrue(context.Characters.Count(s => s.UniverseId == universeId) > 0);
             Assert.IsTrue(context.Ships.Count(s => s.UniverseId == universeId) > 0);
-
-
+            
+            var starMapPath = creation.CreateStarMap(universeId);
+            
+            Assert.IsTrue(File.Exists(starMapPath));
+            
             if (cleanup)
             {
                 creation.DeleteUniverse(universeId);
@@ -47,6 +50,7 @@ public class CreationTests
                 Assert.IsTrue(context.Planets.Count(s => s.UniverseId == universeId) == 0);
                 Assert.IsTrue(context.Characters.Count(c => c.UniverseId == universeId) == 0);
                 Assert.IsTrue(context.Ships.Count(s => s.UniverseId == universeId) == 0);
+                Assert.IsFalse(File.Exists(starMapPath));
             }
         }
     }

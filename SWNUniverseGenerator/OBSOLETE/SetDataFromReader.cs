@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
 
 /*
@@ -16,53 +14,10 @@ using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.OBSOLETE
 {
+    [Obsolete]
     public class SetDataFromReader
     {
-        public static void LoadNamesFromInput()
-        {
-            JObject starData =
-                JObject.Parse(
-                    File.ReadAllText(@"Data\StarData.json"));
-
-            var starNames = starData.GetValue("Stars").ToList();
-            var planetNames = starData.GetValue("Planets").ToList();
-
-            var path = @"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\SWNUniverseGenerator\OBSOLETE\namesTemp.json";
-
-            var names = new EntityNames();
-            names.Stars = new List<string>();
-            names.Planets = new List<string>();
-
-            while (names.Planets.Count < 1000 && names.Stars.Count < 1000)
-            {
-                Console.Out.WriteLine("Enter Input: ");
-                var input = Console.ReadLine();
-                var input2 = Regex.Split(input, "^\\d+ ").ToList();
-
-                foreach (var i in input2)
-                {
-                    if (string.IsNullOrEmpty(i)) continue;
-                    names.Planets.Add(i);
-                    names.Stars.Add(i);
-                }
-            }
-
-            foreach (var i in starNames)
-                names.Stars.Add(i.ToString());
-
-
-            foreach (var i in planetNames)
-                names.Planets.Add(i.ToString());
-
-            names.Planets = names.Planets.Distinct().OrderBy(a => a.ToString()).ToList();
-            names.Stars = names.Stars.Distinct().OrderBy(a => a.ToString()).ToList();
-
-            using var file =
-                File.CreateText(path);
-            var serializer = new JsonSerializer();
-            serializer.Serialize(file, names);
-        }
-
+        [Obsolete]
         public SetDataFromReader()
         {
             var path =
@@ -106,6 +61,52 @@ namespace SWNUniverseGenerator.OBSOLETE
                 File.CreateText(path);
             var serializer = new JsonSerializer();
             serializer.Serialize(file, tags);
+        }
+
+        [Obsolete]
+        public static void LoadNamesFromInput()
+        {
+            var starData =
+                JObject.Parse(
+                    File.ReadAllText(@"Data\StarData.json"));
+
+            var starNames = starData.GetValue("Stars").ToList();
+            var planetNames = starData.GetValue("Planets").ToList();
+
+            var path = @"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\SWNUniverseGenerator\OBSOLETE\namesTemp.json";
+
+            var names = new EntityNames();
+            names.Stars = new List<string>();
+            names.Planets = new List<string>();
+
+            while (names.Planets.Count < 1000 && names.Stars.Count < 1000)
+            {
+                Console.Out.WriteLine("Enter Input: ");
+                var input = Console.ReadLine();
+                var input2 = Regex.Split(input, "^\\d+ ").ToList();
+
+                foreach (var i in input2)
+                {
+                    if (string.IsNullOrEmpty(i)) continue;
+                    names.Planets.Add(i);
+                    names.Stars.Add(i);
+                }
+            }
+
+            foreach (var i in starNames)
+                names.Stars.Add(i.ToString());
+
+
+            foreach (var i in planetNames)
+                names.Planets.Add(i.ToString());
+
+            names.Planets = names.Planets.Distinct().OrderBy(a => a.ToString()).ToList();
+            names.Stars = names.Stars.Distinct().OrderBy(a => a.ToString()).ToList();
+
+            using var file =
+                File.CreateText(path);
+            var serializer = new JsonSerializer();
+            serializer.Serialize(file, names);
         }
     }
 }

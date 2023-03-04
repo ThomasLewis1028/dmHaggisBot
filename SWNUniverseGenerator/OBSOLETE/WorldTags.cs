@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using SWNUniverseGenerator.DeserializedObjects;
+﻿using System;
+using System.Collections.Generic;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.OBSOLETE
 {
+    [Obsolete]
     public class WorldTagList
     {
-        public List<WorldTag> WorldTags { get; set; } = new List<WorldTag>();
+        [Obsolete] public List<WorldTag> WorldTags { get; set; } = new();
     }
 }

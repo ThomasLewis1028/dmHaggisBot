@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.Models
 {
+    [Obsolete]
     public class ShipNaming : BaseEntity
     {
-        public List<String> Adjectives { get; set; }
+        [Obsolete] public List<string> Adjectives { get; set; }
 
-        public List<String> Animals { get; set; }
+        [Obsolete] public List<string> Animals { get; set; }
 
-        public List<String> Nouns { get; set; }
+        [Obsolete] public List<string> Nouns { get; set; }
 
-        public List<String> Presets { get; set; }
+        [Obsolete] public List<string> Presets { get; set; }
     }
 }

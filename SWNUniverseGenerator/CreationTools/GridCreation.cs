@@ -219,7 +219,6 @@ namespace SWNUniverseGenerator.CreationTools
             hex.BottomLeft = new PointF(startX, startY + (2 * Cosign * _hypotenuse));
             hex.MidPoint = new PointF(startX + (_hypotenuse * Sine) + (_hypotenuse / 2), startY + (_hypotenuse * Cosign));
             hex.TopRight = new PointF(hex.MidRight.X, startY - (_hypotenuse * Cosign));
-            hex.MidBottom = new PointF(hex.MidPoint.X, hex.MidPoint.Y + (_hypotenuse * 0.5F));
             hex.TextLocation = new PointF(hex.MidPoint.X - (_hypotenuse * 0.55F), hex.MidPoint.Y + (_hypotenuse * 0.5F));
             hex.X = xAndY.x;
             hex.Y = xAndY.y;
@@ -229,7 +228,7 @@ namespace SWNUniverseGenerator.CreationTools
             return hex;
         }
 
-        public static RectangleF CircleToRectangle(PointF midpoint, float radius)
+        private static RectangleF CircleToRectangle(PointF midpoint, float radius)
         {
             return new RectangleF(midpoint.X - radius,
                 midpoint.Y - radius,
@@ -237,22 +236,22 @@ namespace SWNUniverseGenerator.CreationTools
                 radius * 2);
         }
 
-        public string ImageToBase64String(Image image)
-        {
-            MemoryStream memory = new MemoryStream();
-            image.Save(memory, ImageFormat.Png);
-            string base64 = Convert.ToBase64String(memory.ToArray());
-            memory.Close();
-            return base64;
-        }
-
-        public Image ImageFromBase64String(string base64)
-        {
-            MemoryStream memory = new MemoryStream(Convert.FromBase64String(base64));
-            Image result = Image.FromStream(memory);
-            memory.Close();
-            return result;
-        }
+        // public string ImageToBase64String(Image image)
+        // {
+        //     MemoryStream memory = new MemoryStream();
+        //     image.Save(memory, ImageFormat.Png);
+        //     string base64 = Convert.ToBase64String(memory.ToArray());
+        //     memory.Close();
+        //     return base64;
+        // }
+        //
+        // public Image ImageFromBase64String(string base64)
+        // {
+        //     MemoryStream memory = new MemoryStream(Convert.FromBase64String(base64));
+        //     Image result = Image.FromStream(memory);
+        //     memory.Close();
+        //     return result;
+        // }
 
         private class Hex
         {
@@ -270,11 +269,7 @@ namespace SWNUniverseGenerator.CreationTools
 
             public PointF TopRight { get; set; }
 
-            public PointF MidBottom { get; set; }
-
             public PointF TextLocation { get; set; }
-
-            public String ZoneId { get; set; }
         }
     }
 }

@@ -4,16 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SWNUniverseGenerator.CreationTools;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
 
-namespace SWNUniverseGenerator
+namespace SWNUniverseGenerator.CreationTools
 {
     /// <summary>
     /// This Class should be used as the entry-point for all other data

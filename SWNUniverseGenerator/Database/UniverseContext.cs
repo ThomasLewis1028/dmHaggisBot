@@ -2,6 +2,7 @@
 using LibGit2Sharp;
 using Microsoft.EntityFrameworkCore;
 using SWNUniverseGenerator.Migrations;
+using SWNUniverseGenerator.Migrations.SeedData;
 using SWNUniverseGenerator.Models;
 using Tag = SWNUniverseGenerator.Models.Tag;
 
@@ -21,7 +22,11 @@ namespace SWNUniverseGenerator.Database
         public DbSet<Planet> Planets { get; set; }
         public DbSet<PointOfInterest> PointsOfInterest { get; set; }
         public DbSet<Population> Population { get; set; }
-        public DbSet<Problem> Problems { get; set; }
+        public DbSet<LocationProblem> Problems { get; set; }
+        public DbSet<ProblemConflictFocuses> ProblemConflictFocuses { get; set; }
+        public DbSet<ProblemConflictSituations> ProblemConflictSituations { get; set; }
+        public DbSet<ProblemRestraints> ProblemRestraints { get; set; }
+        public DbSet<ProblemTwists> ProblemTwists { get; set; }
         public DbSet<ShipArmament> ShipArmament { get; set; }
         public DbSet<ShipDefense> ShipDefense { get; set; }
         public DbSet<ShipFitting> ShipFitting { get; set; }
@@ -89,10 +94,11 @@ namespace SWNUniverseGenerator.Database
                 .WithMany()
                 .HasForeignKey(p => p.UniverseId)
                 .IsRequired();
-            
+
             ShipModelCreating(modelBuilder);
             CharacterModelCreating(modelBuilder);
             TagModelCreating(modelBuilder);
+            ProblemModelCreating(modelBuilder);
 
             modelBuilder.Entity<Naming>().HasKey(t => new {t.NameType, t.Name});
 
@@ -107,32 +113,32 @@ namespace SWNUniverseGenerator.Database
                 .WithMany()
                 .HasForeignKey(we => we.TagId)
                 .IsRequired();
-            
+
             modelBuilder.Entity<WorldFriend>()
                 .HasOne<Tag>()
                 .WithMany()
                 .HasForeignKey(wf => wf.TagId)
                 .IsRequired();
-            
+
             modelBuilder.Entity<WorldComplication>()
                 .HasOne<Tag>()
                 .WithMany()
                 .HasForeignKey(wc => wc.TagId)
                 .IsRequired();
-            
+
             modelBuilder.Entity<WorldPlace>()
                 .HasOne<Tag>()
                 .WithMany()
                 .HasForeignKey(wp => wp.TagId)
                 .IsRequired();
-            
+
             modelBuilder.Entity<WorldThing>()
                 .HasOne<Tag>()
                 .WithMany()
                 .HasForeignKey(wt => wt.TagId)
                 .IsRequired();
         }
-        
+
         private void ShipModelCreating(ModelBuilder modelBuilder)
         {
             // SHIPS
@@ -156,16 +162,16 @@ namespace SWNUniverseGenerator.Database
             modelBuilder.Entity<ShipArmament>()
                 .HasOne<Armament>()
                 .WithMany();
-            
+
             // SHIP DEFENSE
             modelBuilder.Entity<ShipDefense>()
                 .HasOne<Ship>()
                 .WithMany();
-            
+
             modelBuilder.Entity<ShipDefense>()
                 .HasOne<Defense>()
                 .WithMany();
-            
+
             // SHIP FITTING
             modelBuilder.Entity<ShipFitting>()
                 .HasOne<Ship>()
@@ -174,7 +180,7 @@ namespace SWNUniverseGenerator.Database
             modelBuilder.Entity<ShipFitting>()
                 .HasOne<Fitting>()
                 .WithMany();
-            
+
             // SPEC
             modelBuilder.Entity<Spec>()
                 .HasOne<Hull>()
@@ -189,7 +195,7 @@ namespace SWNUniverseGenerator.Database
             modelBuilder.Entity<SpecArmament>()
                 .HasOne<Armament>()
                 .WithMany();
-                        
+
             // SPEC DEFENSE
             modelBuilder.Entity<SpecDefense>()
                 .HasOne<Spec>()
@@ -198,7 +204,7 @@ namespace SWNUniverseGenerator.Database
             modelBuilder.Entity<SpecDefense>()
                 .HasOne<Defense>()
                 .WithMany();
-            
+
             // SPEC FITTING
             modelBuilder.Entity<SpecFitting>()
                 .HasOne<Spec>()
@@ -233,6 +239,14 @@ namespace SWNUniverseGenerator.Database
             modelBuilder.Entity<CrewMember>()
                 .HasOne<Ship>()
                 .WithMany();
+        }
+
+        private void ProblemModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProblemConflictSituations>().HasKey(t => new {t.Situation});
+            modelBuilder.Entity<ProblemConflictFocuses>().HasKey(t => new {t.Focus});
+            modelBuilder.Entity<ProblemRestraints>().HasKey(t => new {t.Restraint});;
+            modelBuilder.Entity<ProblemTwists>().HasKey(t => new {t.Twist});
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options) =>

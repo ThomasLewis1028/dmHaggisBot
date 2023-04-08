@@ -10,6 +10,7 @@ using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
+using ProblemData = SWNUniverseGenerator.DeserializedObjects.ProblemData;
 
 namespace SWNUniverseGenerator.CreationTools
 {
@@ -212,7 +213,7 @@ namespace SWNUniverseGenerator.CreationTools
         ///
         /// Default values are handled in CharCreation.AddCharacters
         /// </summary>
-        /// <param name="universe"></param>
+        /// <param name="universeId"></param>
         /// <param name="characterDefaultSettings"></param>
         /// <returns>
         /// Return the newly edited Universe
@@ -231,22 +232,18 @@ namespace SWNUniverseGenerator.CreationTools
         ///
         /// Default values are handled in ProblemCreation.AddProblems
         /// </summary>
-        /// <param name="universe"></param>
+        /// <param name="universeId"></param>
         /// <param name="problemDefaultSettings"></param>
         /// <returns>
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public Universe CreateProblems(Universe universe, ProblemDefaultSettings problemDefaultSettings)
+        public bool CreateProblems(String universeId, ProblemDefaultSettings problemDefaultSettings)
         {
-            // If there are no Planets or Locations for the Problems to be tied to then throw an exception
-            // if (universe.Planets == null || universe.Planets.Count == 0)
-            //     throw new FileNotFoundException("No locations have been loaded.");
-            //
-            // // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
-            // universe = new ProblemCreation().AddProblems(universe, problemDefaultSettings, ProblemData);
-            // SerializeData(universe);
-            return universe;
+            // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
+            new ProblemCreation().AddProblems(universeId, problemDefaultSettings);
+            
+            return true;
         }
 
         /// <summary>

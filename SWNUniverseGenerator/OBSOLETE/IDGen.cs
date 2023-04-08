@@ -29,7 +29,7 @@ namespace SWNUniverseGenerator
                 Star _ => "S-" + id,
                 Character _ => "U-" + id,
                 City _ => "C-" + id,
-                Problem _ => "Q-" + id,
+                LocationProblem _ => "Q-" + id,
                 PointOfInterest _ => "I-" + id,
                 Ship _ => "SH-" + id,
                 Job _ => "J-" + id,

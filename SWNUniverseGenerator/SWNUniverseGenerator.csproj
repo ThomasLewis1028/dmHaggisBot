@@ -40,10 +40,19 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <None Remove="Migrations\SeedData\problemData.json" />
-      <Resource Include="Migrations\SeedData\problemData.json">
+      <Resource Include="Migrations\SeedData\ProblemConflicts.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Migrations\SeedData\ProblemData.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
       <None Remove="Migrations\SeedData\shipData.json" />
+      <Resource Include="Migrations\SeedData\ProblemRestraint.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Migrations\SeedData\ProblemTwist.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
       <Resource Include="Migrations\SeedData\shipData.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>

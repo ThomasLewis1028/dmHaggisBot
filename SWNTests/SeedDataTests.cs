@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SWNUniverseGenerator.Models;
 using SWNUniverseGenerator.Migrations;
+using SWNUniverseGenerator.Migrations.SeedData;
 
 namespace SWNTests;
 

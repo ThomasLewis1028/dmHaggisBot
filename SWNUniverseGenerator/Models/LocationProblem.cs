@@ -2,7 +2,7 @@
 
 namespace SWNUniverseGenerator.Models
 {
-    public class Problem : BaseEntity
+    public class LocationProblem : BaseEntity
     {
         
         public String Name => Id;

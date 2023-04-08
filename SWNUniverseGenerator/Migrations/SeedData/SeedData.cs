@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.Models;
 
-namespace SWNUniverseGenerator.Migrations
+namespace SWNUniverseGenerator.Migrations.SeedData
 {
     public class DbInitializer
     {
@@ -43,19 +43,29 @@ namespace SWNUniverseGenerator.Migrations
 
             var worldTagData = Deserialize<WorldTag>("WorldTag.json");
             var tagData = GetTagData(worldTagData);
-            
+
             modelBuilder.Entity<Tag>().HasData(tagData);
             modelBuilder.Entity<WorldEnemy>().HasData(GetWorldEnemyData(worldTagData, tagData));
             modelBuilder.Entity<WorldFriend>().HasData(GetWorldFriendData(worldTagData, tagData));
             modelBuilder.Entity<WorldComplication>().HasData(GetWorldComplicationData(worldTagData, tagData));
             modelBuilder.Entity<WorldPlace>().HasData(GetWorldPlaceData(worldTagData, tagData));
             modelBuilder.Entity<WorldThing>().HasData(GetWorldThingData(worldTagData, tagData));
-            
+
             modelBuilder.Entity<TechLevel>().HasData(GetTechLevelData());
             modelBuilder.Entity<Temperature>().HasData(GetTemperatureData());
             modelBuilder.Entity<Population>().HasData(GetPopulationData());
             modelBuilder.Entity<Atmosphere>().HasData(GetAtmosphereData());
             modelBuilder.Entity<Biosphere>().HasData(GetBiosphereData());
+
+            var problemConflictData = Deserialize<ProblemConflictData>("ProblemConflicts.json");
+            var problemRestraintData = Deserialize<ProblemRestraintData>("ProblemRestraint.json");
+            var problemTwistData = Deserialize<ProblemTwistData>("ProblemTwist.json");
+            
+            modelBuilder.Entity<ProblemConflictSituations>()
+                .HasData(GetProblemConflictSituationsData(problemConflictData));
+            modelBuilder.Entity<ProblemConflictFocuses>().HasData(GetProblemConflictFocusesData(problemConflictData));
+            modelBuilder.Entity<ProblemRestraints>().HasData(GetProblemRestraintsData(problemRestraintData));
+            modelBuilder.Entity<ProblemTwists>().HasData(GetProblemTwistsData(problemTwistData));
         }
 
         public List<WorldEnemy> GetWorldEnemyData(List<WorldTag> worldTagData, List<Tag> tagData)
@@ -64,7 +74,7 @@ namespace SWNUniverseGenerator.Migrations
 
             foreach (var wtd in worldTagData)
             {
-                foreach(var ene in wtd.Enemies)
+                foreach (var ene in wtd.Enemies)
                 {
                     result.Add(new WorldEnemy()
                     {
@@ -83,7 +93,7 @@ namespace SWNUniverseGenerator.Migrations
 
             foreach (var wtd in worldTagData)
             {
-                foreach(var friend in wtd.Friends)
+                foreach (var friend in wtd.Friends)
                 {
                     result.Add(new WorldFriend()
                     {
@@ -95,14 +105,14 @@ namespace SWNUniverseGenerator.Migrations
 
             return result;
         }
-        
+
         public List<WorldComplication> GetWorldComplicationData(List<WorldTag> worldTagData, List<Tag> tagData)
         {
             var result = new List<WorldComplication>();
 
             foreach (var wtd in worldTagData)
             {
-                foreach(var complication in wtd.Complications)
+                foreach (var complication in wtd.Complications)
                 {
                     result.Add(new WorldComplication()
                     {
@@ -114,14 +124,14 @@ namespace SWNUniverseGenerator.Migrations
 
             return result;
         }
-        
+
         public List<WorldPlace> GetWorldPlaceData(List<WorldTag> worldTagData, List<Tag> tagData)
         {
             var result = new List<WorldPlace>();
 
             foreach (var wtd in worldTagData)
             {
-                foreach(var place in wtd.Places)
+                foreach (var place in wtd.Places)
                 {
                     result.Add(new WorldPlace()
                     {
@@ -133,14 +143,14 @@ namespace SWNUniverseGenerator.Migrations
 
             return result;
         }
-        
+
         public List<WorldThing> GetWorldThingData(List<WorldTag> worldTagData, List<Tag> tagData)
         {
             var result = new List<WorldThing>();
 
             foreach (var wtd in worldTagData)
             {
-                foreach(var thing in wtd.Things)
+                foreach (var thing in wtd.Things)
                 {
                     result.Add(new WorldThing()
                     {
@@ -152,11 +162,11 @@ namespace SWNUniverseGenerator.Migrations
 
             return result;
         }
-        
+
         public List<Tag> GetTagData(List<WorldTag> worldTagData)
         {
             var result = new List<Tag>();
-            
+
             foreach (var wtd in worldTagData)
             {
                 result.Add(new Tag()
@@ -175,25 +185,25 @@ namespace SWNUniverseGenerator.Migrations
             var result = Deserialize<Biosphere>("Biosphere.json");
             return result;
         }
-        
+
         public List<Atmosphere> GetAtmosphereData()
         {
             var result = Deserialize<Atmosphere>("Atmosphere.json");
             return result;
         }
-        
+
         public List<Population> GetPopulationData()
         {
             var result = Deserialize<Population>("Population.json");
             return result;
         }
-        
+
         public List<Temperature> GetTemperatureData()
         {
             var result = Deserialize<Temperature>("Temperature.json");
             return result;
         }
-        
+
         public List<TechLevel> GetTechLevelData()
         {
             var result = Deserialize<TechLevel>("TechLevel.json");
@@ -314,6 +324,42 @@ namespace SWNUniverseGenerator.Migrations
             return result;
         }
 
+        public List<ProblemConflictSituations> GetProblemConflictSituationsData(List<ProblemConflictData> problemsList)
+        {
+            var result = new List<ProblemConflictSituations>();
+
+            AddProblemConflictSituations(problemsList, result);
+
+            return result;
+        }
+
+        public List<ProblemConflictFocuses> GetProblemConflictFocusesData(List<ProblemConflictData> problemsList)
+        {
+            var result = new List<ProblemConflictFocuses>();
+
+            AddProblemConflictFocuses(problemsList, result);
+
+            return result;
+        }
+
+        public List<ProblemRestraints> GetProblemRestraintsData(List<ProblemRestraintData> restraintsList)
+        {
+            var result = new List<ProblemRestraints>();
+
+            AddProblemRestraints(restraintsList, result);
+
+            return result;
+        }
+
+        public List<ProblemTwists> GetProblemTwistsData(List<ProblemTwistData> twistsList)
+        {
+            var result = new List<ProblemTwists>();
+
+            AddProblemTwists(twistsList, result);
+
+            return result;
+        }
+
         public void AddNames(List<String> list, List<Naming> namings, String nameType)
         {
             foreach (var s in list)
@@ -334,7 +380,7 @@ namespace SWNUniverseGenerator.Migrations
         {
             foreach (var spec in shipSpec)
             {
-                var newSpec = new Spec()
+                var newSpec = new Spec
                 {
                     SpecName = spec.PresetName,
                     HullId = hulls.Find(h => h.Type == spec.HullType).Id
@@ -346,63 +392,91 @@ namespace SWNUniverseGenerator.Migrations
         public void AddSpecArmament(List<ShipSpec> shipSpec, List<Spec> specs, List<Armament> armaments,
             List<SpecArmament> specArmaments)
         {
-            foreach (var spec in shipSpec)
-            {
-                if (spec.Weapons != null)
+            specArmaments.AddRange(from spec in shipSpec
+                where spec.Weapons != null
+                from weapon in spec.Weapons
+                select new SpecArmament
                 {
-                    foreach (var weapon in spec.Weapons)
-                    {
-                        var newSpec = new SpecArmament()
-                        {
-                            SpecId = specs.Find(s => s.SpecName == spec.PresetName).Id,
-                            ArmamentId = armaments.Find(a => a.Type == weapon).Id
-                        };
-
-                        specArmaments.Add(newSpec);
-                    }
-                }
-            }
+                    SpecId = specs.Find(s => s.SpecName == spec.PresetName).Id,
+                    ArmamentId = armaments.Find(a => a.Type == weapon).Id
+                });
         }
 
         public void AddSpecDefense(List<ShipSpec> shipSpec, List<Spec> specs, List<Defense> defenses,
             List<SpecDefense> specDefenses)
         {
-            foreach (var spec in shipSpec)
-            {
-                if (spec.Defenses != null)
+            specDefenses.AddRange(from spec in shipSpec
+                where spec.Defenses != null
+                from defense in spec.Defenses
+                select new SpecDefense
                 {
-                    foreach (var defense in spec.Defenses)
-                    {
-                        var newSpec = new SpecDefense()
-                        {
-                            SpecId = specs.Find(s => s.SpecName == spec.PresetName).Id,
-                            DefenseId = defenses.Find(a => a.Type == defense).Id
-                        };
-
-                        specDefenses.Add(newSpec);
-                    }
-                }
-            }
+                    SpecId = specs.Find(s => s.SpecName == spec.PresetName).Id,
+                    DefenseId = defenses.Find(a => a.Type == defense).Id
+                });
         }
 
         public void AddSpecFitting(List<ShipSpec> shipSpec, List<Spec> specs, List<Fitting> fittings,
             List<SpecFitting> specFittings)
         {
-            foreach (var spec in shipSpec)
-            {
-                if (spec.Fittings != null)
+            specFittings.AddRange(from spec in shipSpec
+                where spec.Fittings != null
+                from fitting in spec.Fittings
+                select new SpecFitting
                 {
-                    foreach (var fitting in spec.Fittings)
-                    {
-                        var newSpec = new SpecFitting()
-                        {
-                            SpecId = specs.Find(s => s.SpecName == spec.PresetName).Id,
-                            FittingId = fittings.Find(a => a.Type == fitting).Id
-                        };
+                    SpecId = specs.Find(s => s.SpecName == spec.PresetName).Id,
+                    FittingId = fittings.Find(a => a.Type == fitting).Id
+                });
+        }
 
-                        specFittings.Add(newSpec);
-                    }
-                }
+        public void AddProblemConflictSituations(List<ProblemConflictData> conflictList,
+            List<ProblemConflictSituations> problemConflictSituationsList)
+        {
+            problemConflictSituationsList.AddRange(from conflict in conflictList
+                where conflict.Situations != null
+                from situation in conflict.Situations
+                select new ProblemConflictSituations
+                {
+                    Type = conflict.Type,
+                    Situation = situation
+                });
+        }
+
+        public void AddProblemConflictFocuses(List<ProblemConflictData> conflictList,
+            List<ProblemConflictFocuses> problemConflictFocusesList)
+        {
+            problemConflictFocusesList.AddRange(from conflict in conflictList
+                where conflict.Focuses != null
+                from focus in conflict.Focuses
+                select new ProblemConflictFocuses
+                {
+                    Type = conflict.Type,
+                    Focus = focus
+                });
+        }
+
+        public void AddProblemRestraints(List<ProblemRestraintData> restraintList,
+            List<ProblemRestraints> problemRestraintsList)
+        {
+
+            foreach (var restraint in restraintList)
+            {
+                problemRestraintsList.Add(new ProblemRestraints
+                {
+                    Restraint = restraint.Restraint
+                });
+            }
+        }
+
+        public void AddProblemTwists(List<ProblemTwistData> twistList,
+            List<ProblemTwists> problemTwistsList)
+        {
+
+            foreach (var twist in twistList)
+            {
+                problemTwistsList.Add(new ProblemTwists
+                {
+                    Twist = twist.Twist
+                });
             }
         }
 

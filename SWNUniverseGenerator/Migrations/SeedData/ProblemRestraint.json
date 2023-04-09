@@ -1,24 +1,82 @@
-﻿{
-  "Restraints": [
-    "The government is cracking down on the conflict",
-    "One side seems invincibly stronger to the other",
-    "Both sides have “doomsday” info or devices",
-    "A prior conflict ended horribly for both of them",
-    "Foreign participants are keeping things tamped",
-    "Elements of both sides seek accommodation",
-    "The conflict is only viable in a narrow location",
-    "Catastrophic cost of losing a direct showdown",
-    "Each thinks they’ll win without further exertion",
-    "They expect a better opening to appear soon",
-    "Former ties of friendship or family restrain them",
-    "Religious principles are constraining them",
-    "One side’s still licking their wounds after a failure",
-    "They’re building up force to make sure they win",
-    "Their cultural context makes open struggle",
-    "They expect an outside power to hand them a win",
-    "They’re still searching for a way to get at their goal",
-    "One side mistakenly thinks they’ve already won",
-    "A side is busy integrating a recent success",
+﻿[
+    {
+        "Restraint": 
+        "The government is cracking down on the conflict"
+    },
+    {
+        "Restraint":
+        "One side seems invincibly stronger to the other"
+    },
+    {
+        "Restraint":
+    "Both sides have “doomsday” info or devices"
+    },
+    {
+        "Restraint":
+    "A prior conflict ended horribly for both of them"
+    },
+    {
+        "Restraint":
+    "Foreign participants are keeping things tamped"
+    },
+    {
+        "Restraint":
+    "Elements of both sides seek accommodation"
+    },
+    {
+        "Restraint":
+    "The conflict is only viable in a narrow location"
+    },
+    {
+        "Restraint":
+    "Catastrophic cost of losing a direct showdown"
+    },
+    {
+        "Restraint":
+    "Each thinks they’ll win without further exertion"
+    },
+    {
+        "Restraint":
+    "They expect a better opening to appear soon"
+    },
+    {
+        "Restraint":
+    "Former ties of friendship or family restrain them"
+    },
+    {
+        "Restraint":
+    "Religious principles are constraining them"
+    },
+    {
+        "Restraint":
+    "One side’s still licking their wounds after a failure"
+    },
+    {
+        "Restraint":
+    "They’re building up force to make sure they win"
+    },
+    {
+        "Restraint":
+    "Their cultural context makes open struggle"
+    },
+    {
+        "Restraint":
+    "They expect an outside power to hand them a win"
+    },
+    {
+        "Restraint":
+    "They’re still searching for a way to get at their goal"
+    },
+    {
+        "Restraint":
+    "One side mistakenly thinks they’ve already won"
+    },
+    {
+        "Restraint":
+    "A side is busy integrating a recent success"
+    },
+    {
+        "Restraint":
     "An outside power threatens both sides"
-  ]
-}
+    }
+]

@@ -58,7 +58,7 @@ namespace SWNUniverseGenerator.Migrations.SeedData
             modelBuilder.Entity<Biosphere>().HasData(GetBiosphereData());
 
             var problemConflictData = Deserialize<ProblemConflictData>("ProblemConflicts.json");
-            var problemRestraintData = Deserialize<ProblemRestraintData>("ProblemRestraint.json");
+            var problemRestraintData =  Deserialize<ProblemRestraintData>("ProblemRestraint.json");
             var problemTwistData = Deserialize<ProblemTwistData>("ProblemTwist.json");
             
             modelBuilder.Entity<ProblemConflictSituations>()

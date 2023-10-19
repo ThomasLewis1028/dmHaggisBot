@@ -45,12 +45,7 @@ namespace SWNUniverseGenerator.CreationTools
                         var star = (Star) entity;
 
                         // Set the random number of Planets that will be created for a given Star 
-                        var pMax = planetDefaultSettings.PlanetRange == null ||
-                                   planetDefaultSettings.PlanetRange.Length == 0 ||
-                                   planetDefaultSettings.PlanetRange[0] == 0 ||
-                                   planetDefaultSettings.PlanetRange[1] == 0
-                            ? Rand.Next(1, 3) // Default Planet count is up-to 3
-                            : Rand.Next(planetDefaultSettings.PlanetRange[0],
+                        var pMax = Rand.Next(planetDefaultSettings.PlanetRange[0],
                                 planetDefaultSettings.PlanetRange[1] + 1);
 
                         var pCount = 0;

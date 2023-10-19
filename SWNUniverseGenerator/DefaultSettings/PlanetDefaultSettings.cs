@@ -9,7 +9,7 @@ namespace SWNUniverseGenerator.DefaultSettings
     {
         public PlanetDefaultSettings()
         {
-            PlanetRange = null;
+            PlanetRange = new []{1, 3};
             Name = null;
             StarId = null;
         }

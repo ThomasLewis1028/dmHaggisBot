@@ -10,7 +10,6 @@ using MudBlazor.Services;
 using SWNBlazorApp.Areas.Identity;
 using SWNBlazorApp.Data;
 using SWNUniverseGenerator.Models;
-using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

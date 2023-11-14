@@ -7,15 +7,15 @@
 
     <ItemGroup>
       <PackageReference Include="Markov" Version="2.0.1-ci0025" />
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.3" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.13" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.3" />
-      <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.3" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.13" />
+      <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.13" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="Svg" Version="3.4.4" />
       <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
       <PackageReference Include="VectSharp" Version="2.4.2" />

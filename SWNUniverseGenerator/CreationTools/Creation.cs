@@ -10,7 +10,7 @@ using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
-using ProblemData = SWNUniverseGenerator.DeserializedObjects.ProblemData;
+// using ProblemData = SWNUniverseGenerator.DeserializedObjects.ProblemData;
 
 namespace SWNUniverseGenerator.CreationTools
 {
@@ -33,7 +33,7 @@ namespace SWNUniverseGenerator.CreationTools
         private StarData _starData;
         private CharData _charData;
         public PoiData PoiData;
-        public ProblemData ProblemData;
+        // public ProblemData ProblemData;
         public SocietyData SocietyData;
         public AlienData AlienData;
 
@@ -241,7 +241,7 @@ namespace SWNUniverseGenerator.CreationTools
         public bool CreateProblems(String universeId, ProblemDefaultSettings problemDefaultSettings)
         {
             // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
-            new ProblemCreation().AddProblems(universeId, problemDefaultSettings);
+            // new ProblemCreation().AddProblems(universeId, problemDefaultSettings);
             
             return true;
         }

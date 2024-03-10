@@ -79,7 +79,8 @@ public class CreationTests
         {
             StarCount = 1,
             StarClass = Star.StarClassEnum.A,
-            StarColor = Star.StarColorEnum.Blue
+            StarColor = Star.StarColorEnum.Blue,
+            Name = "Starry McStarface"
         });
         creation.CreateStars(universeId, new StarDefaultSettings
         {
@@ -126,6 +127,8 @@ public class CreationTests
         Assert.IsTrue(context.Zones.Count(z => z.UniverseId == universeId) > 0);
         Assert.IsTrue(context.Planets.Count(p => p.UniverseId == universeId) > 0);
         Assert.IsTrue(stars.Count == 7);
+        
+        Assert.IsTrue(stars.First().Name == "Starry McStarface");
             
         // Classes
         Assert.IsTrue(stars.Count(s => s.StarClass == Star.StarClassEnum.A) == 1);

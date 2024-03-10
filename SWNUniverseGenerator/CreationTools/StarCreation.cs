@@ -67,34 +67,46 @@ namespace SWNUniverseGenerator.CreationTools
                         while (true)
                         {
                             // Pick a random Name for the Star
-                            // star.Name = Rand.Next(0, 4) == 2
-                            //     ? nameGeneration.GenerateName()
-                            //     : starData.Stars[Rand.Next(0, starLen - 1)];
                             using (var nameRepo = new Repository<Naming>(context))
-                                star.Name = ((Naming) nameRepo.Random(n => n.NameType == "Star")).Name;
+                            {
+                                star.Name = string.IsNullOrEmpty(starDefaultSettings.Name)
+                                    ? ((Naming)nameRepo.Random(n => n.NameType == "Star")).Name
+                                    : starDefaultSettings.Name;
+                            }
 
                             // If that Name exists roll a new one 
                             if (!starRepo.Any(a => a.Name == star.Name && a.UniverseId == universeId))
                                 break;
                         }
 
-                        // Set the color of the Star
+                        // Set the Class of the Star
                         int starRand = Rand.Next(0, 100);
-                        int starClass = starDefaultSettings.StarClass == Star.StarClassEnum.Undefined
+                        star.StarClass = starDefaultSettings.StarClass == Star.StarClassEnum.Undefined
                             ? starRand switch
                             {
-                                >= 0 and < 1 => (int) Star.StarClassEnum.O,
-                                >= 1 and < 2 => (int) Star.StarClassEnum.B,
-                                >= 2 and < 3 => (int) Star.StarClassEnum.A,
-                                >= 3 and < 6 => (int) Star.StarClassEnum.F,
-                                >= 6 and < 13 => (int) Star.StarClassEnum.G,
-                                >= 13 and < 25 => (int) Star.StarClassEnum.K,
-                                _ => (int) Star.StarClassEnum.M
+                                >= 0 and < 1 => Star.StarClassEnum.O,
+                                >= 1 and < 2 => Star.StarClassEnum.B,
+                                >= 2 and < 3 => Star.StarClassEnum.A,
+                                >= 3 and < 6 => Star.StarClassEnum.F,
+                                >= 6 and < 13 => Star.StarClassEnum.G,
+                                >= 13 and < 25 => Star.StarClassEnum.K,
+                                _ => Star.StarClassEnum.M
                             }
-                            : (int) starDefaultSettings.StarClass;
+                            : starDefaultSettings.StarClass;
 
-                        star.StarClass = (Star.StarClassEnum) starClass;
-                        star.StarColor = (Star.StarColorEnum) starClass;
+                        // Set the Class of the Star
+                        star.StarColor = starDefaultSettings.StarColor == Star.StarColorEnum.Undefined
+                            ? starRand switch
+                            {
+                                >= 0 and < 1 => Star.StarColorEnum.Blue,
+                                >= 1 and < 2 => Star.StarColorEnum.White,
+                                >= 2 and < 3 => Star.StarColorEnum.Yellow,
+                                >= 3 and < 6 => Star.StarColorEnum.LightOrange,
+                                >= 6 and < 13 => Star.StarColorEnum.BlueWhite,
+                                >= 13 and < 25 => Star.StarColorEnum.OrangeRed,
+                                _ => Star.StarColorEnum.YellowWhite
+                            }
+                            : starDefaultSettings.StarColor;
 
                         // Add the Star to the Universe
                         stars.Add(star);

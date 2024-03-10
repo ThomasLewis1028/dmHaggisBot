@@ -26,6 +26,14 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// </summary>
         public String Name { get; set; }
         
+        /// <summary>
+        /// Store the Class of a Star you would like to create
+        /// </summary>
         public Star.StarClassEnum StarClass { get; set; }
+        
+        /// <summary>
+        /// Store the Color of a Star you would like to create
+        /// </summary>
+        public Star.StarColorEnum StarColor { get; set; }
     }
 }

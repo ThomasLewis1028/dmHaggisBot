@@ -69,9 +69,9 @@ namespace SWNUniverseGenerator.Models
         public String SkinCol { get; set; }
         
         /// <summary>
-        /// A string value of a Character's Height
+        /// An int value of a Character's Height
         /// </summary>
-        public String Height { get; set; }
+        public Int32 Height { get; set; }
         
         /// <summary>
         /// A string value of a Character's Title

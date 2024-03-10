@@ -184,7 +184,7 @@ public class DatabaseTests
                 Last = context.Naming.Where(n => n.NameType == "LastName").Skip(i).Take(1).First().Name,
                 Age = 25+i,
                 Gender = Character.GenderEnum.Male,
-                Height = "7.0",
+                Height = 175,
                 Title = context.Naming.Where(n => n.NameType == "Noun").Skip(i).Take(1).First().Name,
                 CrimeChance = i,
                 EyeCol = context.Naming.Where(n => n.NameType == "EyeColor").Skip(i).Take(1).First().Name,

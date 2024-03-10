@@ -13,7 +13,6 @@ namespace SWNUniverseGenerator.DefaultSettings
             Name = null;
             GridX = 8;
             GridY = 10;
-            Overwrite = false;
         }
 
         /// <summary>
@@ -30,11 +29,5 @@ namespace SWNUniverseGenerator.DefaultSettings
         ///     This value should be an integer Y for your height
         /// </summary>
         public Int32? GridY { get; set; }
-
-        /// <summary>
-        ///     Flag for overwriting a previous universe file
-        ///     Y for yes, N for no
-        /// </summary>
-        public Boolean Overwrite { get; set; }
     }
 }

@@ -148,10 +148,9 @@ namespace SWNUniverseGenerator.CreationTools
                             float modifer = i == 1 ? 2F : i * 1.5F;
                             float currentOrbit = orbitSize * modifer;
 
-                            Rectangle orbitRect = CircleToRectangle(hex.MidPoint, currentOrbit);
                             GraphicsPath orbitPath = new GraphicsPath();
 
-                            orbitPath.Arc(orbitRect.Location, orbitRect.Size.Width, 0, 360);
+                            orbitPath.Arc(hex.MidPoint, currentOrbit, 0, 360);
                             g.StrokePath(orbitPath, orbitPen);
 
                             int angle = new Random().Next(0, 360);
@@ -160,10 +159,9 @@ namespace SWNUniverseGenerator.CreationTools
                             Point planetPoint = new Point(hex.MidPoint.X + (currentOrbit * (float)Math.Cos(radian)),
                                 hex.MidPoint.Y + (currentOrbit * (float)Math.Sin(radian)));
 
-                            Rectangle planetRect = CircleToRectangle(planetPoint, planetSize);
                             GraphicsPath planetPath = new GraphicsPath();
 
-                            planetPath.Arc(planetRect.Location, planetRect.Size.Width, 0, 360);
+                            planetPath.Arc(planetPoint, planetSize, 0, 360);
                             g.FillPath(planetPath, planetBrush);
                         }
                     }
@@ -172,8 +170,6 @@ namespace SWNUniverseGenerator.CreationTools
                     if (star != null)
                     {
                         Brush starBrush = orangeRedStarBrush;
-
-                        Rectangle starRect = CircleToRectangle(hex.MidPoint, starSize);
 
                         starBrush = star.StarColor switch
                         {
@@ -188,7 +184,7 @@ namespace SWNUniverseGenerator.CreationTools
                         };
 
                         GraphicsPath starPath = new GraphicsPath();
-                        starPath.Arc(starRect.Location, starRect.Size.Width, 0, 360);
+                        starPath.Arc(hex.MidPoint, starSize, 0, 360);
                         g.FillPath(starPath, starBrush);
                         
                         g.StrokeText(hex.TextLocation, star.Name,

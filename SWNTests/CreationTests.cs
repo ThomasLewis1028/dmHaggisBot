@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SWNUniverseGenerator.CreationTools;
@@ -12,6 +13,43 @@ namespace SWNTests;
 [TestClass]
 public class CreationTests
 {
+    
+    /// <summary>
+    /// Test the creation of a grid with a width of 20x20
+    /// </summary>
+    /// <param name="universeName"></param>
+    /// <param name="cleanup"></param>
+    [TestMethod, TestCategory("DatabaseTest")]
+    [DataRow("Test Grid Creation", true)]
+    public void TestGridCreation(String universeName, Boolean cleanup)
+    {
+        using var context = new UniverseContext();
+        Creation creation = new Creation();
+
+        string universeId =
+            creation.CreateUniverse(new UniverseDefaultSettings
+                {
+                    Name = universeName
+                },
+                context);
+
+        Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) > 0);
+        Assert.IsTrue(context.Zones.Count(s => s.UniverseId == universeId) > 0);
+
+        var starMapPath = creation.CreateStarMap(universeId);
+
+        Assert.IsTrue(File.Exists(starMapPath));
+
+        if (cleanup)
+        {
+            creation.DeleteUniverse(universeId);
+
+            Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) == 0);
+            Assert.IsTrue(context.Zones.Count(s => s.UniverseId == universeId) == 0);
+            Assert.IsFalse(File.Exists(starMapPath));
+        }
+    }
+    
     /// <summary>
     /// Test the creation of the full universe.
     /// WARNING: This may result in incomplete coverage as it will heavily rely on the randomization of generation
@@ -210,7 +248,7 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
-    [DataRow("Test Planet Class Creation", true)]
+    [DataRow("Test Planet Class Creation", false)]
     public void TestPlanetClassCreation(String universeName, Boolean cleanup)
     {
         using var context = new UniverseContext();
@@ -235,9 +273,9 @@ public class CreationTests
         Assert.IsTrue(context.Planets.First(s => s.UniverseId == universeId).UniverseId == universeId);
         Assert.IsTrue(context.Planets.Count(p => p.UniverseId == universeId && p.Name == "Planet McPlanetface") == 1);
 
-        // var starMapPath = creation.CreateStarMap(universeId);
+        var starMapPath = creation.CreateStarMap(universeId);
 
-        // Assert.IsTrue(File.Exists(starMapPath));
+        Assert.IsTrue(File.Exists(starMapPath));
 
         if (cleanup)
         {
@@ -247,7 +285,7 @@ public class CreationTests
             Assert.IsTrue(context.Zones.Count(s => s.UniverseId == universeId) == 0);
             Assert.IsTrue(context.Stars.Count(s => s.UniverseId == universeId) == 0);
             Assert.IsTrue(context.Planets.Count(s => s.UniverseId == universeId) == 0);
-            // Assert.IsFalse(File.Exists(starMapPath));
+            Assert.IsFalse(File.Exists(starMapPath));
         }
     }
 

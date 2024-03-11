@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.Models;
+using VectSharp;
+using VectSharp.SVG;
 
 namespace SWNUniverseGenerator.CreationTools
 {
     public class GridCreation
     {
-        private static float _hypotenuse = 1000; // hypotenuse for each side of the hex
+        private static float _hypotenuse = 100; // hypotenuse for each side of the hex
         private const int IntAngle = 30; // angle in degrees because I can actually write that down
         private const double IntRadians = IntAngle * (Math.PI / 180); // degrees to radians
-        private static readonly float Cosign = (float) Math.Cos(IntRadians); // cos(30)
-        private static readonly float Sine = (float) Math.Sin(IntRadians); // sin(30)
+        private static readonly float Cosign = (float)Math.Cos(IntRadians); // cos(30)
+        private static readonly float Sine = (float)Math.Sin(IntRadians); // sin(30)
 
         public String CreateGrid(string universeId, UniverseContext universeContext)
         {
@@ -24,56 +24,58 @@ namespace SWNUniverseGenerator.CreationTools
             var gridY = 0;
             using (var univRepo = new Repository<Universe>(universeContext))
             {
-                gridX = ((Universe) univRepo.Search(u => u.Id == universeId).First()).GridX;
-                gridY = ((Universe) univRepo.Search(u => u.Id == universeId).First()).GridY;
+                gridX = ((Universe)univRepo.Search(u => u.Id == universeId).First()).GridX;
+                gridY = ((Universe)univRepo.Search(u => u.Id == universeId).First()).GridY;
             }
 
             int width =
-                (int) ((gridX * ((_hypotenuse * Sine) + _hypotenuse)) + (_hypotenuse * Sine) + _hypotenuse);
-            int height = (int) ((gridY * (2 * _hypotenuse * Cosign)) + (_hypotenuse * Cosign) + _hypotenuse);
+                (int)((gridX * ((_hypotenuse * Sine) + _hypotenuse)) + (_hypotenuse * Sine) + _hypotenuse);
+            int height = (int)((gridY * (2 * _hypotenuse * Cosign)) + (_hypotenuse * Cosign) + _hypotenuse);
             float gridPenThickness = _hypotenuse * 0.05F;
             float starSize = _hypotenuse * 0.175F;
             float planetSize = _hypotenuse * 0.075F;
             float orbitSize = starSize;
             float orbitThickness = _hypotenuse * 0.001F;
-            float bgStarThickness = _hypotenuse * 0.001F;
+            Size bgStarThickness = new Size(_hypotenuse * 0.001, _hypotenuse * 0.001);
 
-            while (width * height > 500000000)
-            {
-                _hypotenuse -= 10;
+            // while (width * height > 500000000)
+            // {
+            //     _hypotenuse -= 10;
+            //
+            //     width =
+            //         (int)((gridX * ((_hypotenuse * Sine) + _hypotenuse)) + (_hypotenuse * Sine) + _hypotenuse);
+            //     height = (int)((gridY * (2 * _hypotenuse * Cosign)) + (_hypotenuse * Cosign) + _hypotenuse);
+            //
+            //     gridPenThickness = _hypotenuse * 0.05F;
+            //     starSize = _hypotenuse * 0.25F;
+            //     planetSize = _hypotenuse * 0.1F;
+            //     orbitSize = starSize;
+            //     // orbitThickness = _hypotenuse * 0.001F;
+            //     // bgStarThickness = _hypotenuse * 0.001F;
+            // }
+            
+            // Colour wheel
+            Colour bgStarBrush = Colours.White;
+            Colour blueStarBrush = Colour.FromRgb(21, 167, 255);
+            Colour whiteStarBrush = Colours.WhiteSmoke;
+            Colour yellowStarBrush = Colour.FromRgb(255, 241, 104);
+            Colour lightOrangeStarBrush = Colour.FromRgb(255, 185, 50);
+            Colour orangeRedStarBrush = Colour.FromRgb(255, 134, 47);
+            Colour yellowWhiteStarBrush = Colour.FromRgb(255, 251, 174);
+            Colour blueWhiteStarBrush = Colour.FromRgb(150, 219, 255);
+            Colour planetBrush = Colour.FromRgb(0, 66, 7);
+            Colour textBrush = Colours.White;
+            Colour gridPen = Colours.White;
+            Colour orbitPen = Colours.White;
+            Colour background = Colour.FromRgb(8, 8, 17);
 
-                width =
-                    (int) ((gridX * ((_hypotenuse * Sine) + _hypotenuse)) + (_hypotenuse * Sine) + _hypotenuse);
-                height = (int) ((gridY * (2 * _hypotenuse * Cosign)) + (_hypotenuse * Cosign) + _hypotenuse);
+            Page grid = new Page(width, height);
+            Graphics g = grid.Graphics;
+            grid.Background = background;
 
-                gridPenThickness = _hypotenuse * 0.05F;
-                starSize = _hypotenuse * 0.25F;
-                planetSize = _hypotenuse * 0.1F;
-                orbitSize = starSize;
-                orbitThickness = _hypotenuse * 0.001F;
-                bgStarThickness = _hypotenuse * 0.001F;
-            }
-
-            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-            Graphics g = Graphics.FromImage(bmp);
-            g.Clear(Color.FromArgb(8, 8, 17));
-            Pen gridPen = new Pen(Color.White, gridPenThickness);
-            Pen orbitPen = new Pen(Color.White, orbitThickness);
-
-            Brush bgStarBrush = new SolidBrush(Color.White);
-            Brush blueStarBrush = new SolidBrush(Color.FromArgb(21, 167, 255));
-            Brush whiteStarBrush = new SolidBrush(Color.WhiteSmoke);
-            Brush yellowStarBrush = new SolidBrush(Color.FromArgb(255, 241, 104));
-            Brush lightOrangeStarBrush = new SolidBrush(Color.FromArgb(255, 185, 50));
-            Brush orangeRedStarBrush = new SolidBrush(Color.FromArgb(255, 134, 47));
-            Brush yellowWhiteStarBrush = new SolidBrush(Color.FromArgb(255, 251, 174));
-            Brush blueWhiteStarBrush = new SolidBrush(Color.FromArgb(150, 219, 255));
-
-            Brush textBrush = new SolidBrush(Color.White);
-            Brush planetBrush = new SolidBrush(Color.FromArgb(0, 66, 7));
 
             List<Hex> hexList = new();
-            PointF startingPoint = new PointF(_hypotenuse / 2, _hypotenuse / 2);
+            Point startingPoint = new Point(_hypotenuse / 2, _hypotenuse / 2);
 
             // Create the hex grid
             for (int x = 0; x < gridX; x++)
@@ -97,20 +99,32 @@ namespace SWNUniverseGenerator.CreationTools
             {
                 var variation = new Random().Next(0, 100) * .001;
 
-                RectangleF starRect = CircleToRectangle(new PointF()
-                {
-                    X = new Random().Next(0, width),
-                    Y = new Random().Next(0, height)
-                }, (float) (bgStarThickness * variation));
-
-                g.FillEllipse(bgStarBrush, starRect);
+                g.FillRectangle(new Point()
+                    {
+                        X = new Random().Next(0, width),
+                        Y = new Random().Next(0, height)
+                    }, new Size(bgStarThickness.Width * variation, bgStarThickness.Height * variation), bgStarBrush
+                );
             }
 
             // Generate stars and planets
             foreach (var hex in hexList)
             {
-                g.DrawPolygon(gridPen, hex.Points.ToArray());
+                GraphicsPath hexPath = new GraphicsPath();
 
+                // Create the Hex Path
+                hexPath.MoveTo(hex.Points.First());
+                foreach (Point point in hex.Points.Skip(1))
+                {
+                    hexPath.LineTo(point.X, point.Y);
+                }
+
+                hexPath.LineTo(hex.Points.First());
+
+                // Draw the Hex
+                g.StrokePath(hexPath, gridPen, gridPenThickness);
+
+                // Go through each zone
                 using (var zoneRepo = new Repository<Zone>(universeContext))
                 {
                     String zoneId = zoneRepo.Search(z => z.UniverseId == universeId
@@ -123,7 +137,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                     Star star = null;
                     if (new Repository<Star>(universeContext).Count(s => s.ZoneId == zoneId) > 0)
-                        star = (Star) new Repository<Star>(universeContext)
+                        star = (Star)new Repository<Star>(universeContext)
                             .Search(s => s.ZoneId == zoneId).ToList().First();
 
                     // Planets
@@ -134,19 +148,23 @@ namespace SWNUniverseGenerator.CreationTools
                             float modifer = i == 1 ? 2F : i * 1.5F;
                             float currentOrbit = orbitSize * modifer;
 
-                            RectangleF orbitRect = CircleToRectangle(hex.MidPoint, currentOrbit);
+                            Rectangle orbitRect = CircleToRectangle(hex.MidPoint, currentOrbit);
+                            GraphicsPath orbitPath = new GraphicsPath();
 
-                            g.DrawEllipse(orbitPen, orbitRect);
+                            orbitPath.Arc(orbitRect.Location, orbitRect.Size.Width, 0, 360);
+                            g.StrokePath(orbitPath, orbitPen);
 
                             int angle = new Random().Next(0, 360);
                             double radian = (angle * (Math.PI / 180));
 
-                            PointF planetPoint = new PointF(hex.MidPoint.X + (currentOrbit * (float) Math.Cos(radian)),
-                                hex.MidPoint.Y + (currentOrbit * (float) Math.Sin(radian)));
+                            Point planetPoint = new Point(hex.MidPoint.X + (currentOrbit * (float)Math.Cos(radian)),
+                                hex.MidPoint.Y + (currentOrbit * (float)Math.Sin(radian)));
 
-                            RectangleF planetRect = CircleToRectangle(planetPoint, planetSize);
+                            Rectangle planetRect = CircleToRectangle(planetPoint, planetSize);
+                            GraphicsPath planetPath = new GraphicsPath();
 
-                            g.FillEllipse(planetBrush, planetRect);
+                            planetPath.Arc(planetRect.Location, planetRect.Size.Width, 0, 360);
+                            g.FillPath(planetPath, planetBrush);
                         }
                     }
 
@@ -155,7 +173,7 @@ namespace SWNUniverseGenerator.CreationTools
                     {
                         Brush starBrush = orangeRedStarBrush;
 
-                        RectangleF starRect = CircleToRectangle(hex.MidPoint, starSize);
+                        Rectangle starRect = CircleToRectangle(hex.MidPoint, starSize);
 
                         starBrush = star.StarColor switch
                         {
@@ -169,11 +187,15 @@ namespace SWNUniverseGenerator.CreationTools
                             _ => starBrush
                         };
 
-                        g.FillEllipse(starBrush, starRect);
-                        g.DrawString(star.Name,
-                            new Font("Cascadia Mono", _hypotenuse * 0.13F, FontStyle.Bold),
-                            textBrush,
-                            hex.TextLocation);
+                        GraphicsPath starPath = new GraphicsPath();
+                        starPath.Arc(starRect.Location, starRect.Size.Width, 0, 360);
+                        g.FillPath(starPath, starBrush);
+                        
+                        g.StrokeText(hex.TextLocation, star.Name,
+                            new Font(FontFamily.ResolveFontFamily(FontFamily.StandardFontFamilies.TimesBold),
+                                _hypotenuse * 0.13F),
+                            textBrush
+                        );
                     }
                 }
             }
@@ -181,10 +203,9 @@ namespace SWNUniverseGenerator.CreationTools
             var imagePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
                             + "/"
                             + universeId
-                            + ".png";
+                            + ".svg";
 
-            bmp.Save(imagePath,
-                ImageFormat.Png);
+            grid.SaveAsSVG(imagePath);
 
             return imagePath;
         }
@@ -198,14 +219,14 @@ namespace SWNUniverseGenerator.CreationTools
         /// <returns>
         /// An array of points needed to create a hex shape
         /// </returns>
-        private static Hex CreateHex(PointF startingPoint, List<Hex> hexes, (int x, int y) xAndY)
+        private static Hex CreateHex(Point startingPoint, List<Hex> hexes, (int x, int y) xAndY)
         {
             Hex hex = new Hex();
-            float startX = startingPoint.X;
-            float startY = startingPoint.Y;
+            double startX = startingPoint.X;
+            double startY = startingPoint.Y;
 
             // Points starting from top right going counter-clockwise
-            hex.Points = new List<PointF>()
+            hex.Points = new List<Point>()
             {
                 new(startX + (_hypotenuse * Sine + _hypotenuse), startY),
                 new(startX + (_hypotenuse * Sine), startY),
@@ -215,11 +236,13 @@ namespace SWNUniverseGenerator.CreationTools
                 new(startX + (2 * _hypotenuse * Sine + _hypotenuse), startY + (_hypotenuse * Cosign))
             };
 
-            hex.MidRight = new PointF(startX + ((_hypotenuse * Sine) + _hypotenuse), startY + (_hypotenuse * Cosign));
-            hex.BottomLeft = new PointF(startX, startY + (2 * Cosign * _hypotenuse));
-            hex.MidPoint = new PointF(startX + (_hypotenuse * Sine) + (_hypotenuse / 2), startY + (_hypotenuse * Cosign));
-            hex.TopRight = new PointF(hex.MidRight.X, startY - (_hypotenuse * Cosign));
-            hex.TextLocation = new PointF(hex.MidPoint.X - (_hypotenuse * 0.55F), hex.MidPoint.Y + (_hypotenuse * 0.5F));
+            hex.MidRight = new Point(startX + ((_hypotenuse * Sine) + _hypotenuse), startY + (_hypotenuse * Cosign));
+            hex.BottomLeft = new Point(startX, startY + (2 * Cosign * _hypotenuse));
+            hex.MidPoint = new Point(startX + (_hypotenuse * Sine) + (_hypotenuse / 2),
+                startY + (_hypotenuse * Cosign));
+            hex.TopRight = new Point(hex.MidRight.X, startY - (_hypotenuse * Cosign));
+            hex.TextLocation =
+                new Point(hex.MidPoint.X - (_hypotenuse * 0.55F), hex.MidPoint.Y + (_hypotenuse * 0.5F));
             hex.X = xAndY.x;
             hex.Y = xAndY.y;
 
@@ -228,48 +251,31 @@ namespace SWNUniverseGenerator.CreationTools
             return hex;
         }
 
-        private static RectangleF CircleToRectangle(PointF midpoint, float radius)
+        private static Rectangle CircleToRectangle(Point midpoint, float radius)
         {
-            return new RectangleF(midpoint.X - radius,
+            return new Rectangle(midpoint.X - radius,
                 midpoint.Y - radius,
                 radius * 2,
                 radius * 2);
         }
 
-        // public string ImageToBase64String(Image image)
-        // {
-        //     MemoryStream memory = new MemoryStream();
-        //     image.Save(memory, ImageFormat.Png);
-        //     string base64 = Convert.ToBase64String(memory.ToArray());
-        //     memory.Close();
-        //     return base64;
-        // }
-        //
-        // public Image ImageFromBase64String(string base64)
-        // {
-        //     MemoryStream memory = new MemoryStream(Convert.FromBase64String(base64));
-        //     Image result = Image.FromStream(memory);
-        //     memory.Close();
-        //     return result;
-        // }
-
         private class Hex
         {
-            public List<PointF> Points { get; set; }
+            public List<Point> Points { get; set; }
 
             public int X { get; set; }
 
             public int Y { get; set; }
 
-            public PointF MidRight { get; set; }
+            public Point MidRight { get; set; }
 
-            public PointF BottomLeft { get; set; }
+            public Point BottomLeft { get; set; }
 
-            public PointF MidPoint { get; set; }
+            public Point MidPoint { get; set; }
 
-            public PointF TopRight { get; set; }
+            public Point TopRight { get; set; }
 
-            public PointF TextLocation { get; set; }
+            public Point TextLocation { get; set; }
         }
     }
 }

@@ -50,6 +50,7 @@ namespace SWNUniverseGenerator.CreationTools
         /// </summary>
         public Creation()
         {
+            // TODO: Fix name generation scripts
             // MaleFirstNameGeneration = new NameGeneration();
             // MaleFirstNameGeneration.GenerateChain(_charData.MaleName);
             //
@@ -81,9 +82,7 @@ namespace SWNUniverseGenerator.CreationTools
         /// <exception cref="IOException"></exception>
         public string CreateUniverse(UniverseDefaultSettings universeDefaultSettings, UniverseContext context)
         {
-            string universeId;
-
-            universeId = GenerateUniverse(universeDefaultSettings, context);
+            string universeId = GenerateUniverse(universeDefaultSettings, context);
 
             GenerateZones(universeDefaultSettings, context, universeId);
 
@@ -98,24 +97,19 @@ namespace SWNUniverseGenerator.CreationTools
         /// <returns></returns>
         private static string GenerateUniverse(UniverseDefaultSettings universeDefaultSettings, UniverseContext context)
         {
-            string universeId;
-            using (var univRepo = new Repository<Universe>(context))
-            {
-                // Create the Universe.
-                var universe = new Universe()
+            // Create the Universe with the values specified, or defaults
+            var universe = new Universe
                 {
-                    Name = string.IsNullOrEmpty(universeDefaultSettings.Name)
-                        ? "Universe"
-                        : universeDefaultSettings.Name,
-                    GridX = universeDefaultSettings.GridX ?? 8,
-                    GridY = universeDefaultSettings.GridY ?? 10,
+                    Name = universeDefaultSettings.Name,
+                    GridX = universeDefaultSettings.GridX,
+                    GridY = universeDefaultSettings.GridY
                 };
-
-                universeId = universe.Id;
+                
+            // Add the Universe to the database
+            using (var univRepo = new Repository<Universe>(context))
                 univRepo.Add(universe);
-            }
 
-            return universeId;
+            return universe.Id;
         }
 
         /// <summary>

@@ -70,19 +70,13 @@ public class DatabaseTests
             {
                 //Cleanup
                 foreach (var character in context.Characters.Where(c => c.UniverseId == universeId))
-                {
                     context.Characters.Remove(character);
-                }
                 
                 foreach (var planet in context.Planets.Where(c => c.UniverseId == universeId))
-                {
                     context.Planets.Remove(planet);
-                }
                 
                 foreach (var zone in context.Zones.Where(c => c.UniverseId == universeId))
-                {
                     context.Zones.Remove(zone);
-                }
 
                 context.Universes.Remove(context.Universes.First(c => c.Id == universeId));
 

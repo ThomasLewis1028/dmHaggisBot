@@ -26,7 +26,7 @@ public class CreationTests
         using var context = new UniverseContext();
         Creation creation = new Creation();
 
-        string universeId = creation.CreateUniverse(new UniverseDefaultSettings {Name = universeName}, context);
+        string universeId = creation.CreateUniverse(new UniverseDefaultSettings { Name = universeName }, context);
 
         creation.CreateStars(universeId, new StarDefaultSettings());
         creation.CreatePlanets(universeId, new PlanetDefaultSettings());
@@ -73,7 +73,7 @@ public class CreationTests
         using var context = new UniverseContext();
         Creation creation = new Creation();
 
-        string universeId = creation.CreateUniverse(new UniverseDefaultSettings {Name = universeName}, context);
+        string universeId = creation.CreateUniverse(new UniverseDefaultSettings { Name = universeName }, context);
 
         creation.CreateStars(universeId, new StarDefaultSettings
         {
@@ -120,16 +120,16 @@ public class CreationTests
         });
 
         creation.CreatePlanets(universeId, new PlanetDefaultSettings());
-            
+
         List<Star> stars = context.Stars.Where(s => s.UniverseId == universeId).ToList();
-            
+
         Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) > 0);
         Assert.IsTrue(context.Zones.Count(z => z.UniverseId == universeId) > 0);
         Assert.IsTrue(context.Planets.Count(p => p.UniverseId == universeId) > 0);
         Assert.IsTrue(stars.Count == 7);
-        
+
         Assert.IsTrue(stars.First().Name == "Starry McStarface");
-            
+
         // Classes
         Assert.IsTrue(stars.Count(s => s.StarClass == Star.StarClassEnum.A) == 1);
         Assert.IsTrue(stars.Count(s => s.StarClass == Star.StarClassEnum.M) == 1);
@@ -138,7 +138,7 @@ public class CreationTests
         Assert.IsTrue(stars.Count(s => s.StarClass == Star.StarClassEnum.B) == 1);
         Assert.IsTrue(stars.Count(s => s.StarClass == Star.StarClassEnum.F) == 1);
         Assert.IsTrue(stars.Count(s => s.StarClass == Star.StarClassEnum.O) == 1);
-            
+
         // Colors
         Assert.IsTrue(stars.Count(s => s.StarColor == Star.StarColorEnum.Blue) == 1);
         Assert.IsTrue(stars.Count(s => s.StarColor == Star.StarColorEnum.BlueWhite) == 1);
@@ -147,7 +147,7 @@ public class CreationTests
         Assert.IsTrue(stars.Count(s => s.StarColor == Star.StarColorEnum.Yellow) == 1);
         Assert.IsTrue(stars.Count(s => s.StarColor == Star.StarColorEnum.LightOrange) == 1);
         Assert.IsTrue(stars.Count(s => s.StarColor == Star.StarColorEnum.OrangeRed) == 1);
-            
+
         Assert.IsTrue(stars.First().UniverseId == universeId);
 
         // var starMapPath = creation.CreateStarMap(universeId);
@@ -205,7 +205,7 @@ public class CreationTests
             // Assert.IsFalse(File.Exists(starMapPath));
         }
     }
-    
+
     /// <summary>
     /// Test the creation of Planets and all the values they can have
     /// </summary>
@@ -219,17 +219,23 @@ public class CreationTests
         Creation creation = new Creation();
 
         string universeId =
-            creation.CreateUniverse(new UniverseDefaultSettings {Name = universeName}, context);
+            creation.CreateUniverse(new UniverseDefaultSettings { Name = universeName }, context);
 
         creation.CreateStars(universeId, new StarDefaultSettings());
 
         creation.CreatePlanets(universeId, new PlanetDefaultSettings());
+        creation.CreatePlanets(universeId, new PlanetDefaultSettings
+        {
+            Name = "Planet McPlanetface",
+            StarId = new[] { context.Stars.First(s => s.UniverseId == universeId).Id }
+        });
 
         Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) > 0);
         Assert.IsTrue(context.Zones.Count(s => s.UniverseId == universeId) > 0);
         Assert.IsTrue(context.Stars.Count(s => s.UniverseId == universeId) > 0);
         Assert.IsTrue(context.Planets.Count(s => s.UniverseId == universeId) > 0);
         Assert.IsTrue(context.Planets.First(s => s.UniverseId == universeId).UniverseId == universeId);
+        Assert.IsTrue(context.Planets.Count(p => p.Id == universeId && p.Name == "Planet McPlanetface") == 0);
 
         // var starMapPath = creation.CreateStarMap(universeId);
 
@@ -260,11 +266,11 @@ public class CreationTests
         Creation creation = new Creation();
 
         string universeId =
-            creation.CreateUniverse(new UniverseDefaultSettings {Name = universeName}, context);
+            creation.CreateUniverse(new UniverseDefaultSettings { Name = universeName }, context);
 
         creation.CreateStars(universeId, new StarDefaultSettings());
         creation.CreatePlanets(universeId, new PlanetDefaultSettings());
-            
+
         creation.CreateCharacter(universeId, new CharacterDefaultSettings
         {
             Count = 1,
@@ -279,7 +285,7 @@ public class CreationTests
             Title = "Dude",
             Height = 120,
             CurrentPlanetId = context.Planets.First(p => p.UniverseId == universeId).Id,
-            CrimeChance = new[]{50, 50},
+            CrimeChance = new[] { 50, 50 },
             InitialReaction = "Warm"
         });
         creation.CreateCharacter(universeId, new CharacterDefaultSettings
@@ -296,7 +302,7 @@ public class CreationTests
         Assert.IsTrue(context.Planets.Count(s => s.UniverseId == universeId) > 0);
 
         List<Character> chars = context.Characters.Where(c => c.UniverseId == universeId).ToList();
-            
+
         Assert.IsTrue(context.Characters.Count(c => c.UniverseId == universeId) == 2);
         Assert.IsTrue(chars.Count == 2);
         Assert.IsTrue(chars.First().First == "John");
@@ -305,7 +311,7 @@ public class CreationTests
         Assert.IsTrue(chars.First().Age == 25);
         Assert.IsTrue(chars.First().HairStyle == "Long Straight");
         Assert.IsTrue(chars.First().HairCol == "Brown");
-        Assert.IsTrue(chars.First().EyeCol == "Blue"); 
+        Assert.IsTrue(chars.First().EyeCol == "Blue");
         Assert.IsTrue(chars.First().Title == "Dude");
         Assert.IsTrue(chars.First().SkinCol == "Pale");
         Assert.IsTrue(chars.First().Height == 120);
@@ -313,11 +319,11 @@ public class CreationTests
         Assert.IsTrue(chars.First().CrimeChance == 50);
         Assert.IsTrue(chars.First().InitialReaction == "Warm");
         Assert.IsTrue(chars.First().CurrentLocationId == context.Planets.First(p => p.UniverseId == universeId).Id);
-            
+
         Assert.IsTrue(chars.Last().First == "Jane");
         Assert.IsTrue(chars.Last().Last == "Doe");
         Assert.IsTrue(chars.Last().Gender == Character.GenderEnum.Female);
-            
+
         Assert.IsTrue(chars.First().UniverseId == universeId);
 
         // var starMapPath = creation.CreateStarMap(universeId);

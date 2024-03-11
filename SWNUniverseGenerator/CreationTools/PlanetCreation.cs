@@ -62,13 +62,12 @@ namespace SWNUniverseGenerator.CreationTools
                             while (true)
                             {
                                 // Pick a random name out of the list of Planets
-                                // planet.Name = Rand.Next(0, 4) == 2
-                                //     ? nameGeneration.GenerateName()
-                                //     : starData.Planets[Rand.Next(0, planLen)];
-                                
                                 using (var repo = new Repository<Naming>(context))
-                                    planet.Name = ((Naming) repo.Random(n => n.NameType == "Planet")).Name;
-                                
+                                {
+                                    planet.Name = string.IsNullOrEmpty(planetDefaultSettings.Name)
+                                        ? planetDefaultSettings.Name
+                                        : ((Naming)repo.Random(n => n.NameType == "Planet")).Name;
+                                }
                                 // No planets can share a name
                                 if (!planetRepo.Any(a => a.Name == planet.Name))
                                     break;

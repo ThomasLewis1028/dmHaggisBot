@@ -247,14 +247,6 @@ namespace SWNUniverseGenerator.CreationTools
             return hex;
         }
 
-        private static Rectangle CircleToRectangle(Point midpoint, float radius)
-        {
-            return new Rectangle(midpoint.X - radius,
-                midpoint.Y - radius,
-                radius * 2,
-                radius * 2);
-        }
-
         private class Hex
         {
             public List<Point> Points { get; set; }

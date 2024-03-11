@@ -94,7 +94,7 @@ namespace SWNUniverseGenerator.CreationTools
                             }
                             : starDefaultSettings.StarClass;
 
-                        // Set the Class of the Star
+                        // Set the Color of the Star
                         star.StarColor = starDefaultSettings.StarColor == Star.StarColorEnum.Undefined
                             ? starRand switch
                             {

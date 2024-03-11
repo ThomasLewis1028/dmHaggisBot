@@ -6,7 +6,7 @@ namespace SWNUniverseGenerator.Models
         {
             public static string GenerateId(this IEntity myInterface)
             {
-                // Create a Guid and chop everything from the first hyphen and on
+                // Create a Guid
                 var id = Guid.NewGuid().ToString().ToUpper();
                 
                 // Set the ID based on the type of Object

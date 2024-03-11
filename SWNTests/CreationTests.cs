@@ -119,13 +119,11 @@ public class CreationTests
             StarColor = Star.StarColorEnum.OrangeRed
         });
 
-        creation.CreatePlanets(universeId, new PlanetDefaultSettings());
 
         List<Star> stars = context.Stars.Where(s => s.UniverseId == universeId).ToList();
 
         Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) > 0);
         Assert.IsTrue(context.Zones.Count(z => z.UniverseId == universeId) > 0);
-        Assert.IsTrue(context.Planets.Count(p => p.UniverseId == universeId) > 0);
         Assert.IsTrue(stars.Count == 7);
 
         Assert.IsTrue(stars.First().Name == "Starry McStarface");
@@ -235,7 +233,7 @@ public class CreationTests
         Assert.IsTrue(context.Stars.Count(s => s.UniverseId == universeId) > 0);
         Assert.IsTrue(context.Planets.Count(s => s.UniverseId == universeId) > 0);
         Assert.IsTrue(context.Planets.First(s => s.UniverseId == universeId).UniverseId == universeId);
-        Assert.IsTrue(context.Planets.Count(p => p.Id == universeId && p.Name == "Planet McPlanetface") == 0);
+        Assert.IsTrue(context.Planets.Count(p => p.UniverseId == universeId && p.Name == "Planet McPlanetface") == 1);
 
         // var starMapPath = creation.CreateStarMap(universeId);
 

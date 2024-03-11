@@ -10,6 +10,7 @@ using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
+
 // using ProblemData = SWNUniverseGenerator.DeserializedObjects.ProblemData;
 
 namespace SWNUniverseGenerator.CreationTools
@@ -32,7 +33,9 @@ namespace SWNUniverseGenerator.CreationTools
         private WorldInfo _worldInfo;
         private StarData _starData;
         private CharData _charData;
+
         public PoiData PoiData;
+
         // public ProblemData ProblemData;
         public SocietyData SocietyData;
         public AlienData AlienData;
@@ -99,12 +102,12 @@ namespace SWNUniverseGenerator.CreationTools
         {
             // Create the Universe with the values specified, or defaults
             var universe = new Universe
-                {
-                    Name = universeDefaultSettings.Name,
-                    GridX = universeDefaultSettings.GridX,
-                    GridY = universeDefaultSettings.GridY
-                };
-                
+            {
+                Name = universeDefaultSettings.Name,
+                GridX = universeDefaultSettings.GridX,
+                GridY = universeDefaultSettings.GridY
+            };
+
             // Add the Universe to the database
             using (var univRepo = new Repository<Universe>(context))
                 univRepo.Add(universe);
@@ -118,30 +121,30 @@ namespace SWNUniverseGenerator.CreationTools
         /// <param name="universeDefaultSettings"></param>
         /// <param name="context"></param>
         /// <param name="universeId"></param>
-        private static void GenerateZones(UniverseDefaultSettings universeDefaultSettings, UniverseContext context,
+        private static bool GenerateZones(UniverseDefaultSettings universeDefaultSettings, UniverseContext context,
             string universeId)
         {
-            using (var zoneRepo = new Repository<Zone>(context))
+            List<Zone> zones = new();
+            // Add the Zones to the Universe
+            for (var i = 0; i < universeDefaultSettings.GridX; i++)
             {
-                List<Zone> zones = new();
-                // Add the Zones to the Universe
-                for (var i = 0; i < universeDefaultSettings.GridX; i++)
+                for (var j = 0; j < universeDefaultSettings.GridY; j++)
                 {
-                    for (var j = 0; j < universeDefaultSettings.GridY; j++)
+                    Zone zone = new Zone
                     {
-                        Zone zone = new Zone
-                        {
-                            X = i,
-                            Y = j,
-                            UniverseId = universeId
-                        };
+                        X = i,
+                        Y = j,
+                        UniverseId = universeId
+                    };
 
-                        zones.Add(zone);
-                    }
+                    zones.Add(zone);
                 }
-
-                zoneRepo.AddRange(zones);
             }
+
+            using var zoneRepo = new Repository<Zone>(context);
+            bool result = zoneRepo.AddRange(zones);
+            
+            return result;
         }
 
         /// <summary>
@@ -236,7 +239,7 @@ namespace SWNUniverseGenerator.CreationTools
         {
             // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
             // new ProblemCreation().AddProblems(universeId, problemDefaultSettings);
-            
+
             return true;
         }
 
@@ -296,7 +299,7 @@ namespace SWNUniverseGenerator.CreationTools
             // If there are no Planets or Locations for the Problems to be tied to then throw an exception
             using var context = new UniverseContext();
             using var planRepo = new Repository<Planet>(context);
-            
+
             return new GridCreation().CreateGrid(universeId, context);
         }
 
@@ -333,12 +336,11 @@ namespace SWNUniverseGenerator.CreationTools
         /// <param name="universeId"></param>
         public void DeleteUniverse(String universeId)
         {
-            
             File.Delete(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-                         + "/"
-                         + universeId
-                         + ".png");
-            
+                        + "/"
+                        + universeId
+                        + ".png");
+
             using (var context = new UniverseContext())
             {
                 using (var crewRepo = new Repository<CrewMember>(context))

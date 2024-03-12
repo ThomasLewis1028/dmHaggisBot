@@ -162,4 +162,8 @@
       <Compile Remove="Migrations\20230301021722_1.Designer.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Generation\" />
+    </ItemGroup>
+
 </Project>

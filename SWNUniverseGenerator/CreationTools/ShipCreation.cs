@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.DeserializedObjects;
@@ -39,6 +40,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                         shipRepo.Add(ship);
                         
+                        // TODO: Fix this to work with new models
                         // Set the type of ship
                         // if (string.IsNullOrEmpty(shipDefaultSettings.Type))
                         // {
@@ -117,6 +119,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 : shipDefaultSettings.LocationId;
                         }
 
+                        // TODO: Fix this to work with new models
                         // ShipPresets shipPresets = shipData.Presets.Find(a => a.HullType == shipHullObject.Type);
                         // ShipSpec shipSpec = shipPresets.ListPresets[Rand.Next(0, shipPresets.ListPresets.Count)];
                         // ship.CrewSkill = shipSpec.CrewSkill;
@@ -242,6 +245,7 @@ namespace SWNUniverseGenerator.CreationTools
                             }
                         }
 
+                        // TODO: Fix this to work with new models
                         // If the ship has the Ship Bay/Fighter fitting, generate a ship to go in that space
                         // if (ship.Fittings.Any(f => f.Name == "Ship bay/fighter"))
                         // {

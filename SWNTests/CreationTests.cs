@@ -186,9 +186,9 @@ public class CreationTests
 
         Assert.IsTrue(stars.First().UniverseId == universeId);
 
-        // var starMapPath = creation.CreateStarMap(universeId);
+        var starMapPath = creation.CreateStarMap(universeId);
 
-        // Assert.IsTrue(File.Exists(starMapPath));
+        Assert.IsTrue(File.Exists(starMapPath));
 
         if (cleanup)
         {
@@ -198,7 +198,7 @@ public class CreationTests
             Assert.IsTrue(context.Zones.Count(s => s.UniverseId == universeId) == 0);
             Assert.IsTrue(context.Stars.Count(s => s.UniverseId == universeId) == 0);
             Assert.IsTrue(context.Planets.Count(s => s.UniverseId == universeId) == 0);
-            // Assert.IsFalse(File.Exists(starMapPath));
+            Assert.IsFalse(File.Exists(starMapPath));
         }
     }
 

@@ -10,10 +10,13 @@ namespace SWNUniverseGenerator
         private MarkovChain<Char> _chain = new MarkovChain<Char>(2);
         private Random rand = new Random();
 
-        public void GenerateChain(List<String> nameList)
+        public bool GenerateChain(List<String> nameList)
         {
+
             foreach (var name in nameList)
                 _chain.Add(name, 1);
+            return true;
+
         }
 
         public String GenerateName()

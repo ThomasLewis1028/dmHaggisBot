@@ -339,7 +339,7 @@ namespace SWNUniverseGenerator.CreationTools
             File.Delete(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
                         + "/"
                         + universeId
-                        + ".png");
+                        + ".svg");
 
             using (var context = new UniverseContext())
             {

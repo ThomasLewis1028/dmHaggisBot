@@ -248,7 +248,7 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
-    [DataRow("Test Planet Class Creation", false)]
+    [DataRow("Test Planet Class Creation", true)]
     public void TestPlanetClassCreation(String universeName, Boolean cleanup)
     {
         using var context = new UniverseContext();

@@ -1,0 +1,138 @@
+﻿[
+  {
+    "Type": "Money",
+    "Situations": [
+      "Money is owed to a ruthless creditor",
+      "Money was stolen from someone",
+      "A sudden profit opportunity arises",
+      "There’s a hidden stash of wealth",
+      "Money is offered from an evil source"
+    ],
+    "Focuses": [
+      "Organized crime wants it",
+      "Corrupt officials want it",
+      "A sympathetic NPC needs it",
+      "The PCs are owed it",
+      "It will disappear very soon"
+    ]
+  },
+  {
+    "Type": "Revenge",
+    "Situations": [
+      "Someone was murdered",
+      "Someone was stripped of rank",
+      "Someone lost all their wealth",
+      "The PCs are somehow blamed",
+      "Both sides were wronged"
+    ],
+    "Focuses": [
+      "It was wholly justified",
+      "The wrong person is targeted",
+      "The reaction is excessive",
+      "Someone lost someone’s love",
+      "Someone was framed for a crime"
+    ]
+  },
+  {
+    "Type": "Power",
+    "Situations": [
+      "An influential political leader",
+      "A stern community elder",
+      "A ruling patriarch of a large family",
+      "A star expert in a particular industry",
+      "A criminal boss or outcast leader"
+    ],
+    "Focuses": [
+      "They’ve betrayed their own",
+      "Someone’s gunning for them",
+      "They made a terrible choice",
+      "They usurped their position",
+      "They’re oppressing their own"
+    ]
+  },
+  {
+    "Type": "Natural Danger",
+    "Situations": [
+      "A cyclical planetary phenomenon",
+      "A sudden natural disaster",
+      "Sudden loss of vital infrastructure",
+      "The government hushes it up",
+      "Formerly-unknown planetary peril"
+    ],
+    "Focuses": [
+      "Anti-helpful bureaucrats",
+      "Religious zealots panic",
+      "Bandits and looters strike",
+      "Catastrophe from outside meddling",
+      "There’s money in exploiting it"
+    ]
+  },
+  {
+    "Type": "Religion",
+    "Situations": [
+      "Sects that hate each other bitterly",
+      "Zealot reformers forcing new things",
+      "Radical traditionalists fighting back",
+      "Ethnic religious divisions",
+      "Corrupt and decadent institutions"
+    ],
+    "Focuses": [
+      "Charismatic new leader",
+      "Mandatory state religion",
+      "Heavy foreign influence",
+      "Religious purging underway",
+      "Fighting for holy ground"
+    ]
+  },
+  {
+    "Type": "Ideology",
+    "Situations": [
+      "A universally-despised fringe group",
+      "Terrorists with widespread support",
+      "A political party’s goon squads",
+      "Dead-end former regime supporters",
+      "Ruthless ascendant political group"
+    ],
+    "Focuses": [
+      "Terrorist attack",
+      "Street rioting",
+      "Police state crackdown",
+      "Forced expulsions",
+      "Territory under hostile rule"
+    ]
+  },
+  {
+    "Type": "Ethnicity",
+    "Situations": [
+      "A traditionally subordinate group",
+      "An ethnic group from offworld",
+      "A dominant caste or ethnicity",
+      "An alien or transhuman group",
+      "Two groups that hate each other"
+    ],
+    "Focuses": [
+      "Forced immigration",
+      "Official ethnic ghettos",
+      "Rigid separation of groups",
+      "Group statuses have changed",
+      "Rising ethnic violence"
+    ]
+  },
+  {
+    "Type": "Resources",
+    "Situations": [
+      "There’s a cache of illegal materials",
+      "A hidden strike of rare resources",
+      "Cargo has been abandoned as lost",
+      "Land ownership is disputed",
+      "A resource is desperately necessary"
+    ],
+    "Focuses": [
+      "Someone thinks they own it",
+      "The state is looking for it",
+      "It has its own protectors",
+      "Rights to it were stolen",
+      "Offworlders want it badly"
+    ]
+  }
+]

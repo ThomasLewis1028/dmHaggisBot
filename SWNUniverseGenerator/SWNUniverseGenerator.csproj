@@ -1,44 +1,165 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
-        <LangVersion>9</LangVersion>
+        <TargetFramework>net7.0</TargetFramework>
+        <LangVersion>11</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Markov" Version="2.0.1-ci0025" />
-      <PackageReference Include="MongoDB.Driver" Version="2.14.0-beta1" />
-      <PackageReference Include="MongoDB.Driver.Core" Version="2.14.0-beta1" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.13" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.13" />
+      <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.13" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.7" />
+      <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
+      <PackageReference Include="VectSharp.Raster.ImageSharp" Version="2.0.0" />
+      <PackageReference Include="VectSharp.SVG" Version="1.9.0" />
     </ItemGroup>
 
     <ItemGroup>
+      <Resource Include="Migrations\SeedData\alienData.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Migrations\SeedData\pointsOfInterest.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <EmbeddedResource Include="Migrations\SeedData\Origins.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
       <None Remove="Data\StarData.json" />
-      <EmbeddedResource Include="Data\starData.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
       <None Remove="Data\worldTags.json" />
-      <EmbeddedResource Include="Data\worldTags.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
       <None Remove="Data\characterData.json" />
-      <EmbeddedResource Include="Data\characterData.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <None Update="Data\problemData.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Remove="Data\pointsOfInterest.json" />
-      <EmbeddedResource Include="Data\pointsOfInterest.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <None Update="Data\shipData.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Remove="Data\alienData.json" />
-      <EmbeddedResource Include="Data\alienData.json">
+      <None Remove="Migrations\SeedData\beastData.json" />
+      <Resource Include="Migrations\SeedData\beastData.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Migrations\SeedData\problemData.json" />
+      <EmbeddedResource Include="Migrations\SeedData\ProblemConflicts.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
+      <EmbeddedResource Include="Migrations\SeedData\ProblemData.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\shipData.json" />
+      <EmbeddedResource Include="Migrations\SeedData\ProblemRestraint.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Migrations\SeedData\ProblemTwist.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <Resource Include="Migrations\SeedData\shipData.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Migrations\SeedData\shipHulls.json" />
+      <None Remove="Migrations\SeedData\shipFittings.json" />
+      <EmbeddedResource Include="Migrations\SeedData\ShipFitting.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\ShipDefense.json" />
+      <EmbeddedResource Include="Migrations\SeedData\ShipDefense.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\ShipHull.json" />
+      <EmbeddedResource Include="Migrations\SeedData\ShipHull.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\ShipWeapon.json" />
+      <EmbeddedResource Include="Migrations\SeedData\ShipWeapon.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\StarNames.json" />
+      <EmbeddedResource Include="Migrations\SeedData\StarNames.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\PlanetNames.json" />
+      <EmbeddedResource Include="Migrations\SeedData\PlanetNames.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\EyeColor.json" />
+      <EmbeddedResource Include="Migrations\SeedData\EyeColor.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\FemaleName.json" />
+      <EmbeddedResource Include="Migrations\SeedData\FemaleName.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\HairColor.json" />
+      <EmbeddedResource Include="Migrations\SeedData\HairColor.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\HairStyle.json" />
+      <EmbeddedResource Include="Migrations\SeedData\HairStyle.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\InitialReactions.json" />
+      <EmbeddedResource Include="Migrations\SeedData\InitialReactions.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\LastName.json" />
+      <EmbeddedResource Include="Migrations\SeedData\LastName.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\MaleName.json" />
+      <EmbeddedResource Include="Migrations\SeedData\MaleName.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Preset.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Preset.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Noun.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Noun.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Adjective.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Adjective.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Animal.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Animal.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\ShipSpec.json" />
+      <EmbeddedResource Include="Migrations\SeedData\ShipSpec.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Atmosphere.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Atmosphere.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Biosphere.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Biosphere.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Population.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Population.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\TechLevel.json" />
+      <EmbeddedResource Include="Migrations\SeedData\TechLevel.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\Temperature.json" />
+      <EmbeddedResource Include="Migrations\SeedData\Temperature.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Migrations\SeedData\WorldTag.json" />
+      <EmbeddedResource Include="Migrations\SeedData\WorldTag.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Migrations\20230301021722_1.cs" />
+      <Compile Remove="Migrations\20230301021722_1.Designer.cs" />
     </ItemGroup>
 
 </Project>

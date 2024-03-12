@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SWNUniverseGenerator.DeserializedObjects;
+using SWNUniverseGenerator.Models;
 
 /*
  * This is mostly obsolete. I used this function to copy/paste the descriptions from the Stars Without Number rulebook
@@ -15,11 +14,59 @@ using SWNUniverseGenerator.DeserializedObjects;
 
 namespace SWNUniverseGenerator.OBSOLETE
 {
+    [Obsolete]
     public class SetDataFromReader
     {
+        [Obsolete]
+        public SetDataFromReader()
+        {
+            var path =
+                @"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\dmHaggisBot\ReadFromDescriptions\worldTemp.json";
+            var path2 = @"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\dmHaggisBot\worldTags.json";
+
+            var tags = new WorldTagList();
+
+            var wTags =
+                JObject.Parse(
+                    File.ReadAllText(path2));
+
+            foreach (var i in wTags["WorldTags"])
+            {
+                var tag = new WorldTag();
+
+                using (var sr = new StreamReader(Console.OpenStandardInput(), Console.InputEncoding))
+                {
+                    Console.Out.WriteLine(" - " + i);
+                    tag.Type = i.ToString().ToUpper();
+                    Console.Out.WriteLine("Set Input: ");
+
+                    //Allow for one long input with newlines and then split based on the bullets to the left
+                    var input = sr.ReadToEnd();
+                    var input2 = Regex.Split(input, "\n[E,F,C,T,P] ");
+
+                    //Set the data to its proper place and replace all newlines, returns and ctrl+Z's
+                    // tag.Description = input2[0].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "");
+                    // tag.Enemies = input2[1].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
+                    // tag.Friends = input2[2].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
+                    // tag.Complications =
+                    //     input2[3].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
+                    // tag.Things = input2[4].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
+                    // tag.Places = input2[5].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
+                }
+
+                tags.WorldTags.Add(tag);
+            }
+
+            using var file =
+                File.CreateText(path);
+            var serializer = new JsonSerializer();
+            serializer.Serialize(file, tags);
+        }
+
+        [Obsolete]
         public static void LoadNamesFromInput()
         {
-            JObject starData =
+            var starData =
                 JObject.Parse(
                     File.ReadAllText(@"Data\StarData.json"));
 
@@ -60,51 +107,6 @@ namespace SWNUniverseGenerator.OBSOLETE
                 File.CreateText(path);
             var serializer = new JsonSerializer();
             serializer.Serialize(file, names);
-        }
-
-        public SetDataFromReader()
-        {
-            var path =
-                @"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\dmHaggisBot\ReadFromDescriptions\worldTemp.json";
-            var path2 = @"C:\Users\Thomas Lewis\RiderProjects\dmHaggisBot\dmHaggisBot\worldTags.json";
-
-            var tags = new WorldTagList();
-
-            var wTags =
-                JObject.Parse(
-                    File.ReadAllText(path2));
-
-            foreach (var i in wTags["WorldTags"])
-            {
-                var tag = new WorldTag();
-
-                using (var sr = new StreamReader(Console.OpenStandardInput(), Console.InputEncoding))
-                {
-                    Console.Out.WriteLine(" - " + i);
-                    tag.Type = i.ToString().ToUpper();
-                    Console.Out.WriteLine("Set Input: ");
-
-                    //Allow for one long input with newlines and then split based on the bullets to the left
-                    var input = sr.ReadToEnd();
-                    var input2 = Regex.Split(input, "\n[E,F,C,T,P] ");
-
-                    //Set the data to its proper place and replace all newlines, returns and ctrl+Z's
-                    tag.Description = input2[0].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "");
-                    tag.Enemies = input2[1].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
-                    tag.Friends = input2[2].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
-                    tag.Complications =
-                        input2[3].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
-                    tag.Things = input2[4].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
-                    tag.Places = input2[5].Replace("\n", " ").Replace("\r", "").Replace("\u001a", "").Split(", ");
-                }
-
-                tags.WorldTags.Add(tag);
-            }
-
-            using var file =
-                File.CreateText(path);
-            var serializer = new JsonSerializer();
-            serializer.Serialize(file, tags);
         }
     }
 }

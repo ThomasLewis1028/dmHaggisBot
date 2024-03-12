@@ -7,6 +7,12 @@ namespace SWNUniverseGenerator.DefaultSettings
     /// </summary>
     public class PlanetDefaultSettings
     {
+        public PlanetDefaultSettings()
+        {
+            PlanetRange = new []{1, 3};
+            Name = null;
+            StarId = null;
+        }
         /// <summary>
         /// Store an upper and lower bound on the number of planets to be created
         /// </summary>

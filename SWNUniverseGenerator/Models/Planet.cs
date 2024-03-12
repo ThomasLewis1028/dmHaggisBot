@@ -6,18 +6,18 @@ namespace SWNUniverseGenerator.Models
     /// <summary>
     /// Planet object that stores all of the necessary information about a Planet
     /// </summary>
-    public class Planet : ILocation
+    public class Planet : BaseEntity, ILocation
     {
-        /// <summary>
-        /// Implemented from ILocation. Will be the unique ID for a Planet
-        /// </summary>
-        public String Id { get; set; }
 
         /// <summary>
-        /// This is the parent Star that a Planet orbits. This allows for a partially non-relational database
-        /// but still allows you to tie planets to Stars
+        /// This is the Zone in which a planet lies
         /// </summary>
-        public String StarId { get; set; }
+        public String ZoneId { get; set; }
+        
+        /// <summary>
+        /// A string value for the universe a given planet is tied to
+        /// </summary>
+        public String UniverseId { get; set; }
 
         /// <summary>
         /// Implemented from ILocation. This should be a unique name for a Planet
@@ -83,45 +83,45 @@ namespace SWNUniverseGenerator.Models
         /// </summary>
         public String Contact { get; set; }
 
-        public Society Society { get; set; }
-
-        public Ruler Ruler { get; set; }
-
-        public Ruled Ruled { get; set; }
-        
-        public Flavor Flavor { get; set; }
+        // public Society Society { get; set; }
+        //
+        // public Ruler Ruler { get; set; }
+        //
+        // public Ruled Ruled { get; set; }
+        //
+        // public Flavor Flavor { get; set; }
     }
 
     public class Society
     {
         public String PriorCulture { get; set; }
-
+    
         public String OtherSociety { get; set; }
-
+    
         public String MainRemnant { get; set; }
-
+    
         public String SocietyAge { get; set; }
-
+    
         public String ImportantResource { get; set; }
-
+    
         public String FoundingReason { get; set; }
     }
-
+    
     public class Ruler
     {
         public String GeneralSecurity { get; set; }
-
+    
         public String LegitimacySource { get; set; }
-
+    
         public String MainRulerConflict { get; set; }
-
+    
         public String RuleCompletion { get; set; }
-
+    
         public String RuleForm { get; set; }
-
+    
         public String MainPopConflict { get; set; }
     }
-
+    
     public class Ruled
     {
         public String Contentment { get; set; }
@@ -142,15 +142,15 @@ namespace SWNUniverseGenerator.Models
         public String BasicFlavor { get; set; }
         
         public String OutsiderTreatment { get; set; }
-
+    
         public String PrimaryVirtue { get; set; }
-
+    
         public String PrimaryVice { get; set; }
-
+    
         public String XenophiliaDegree { get; set; }
-
+    
         public String PossiblePatron { get; set; }
-
+    
         public String Customs { get; set; }
     }
 }

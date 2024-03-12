@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
 namespace SWNUniverseGenerator.Models
@@ -6,8 +8,10 @@ namespace SWNUniverseGenerator.Models
     /// <summary>
     /// Character object that stores all of the necessary information about a Character
     /// </summary>
-    public class Character : IEntity
+    [Table("Characters")]
+    public class Character : BaseEntity
     {
+
         /// <summary>
         /// An Enum for a list of Genders. Undefined should never be used.
         /// </summary>
@@ -17,13 +21,6 @@ namespace SWNUniverseGenerator.Models
             Female,
             Undefined
         }
-        
-        //private Ship ship;
-
-        /// <summary>
-        /// The unique String ID of a Character. This should be randomly generated to assure uniqueness.
-        /// </summary>
-        public String Id { get; set; }
         
         /// <summary>
         /// First name of the Character
@@ -43,13 +40,13 @@ namespace SWNUniverseGenerator.Models
         /// <summary>
         /// A unique String ID of a Planet to mark the Character's birth planet
         /// </summary>
-        public String BirthPlanet { get; set; }
+        public String BirthPlanetId { get; set; }
         
         /// <summary>
-        /// A unique String ID of a Planet to mark the Character's current Location.
+        /// A unique String ID of an ILocation to mark the Character's current Location.
         /// Location can be a planet, a city, or other various location types. 
         /// </summary>
-        public String CurrentLocation { get; set; }
+        public String CurrentLocationId { get; set; }
         
         /// <summary>
         /// A string value of a Character's HairStyle
@@ -72,43 +69,36 @@ namespace SWNUniverseGenerator.Models
         public String SkinCol { get; set; }
         
         /// <summary>
-        /// A string value of a Character's Height
+        /// An int value of a Character's Height
         /// </summary>
-        public String Height { get; set; }
+        public Int32 Height { get; set; }
         
         /// <summary>
         /// A string value of a Character's Title
         /// </summary>
         public String Title { get; set; }
-        
+
         /// <summary>
         /// A Enum for the Character's Gender.
         /// </summary>
         public GenderEnum Gender { get; set; }
 
         /// <summary>
-        /// This will return the string values stored in Gender as opposed to an index integer
-        /// </summary>
-        /// <returns>String value of the Gender</returns>
-        public String GetGender()
-        {
-            return Gender.ToString();
-        }
-
-        /// <summary>
         /// Returns the concatenation of the First and Last name without storing it in the Json
         /// </summary>
-        [JsonIgnore] public String Name => First + " " + Last;
+        [JsonIgnore] 
+        [NotMapped]
+        public String Name => First + " " + Last;
         
         /// <summary>
         /// An integer representation of the likelihood a character will aide in some shady matter
         /// </summary>
         public Int32 CrimeChance { get; set; }
-        
+
         /// <summary>
-        /// A string value for the ship a given character is tied to
+        /// A string value for the universe a given character is tied to
         /// </summary>
-        public String ShipId { get; set; }
+        public String UniverseId { get; set; }
         
         /// <summary>
         /// A string value for a character's initial reaction to the players

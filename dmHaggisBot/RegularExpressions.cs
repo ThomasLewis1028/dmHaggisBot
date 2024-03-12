@@ -38,5 +38,8 @@ namespace dmHaggisBot
 
         public static readonly Regex AlienCreate =
             new Regex("^(alienCreate|createAlien|ac|ca)($| .*)", RegexOptions.IgnoreCase);
+        
+        public static readonly Regex PrintGrid =
+            new Regex("^(pg|printgrid)($| .*)", RegexOptions.IgnoreCase);
     }
 }

@@ -8,6 +8,27 @@ namespace SWNUniverseGenerator.DefaultSettings
     /// </summary>
     public class CharacterDefaultSettings
     {
+        public CharacterDefaultSettings()
+        {
+            First = null;
+            Last = null;
+            AgeRange = null;
+            Age = -1;
+            HairStyle = null;
+            HairCol = null;
+            EyeCol = null;
+            SkinCol = null;
+            Height = -1;
+            Title = null;
+            Gender = Character.GenderEnum.Undefined;
+            Count = -1;
+            CrimeChance = null;
+            ShipId = null;
+            BirthPlanetId = null;
+            CurrentPlanetId = null;
+            InitialReaction = null;
+        }
+        
         /// <summary>
         /// This value should be a string for a first name
         /// </summary>
@@ -22,7 +43,12 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// This value should be a range using a string.
         /// Generally this will be between 15 and 100
         /// </summary>
-        public Int32[] Age { get; set; }
+        public Int32[] AgeRange { get; set; }
+        
+        /// <summary>
+        /// This value should be the actual age, if one is specified
+        /// </summary>
+        public Int32 Age { get; set; }
 
         /// <summary>
         /// This value should be a description of the hairstyle
@@ -45,9 +71,9 @@ namespace SWNUniverseGenerator.DefaultSettings
         public String SkinCol { get; set; }
         
         /// <summary>
-        /// This value should be a description of the height
+        /// This value should be the height in CM
         /// </summary>
-        public String Height { get; set; }
+        public Int32 Height { get; set; }
 
         /// <summary>
         /// This value should be a character's title
@@ -75,5 +101,20 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// This value should be a specific ShipID that you wish you tie a character to
         /// </summary>
         public String ShipId { get; set; }
+        
+        /// <summary>
+        /// This value should be a specific PlanetID that you wish to set as the character's birth planet
+        /// </summary>
+        public String BirthPlanetId { get; set; }
+        
+        /// <summary>
+        /// This value should be a specific PlanetID that you wish to set as the character's current planet
+        /// </summary>
+        public String CurrentPlanetId { get; set; }
+        
+        /// <summary>
+        /// This value should be a description of the attitude towards the players
+        /// </summary>
+        public String InitialReaction { get; set; }
     }
 }

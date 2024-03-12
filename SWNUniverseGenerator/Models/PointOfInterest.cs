@@ -5,13 +5,9 @@ namespace SWNUniverseGenerator.Models
     /// <summary>
     /// This class stores all of the necessary information about a Point of Interest
     /// </summary>
-    public class PointOfInterest : ILocation
+    public class PointOfInterest : BaseEntity, ILocation
     {
-        /// <summary>
-        /// The ID of the point of interest
-        /// </summary>
-        public String Id { get; set; }
-        
+
         /// <summary>
         /// The name of the point of interest
         /// </summary>
@@ -33,8 +29,10 @@ namespace SWNUniverseGenerator.Models
         public String Situation { get; set; }
 
         /// <summary>
-        /// The star system in which this point of interest may reside
+        /// A string value for the universe a given PointOfInterest is tied to
         /// </summary>
-        public String StarId { get; set; }
+        public String UniverseId { get; set; }
+        
+        public String ZoneId { get; set; }
     }
 }

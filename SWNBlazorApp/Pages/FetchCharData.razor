@@ -1,0 +1,249 @@
+﻿@page "/fetchchardata"
+
+<PageTitle>Character Data</PageTitle>
+
+@using SWNBlazorApp.Data
+@using SWNUniverseGenerator
+@using SWNUniverseGenerator.DefaultSettings
+@using SWNUniverseGenerator.Models
+@inject CharacterService CharacterService
+@inject CreationService CreationService
+@inject UniverseService UniverseService
+@inject Universe CurrentUniverse
+@inject IDialogService DialogService
+
+<h1>Character Data</h1>
+
+<p>All characters in the current universe</p>
+
+@if (characters == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="12">
+            <MudExpansionPanels>
+                @* Character Creation *@
+                <MudExpansionPanel Text="Character Creation">
+                    <MudItem xs="12" sm="6">
+                        <MudPaper Class="pa-4">
+                            <MudForm @ref="form">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudTextField T="String" Label="First Name" Required="false" @bind-Value="newCharFirstName"/>
+                                    </MudItem>
+                                    <MudItem xs="4">
+                                        <MudTextField T="String" Label="Last Name" Required="false" @bind-Value="newCharLastName"/>
+                                    </MudItem>
+                                    <MudItem xs="1">
+                                        <MudTextField T="int" Label="Age" Required="false" @bind-Value="newCharAge"/>
+                                    </MudItem>
+                                    <MudItem xs="3">
+                                        <MudSelect T="Character.GenderEnum" Label="Gender" Required="true" @bind-Value="newCharGender">
+                                            <MudSelectItem Value="@Character.GenderEnum.Undefined"/>
+                                            <MudSelectItem Value="@Character.GenderEnum.Male"/>
+                                            <MudSelectItem Value="@Character.GenderEnum.Female"/>
+                                        </MudSelect>
+                                    </MudItem>
+
+                                    <MudItem xs="4">
+                                        <MudTextField T="String" Label="Hair Color" Required="false" @bind-Value="newCharHairColor"/>
+                                    </MudItem>
+                                    <MudItem xs="4">
+                                        <MudTextField T="String" Label="Hair Style" Required="false" @bind-Value="newCharHairStyle"/>
+                                    </MudItem>
+                                    <MudItem xs="4">
+                                        <MudTextField T="String" Label="Eye Color" Required="false" @bind-Value="newCharEyeColor"/>
+                                    </MudItem>
+
+                                    <MudItem xs="6">
+                                        <MudTextField T="String" Label="Title" Required="false" @bind-Value="newCharTitle"/>
+                                    </MudItem>
+                                    <MudItem xs="6">
+                                        <MudTextField T="String" Label="Ship Id" Required="false" @bind-Value="newCharShipId"/>
+                                    </MudItem>
+
+                                    <MudItem xs="6">
+                                        <MudTextField T="String" Label="Birth Planet ID" Required="false" @bind-Value="newCharBirthPlanetId"/>
+                                    </MudItem>
+                                    <MudItem xs="6">
+                                        <MudTextField T="String" Label="Current Planet ID" Required="false" @bind-Value="newCharCurrPlanetId"/>
+                                    </MudItem>
+
+                                    <MudItem xs="2">
+                                        <MudTextField T="int" Label="Crime Chance %" Required="false" @bind-Value="newCharCrimeChance"/>
+                                    </MudItem>
+                                    <MudItem xs="10">
+                                        <MudTextField T="String" Label="Initial Reaction" Required="false" @bind-Value="newCharInitialReaction"/>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudForm>
+                        </MudPaper>
+                        <MudPaper Class="pa-4 mt-4">
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CreateCharacter())">Create Character</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" OnClick="@(() => form.Reset())" Class="mx-2">Reset</MudButton>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudPaper Class="pa-4 mud-height-full">
+
+                        </MudPaper>
+                    </MudItem>
+                </MudExpansionPanel>
+            </MudExpansionPanels>
+        </MudItem>
+        @* Character List *@
+        <MudItem xs="8">
+            <MudTable Items="@characters.OrderBy(c => c.Id)" Hover="true" SortLabel="Sort By" Filter="new Func<Character, bool>(CharacterFilterFunc)" @bind-SelectedItem="currentCharacter">
+                <ToolBarContent>
+                    <MudText Typo="Typo.h6">Character List</MudText>
+                    <MudSpacer/>
+                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Id)">ID</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Name)">Name</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Title)">Title</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.ShipId)">Ship ID</MudTableSortLabel>
+                    </MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Id" class="cursor-pointer">@context.Id</MudTd>
+                    <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
+                    <MudTd DataLabel="Title" class="cursor-pointer">@context.Title</MudTd>
+                    <MudTd DataLabel="Ship Id" class="cursor-pointer">@context.ShipId</MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager PageSizeOptions="new[] {10, 15, 20, 25, 50, 75, 100, int.MaxValue}"/>
+                </PagerContent>
+            </MudTable>
+        </MudItem>
+
+        <MudItem xs="4">
+            @*Individual Character Display*@
+            @if (currentCharacter != null)
+            {
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6">@currentCharacter.Name</MudText>
+                            <MudText Typo="Typo.body2">@currentCharacter.Id</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        @if(currentCharacter.Title != null)
+                        {
+                            <MudText Typo="Typo.body1">Title: @currentCharacter.Title</MudText>
+                        }
+                        @if (currentCharacter.ShipId != null)
+                        {
+                            <MudText Typo="Typo.body1">Ship Name: @GetShipName(currentCharacter.ShipId)</MudText>
+                            <MudText Typo="Typo.body1">Ship ID: @currentCharacter.ShipId</MudText>
+                        }
+                        <MudText Typo="Typo.body1">Gender: @currentCharacter.Gender</MudText>
+                        <MudText Typo="Typo.body1">Skin Color: @currentCharacter.SkinCol</MudText>
+                        <MudText Typo="Typo.body1">Hair Style: @currentCharacter.HairStyle</MudText>
+                        <MudText Typo="Typo.body1">Hair Color: @currentCharacter.HairCol</MudText>
+                        <MudText Typo="Typo.body1">Eye Color: @currentCharacter.EyeCol</MudText>
+                        <MudText Typo="Typo.body1">Height: @currentCharacter.Height</MudText>
+                        <MudText Typo="Typo.body1">Birth Planet: @currentCharacter.BirthPlanet - @GetPlanetName(@currentCharacter.BirthPlanet)</MudText>
+                        <MudText Typo="Typo.body1">Current Planet: @currentCharacter.CurrentLocation - @GetPlanetName(@currentCharacter.CurrentLocation)</MudText>
+                        <MudText Typo="Typo.body1">Initial Reaction: @currentCharacter.InitialReaction</MudText>
+                        <MudText Typo="Typo.body1">Crime Chance: @currentCharacter.CrimeChance%</MudText>
+
+                    </MudCardContent>
+                </MudCard>
+            }
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+    private List<Character>? characters;
+    private Character currentCharacter;
+    private string searchString;
+    MudForm form;
+
+    private string newCharFirstName;
+    private string newCharLastName;
+    private int newCharAge;
+    private Character.GenderEnum newCharGender = Character.GenderEnum.Undefined;
+    private string newCharTitle;
+    private string newCharShipId;
+    private string newCharHairColor;
+    private string newCharHairStyle;
+    private string newCharEyeColor;
+    private string newCharBirthPlanetId;
+    private string newCharCurrPlanetId;
+    private int newCharCrimeChance;
+    private string newCharInitialReaction;
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUniverse = UniverseService.GetUniverseAsync().Result;
+        characters = await CharacterService.GetCharactersAsync(CurrentUniverse);
+    }
+
+    private String GetPlanetName(String planetId)
+    {
+        string[] array = {planetId};
+        return Search.SearchUniverseList(UniverseService.GetUniverseAsync().Result, new SearchDefaultSettings() {Id = array}).First().Name;
+    }
+
+    private String GetShipName(String shipId)
+    {
+        string[] array = {shipId};
+        return Search.SearchUniverseList(UniverseService.GetUniverseAsync().Result, new SearchDefaultSettings() {Id = array}).First().Name;
+    }
+
+    private void CreateCharacters()
+    {
+    }
+
+    private void CreateCharacter()
+    {
+        Creation creation = CreationService.GetCreationAsync().Result;
+        Universe universe = UniverseService.GetUniverseAsync().Result;
+
+        creation.CreateCharacter(universe, new CharacterDefaultSettings()
+        {
+            First = newCharFirstName,
+            Last = newCharLastName,
+            Gender = newCharGender,
+            Age = new[] {newCharAge, newCharAge},
+            HairStyle = newCharHairStyle,
+            HairCol = newCharHairColor,
+            EyeCol = newCharEyeColor,
+            Title = newCharTitle,
+            Count = 1,
+            CrimeChance = new[] {newCharCrimeChance, newCharCrimeChance},
+            ShipId = newCharShipId
+        });
+        OnInitializedAsync();
+    }
+
+    private bool CharacterFilterFunc(Character character) => CharacterFilter(character, searchString);
+
+    private bool CharacterFilter(Character character, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (character.Name.Contains(this.searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (character.Id.Contains(this.searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+}

@@ -7,11 +7,11 @@ namespace SWNUniverseGenerator.DefaultSettings
     {
         public Int32 Count { get; set; }
         
-        public List<String> BodyTrait { get; set; }
+        public String BodyTrait { get; set; }
         
         public Int32 BodyTraitCount { get; set; }
         
-        public List<String> Lenses { get; set; }
+        public String Lenses { get; set; }
 
         // public List<String> SocialStructures { get; set; }
         

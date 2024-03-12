@@ -3,10 +3,11 @@ using System.Collections.Generic;
 
 namespace SWNUniverseGenerator.OBSOLETE
 {
+    [Obsolete]
     public class EntityNames
     {
-        public List<String> Stars { get; set; }
-        
-        public List<String> Planets { get; set; }
+        [Obsolete] public List<string> Stars { get; set; }
+
+        [Obsolete] public List<string> Planets { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace SWNUniverseGenerator.DeserializedObjects
 {
+    
     public class AlienData
     {
         public List<String> BodyTraits { get; set; }

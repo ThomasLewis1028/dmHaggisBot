@@ -6,6 +6,7 @@ namespace SWNUniverseGenerator.DeserializedObjects
     /// <summary>
     /// This is where a characterData.json file is deserialized to
     /// </summary>
+    [Obsolete]
     public class CharData
     {
         /// <summary>

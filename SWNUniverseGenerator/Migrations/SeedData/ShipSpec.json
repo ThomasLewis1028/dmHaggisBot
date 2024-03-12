@@ -1,0 +1,297 @@
+﻿[
+  {
+    "HullType": "Strike Fighter",
+    "PresetName": "Fighter",
+    "CrewSkill": 2,
+    "CP": 4,
+    "Weapons": [
+      "Reaper Battery"
+    ],
+    "Defenses": null,
+    "Fittings": [
+      "Spike Drive-1",
+      "Atmospheric configuration"
+    ]
+  },
+  {
+    "HullType": "Strike Fighter",
+    "PresetName": "Bomber",
+    "CrewSkill": 2,
+    "CP": 4,
+    "Weapons": [
+      "Fractal Impact Charge"
+    ],
+    "Defenses": null,
+    "Fittings": [
+      "Spike Drive-1",
+      "Atmospheric configuration"
+    ]
+  },
+  {
+    "HullType": "Shuttle",
+    "PresetName": "Shuttle",
+    "CrewSkill": 1,
+    "CP": 4,
+    "Weapons": null,
+    "Defenses": null,
+    "Fittings": [
+      "Atmospheric configuration",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Spike Drive-1",
+      "Extended life support"
+    ]
+  },
+  {
+    "HullType": "Free Merchant",
+    "PresetName": "Free Merchant",
+    "CrewSkill": 1,
+    "CP": 4,
+    "Weapons": [
+      "Multifocal Laser",
+      "Sandthrower"
+    ],
+    "Defenses": null,
+    "Fittings": [
+      "Atmospheric configuration",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Spike Drive-1",
+      "Fuel scoops",
+      "Fuel bunker"
+    ]
+  },
+  {
+    "HullType": "Patrol Boat",
+    "PresetName": "Patrol Boat",
+    "CrewSkill": 2,
+    "CP": 5,
+    "Weapons": [
+      "Plasma Beam"
+    ],
+    "Defenses": null,
+    "Fittings": [
+      "Armory",
+      "Atmospheric configuration",
+      "Boarding tubes",
+      "Extended stores",
+      "Survey sensor array",
+      "Spike Drive-2",
+      "Ship's locker"
+    ]
+  },
+  {
+    "HullType": "Corvette",
+    "PresetName": "Corvette",
+    "CrewSkill": 2,
+    "CP": 5,
+    "Weapons": [
+      "Sandthrower",
+      "Plasma Beam",
+      "Plasma Beam"
+    ],
+    "Defenses": [
+      "Hardened Polyceramic Overlay"
+    ],
+    "Fittings": [
+      "Armory",
+      "Boarding tubes",
+      "Cargo lighter",
+      "Spike Drive-2",
+      "Extended stores",
+      "Fuel bunker",
+      "Ship's locker"
+    ]
+  },
+  {
+    "HullType": "Heavy Frigate",
+    "PresetName": "Heavy Frigate",
+    "CrewSkill": 2,
+    "CP": 5,
+    "Weapons": [
+      "Torpedo Launcher",
+      "Plasma Beam",
+      "Plasma Beam"
+    ],
+    "Defenses": [
+      "Hardened Polyceramic Overlay"
+    ],
+    "Fittings": [
+      "Armory",
+      "Boarding tubes",
+      "Spike Drive-2",
+      "Fuel scoops",
+      "Drop pod",
+      "Fuel bunker",
+      "Ship's locker"
+    ]
+  },
+  {
+    "HullType": "Bulk Freighter",
+    "PresetName": "Bulk Freighter",
+    "CrewSkill": 1,
+    "CP": 4,
+    "Weapons": [
+      "Plasma Beam"
+    ],
+    "Defenses": null,
+    "Fittings": [
+      "Spike Drive-2",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo lighter",
+      "Fuel bunker",
+      "Ship's locker"
+    ]
+  },
+  {
+    "HullType": "Fleet Cruiser",
+    "PresetName": "Fleet Cruiser",
+    "CrewSkill": 2,
+    "CP": 5,
+    "Weapons": [
+      "Multifocal Laser",
+      "Multifocal Laser",
+      "Smart Cloud",
+      "Gravcannon"
+    ],
+    "Defenses": [
+      "Hardened Polyceramic Overlay"
+    ],
+    "Fittings": [
+      "Spike Drive-3",
+      "Drop pod",
+      "Armory",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Ship's locker",
+      "Boarding tubes",
+      "Fuel scoops",
+      "Advanced nav computer"
+    ]
+  },
+  {
+    "HullType": "Battleship",
+    "PresetName": "Battleship",
+    "CrewSkill": 3,
+    "CP": 6,
+    "Weapons": [
+      "Multifocal Laser",
+      "Multifocal Laser",
+      "Vortex Tunnel Inductor",
+      "Gravcannon",
+      "Lightning Charge Mantle"
+    ],
+    "Defenses": [
+      "Ablative Hull Compartments",
+      "Hardened Polyceramic Overlay"
+    ],
+    "Fittings": [
+      "Armory",
+      "Advanced nav computer",
+      "Boarding tubes",
+      "Cargo space",
+      "Spike Drive-3",
+      "Drop pod",
+      "Fuel bunker",
+      "Fuel scoops",
+      "Ship bay/fighter",
+      "Ship's locker"
+    ]
+  },
+  {
+    "HullType": "Carrier",
+    "PresetName": "Carrier",
+    "CrewSkill": 3,
+    "CP": 6,
+    "Weapons": [
+      "Gravcannon"
+    ],
+    "Defenses": [
+      "Ablative Hull Compartments",
+      "Hardened Polyceramic Overlay"
+    ],
+    "Fittings": [
+      "Armory",
+      "Spike Drive-3",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Cargo space",
+      "Drop pod",
+      "Advanced nav computer",
+      "Lifeboats",
+      "Fuel bunker",
+      "Fuel scoops",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/fighter",
+      "Ship bay/frigate",
+      "Ship bay/frigate",
+      "Ship bay/frigate",
+      "Ship bay/frigate",
+      "Ship bay/frigate",
+      "Ship's locker",
+      "Workshop"
+    ]
+  },
+  {
+    "HullType": "Small Station",
+    "PresetName": "Small Station",
+    "CrewSkill": 3,
+    "CP": 6,
+    "Weapons": null,
+    "Defenses": null,
+    "Fittings": null
+  },
+  {
+    "HullType": "Large Station",
+    "PresetName": "Large Station",
+    "CrewSkill": 3,
+    "CP": 6,
+    "Weapons": null,
+    "Defenses": null,
+    "Fittings": null
+  }
+]

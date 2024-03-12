@@ -55,7 +55,7 @@ namespace SWNUniverseGenerator.CreationTools
             // }
             
             // Colour wheel
-            Colour bgStarBrush = Colours.White;
+            Colour bgStarBrush = Colours.White.WithAlpha(.5);
             Colour blueStarBrush = Colour.FromRgb(21, 167, 255);
             Colour whiteStarBrush = Colours.WhiteSmoke;
             Colour yellowStarBrush = Colour.FromRgb(255, 241, 104);
@@ -66,7 +66,7 @@ namespace SWNUniverseGenerator.CreationTools
             Colour planetBrush = Colour.FromRgb(0, 66, 7);
             Colour textBrush = Colours.White;
             Colour gridPen = Colours.White;
-            Colour orbitPen = Colours.White;
+            Colour orbitPen = Colours.White.WithAlpha(0.25);
             Colour background = Colour.FromRgb(8, 8, 17);
 
             Page grid = new Page(width, height);
@@ -103,7 +103,7 @@ namespace SWNUniverseGenerator.CreationTools
                     {
                         X = new Random().Next(0, width),
                         Y = new Random().Next(0, height)
-                    }, new Size(bgStarThickness.Width * variation, bgStarThickness.Height * variation), bgStarBrush
+                    }, new Size(1, 1), bgStarBrush
                 );
             }
 
@@ -187,7 +187,7 @@ namespace SWNUniverseGenerator.CreationTools
                         starPath.Arc(hex.MidPoint, starSize, 0, 360);
                         g.FillPath(starPath, starBrush);
                         
-                        g.StrokeText(hex.TextLocation, star.Name,
+                        g.FillText(hex.TextLocation, star.Name,
                             new Font(FontFamily.ResolveFontFamily(FontFamily.StandardFontFamilies.TimesBold),
                                 _hypotenuse * 0.13F),
                             textBrush

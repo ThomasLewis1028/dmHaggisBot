@@ -61,7 +61,7 @@ This will _eventually_ be the frontend. The goal is to allow for all creation to
 It's not currently working because I broke it for the database. It'll get there.
 
 ## DEPRECATED - dmHaggisBot 
-THIS IS NO LONGER IN USE. USE AT YOUR OWN RISK.
+THIS IS NO LONGER IN USE. USE AT YOUR OWN RISK. WHEN `Discord.net` UPDATED I DECIDED I DIDN'T CARE TO FIGURE OUT HOW IT WORKED SO I NO LONGER USE THIS.
 
 This is a bot  uses the [Discord.net](https://github.com/discord-net/Discord.Net) API to connect to Discord and speak in a channel. Each task is called asynchronously and uses a set of regular expressions to determine what function to call.
 

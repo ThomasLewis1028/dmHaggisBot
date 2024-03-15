@@ -29,8 +29,8 @@ namespace SWNUniverseGenerator.CreationTools
         /// </returns>
         public bool AddPlanets(String universeId, PlanetDefaultSettings planetDefaultSettings)
         {
-            if (planetDefaultSettings.StarId != null)
-                if (planetDefaultSettings.StarId.Length > 1 && !string.IsNullOrEmpty(planetDefaultSettings.Name))
+            if (planetDefaultSettings.StarIdList != null)
+                if (planetDefaultSettings.StarIdList.Count > 1 && !string.IsNullOrEmpty(planetDefaultSettings.Name))
                     throw new Exception("Cannot combine Range of StarIds and Named Planets");
 
             using (var context = new UniverseContext())
@@ -42,7 +42,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                     using (var repo = new Repository<Star>(context))
                     {
-                        if (planetDefaultSettings.StarId == null)
+                        if (planetDefaultSettings.StarIdList == null)
                         {
                             stars = repo.Search(s => s.UniverseId == universeId).ToList();
                         }
@@ -50,7 +50,7 @@ namespace SWNUniverseGenerator.CreationTools
                         {
                             stars = repo.Search(s =>
                                     s.UniverseId == universeId
-                                    && planetDefaultSettings.StarId.Contains(s.Id))
+                                    && planetDefaultSettings.StarIdList.Contains(s.Id))
                                 .ToList();
                         }
                     }
@@ -61,12 +61,12 @@ namespace SWNUniverseGenerator.CreationTools
                         var star = (Star)entity;
 
                         var pMax = 0;
-                        
+
                         // Set the random number of Planets that will be created for a given Star 
                         if (string.IsNullOrEmpty(planetDefaultSettings.Name))
                         {
-                            pMax = Rand.Next(planetDefaultSettings.PlanetRange[0],
-                                planetDefaultSettings.PlanetRange[1] + 1);
+                            pMax = Rand.Next(planetDefaultSettings.PlanetRange.Item1,
+                                planetDefaultSettings.PlanetRange.Item2 + 1);
                         }
                         // If there is a specified name, only allow one Planet to be created
                         else

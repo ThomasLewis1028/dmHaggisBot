@@ -8,7 +8,7 @@ namespace SWNUniverseGenerator.DefaultSettings
     /// </summary>
     public class CharacterDefaultSettings
     {
-        public CharacterDefaultSettings()
+        public CharacterDefaultSettings(Int32 count = 1000)
         {
             First = null;
             Last = null;
@@ -20,8 +20,8 @@ namespace SWNUniverseGenerator.DefaultSettings
             SkinCol = null;
             Height = -1;
             Title = null;
+            Count = count;
             Gender = Character.GenderEnum.Undefined;
-            Count = -1;
             CrimeChance = null;
             ShipId = null;
             BirthPlanetId = null;

@@ -12,7 +12,8 @@ namespace SWNUniverseGenerator.CreationTools
 {
     public class GridCreation
     {
-        private static float _hypotenuse = 100; // hypotenuse for each side of the hex
+        private static readonly Random Rand = new Random();
+        private static float _hypotenuse = 150; // hypotenuse for each side of the hex
         private const int IntAngle = 30; // angle in degrees because I can actually write that down
         private const double IntRadians = IntAngle * (Math.PI / 180); // degrees to radians
         private static readonly float Cosign = (float)Math.Cos(IntRadians); // cos(30)
@@ -31,29 +32,11 @@ namespace SWNUniverseGenerator.CreationTools
             int width =
                 (int)((gridX * ((_hypotenuse * Sine) + _hypotenuse)) + (_hypotenuse * Sine) + _hypotenuse);
             int height = (int)((gridY * (2 * _hypotenuse * Cosign)) + (_hypotenuse * Cosign) + _hypotenuse);
-            float gridPenThickness = _hypotenuse * 0.05F;
-            float starSize = _hypotenuse * 0.175F;
-            float planetSize = _hypotenuse * 0.075F;
-            float orbitSize = starSize;
-            float orbitThickness = _hypotenuse * 0.001F;
-            Size bgStarThickness = new Size(_hypotenuse * 0.001, _hypotenuse * 0.001);
+            float gridPenThickness = _hypotenuse * 0.01F;
+            float starRadius = _hypotenuse * 0.15F;
+            float planetRadius = starRadius * 0.25F;
+            float orbitRadius = starRadius + planetRadius * 3F;
 
-            // while (width * height > 500000000)
-            // {
-            //     _hypotenuse -= 10;
-            //
-            //     width =
-            //         (int)((gridX * ((_hypotenuse * Sine) + _hypotenuse)) + (_hypotenuse * Sine) + _hypotenuse);
-            //     height = (int)((gridY * (2 * _hypotenuse * Cosign)) + (_hypotenuse * Cosign) + _hypotenuse);
-            //
-            //     gridPenThickness = _hypotenuse * 0.05F;
-            //     starSize = _hypotenuse * 0.25F;
-            //     planetSize = _hypotenuse * 0.1F;
-            //     orbitSize = starSize;
-            //     // orbitThickness = _hypotenuse * 0.001F;
-            //     // bgStarThickness = _hypotenuse * 0.001F;
-            // }
-            
             // Colour wheel
             Colour bgStarBrush = Colours.White.WithAlpha(.5);
             Colour blueStarBrush = Colour.FromRgb(21, 167, 255);
@@ -93,12 +76,24 @@ namespace SWNUniverseGenerator.CreationTools
 
 
             // Generate background stars
-            var bgStarCount = (width * height) * .01;
+            double bgStarCount = (width * height) * .0075;
 
             for (int i = 0; i < bgStarCount; i++)
             {
-                var variation = new Random().Next(0, 100) * .001;
-
+                // Set the Class of the Star
+                int starRand = Rand.Next(0, 100);
+                double opacityRand = Rand.NextDouble();
+                bgStarBrush = starRand switch
+                {
+                    >= 0 and < 1 => blueStarBrush.WithAlpha(opacityRand),
+                    >= 1 and < 2 => whiteStarBrush.WithAlpha(opacityRand),
+                    >= 2 and < 3 => yellowStarBrush.WithAlpha(opacityRand),
+                    >= 3 and < 6 => lightOrangeStarBrush.WithAlpha(opacityRand),
+                    >= 6 and < 13 => blueWhiteStarBrush.WithAlpha(opacityRand),
+                    >= 13 and < 25 => orangeRedStarBrush.WithAlpha(opacityRand),
+                    _ => yellowWhiteStarBrush.WithAlpha(opacityRand)
+                };
+                
                 g.FillRectangle(new Point()
                     {
                         X = new Random().Next(0, width),
@@ -143,26 +138,27 @@ namespace SWNUniverseGenerator.CreationTools
                     // Planets
                     if (planets.Count > 0)
                     {
+                        float currentOrbit = orbitRadius;
                         for (int i = 1; i <= planets.Count; i++)
                         {
-                            float modifer = i == 1 ? 2F : i * 1.5F;
-                            float currentOrbit = orbitSize * modifer;
-
                             GraphicsPath orbitPath = new GraphicsPath();
 
                             orbitPath.Arc(hex.MidPoint, currentOrbit, 0, 360);
                             g.StrokePath(orbitPath, orbitPen);
 
                             int angle = new Random().Next(0, 360);
-                            double radian = (angle * (Math.PI / 180));
+                            double radian = angle * (Math.PI / 180);
 
-                            Point planetPoint = new Point(hex.MidPoint.X + (currentOrbit * (float)Math.Cos(radian)),
+                            Point planetPoint = new Point(
+                                hex.MidPoint.X + (currentOrbit * (float)Math.Cos(radian)),
                                 hex.MidPoint.Y + (currentOrbit * (float)Math.Sin(radian)));
 
                             GraphicsPath planetPath = new GraphicsPath();
 
-                            planetPath.Arc(planetPoint, planetSize, 0, 360);
+                            planetPath.Arc(planetPoint, planetRadius, 0, 360);
                             g.FillPath(planetPath, planetBrush);
+
+                            currentOrbit += planetRadius * 2;
                         }
                     }
 
@@ -184,12 +180,19 @@ namespace SWNUniverseGenerator.CreationTools
                         };
 
                         GraphicsPath starPath = new GraphicsPath();
-                        starPath.Arc(hex.MidPoint, starSize, 0, 360);
+                        starPath.Arc(hex.MidPoint, starRadius, 0, 360);
                         g.FillPath(starPath, starBrush);
-                        
-                        g.FillText(hex.TextLocation, star.Name,
-                            new Font(FontFamily.ResolveFontFamily(FontFamily.StandardFontFamilies.TimesBold),
-                                _hypotenuse * 0.13F),
+
+                        Font font = new Font(FontFamily.ResolveFontFamily(FontFamily.StandardFontFamilies.TimesBold),
+                            _hypotenuse * 0.13F);
+                        Size textSize = font.MeasureText(star.Name);
+
+                        g.FillText(
+                            // Center the text at the midpoint
+                            hex.TextLocation.X - textSize.Width * 0.5,
+                            hex.TextLocation.Y,
+                            star.Name,
+                            font,
                             textBrush
                         );
                     }
@@ -238,7 +241,7 @@ namespace SWNUniverseGenerator.CreationTools
                 startY + (_hypotenuse * Cosign));
             hex.TopRight = new Point(hex.MidRight.X, startY - (_hypotenuse * Cosign));
             hex.TextLocation =
-                new Point(hex.MidPoint.X - (_hypotenuse * 0.55F), hex.MidPoint.Y + (_hypotenuse * 0.5F));
+                new Point(hex.MidPoint.X, hex.MidPoint.Y + (_hypotenuse * 0.5F));
             hex.X = xAndY.x;
             hex.Y = xAndY.y;
 
@@ -247,6 +250,9 @@ namespace SWNUniverseGenerator.CreationTools
             return hex;
         }
 
+        /// <summary>
+        /// Hex class. This is so that the points for an individual hex can be stored and retrieved automatically.
+        /// </summary>
         private class Hex
         {
             public List<Point> Points { get; set; }

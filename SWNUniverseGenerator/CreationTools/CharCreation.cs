@@ -28,15 +28,10 @@ namespace SWNUniverseGenerator.CreationTools
             {
                 using (var charRepo = new Repository<Character>(context))
                 {
-                    // Set the number of characters you want to create. Default is 100.
-                    var count = characterDefaultSettings.Count < 0
-                        ? 100
-                        : characterDefaultSettings.Count;
-
                     List<Character> characters = new();
 
                     var cCount = 0;
-                    while (cCount < count)
+                    while (cCount < characterDefaultSettings.Count)
                     {
                         // Create the character with the specified first and last name
                         var character = new Character()

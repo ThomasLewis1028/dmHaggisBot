@@ -56,4 +56,6 @@ public class NameGenerationTests
         var actual = nameGeneration.GenerateName();
         Assert.IsTrue(Regex.IsMatch(actual, expected));
     }
+    
+    
 }

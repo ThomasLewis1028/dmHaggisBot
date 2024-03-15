@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LibGit2Sharp;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
-using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.CreationTools
@@ -110,6 +108,11 @@ namespace SWNUniverseGenerator.CreationTools
 
                         // Add the Star to the Universe
                         stars.Add(star);
+
+                        if (starDefaultSettings.CreatePlanets)
+                        {
+                            new PlanetCreation().AddPlanets(universeId, new PlanetDefaultSettings());
+                        }
 
                         sCount++;
                     }

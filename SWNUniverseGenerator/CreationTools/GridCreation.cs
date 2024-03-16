@@ -6,14 +6,16 @@ using System.Reflection;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.Models;
 using VectSharp;
+using VectSharp.Filters;
+using VectSharp.Raster.ImageSharp;
 using VectSharp.SVG;
 
 namespace SWNUniverseGenerator.CreationTools
 {
     public class GridCreation
     {
-        private static readonly Random Rand = new Random();
-        private static float _hypotenuse = 150; // hypotenuse for each side of the hex
+        private static readonly Random Rand = new();
+        private const float Hypotenuse = 150; // hypotenuse for each side of the hex
         private const int IntAngle = 30; // angle in degrees because I can actually write that down
         private const double IntRadians = IntAngle * (Math.PI / 180); // degrees to radians
         private static readonly float Cosign = (float)Math.Cos(IntRadians); // cos(30)
@@ -21,8 +23,8 @@ namespace SWNUniverseGenerator.CreationTools
 
         public String CreateGrid(string universeId, UniverseContext universeContext)
         {
-            var gridX = 0;
-            var gridY = 0;
+            int gridX;
+            int gridY;
             using (var univRepo = new Repository<Universe>(universeContext))
             {
                 gridX = ((Universe)univRepo.Search(u => u.Id == universeId).First()).GridX;
@@ -30,35 +32,36 @@ namespace SWNUniverseGenerator.CreationTools
             }
 
             int width =
-                (int)((gridX * ((_hypotenuse * Sine) + _hypotenuse)) + (_hypotenuse * Sine) + _hypotenuse);
-            int height = (int)((gridY * (2 * _hypotenuse * Cosign)) + (_hypotenuse * Cosign) + _hypotenuse);
-            float gridPenThickness = _hypotenuse * 0.01F;
-            float starRadius = _hypotenuse * 0.15F;
+                (int)((gridX * ((Hypotenuse * Sine) + Hypotenuse)) + (Hypotenuse * Sine) + Hypotenuse);
+            int height = (int)((gridY * (2 * Hypotenuse * Cosign)) + (Hypotenuse * Cosign) + Hypotenuse);
+            float gridPenThickness = Hypotenuse * 0.01F;
+            float starRadius = Hypotenuse * 0.15F;
             float planetRadius = starRadius * 0.25F;
             float orbitRadius = starRadius + planetRadius * 3F;
 
             // Colour wheel
-            Colour bgStarBrush = Colours.White.WithAlpha(.5);
-            Colour blueStarBrush = Colour.FromRgb(21, 167, 255);
-            Colour whiteStarBrush = Colours.WhiteSmoke;
-            Colour yellowStarBrush = Colour.FromRgb(255, 241, 104);
-            Colour lightOrangeStarBrush = Colour.FromRgb(255, 185, 50);
-            Colour orangeRedStarBrush = Colour.FromRgb(255, 134, 47);
-            Colour yellowWhiteStarBrush = Colour.FromRgb(255, 251, 174);
-            Colour blueWhiteStarBrush = Colour.FromRgb(150, 219, 255);
-            Colour planetBrush = Colour.FromRgb(0, 66, 7);
-            Colour textBrush = Colours.White;
+            Colour bgStarColor;
+            Colour blueStarColor = Colour.FromRgb(21, 167, 255);
+            Colour whiteStarColor = Colours.WhiteSmoke;
+            Colour yellowStarColor = Colour.FromRgb(255, 241, 104);
+            Colour lightOrangeStarColor = Colour.FromRgb(255, 185, 50);
+            Colour orangeRedStarColor = Colour.FromRgb(255, 134, 47);
+            Colour yellowWhiteStarColor = Colour.FromRgb(255, 251, 174);
+            Colour blueWhiteStarColor = Colour.FromRgb(150, 219, 255);
+            Colour planetColor = Colour.FromRgb(0, 66, 7);
+            Colour textColor = Colours.WhiteSmoke;
             Colour gridPen = Colours.White;
             Colour orbitPen = Colours.White.WithAlpha(0.25);
             Colour background = Colour.FromRgb(8, 8, 17);
 
             Page grid = new Page(width, height);
             Graphics g = grid.Graphics;
+            Graphics starGraphics = new Graphics();
+            Graphics bgGraphics = new Graphics();
             grid.Background = background;
 
-
             List<Hex> hexList = new();
-            Point startingPoint = new Point(_hypotenuse / 2, _hypotenuse / 2);
+            Point startingPoint = new Point(Hypotenuse / 2, Hypotenuse / 2);
 
             // Create the hex grid
             for (int x = 0; x < gridX; x++)
@@ -83,24 +86,28 @@ namespace SWNUniverseGenerator.CreationTools
                 // Set the Class of the Star
                 int starRand = Rand.Next(0, 100);
                 double opacityRand = Rand.NextDouble();
-                bgStarBrush = starRand switch
+                bgStarColor = starRand switch
                 {
-                    >= 0 and < 1 => blueStarBrush.WithAlpha(opacityRand),
-                    >= 1 and < 2 => whiteStarBrush.WithAlpha(opacityRand),
-                    >= 2 and < 3 => yellowStarBrush.WithAlpha(opacityRand),
-                    >= 3 and < 6 => lightOrangeStarBrush.WithAlpha(opacityRand),
-                    >= 6 and < 13 => blueWhiteStarBrush.WithAlpha(opacityRand),
-                    >= 13 and < 25 => orangeRedStarBrush.WithAlpha(opacityRand),
-                    _ => yellowWhiteStarBrush.WithAlpha(opacityRand)
+                    >= 0 and < 1 => blueStarColor.WithAlpha(opacityRand),
+                    >= 1 and < 2 => whiteStarColor.WithAlpha(opacityRand),
+                    >= 2 and < 3 => yellowStarColor.WithAlpha(opacityRand),
+                    >= 3 and < 6 => lightOrangeStarColor.WithAlpha(opacityRand),
+                    >= 6 and < 13 => blueWhiteStarColor.WithAlpha(opacityRand),
+                    >= 13 and < 25 => orangeRedStarColor.WithAlpha(opacityRand),
+                    _ => yellowWhiteStarColor.WithAlpha(opacityRand)
                 };
-                
-                g.FillRectangle(new Point()
+
+
+                bgGraphics.FillRectangle(new Point()
                     {
                         X = new Random().Next(0, width),
                         Y = new Random().Next(0, height)
-                    }, new Size(1, 1), bgStarBrush
+                    }, new Size(1, 1), bgStarColor
                 );
             }
+
+            IFilter bgFilter = new GaussianBlurFilter(0.5);
+            g.DrawGraphics(0, 0, bgGraphics, bgFilter);
 
             // Generate stars and planets
             foreach (var hex in hexList)
@@ -143,8 +150,12 @@ namespace SWNUniverseGenerator.CreationTools
                         {
                             GraphicsPath orbitPath = new GraphicsPath();
 
+                            Graphics orbitGraphics = new Graphics();
                             orbitPath.Arc(hex.MidPoint, currentOrbit, 0, 360);
-                            g.StrokePath(orbitPath, orbitPen);
+                            orbitGraphics.StrokePath(orbitPath, orbitPen);
+
+                            IFilter orbitFilter = new GaussianBlurFilter(.1);
+                            g.DrawGraphics(0, 0, orbitGraphics, orbitFilter);
 
                             int angle = new Random().Next(0, 360);
                             double radian = angle * (Math.PI / 180);
@@ -156,7 +167,7 @@ namespace SWNUniverseGenerator.CreationTools
                             GraphicsPath planetPath = new GraphicsPath();
 
                             planetPath.Arc(planetPoint, planetRadius, 0, 360);
-                            g.FillPath(planetPath, planetBrush);
+                            g.FillPath(planetPath, planetColor);
 
                             currentOrbit += planetRadius * 2;
                         }
@@ -165,26 +176,39 @@ namespace SWNUniverseGenerator.CreationTools
                     // Stars
                     if (star != null)
                     {
-                        Brush starBrush = orangeRedStarBrush;
+                        Colour starColor = orangeRedStarColor;
 
-                        starBrush = star.StarColor switch
+                        starColor = star.StarColor switch
                         {
-                            Star.StarColorEnum.Blue => blueStarBrush,
-                            Star.StarColorEnum.BlueWhite => blueWhiteStarBrush,
-                            Star.StarColorEnum.White => whiteStarBrush,
-                            Star.StarColorEnum.YellowWhite => yellowWhiteStarBrush,
-                            Star.StarColorEnum.Yellow => yellowStarBrush,
-                            Star.StarColorEnum.LightOrange => lightOrangeStarBrush,
-                            Star.StarColorEnum.OrangeRed => orangeRedStarBrush,
-                            _ => starBrush
+                            Star.StarColorEnum.Blue => blueStarColor,
+                            Star.StarColorEnum.BlueWhite => blueWhiteStarColor,
+                            Star.StarColorEnum.White => whiteStarColor,
+                            Star.StarColorEnum.YellowWhite => yellowWhiteStarColor,
+                            Star.StarColorEnum.Yellow => yellowStarColor,
+                            Star.StarColorEnum.LightOrange => lightOrangeStarColor,
+                            Star.StarColorEnum.OrangeRed => orangeRedStarColor,
+                            _ => starColor
                         };
+                        
+                        RadialGradientBrush radialStarBrush = new RadialGradientBrush(
+                            hex.MidPoint,
+                            hex.MidPoint,
+                            starRadius,
+                            new GradientStop(Colours.White, 0),
+                            new GradientStop(starColor, 0.75),
+                            new GradientStop(starColor, 1));
 
                         GraphicsPath starPath = new GraphicsPath();
                         starPath.Arc(hex.MidPoint, starRadius, 0, 360);
-                        g.FillPath(starPath, starBrush);
+                        starGraphics.FillPath(starPath, radialStarBrush);
+
+                        // Create blur the stars to give a less "solid" look
+                        IFilter filter = new GaussianBlurFilter(1.25);
+                        g.DrawGraphics(0, 0, starGraphics, filter);
+
 
                         Font font = new Font(FontFamily.ResolveFontFamily(FontFamily.StandardFontFamilies.TimesBold),
-                            _hypotenuse * 0.13F);
+                            Hypotenuse * 0.13F);
                         Size textSize = font.MeasureText(star.Name);
 
                         g.FillText(
@@ -193,20 +217,26 @@ namespace SWNUniverseGenerator.CreationTools
                             hex.TextLocation.Y,
                             star.Name,
                             font,
-                            textBrush
+                            textColor
                         );
                     }
                 }
             }
 
-            var imagePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-                            + "/"
-                            + universeId
-                            + ".svg";
+            var svgPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                          + "/"
+                          + universeId
+                          + ".svg";
 
-            grid.SaveAsSVG(imagePath);
+            var pngPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                          + "/"
+                          + universeId
+                          + ".png";
 
-            return imagePath;
+            grid.SaveAsSVG(svgPath);
+            grid.SaveAsImage(pngPath);
+
+            return svgPath;
         }
 
         /// <summary>
@@ -227,21 +257,21 @@ namespace SWNUniverseGenerator.CreationTools
             // Points starting from top right going counter-clockwise
             hex.Points = new List<Point>()
             {
-                new(startX + (_hypotenuse * Sine + _hypotenuse), startY),
-                new(startX + (_hypotenuse * Sine), startY),
-                new(startX, startY + (_hypotenuse * Cosign)),
-                new(startX + (_hypotenuse * Sine), startY + (2 * _hypotenuse * Cosign)),
-                new(startX + (_hypotenuse * Sine + _hypotenuse), startY + (2 * _hypotenuse * Cosign)),
-                new(startX + (2 * _hypotenuse * Sine + _hypotenuse), startY + (_hypotenuse * Cosign))
+                new(startX + (Hypotenuse * Sine + Hypotenuse), startY),
+                new(startX + (Hypotenuse * Sine), startY),
+                new(startX, startY + (Hypotenuse * Cosign)),
+                new(startX + (Hypotenuse * Sine), startY + (2 * Hypotenuse * Cosign)),
+                new(startX + (Hypotenuse * Sine + Hypotenuse), startY + (2 * Hypotenuse * Cosign)),
+                new(startX + (2 * Hypotenuse * Sine + Hypotenuse), startY + (Hypotenuse * Cosign))
             };
 
-            hex.MidRight = new Point(startX + ((_hypotenuse * Sine) + _hypotenuse), startY + (_hypotenuse * Cosign));
-            hex.BottomLeft = new Point(startX, startY + (2 * Cosign * _hypotenuse));
-            hex.MidPoint = new Point(startX + (_hypotenuse * Sine) + (_hypotenuse / 2),
-                startY + (_hypotenuse * Cosign));
-            hex.TopRight = new Point(hex.MidRight.X, startY - (_hypotenuse * Cosign));
+            hex.MidRight = new Point(startX + ((Hypotenuse * Sine) + Hypotenuse), startY + (Hypotenuse * Cosign));
+            hex.BottomLeft = new Point(startX, startY + (2 * Cosign * Hypotenuse));
+            hex.MidPoint = new Point(startX + (Hypotenuse * Sine) + (Hypotenuse / 2),
+                startY + (Hypotenuse * Cosign));
+            hex.TopRight = new Point(hex.MidRight.X, startY - (Hypotenuse * Cosign));
             hex.TextLocation =
-                new Point(hex.MidPoint.X, hex.MidPoint.Y + (_hypotenuse * 0.5F));
+                new Point(hex.MidPoint.X, hex.MidPoint.Y + (Hypotenuse * 0.5F));
             hex.X = xAndY.x;
             hex.Y = xAndY.y;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.DefaultSettings
 {
@@ -8,11 +9,13 @@ namespace SWNUniverseGenerator.DefaultSettings
     /// </summary>
     public class PlanetDefaultSettings
     {
-        public PlanetDefaultSettings(Tuple<Int32, Int32> planetRange = null, List<String> starIdList = null)
+        public PlanetDefaultSettings(
+            Tuple<Int32, Int32> planetRange = null, 
+            List<IEntity> starList = null)
         {
             PlanetRange = planetRange ?? new Tuple<Int32, Int32>(0, 3);
             Name = null;
-            StarIdList = starIdList;
+            StarList = starList;
         }
         /// <summary>
         /// Store an upper and lower bound on the number of planets to be created
@@ -27,7 +30,8 @@ namespace SWNUniverseGenerator.DefaultSettings
         
         /// <summary>
         /// Store a list of StarIDs if you want to create a planet on a specific Star or set of Stars
+        /// By default, it will generate planets for each star
         /// </summary>
-        public List<String> StarIdList { get; set; }
+        public List<IEntity> StarList { get; set; }
     }
 }

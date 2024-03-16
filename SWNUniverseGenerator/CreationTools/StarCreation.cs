@@ -111,7 +111,10 @@ namespace SWNUniverseGenerator.CreationTools
 
                         if (starDefaultSettings.CreatePlanets)
                         {
-                            new PlanetCreation().AddPlanets(universeId, new PlanetDefaultSettings());
+                            new PlanetCreation().AddPlanets(universeId, new PlanetDefaultSettings
+                            {
+                                StarList = new List<IEntity>{star}
+                            });
                         }
 
                         sCount++;

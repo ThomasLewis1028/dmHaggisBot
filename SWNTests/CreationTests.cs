@@ -257,13 +257,13 @@ public class CreationTests
         string universeId =
             creation.CreateUniverse(new UniverseDefaultSettings { Name = universeName }, context);
 
-        creation.CreateStars(universeId, new StarDefaultSettings());
+        creation.CreateStars(universeId, new StarDefaultSettings(createPlanets: true));
 
-        creation.CreatePlanets(universeId, new PlanetDefaultSettings());
+        // creation.CreatePlanets(universeId, new PlanetDefaultSettings());
         creation.CreatePlanets(universeId, new PlanetDefaultSettings
         {
             Name = "Planet McPlanetface",
-            StarIdList = new List<string> { context.Stars.First(s => s.UniverseId == universeId).Id }
+            StarList = new List<IEntity> { context.Stars.First(s => s.UniverseId == universeId) }
         });
 
         Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) > 0);

@@ -7,8 +7,8 @@ namespace SWNUniverseGenerator
 {
     public class NameGeneration
     {
-        private MarkovChain<Char> _chain = new MarkovChain<Char>(2);
-        private Random rand = new Random();
+        private MarkovChain<Char> _chain = new (2);
+        private Random _rand = new ();
 
         public bool GenerateChain(List<String> nameList)
         {
@@ -21,7 +21,7 @@ namespace SWNUniverseGenerator
 
         public String GenerateName()
         {
-            return new String(_chain.Chain(rand.Next()).ToArray());
+            return new String(_chain.Chain(_rand.Next()).ToArray());
         }
     }
 }

@@ -143,7 +143,7 @@ namespace SWNUniverseGenerator.CreationTools
 
             using var zoneRepo = new Repository<Zone>(context);
             bool result = zoneRepo.AddRange(zones);
-            
+
             return result;
         }
 
@@ -336,10 +336,21 @@ namespace SWNUniverseGenerator.CreationTools
         /// <param name="universeId"></param>
         public void DeleteUniverse(String universeId)
         {
-            File.Delete(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-                        + "/"
-                        + universeId
-                        + ".svg");
+            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                          + "/"
+                          + universeId;
+
+            if (File.Exists(path + ".svg"))
+            {
+                File.Delete(path
+                            + ".svg");
+            }
+
+            if (File.Exists(path + ".png"))
+            {
+                File.Delete(path
+                            + ".png");
+            }
 
             using (var context = new UniverseContext())
             {

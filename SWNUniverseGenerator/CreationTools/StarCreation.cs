@@ -113,7 +113,7 @@ namespace SWNUniverseGenerator.CreationTools
                         {
                             new PlanetCreation().AddPlanets(universeId, new PlanetDefaultSettings
                             {
-                                StarList = new List<IEntity>{star}
+                                StarList = new List<Star>{star}
                             });
                         }
 

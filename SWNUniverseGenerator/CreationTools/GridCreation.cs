@@ -189,7 +189,7 @@ namespace SWNUniverseGenerator.CreationTools
                             Star.StarColorEnum.OrangeRed => orangeRedStarColor,
                             _ => starColor
                         };
-                        
+
                         RadialGradientBrush radialStarBrush = new RadialGradientBrush(
                             hex.MidPoint,
                             hex.MidPoint,
@@ -228,13 +228,7 @@ namespace SWNUniverseGenerator.CreationTools
                           + universeId
                           + ".svg";
 
-            var pngPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-                          + "/"
-                          + universeId
-                          + ".png";
-
             grid.SaveAsSVG(svgPath);
-            grid.SaveAsImage(pngPath);
 
             return svgPath;
         }
@@ -278,6 +272,23 @@ namespace SWNUniverseGenerator.CreationTools
             hexes.Add(hex);
 
             return hex;
+        }
+
+        public string GetPng(string universeId)
+        {
+            var svgPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                          + "/"
+                          + universeId
+                          + ".svg";
+
+            Page page = Parser.FromFile(svgPath);
+
+            var pngPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                          + "/"
+                          + universeId
+                          + ".png";
+            page.SaveAsImage(pngPath);
+            return pngPath;
         }
 
         /// <summary>

@@ -13,7 +13,6 @@ namespace SWNTests;
 [TestClass]
 public class CreationTests
 {
-    
     /// <summary>
     /// Test the creation of a grid with a width of 20x20
     /// </summary>
@@ -37,8 +36,10 @@ public class CreationTests
         Assert.IsTrue(context.Zones.Count(s => s.UniverseId == universeId) > 0);
 
         var starMapPath = creation.CreateStarMap(universeId);
+        var starMapPng = new GridCreation().GetPng(universeId);
 
         Assert.IsTrue(File.Exists(starMapPath));
+        Assert.IsTrue(File.Exists(starMapPng));
 
         if (cleanup)
         {
@@ -47,9 +48,10 @@ public class CreationTests
             Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) == 0);
             Assert.IsTrue(context.Zones.Count(s => s.UniverseId == universeId) == 0);
             Assert.IsFalse(File.Exists(starMapPath));
+            Assert.IsFalse(File.Exists(starMapPath));
         }
     }
-    
+
     /// <summary>
     /// Test the creation of the full universe.
     /// WARNING: This may result in incomplete coverage as it will heavily rely on the randomization of generation
@@ -58,7 +60,8 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
-    [DataRow("Test Full Creation", false)]
+    // [DataRow("Test Full Creation", false)]
+    [DataRow("Test Full Creation 2", true)]
     public void TestFullCreation(String universeName, Boolean cleanup)
     {
         using var context = new UniverseContext();
@@ -66,8 +69,9 @@ public class CreationTests
 
         string universeId = creation.CreateUniverse(new UniverseDefaultSettings { Name = universeName }, context);
 
-        creation.CreateStars(universeId, new StarDefaultSettings());
-        creation.CreatePlanets(universeId, new PlanetDefaultSettings());
+        creation.CreateStars(universeId, new StarDefaultSettings(createPlanets: false));
+        creation.CreatePlanets(universeId,
+            new PlanetDefaultSettings(starList: context.Stars.Where(s => s.UniverseId == universeId).ToList()));
         creation.CreateCharacter(universeId, new CharacterDefaultSettings());
         creation.CreateShips(universeId, new ShipDefaultSettings());
         creation.CreateProblems(universeId, new ProblemDefaultSettings());
@@ -81,9 +85,9 @@ public class CreationTests
         Assert.IsTrue(context.Characters.Count(s => s.UniverseId == universeId) > 0);
         Assert.IsTrue(context.Ships.Count(s => s.UniverseId == universeId) > 0);
 
-        // var starMapPath = creation.CreateStarMap(universeId);
+        var starMapPath = creation.CreateStarMap(universeId);
 
-        // Assert.IsTrue(File.Exists(starMapPath));
+        Assert.IsTrue(File.Exists(starMapPath));
 
         if (cleanup)
         {
@@ -95,7 +99,7 @@ public class CreationTests
             Assert.IsTrue(context.Planets.Count(s => s.UniverseId == universeId) == 0);
             Assert.IsTrue(context.Characters.Count(c => c.UniverseId == universeId) == 0);
             Assert.IsTrue(context.Ships.Count(s => s.UniverseId == universeId) == 0);
-            // Assert.IsFalse(File.Exists(starMapPath));
+            Assert.IsFalse(File.Exists(starMapPath));
         }
     }
 
@@ -208,7 +212,7 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
-    [DataRow("Test Wide Grid Creation", false)]
+    [DataRow("Test Wide Grid Creation", true)]
     public void TestWideGridCreation(String universeName, Boolean cleanup)
     {
         using var context = new UniverseContext();
@@ -248,7 +252,7 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
-    [DataRow("Test Planet Class Creation", false)]
+    [DataRow("Test Planet Class Creation", true)]
     public void TestPlanetClassCreation(String universeName, Boolean cleanup)
     {
         using var context = new UniverseContext();
@@ -259,11 +263,10 @@ public class CreationTests
 
         creation.CreateStars(universeId, new StarDefaultSettings(createPlanets: true));
 
-        // creation.CreatePlanets(universeId, new PlanetDefaultSettings());
         creation.CreatePlanets(universeId, new PlanetDefaultSettings
         {
             Name = "Planet McPlanetface",
-            StarList = new List<IEntity> { context.Stars.First(s => s.UniverseId == universeId) }
+            StarList = new List<Star> { context.Stars.First(s => s.UniverseId == universeId) }
         });
 
         Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) > 0);
@@ -304,8 +307,7 @@ public class CreationTests
         string universeId =
             creation.CreateUniverse(new UniverseDefaultSettings { Name = universeName }, context);
 
-        creation.CreateStars(universeId, new StarDefaultSettings());
-        creation.CreatePlanets(universeId, new PlanetDefaultSettings());
+        creation.CreateStars(universeId, new StarDefaultSettings(createPlanets: true));
 
         creation.CreateCharacter(universeId, new CharacterDefaultSettings
         {

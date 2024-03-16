@@ -11,7 +11,7 @@ namespace SWNUniverseGenerator.DefaultSettings
     {
         public PlanetDefaultSettings(
             Tuple<Int32, Int32> planetRange = null, 
-            List<IEntity> starList = null)
+            List<Star> starList = null)
         {
             PlanetRange = planetRange ?? new Tuple<Int32, Int32>(0, 3);
             Name = null;
@@ -32,6 +32,6 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// Store a list of StarIDs if you want to create a planet on a specific Star or set of Stars
         /// By default, it will generate planets for each star
         /// </summary>
-        public List<IEntity> StarList { get; set; }
+        public List<Star> StarList { get; set; }
     }
 }

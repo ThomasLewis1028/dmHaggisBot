@@ -36,8 +36,40 @@ namespace SWNUniverseGenerator.CreationTools
                         };
                         
                         using (var specRepo = new Repository<Spec>(context))
-                            ship.SpecId = specRepo.Random().Id;
+                        {
+                            using (var hullRepo = new Repository<Hull>(context))
+                            {
+                                IEntity hull = null;
+                                if (string.IsNullOrEmpty(shipDefaultSettings.Type))
+                                {
+                                    var hullSwitch = Rand.Next(0, 100);
+                                    // Weighted chances for each hull type
+                                    hull = hullSwitch switch
+                                    {
+                                        var n when (n >= 0 && n < 10) => hullRepo.Search(h => h.Type == "Strike Fighter").First(),
+                                        var n when (n >= 10 && n < 25) => hullRepo.Search(h => h.Type == "Shuttle").First(),
+                                        var n when (n >= 25 && n < 50) => hullRepo.Search(h => h.Type == "Free Merchant").First(),
+                                        var n when (n >= 50 && n < 60) => hullRepo.Search(h => h.Type == "Patrol Boat").First(),
+                                        var n when (n >= 60 && n < 72) => hullRepo.Search(h => h.Type == "Corvette").First(),
+                                        var n when (n >= 72 && n < 81) => hullRepo.Search(h => h.Type == "Heavy Frigate").First(),
+                                        var n when (n >= 81 && n < 86) => hullRepo.Search(h => h.Type == "Bulk Freighter").First(),
+                                        var n when (n >= 86 && n < 91) => hullRepo.Search(h => h.Type == "Fleet Cruiser").First(),
+                                        var n when (n >= 91 && n < 94) => hullRepo.Search(h => h.Type == "Battleship").First(),
+                                        var n when (n >= 94 && n < 95) => hullRepo.Search(h => h.Type == "Carrier").First(),
+                                        var n when (n >= 95 && n < 97) => hullRepo.Search(h => h.Type == "Free Merchant").First(), // Free Merchant temporary value
+                                        var n when (n >= 97 && n < 100) => hullRepo.Search(h => h.Type == "Free Merchant").First(), // Free Merchant temporary value
+                                        _ => hullRepo.Search(h => h.Type == "Free Merchant").First()
+                                    };
 
+                                    ship.SpecId = specRepo.Search(s => s.HullId == hull.Id).First().Id;
+                                }
+                                else
+                                {
+                                    ship.SpecId = specRepo.Random(s => s.HullId == hullRepo.Random().Id).Id;
+                                }
+                            }
+                        }
+                        
                         shipRepo.Add(ship);
                         
                         // TODO: Fix this to work with new models
@@ -108,7 +140,6 @@ namespace SWNUniverseGenerator.CreationTools
                             }
                         }
 
-                        // ship.Hull = shipHull;
                         using (var repo = new Repository<Planet>(context))
                         {
                             ship.HomeId = String.IsNullOrEmpty(shipDefaultSettings.HomeId)

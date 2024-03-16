@@ -60,7 +60,7 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
-    // [DataRow("Test Full Creation", false)]
+    [DataRow("Test Full Creation", false)]
     [DataRow("Test Full Creation 2", true)]
     public void TestFullCreation(String universeName, Boolean cleanup)
     {
@@ -73,7 +73,7 @@ public class CreationTests
         creation.CreatePlanets(universeId,
             new PlanetDefaultSettings(starList: context.Stars.Where(s => s.UniverseId == universeId).ToList()));
         creation.CreateCharacter(universeId, new CharacterDefaultSettings());
-        creation.CreateShips(universeId, new ShipDefaultSettings());
+        creation.CreateShips(universeId, new ShipDefaultSettings(count: 100));
         creation.CreateProblems(universeId, new ProblemDefaultSettings());
 
         Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) > 0);

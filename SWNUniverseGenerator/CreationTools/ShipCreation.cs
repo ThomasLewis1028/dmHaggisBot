@@ -34,42 +34,56 @@ namespace SWNUniverseGenerator.CreationTools
                         {
                             UniverseId = universeId
                         };
-                        
+
                         using (var specRepo = new Repository<Spec>(context))
                         {
                             using (var hullRepo = new Repository<Hull>(context))
                             {
-                                IEntity hull = null;
+                                IEntity hull;
                                 if (string.IsNullOrEmpty(shipDefaultSettings.Type))
                                 {
                                     var hullSwitch = Rand.Next(0, 100);
                                     // Weighted chances for each hull type
                                     hull = hullSwitch switch
                                     {
-                                        var n when (n >= 0 && n < 10) => hullRepo.Search(h => h.Type == "Strike Fighter").First(),
-                                        var n when (n >= 10 && n < 25) => hullRepo.Search(h => h.Type == "Shuttle").First(),
-                                        var n when (n >= 25 && n < 50) => hullRepo.Search(h => h.Type == "Free Merchant").First(),
-                                        var n when (n >= 50 && n < 60) => hullRepo.Search(h => h.Type == "Patrol Boat").First(),
-                                        var n when (n >= 60 && n < 72) => hullRepo.Search(h => h.Type == "Corvette").First(),
-                                        var n when (n >= 72 && n < 81) => hullRepo.Search(h => h.Type == "Heavy Frigate").First(),
-                                        var n when (n >= 81 && n < 86) => hullRepo.Search(h => h.Type == "Bulk Freighter").First(),
-                                        var n when (n >= 86 && n < 91) => hullRepo.Search(h => h.Type == "Fleet Cruiser").First(),
-                                        var n when (n >= 91 && n < 94) => hullRepo.Search(h => h.Type == "Battleship").First(),
-                                        var n when (n >= 94 && n < 95) => hullRepo.Search(h => h.Type == "Carrier").First(),
-                                        var n when (n >= 95 && n < 97) => hullRepo.Search(h => h.Type == "Free Merchant").First(), // Free Merchant temporary value
-                                        var n when (n >= 97 && n < 100) => hullRepo.Search(h => h.Type == "Free Merchant").First(), // Free Merchant temporary value
+                                        var n when (n >= 0 && n < 10) => hullRepo
+                                            .Search(h => h.Type == "Strike Fighter").First(),
+                                        var n when (n >= 10 && n < 25) => hullRepo.Search(h => h.Type == "Shuttle")
+                                            .First(),
+                                        var n when (n >= 25 && n < 50) => hullRepo
+                                            .Search(h => h.Type == "Free Merchant").First(),
+                                        var n when (n >= 50 && n < 60) => hullRepo.Search(h => h.Type == "Patrol Boat")
+                                            .First(),
+                                        var n when (n >= 60 && n < 72) => hullRepo.Search(h => h.Type == "Corvette")
+                                            .First(),
+                                        var n when (n >= 72 && n < 81) => hullRepo
+                                            .Search(h => h.Type == "Heavy Frigate").First(),
+                                        var n when (n >= 81 && n < 86) => hullRepo
+                                            .Search(h => h.Type == "Bulk Freighter").First(),
+                                        var n when (n >= 86 && n < 91) => hullRepo
+                                            .Search(h => h.Type == "Fleet Cruiser").First(),
+                                        var n when (n >= 91 && n < 94) => hullRepo.Search(h => h.Type == "Battleship")
+                                            .First(),
+                                        var n when (n >= 94 && n < 95) => hullRepo.Search(h => h.Type == "Carrier")
+                                            .First(),
+                                        var n when (n >= 95 && n < 97) => hullRepo
+                                            .Search(h => h.Type == "Free Merchant")
+                                            .First(), // Free Merchant temporary value
+                                        var n when (n >= 97 && n < 100) => hullRepo
+                                            .Search(h => h.Type == "Free Merchant")
+                                            .First(), // Free Merchant temporary value
                                         _ => hullRepo.Search(h => h.Type == "Free Merchant").First()
                                     };
 
-                                    ship.SpecId = specRepo.Search(s => s.HullId == hull.Id).First().Id;
+                                    ship.SpecId = specRepo.Random(s => s.HullId == hull.Id).Id;
                                 }
                                 else
                                 {
-                                    ship.SpecId = specRepo.Random(s => s.HullId == hullRepo.Random().Id).Id;
+                                    ship.SpecId = hullRepo.Search(h => h.Type == shipDefaultSettings.Type).First().Id;
                                 }
                             }
                         }
-                        
+
                         shipRepo.Add(ship);
 
                         // Set the name of the ship based on whatever math I came up with
@@ -84,23 +98,23 @@ namespace SWNUniverseGenerator.CreationTools
                                 {
                                     if (nameType > 0)
                                     {
-                                        name += ((Naming) nameRepo.Random(n => n.NameType == "Adjective")).Name;
+                                        name += ((Naming)nameRepo.Random(n => n.NameType == "Adjective")).Name;
 
                                         name += Rand.Next(0, 10) == 0
-                                            ? "-" + ((Naming) nameRepo.Random(n => n.NameType == "Adjective")).Name
+                                            ? "-" + ((Naming)nameRepo.Random(n => n.NameType == "Adjective")).Name
                                             : "";
 
                                         nameType = Rand.Next(0, 2);
 
                                         if (nameType == 0)
                                             name += " " +
-                                                    ((Naming) nameRepo.Random(n => n.NameType == "Animal")).Name;
+                                                    ((Naming)nameRepo.Random(n => n.NameType == "Animal")).Name;
                                         else
                                             name += " " +
-                                                    ((Naming) nameRepo.Random(n => n.NameType == "Noun")).Name;
+                                                    ((Naming)nameRepo.Random(n => n.NameType == "Noun")).Name;
                                     }
                                     else
-                                        name += ((Naming) nameRepo.Random(n => n.NameType == "Noun")).Name;
+                                        name += ((Naming)nameRepo.Random(n => n.NameType == "Noun")).Name;
 
                                     ship.Name = name;
 
@@ -139,7 +153,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 };
                                 shipArmaments.Add(shipArmament);
                             }
-                            
+
                             armaRepo.AddRange(shipArmaments);
                         }
 
@@ -156,7 +170,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 };
                                 shipDefenses.Add(shipDefense);
                             }
-                            
+
                             defRepo.AddRange(shipDefenses);
                         }
 
@@ -173,10 +187,10 @@ namespace SWNUniverseGenerator.CreationTools
                                 };
                                 shipFittings.Add(shipFitting);
                             }
-                            
+
                             fitRepo.AddRange(shipFittings);
                         }
-                        
+
 
                         // Create the crew for the ship
                         if (shipDefaultSettings.CreateCrew)
@@ -185,12 +199,12 @@ namespace SWNUniverseGenerator.CreationTools
                             {
                                 using (var specRepo = new Repository<Spec>(context))
                                 {
-                                    var hullId = ((Spec) specRepo.Search(s => s.Id == ship.SpecId).First()).HullId;
+                                    var hullId = ((Spec)specRepo.Search(s => s.Id == ship.SpecId).First()).HullId;
 
-                                    var hullCrewMin = ((Hull) hullRepo.Search(h =>
+                                    var hullCrewMin = ((Hull)hullRepo.Search(h =>
                                         h.Id == hullId).First()).CrewMin;
 
-                                    var hullCrewMax = ((Hull) hullRepo.Search(h =>
+                                    var hullCrewMax = ((Hull)hullRepo.Search(h =>
                                         h.Id == hullId).First()).CrewMax;
 
                                     new CharCreation().AddCharacters(universeId,
@@ -247,58 +261,44 @@ namespace SWNUniverseGenerator.CreationTools
                         }
 
                         // TODO: Fix this to work with new models
-                        // If the ship has the Ship Bay/Fighter fitting, generate a ship to go in that space
-                        // if (ship.Fittings.Any(f => f.Name == "Ship bay/fighter"))
-                        // {
-                        //     var fighterHangarCount = ship.Fittings.FindAll(f => f.Name == "Ship bay/fighter").Count;
-                        //
-                        //     ShipCreation shipCreation = new ShipCreation();
-                        //
-                        //     var randFhc = Rand.Next(0, fighterHangarCount);
-                        //     var fCount = 0;
-                        //     while (fCount < randFhc)
-                        //     {
-                        //         universeId = shipCreation.AddShips(universeId,
-                        //             new ShipDefaultSettings
-                        //             {
-                        //                 Count = 1,
-                        //                 CreateCrew = false,
-                        //                 HomeId = ship.Id,
-                        //                 Type = shipData.Hulls.FindAll(h => h.Class == "Fighter")[
-                        //                     Rand.Next(0, shipData.Hulls.FindAll(h => h.Class == "Fighter").Count)].Type
-                        //             },
-                        //             shipData, charData, nameGenerations);
-                        //         fCount++;
-                        //     }
-                        // }
+                        // If the ship has the Ship Bay/Fighter or Ship Bay/Frigate fitting, generate a ship to go in that space
+                        using (var fittingRepo = new Repository<Fitting>(context))
+                        {
+                            var fighterBayCount = shipFittings.Count(sf =>
+                                sf.FittingId == fittingRepo.Search(f => f.Type == "Ship bay/fighter").First().Id);
+                            fighterBayCount = Rand.Next(0, fighterBayCount + 1);
 
-                        // If the ship has the Ship Bay/Frigate fitting, generate a ship to go in that space
-                        // if (ship.Fittings.Any(f => f.Name == "Ship bay/frigate"))
-                        // {
-                        //     var frigateHangarCount = ship.Fittings.FindAll(f => f.Name == "Ship bay/frigate").Count;
-                        //
-                        //     ShipCreation shipCreation = new ShipCreation();
-                        //
-                        //     var randFhc = Rand.Next(0, frigateHangarCount);
-                        //     var fCount = 0;
-                        //     while (fCount < randFhc)
-                        //     {
-                        //         universeId = shipCreation.AddShips(universeId,
-                        //             new ShipDefaultSettings
-                        //             {
-                        //                 Count = 1,
-                        //                 CreateCrew = false,
-                        //                 HomeId = ship.Id,
-                        //                 Type = shipData.Hulls.FindAll(h => h.Class == "Frigate")[
-                        //                     Rand.Next(0, shipData.Hulls.FindAll(h => h.Class == "Frigate").Count)].Type
-                        //             },
-                        //             shipData, charData, nameGenerations);
-                        //         fCount++;
-                        //     }
-                        // }
+                            var frigateBayCount = shipFittings.Count(sf =>
+                                sf.FittingId == fittingRepo.Search(f => f.Type == "Ship bay/frigate").First().Id);
+                            frigateBayCount = Rand.Next(0, frigateBayCount + 1);
+
+                            if (fighterBayCount > 0)
+                            {
+                                new ShipCreation().AddShips(universeId, new ShipDefaultSettings
+                                {
+                                    Count = fighterBayCount,
+                                    Type = "Strike Fighter",
+                                    HomeId = ship.Id,
+                                    LocationId = ship.Id,
+                                    CreateCrew = false
+                                });
+                            }
+
+                            if (frigateBayCount > 0)
+                            {
+                                new ShipCreation().AddShips(universeId, new ShipDefaultSettings
+                                {
+                                    Count = frigateBayCount,
+                                    Type = "Frigate",
+                                    HomeId = ship.Id,
+                                    LocationId = ship.Id,
+                                    CreateCrew = false
+                                });
+                            }
+                        }
 
                         ships.Add(ship);
-                        
+
                         shipArmaments.Clear();
                         shipDefenses.Clear();
                         shipFittings.Clear();

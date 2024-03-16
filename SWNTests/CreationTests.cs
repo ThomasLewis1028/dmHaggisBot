@@ -379,4 +379,52 @@ public class CreationTests
             // Assert.IsFalse(File.Exists(starMapPath));
         }
     }
+    
+    
+    /// <summary>
+    /// Test the creation of ships and all the values a Ship can have
+    /// </summary>
+    /// <param name="universeName"></param>
+    /// <param name="cleanup"></param>
+    [TestMethod, TestCategory("DatabaseTest")]
+    [DataRow("Test Ship Creation", false)]
+    [DataRow("Test Ship Creation", true)]
+    public void TestShipCreation(String universeName, Boolean cleanup)
+    {
+        using var context = new UniverseContext();
+        Creation creation = new Creation();
+
+        string universeId =
+            creation.CreateUniverse(new UniverseDefaultSettings { Name = universeName }, context);
+
+        creation.CreateShips(universeId, new ShipDefaultSettings
+        {
+            Count = 10,
+            CreateCrew = false,
+            HomeId = universeId,
+            LocationId = universeId
+        });
+
+        creation.CreateShips(universeId, new ShipDefaultSettings
+        {
+            Count = 1,
+            CreateCrew = false,
+            HomeId = universeId,
+            LocationId = universeId,
+            Type = "Carrier"
+        });
+
+        Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) > 0);
+        Assert.IsTrue(context.Ships.Count(s => s.UniverseId == universeId) >= 10);
+        
+        if (cleanup)
+        {
+            creation.DeleteUniverse(universeId);
+
+            Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) == 0);
+            Assert.IsTrue(context.Zones.Count(s => s.UniverseId == universeId) == 0);
+            Assert.IsTrue(context.Stars.Count(s => s.UniverseId == universeId) == 0);
+            Assert.IsTrue(context.Planets.Count(s => s.UniverseId == universeId) == 0);
+        }
+    }
 }

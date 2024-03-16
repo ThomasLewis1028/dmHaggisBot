@@ -28,6 +28,20 @@
     ]
   },
   {
+    "HullType": "Strike Fighter",
+    "PresetName": "Dogfighter",
+    "CrewSkill": 2,
+    "CP": 4,
+    "Weapons": [
+      "Multifocal Laser"
+    ],
+    "Defenses": null,
+    "Fittings": [
+      "Spike Drive-1",
+      "Atmospheric configuration"
+    ]
+  },
+  {
     "HullType": "Shuttle",
     "PresetName": "Shuttle",
     "CrewSkill": 1,

@@ -71,36 +71,6 @@ namespace SWNUniverseGenerator.CreationTools
                         }
                         
                         shipRepo.Add(ship);
-                        
-                        // TODO: Fix this to work with new models
-                        // Set the type of ship
-                        // if (string.IsNullOrEmpty(shipDefaultSettings.Type))
-                        // {
-                        //     // var hullSwitch = Rand.Next(0, 100);
-                        //     //
-                        //     // // Weighted chances for each hull type
-                        //     // shipHullObject = hullSwitch switch
-                        //     // {
-                        //     //     { } n when (n >= 0 && n < 10) => shipData.Hulls[0],
-                        //     //     { } n when (n >= 10 && n < 25) => shipData.Hulls[1],
-                        //     //     { } n when (n >= 25 && n < 50) => shipData.Hulls[2],
-                        //     //     { } n when (n >= 50 && n < 60) => shipData.Hulls[3],
-                        //     //     { } n when (n >= 60 && n < 72) => shipData.Hulls[4],
-                        //     //     { } n when (n >= 72 && n < 81) => shipData.Hulls[5],
-                        //     //     { } n when (n >= 81 && n < 86) => shipData.Hulls[6],
-                        //     //     { } n when (n >= 86 && n < 91) => shipData.Hulls[7],
-                        //     //     { } n when (n >= 91 && n < 94) => shipData.Hulls[8],
-                        //     //     { } n when (n >= 94 && n < 95) => shipData.Hulls[9],
-                        //     //     { } n when (n >= 95 && n < 97) => shipData.Hulls[2], // Free Merchant temporary value
-                        //     //     { } n when (n >= 97 && n < 100) => shipData.Hulls[2], // Free Merchant temporary value
-                        //     //     _ => shipData.Hulls[2]
-                        //     // };
-                        //     
-                        // }
-                        // else if (shipData.Hulls.Exists(h => h.Type == type))
-                        //     shipHullObject = shipData.Hulls.Find(h => h.Type == type);
-                        // else
-                        //     throw new FileLoadException("No ship of this type exists");
 
                         // Set the name of the ship based on whatever math I came up with
                         if (string.IsNullOrEmpty(shipDefaultSettings.Name))

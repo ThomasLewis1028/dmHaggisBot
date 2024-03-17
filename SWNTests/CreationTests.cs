@@ -411,7 +411,7 @@ public class CreationTests
             CreateCrew = false,
             HomeId = universeId,
             LocationId = universeId,
-            Type = "Carrier"
+            HullType = Hull.HullTypeEnum.Carrier
         });
 
         Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) > 0);

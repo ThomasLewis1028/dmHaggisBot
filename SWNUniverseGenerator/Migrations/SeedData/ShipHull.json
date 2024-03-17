@@ -1,6 +1,6 @@
 [
   {
-    "Type": "Strike Fighter",
+    "HullType": "Strike Fighter",
     "Cost": 200000,
     "Speed": 5,
     "Armor": 5,
@@ -11,11 +11,11 @@
     "Power": 5,
     "Mass": 2,
     "Hardpoints": 1,
-    "Class": "Fighter",
+    "HullClass": "Fighter",
     "Description": "Small craft, often modified to replace the spike drive with a system drive. Their speed, cheapness, and combat utility make them a popular choice as inexpensive system patrol craft."
   },
   {
-    "Type": "Shuttle",
+    "HullType": "Shuttle",
     "Cost": 200000,
     "Speed": 3,
     "Armor": 0,
@@ -26,11 +26,11 @@
     "Power": 3,
     "Mass": 5,
     "Hardpoints": 1,
-    "Class": "Fighter",
+    "HullClass": "Fighter",
     "Description": "The smallest craft that’s regularly used for interstellar drills, a shuttle is a cheap means of moving small amounts of precious material or important persons between worlds."
   },
   {
-    "Type": "Free Merchant",
+    "HullType": "Free Merchant",
     "Cost": 500000,
     "Speed": 3,
     "Armor": 2,
@@ -41,11 +41,11 @@
     "Power": 10,
     "Mass": 15,
     "Hardpoints": 2,
-    "Class": "Frigate",
+    "HullClass": "Frigate",
     "Description": "A hull type much beloved by adventurers, a free merchant has unimpressive combat utility but can carry substantial amounts of cargo while mounting enough weaponry to discourage small-craft piracy."
   },
   {
-    "Type": "Patrol Boat",
+    "HullType": "Patrol Boat",
     "Cost": 2500000,
     "Speed": 4,
     "Armor": 5,
@@ -56,11 +56,11 @@
     "Power": 15,
     "Mass": 10,
     "Hardpoints": 4,
-    "Class": "Frigate",
+    "HullClass": "Frigate",
     "Description": "The hull of choice for customs cutters and system law enforcement, the patrol boat is a light frigate built heavy enough to overawe small merchant vessels while still being relatively cheap to build and crew."
   },
   {
-    "Type": "Corvette",
+    "HullType": "Corvette",
     "Cost": 4000000,
     "Speed": 2,
     "Armor": 10,
@@ -71,11 +71,11 @@
     "Power": 15,
     "Mass": 15,
     "Hardpoints": 6,
-    "Class": "Frigate",
+    "HullClass": "Frigate",
     "Description": "The smallest true combat frigate, and often simply called a “frigate” by spacers. Corvettes have significantly thicker armor than patrol boats and trade additional crew needs and less maneuverability for more available free mass."
   },
   {
-    "Type": "Heavy Frigate",
+    "HullType": "Heavy Frigate",
     "Cost": 7000000,
     "Speed": 1,
     "Armor": 10,
@@ -86,11 +86,11 @@
     "Power": 25,
     "Mass": 20,
     "Hardpoints": 8,
-    "Class": "Frigate",
+    "HullClass": "Frigate",
     "Description": "The heaviest starship that most poor or resource-deprived worlds can build, the heavy frigate can carry a significant loadout of weaponry and has enough crew to overwhelm most pirate ships if it comes to a boarding action. While it packs a substantial punch, it lacks the armor of a true cruiser-class warship."
   },
   {
-    "Type": "Bulk Freighter",
+    "HullType": "Bulk Freighter",
     "Cost": 5000000,
     "Speed": 0,
     "Armor": 0,
@@ -101,11 +101,11 @@
     "Power": 15,
     "Mass": 25,
     "Hardpoints": 2,
-    "Class": "Cruiser",
+    "HullClass": "Cruiser",
     "Description": "This class of huge cargo ship is found most often in peaceful, heavily-populated sectors."
   },
   {
-    "Type": "Fleet Cruiser",
+    "HullType": "Fleet Cruiser",
     "Cost": 10000000,
     "Speed": 1,
     "Armor": 15,
@@ -116,11 +116,11 @@
     "Power": 50,
     "Mass": 30,
     "Hardpoints": 10,
-    "Class": "Cruiser",
+    "HullClass": "Cruiser",
     "Description": "The favored ship of the line of most wealthy, advanced worlds, and often the biggest and most powerful ship most planets can build. A cruiser’s heavy armor and infrastructural support for heavy guns make it a lethal weapon against frigates and any other ship not optimized for cracking heavy armor. They can prove vulnerable to swarm attacks by fighter-bombers equipped with the right kind of armor-piercing weapons."
   },
   {
-    "Type": "Battleship",
+    "HullType": "Battleship",
     "Cost": 50000000,
     "Speed": 0,
     "Armor": 20,
@@ -131,11 +131,11 @@
     "Power": 75,
     "Mass": 50,
     "Hardpoints": 15,
-    "Class": "Capital",
+    "HullClass": "Capital",
     "Description": " Dreaded hulks of interstellar war, very few worlds have the necessary technology or economy to support the massive expense of building and crewing a battleship. Those that do gain access to a ship that is largely invulnerable to anything short of specially-designed anti-capital cruisers or hunter-killer frigates."
   },
   {
-    "Type": "Carrier",
+    "HullType": "Carrier",
     "Cost": 60000000,
     "Speed": 0,
     "Armor": 10,
@@ -146,11 +146,11 @@
     "Power": 50,
     "Mass": 100,
     "Hardpoints": 4,
-    "Class": "Capital",
+    "HullClass": "Capital",
     "Description": "The queen of a fleet, even fewer polities can afford to build one of these huge ships. Carriers can support flights of fighter or frigate-class warships, ones specially equipped to handle particular missions. This versatility allows it to load fighter-bombers for anti-capital missions one month, and then switch to swarms of hunter-killer frigates the next when a hostile system’s asteroid outposts need to be destroyed. Stripped of its combat wings, however, a carrier has less individual firepower than a cruiser."
   },
   {
-    "Type": "Small Station",
+    "HullType": "Small Station",
     "Cost": 5000000,
     "Speed": null,
     "Armor": 5,
@@ -161,11 +161,11 @@
     "Power": 50,
     "Mass": 40,
     "Hardpoints": 10,
-    "Class": "Cruiser",
+    "HullClass": "Cruiser",
     "Description": "Almost every space-faring world has at least one space station in orbit. A station has no Speed score, no spike drive, and cannot perform any maneuvers in combat, though its transit jets can slowly move it around a solar system over a matter of weeks. Civilian trade stations allow for docking by bulk freighters and ships not cleared to land on the surface, while military stations strictly forbid any civilian docking."
   },
   {
-    "Type": "Large Station",
+    "HullType": "Large Station",
     "Cost": 40000000,
     "Speed": null,
     "Armor": 20,
@@ -176,7 +176,7 @@
     "Power": 125,
     "Mass": 75,
     "Hardpoints": 30,
-    "Class": "Capital",
+    "HullClass": "Capital",
     "Description": "Almost every space-faring world has at least one space station in orbit. A station has no Speed score, no spike drive, and cannot perform any maneuvers in combat, though its transit jets can slowly move it around a solar system over a matter of weeks. Civilian trade stations allow for docking by bulk freighters and ships not cleared to land on the surface, while military stations strictly forbid any civilian docking."
   }
 ]

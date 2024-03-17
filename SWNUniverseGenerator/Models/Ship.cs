@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using SWNUniverseGenerator.DeserializedObjects;
 
 namespace SWNUniverseGenerator.Models
 {
@@ -10,8 +7,8 @@ namespace SWNUniverseGenerator.Models
     public class Ship : BaseEntity
     {
         public String Name { get; set; }
-
-        public String SpecId { get; set; }
+        
+        public String HullId { get; set; }
 
         public Int32 CrewSkill { get; set; }
 
@@ -26,4 +23,6 @@ namespace SWNUniverseGenerator.Models
         /// </summary>
         public String UniverseId { get; set; }
     }
+    
+    
 }

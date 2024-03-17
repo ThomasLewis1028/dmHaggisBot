@@ -50,7 +50,7 @@ public class SeedDataTests
     {
         var dbInit = new DbInitializer();
 
-        var shipSpec = dbInit.Deserialize<ShipSpec>("ShipSpec.json");
+        var shipSpec = dbInit.DeserializeHulls<ShipSpec>("ShipSpec.json");
 
         var hullData = dbInit.GetShipHullData();
         List<Spec> specData = dbInit.GetSpecData(hullData, shipSpec);
@@ -62,7 +62,7 @@ public class SeedDataTests
     {
         var dbInit = new DbInitializer();
 
-        var shipSpec = dbInit.Deserialize<ShipSpec>("ShipSpec.json");
+        var shipSpec = dbInit.DeserializeHulls<ShipSpec>("ShipSpec.json");
         var hullData = dbInit.GetShipHullData();
         var specData = dbInit.GetSpecData(hullData, shipSpec);
 
@@ -77,7 +77,7 @@ public class SeedDataTests
     {
         var dbInit = new DbInitializer();
 
-        var shipSpec = dbInit.Deserialize<ShipSpec>("ShipSpec.json");
+        var shipSpec = dbInit.DeserializeHulls<ShipSpec>("ShipSpec.json");
         var hullData = dbInit.GetShipHullData();
         var specData = dbInit.GetSpecData(hullData, shipSpec);
 
@@ -92,7 +92,7 @@ public class SeedDataTests
     {
         var dbInit = new DbInitializer();
 
-        var shipSpec = dbInit.Deserialize<ShipSpec>("ShipSpec.json");
+        var shipSpec = dbInit.DeserializeHulls<ShipSpec>("ShipSpec.json");
         var hullData = dbInit.GetShipHullData();
         var specData = dbInit.GetSpecData(hullData, shipSpec);
 

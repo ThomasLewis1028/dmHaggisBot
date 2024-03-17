@@ -5,7 +5,7 @@ namespace SWNUniverseGenerator.Models
 {
     public class ShipSpec : BaseEntity
     {
-        public String HullType { get; set; }
+        public Hull.HullTypeEnum HullType { get; set; }
         
         public String PresetName { get; set; }
         

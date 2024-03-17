@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -30,7 +31,7 @@ namespace SWNUniverseGenerator.Migrations.SeedData
             var fittingData = GetShipFittingData();
             modelBuilder.Entity<Fitting>().HasData(fittingData);
 
-            var shipSpecs = Deserialize<ShipSpec>("ShipSpec.json");
+            var shipSpecs = DeserializeHulls<ShipSpec>("ShipSpec.json");
 
             var specData = GetSpecData(hullData, shipSpecs);
             modelBuilder.Entity<Spec>().HasData(specData);
@@ -58,9 +59,9 @@ namespace SWNUniverseGenerator.Migrations.SeedData
             modelBuilder.Entity<Biosphere>().HasData(GetBiosphereData());
 
             var problemConflictData = Deserialize<ProblemConflictData>("ProblemConflicts.json");
-            var problemRestraintData =  Deserialize<ProblemRestraintData>("ProblemRestraint.json");
+            var problemRestraintData = Deserialize<ProblemRestraintData>("ProblemRestraint.json");
             var problemTwistData = Deserialize<ProblemTwistData>("ProblemTwist.json");
-            
+
             modelBuilder.Entity<ProblemConflictSituations>()
                 .HasData(GetProblemConflictSituationsData(problemConflictData));
             modelBuilder.Entity<ProblemConflictFocuses>().HasData(GetProblemConflictFocusesData(problemConflictData));
@@ -212,7 +213,7 @@ namespace SWNUniverseGenerator.Migrations.SeedData
 
         public List<Hull> GetShipHullData()
         {
-            var result = JsonConvert.DeserializeObject<List<Hull>>(ReadManifestData<UniverseContext>("ShipHull.json"));
+            var result = JsonConvert.DeserializeObject<List<Hull>>(ReadManifestData<UniverseContext>("ShipHull.json"), new EnumConverter());
             return result;
         }
 
@@ -383,7 +384,7 @@ namespace SWNUniverseGenerator.Migrations.SeedData
                 var newSpec = new Spec
                 {
                     SpecName = spec.PresetName,
-                    HullId = hulls.Find(h => h.Type == spec.HullType).Id
+                    HullId = hulls.Find(h => h.HullType == spec.HullType).Id
                 };
                 specs.Add(newSpec);
             }
@@ -457,7 +458,6 @@ namespace SWNUniverseGenerator.Migrations.SeedData
         public void AddProblemRestraints(List<ProblemRestraintData> restraintList,
             List<ProblemRestraints> problemRestraintsList)
         {
-
             foreach (var restraint in restraintList)
             {
                 problemRestraintsList.Add(new ProblemRestraints
@@ -470,7 +470,6 @@ namespace SWNUniverseGenerator.Migrations.SeedData
         public void AddProblemTwists(List<ProblemTwistData> twistList,
             List<ProblemTwists> problemTwistsList)
         {
-
             foreach (var twist in twistList)
             {
                 problemTwistsList.Add(new ProblemTwists
@@ -503,6 +502,39 @@ namespace SWNUniverseGenerator.Migrations.SeedData
         public List<TSource> Deserialize<TSource>(String json) where TSource : BaseEntity
         {
             return JsonConvert.DeserializeObject<List<TSource>>(ReadManifestData<UniverseContext>(json));
+        }
+
+        public List<ShipSpec> DeserializeHulls<ShipSpec>(String json) where ShipSpec : BaseEntity
+        {
+            return JsonConvert.DeserializeObject<List<ShipSpec>>(ReadManifestData<UniverseContext>(json),
+                new EnumConverter());
+        }
+    }
+
+    public class EnumConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(Hull.HullTypeEnum);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
+        {
+            var eTypeVal = typeof(Hull.HullTypeEnum).GetMembers()
+                .Where(x => x.GetCustomAttributes(typeof(DescriptionAttribute)).Any())
+                .FirstOrDefault(x =>
+                    ((DescriptionAttribute)x.GetCustomAttribute(typeof(DescriptionAttribute))).Description ==
+                    (string)reader.Value);
+
+            if (eTypeVal == null) return Enum.Parse(typeof(Hull.HullTypeEnum), (string)reader.Value);
+
+            return Enum.Parse(typeof(Hull.HullTypeEnum), eTypeVal.Name);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
         }
     }
 }

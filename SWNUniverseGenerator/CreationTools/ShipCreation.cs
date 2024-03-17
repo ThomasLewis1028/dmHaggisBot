@@ -35,51 +35,67 @@ namespace SWNUniverseGenerator.CreationTools
                             UniverseId = universeId
                         };
 
+                        Spec spec;
+
                         using (var specRepo = new Repository<Spec>(context))
                         {
                             using (var hullRepo = new Repository<Hull>(context))
                             {
                                 IEntity hull;
-                                if (string.IsNullOrEmpty(shipDefaultSettings.Type))
+                                if (shipDefaultSettings.HullType == Hull.HullTypeEnum.Undefined)
                                 {
                                     var hullSwitch = Rand.Next(0, 100);
                                     // Weighted chances for each hull type
                                     hull = hullSwitch switch
                                     {
                                         var n when (n >= 0 && n < 10) => hullRepo
-                                            .Search(h => h.Type == "Strike Fighter").First(),
-                                        var n when (n >= 10 && n < 25) => hullRepo.Search(h => h.Type == "Shuttle")
+                                            .Search(h => h.HullType == Hull.HullTypeEnum.StrikeFighter)
+                                            .First(),
+                                        var n when (n >= 10 && n < 25) => hullRepo
+                                            .Search(h => h.HullType == Hull.HullTypeEnum.Shuttle)
                                             .First(),
                                         var n when (n >= 25 && n < 50) => hullRepo
-                                            .Search(h => h.Type == "Free Merchant").First(),
-                                        var n when (n >= 50 && n < 60) => hullRepo.Search(h => h.Type == "Patrol Boat")
+                                            .Search(h => h.HullType == Hull.HullTypeEnum.FreeMerchant)
                                             .First(),
-                                        var n when (n >= 60 && n < 72) => hullRepo.Search(h => h.Type == "Corvette")
+                                        var n when (n >= 50 && n < 60) => hullRepo
+                                            .Search(h => h.HullType == Hull.HullTypeEnum.PatrolBoat)
+                                            .First(),
+                                        var n when (n >= 60 && n < 72) => hullRepo
+                                            .Search(h => h.HullType == Hull.HullTypeEnum.Corvette)
                                             .First(),
                                         var n when (n >= 72 && n < 81) => hullRepo
-                                            .Search(h => h.Type == "Heavy Frigate").First(),
-                                        var n when (n >= 81 && n < 86) => hullRepo
-                                            .Search(h => h.Type == "Bulk Freighter").First(),
-                                        var n when (n >= 86 && n < 91) => hullRepo
-                                            .Search(h => h.Type == "Fleet Cruiser").First(),
-                                        var n when (n >= 91 && n < 94) => hullRepo.Search(h => h.Type == "Battleship")
+                                            .Search(h => h.HullType == Hull.HullTypeEnum.HeavyFrigate)
                                             .First(),
-                                        var n when (n >= 94 && n < 95) => hullRepo.Search(h => h.Type == "Carrier")
+                                        var n when (n >= 81 && n < 86) => hullRepo
+                                            .Search(h => h.HullType == Hull.HullTypeEnum.BulkFreighter)
+                                            .First(),
+                                        var n when (n >= 86 && n < 91) => hullRepo
+                                            .Search(h => h.HullType == Hull.HullTypeEnum.FleetCruiser)
+                                            .First(),
+                                        var n when (n >= 91 && n < 94) => hullRepo
+                                            .Search(h => h.HullType == Hull.HullTypeEnum.Battleship)
+                                            .First(),
+                                        var n when (n >= 94 && n < 95) => hullRepo
+                                            .Search(h => h.HullType == Hull.HullTypeEnum.Carrier)
                                             .First(),
                                         var n when (n >= 95 && n < 97) => hullRepo
-                                            .Search(h => h.Type == "Free Merchant")
+                                            .Search(h => h.HullType == Hull.HullTypeEnum.FreeMerchant)
                                             .First(), // Free Merchant temporary value
                                         var n when (n >= 97 && n < 100) => hullRepo
-                                            .Search(h => h.Type == "Free Merchant")
+                                            .Search(h => h.HullType == Hull.HullTypeEnum.FreeMerchant)
                                             .First(), // Free Merchant temporary value
-                                        _ => hullRepo.Search(h => h.Type == "Free Merchant").First()
+                                        _ => hullRepo
+                                            .Search(h => h.HullType == Hull.HullTypeEnum.FreeMerchant)
+                                            .First()
                                     };
 
-                                    ship.SpecId = specRepo.Random(s => s.HullId == hull.Id).Id;
+                                    ship.HullId = hull.Id;
+                                    spec = (Spec)specRepo.Random(s => s.HullId == hull.Id);
                                 }
                                 else
                                 {
-                                    ship.SpecId = hullRepo.Search(h => h.Type == shipDefaultSettings.Type).First().Id;
+                                    ship.HullId = hullRepo.Search(h => h.HullType == shipDefaultSettings.HullType).First().Id;
+                                    spec = (Spec)specRepo.Random(s => s.HullId == ship.HullId);
                                 }
                             }
                         }
@@ -143,7 +159,7 @@ namespace SWNUniverseGenerator.CreationTools
                         // Set the armaments
                         using (var armaRepo = new Repository<ShipArmament>(context))
                         {
-                            foreach (var specArmament in context.SpecArmament.Where(s => s.SpecId == ship.SpecId))
+                            foreach (var specArmament in context.SpecArmament.Where(s => s.SpecId == spec.Id))
                             {
                                 var shipArmament = new ShipArmament()
                                 {
@@ -160,7 +176,7 @@ namespace SWNUniverseGenerator.CreationTools
                         // Set the defenses
                         using (var defRepo = new Repository<ShipDefense>(context))
                         {
-                            foreach (var specDefense in context.SpecDefense.Where(s => s.SpecId == ship.SpecId))
+                            foreach (var specDefense in context.SpecDefense.Where(s => s.SpecId == spec.Id))
                             {
                                 var shipDefense = new ShipDefense()
                                 {
@@ -177,7 +193,7 @@ namespace SWNUniverseGenerator.CreationTools
                         // Set the fittings
                         using (var fitRepo = new Repository<ShipFitting>(context))
                         {
-                            foreach (var specFitting in context.SpecFitting.Where(s => s.SpecId == ship.SpecId))
+                            foreach (var specFitting in context.SpecFitting.Where(s => s.SpecId == spec.Id))
                             {
                                 var shipFitting = new ShipFitting()
                                 {
@@ -199,13 +215,11 @@ namespace SWNUniverseGenerator.CreationTools
                             {
                                 using (var specRepo = new Repository<Spec>(context))
                                 {
-                                    var hullId = ((Spec)specRepo.Search(s => s.Id == ship.SpecId).First()).HullId;
-
                                     var hullCrewMin = ((Hull)hullRepo.Search(h =>
-                                        h.Id == hullId).First()).CrewMin;
+                                        h.Id == ship.HullId).First()).CrewMin;
 
                                     var hullCrewMax = ((Hull)hullRepo.Search(h =>
-                                        h.Id == hullId).First()).CrewMax;
+                                        h.Id == ship.HullId).First()).CrewMax;
 
                                     new CharCreation().AddCharacters(universeId,
                                         new CharacterDefaultSettings
@@ -277,7 +291,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 new ShipCreation().AddShips(universeId, new ShipDefaultSettings
                                 {
                                     Count = fighterBayCount,
-                                    Type = "Strike Fighter",
+                                    HullClass = Hull.HullClassEnum.Fighter,
                                     HomeId = ship.Id,
                                     LocationId = ship.Id,
                                     CreateCrew = false
@@ -289,7 +303,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 new ShipCreation().AddShips(universeId, new ShipDefaultSettings
                                 {
                                     Count = frigateBayCount,
-                                    Type = "Frigate",
+                                    HullClass = Hull.HullClassEnum.Frigate,
                                     HomeId = ship.Id,
                                     LocationId = ship.Id,
                                     CreateCrew = false

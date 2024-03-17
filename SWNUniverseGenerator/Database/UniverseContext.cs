@@ -149,9 +149,9 @@ namespace SWNUniverseGenerator.Database
                 .IsRequired();
 
             modelBuilder.Entity<Ship>()
-                .HasOne<Spec>()
+                .HasOne<Hull>()
                 .WithMany()
-                .HasForeignKey(sh => sh.SpecId)
+                .HasForeignKey(sh => sh.HullId)
                 .IsRequired();
 
             // SHIP ARMAMENT

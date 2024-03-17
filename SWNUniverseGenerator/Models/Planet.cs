@@ -1,5 +1,4 @@
 ﻿using System;
-using SWNUniverseGenerator.DeserializedObjects;
 
 namespace SWNUniverseGenerator.Models
 {
@@ -8,7 +7,6 @@ namespace SWNUniverseGenerator.Models
     /// </summary>
     public class Planet : BaseEntity, ILocation
     {
-
         /// <summary>
         /// This is the Zone in which a planet lies
         /// </summary>

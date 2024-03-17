@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
-using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
 
 // using ProblemData = SWNUniverseGenerator.DeserializedObjects.ProblemData;
@@ -130,7 +126,6 @@ namespace SWNUniverseGenerator.CreationTools
         /// </summary>
         /// <param name="universeId"></param>
         /// <param name="starDefaultSettings"></param>
-        /// <param name="context"></param>
         /// <returns>
         /// True at the end
         /// </returns>
@@ -290,16 +285,12 @@ namespace SWNUniverseGenerator.CreationTools
                           + universeId;
 
             if (File.Exists(path + ".svg"))
-            {
                 File.Delete(path
                             + ".svg");
-            }
 
             if (File.Exists(path + ".png"))
-            {
                 File.Delete(path
                             + ".png");
-            }
 
             using (var context = new UniverseContext())
             {
@@ -309,8 +300,8 @@ namespace SWNUniverseGenerator.CreationTools
                 using (var charRepo = new Repository<Character>(context))
                     charRepo.DeleteRange(context.Characters.Where(c => c.UniverseId == universeId).ToList());
 
-                using (var armaRepo = new Repository<ShipArmament>(context))
-                    armaRepo.DeleteRange(context.ShipArmament.Where(c => c.UniverseId == universeId).ToList());
+                using (var armamentRepo = new Repository<ShipArmament>(context))
+                    armamentRepo.DeleteRange(context.ShipArmament.Where(c => c.UniverseId == universeId).ToList());
 
                 using (var defRepo = new Repository<ShipDefense>(context))
                     defRepo.DeleteRange(context.ShipDefense.Where(c => c.UniverseId == universeId).ToList());

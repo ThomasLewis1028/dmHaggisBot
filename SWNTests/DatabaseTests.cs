@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SWNUniverseGenerator;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.Models;
 
@@ -13,24 +10,24 @@ namespace SWNTests;
 [TestClass]
 public class DatabaseTests
 {
-    private static readonly Random Rand = new Random();
+    private static readonly Random Rand = new ();
 
-    /// <summary>
-    /// Runs 1 time prior to all tests for setup 
-    /// </summary>
-    /// <param name="testContext"></param>
-    [ClassInitialize]
-    public static async Task ClassInitialize(TestContext testContext)
-    {
-    }
+    // /// <summary>
+    // /// Runs 1 time prior to all tests for setup 
+    // /// </summary>
+    // /// <param name="testContext"></param>
+    // [ClassInitialize]
+    // public static async Task ClassInitialize(TestContext testContext)
+    // {
+    // }
 
-    /// <summary>
-    /// Runs 1 time when tests are all complete and used for cleanup tasks
-    /// </summary>
-    [ClassCleanup]
-    public static async Task ClassCleanup()
-    {
-    }
+    // /// <summary>
+    // /// Runs 1 time when tests are all complete and used for cleanup tasks
+    // /// </summary>
+    // [ClassCleanup]
+    // public static async Task ClassCleanup()
+    // {
+    // }
 
 
     [TestMethod, TestCategory("DatabaseTest")]
@@ -54,12 +51,12 @@ public class DatabaseTests
             TestAddCharacter(universeId, context);
 
             //Join Query
-            var joinquery =
+            var joinQuery =
                 from u in context.Universes
                 join c in context.Characters on u.Id equals c.UniverseId
                 where u.Id == ucGet.Id
                 select new {u.Name, c.First, c.Last};
-            var result = joinquery.First();
+            var result = joinQuery.First();
             Assert.AreEqual(result.Name, universeName);
             Assert.IsNotNull(result.First);
             Assert.IsNotNull(result.Last);

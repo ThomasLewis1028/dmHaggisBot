@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SWNUniverseGenerator.DefaultSettings;
-using SWNUniverseGenerator.DeserializedObjects;
-using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.CreationTools
 {
     internal class AlienCreation
     {
-        private static readonly Random Rand = new Random();
+        private static readonly Random Rand = new ();
 
-        public Universe AddAliens(Universe universe, AlienDefaultSettings alienDefaultSettings, AlienData alienData)
-        {
+        // public Universe AddAliens(Universe universe, AlienDefaultSettings alienDefaultSettings, AlienData alienData)
+        // {
             // If no Characters have been created on the Universe then give it an empty list of them.
             // universe.Aliens ??= new List<Alien>();
             //
@@ -113,7 +108,7 @@ namespace SWNUniverseGenerator.CreationTools
             //
             // universe.Aliens = universe.Aliens.OrderBy(a => a.Id).ToList();
 
-            return universe;
-        }
+        //     return universe;
+        // }
     }
 }

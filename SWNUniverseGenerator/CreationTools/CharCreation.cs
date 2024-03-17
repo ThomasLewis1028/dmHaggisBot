@@ -19,8 +19,6 @@ namespace SWNUniverseGenerator.CreationTools
         /// </summary>
         /// <param name="universeId"></param>
         /// <param name="characterDefaultSettings"></param>
-        /// <param name="charData"></param>
-        /// <param name="nameGenerations"></param>
         /// <returns>The newly modified universe</returns>
         public void AddCharacters(String universeId, CharacterDefaultSettings characterDefaultSettings)
         {
@@ -117,16 +115,14 @@ namespace SWNUniverseGenerator.CreationTools
                         using (var repo = new Repository<Planet>(context))
                         {
                             // Character birth planet
-                            character.BirthPlanetId = characterDefaultSettings.BirthPlanetId == null
-                                ? repo.Random(p => p.UniverseId == universeId).Id
-                                : characterDefaultSettings.BirthPlanetId;
+                            character.BirthPlanetId = characterDefaultSettings.BirthPlanetId
+                                                      ?? repo.Random(p => p.UniverseId == universeId).Id;
 
                             // Character current planet
-                            character.CurrentLocationId = characterDefaultSettings.CurrentPlanetId == null
-                                ? Rand.Next(0, 100) < 5
-                                    ? repo.Random(p => p.UniverseId == universeId).Id
-                                    : character.BirthPlanetId
-                                : characterDefaultSettings.CurrentPlanetId;
+                            character.CurrentLocationId = characterDefaultSettings.CurrentPlanetId
+                                                          ?? (Rand.Next(0, 100) < 5
+                                                              ? repo.Random(p => p.UniverseId == universeId).Id
+                                                              : character.BirthPlanetId);
                         }
 
                         // Character crime chance

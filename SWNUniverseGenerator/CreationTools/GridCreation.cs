@@ -40,7 +40,6 @@ namespace SWNUniverseGenerator.CreationTools
             float orbitRadius = starRadius + planetRadius * 3F;
 
             // Colour wheel
-            Colour bgStarColor;
             Colour blueStarColor = Colour.FromRgb(21, 167, 255);
             Colour whiteStarColor = Colours.WhiteSmoke;
             Colour yellowStarColor = Colour.FromRgb(255, 241, 104);
@@ -86,7 +85,7 @@ namespace SWNUniverseGenerator.CreationTools
                 // Set the Class of the Star
                 int starRand = Rand.Next(0, 100);
                 double opacityRand = Rand.NextDouble();
-                bgStarColor = starRand switch
+                var bgStarColor = starRand switch
                 {
                     >= 0 and < 1 => blueStarColor.WithAlpha(opacityRand),
                     >= 1 and < 2 => whiteStarColor.WithAlpha(opacityRand),

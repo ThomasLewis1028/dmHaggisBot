@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
@@ -39,9 +38,8 @@ namespace SWNUniverseGenerator.CreationTools
                     List<Planet> planets = new();
 
                     // Iterate through each star and add planets
-                    foreach (var entity in planetDefaultSettings.StarList)
+                    foreach (var star in planetDefaultSettings.StarList)
                     {
-                        var star = (Star)entity;
                         int pMax;
 
                         // Set the random number of Planets that will be created for a given Star 

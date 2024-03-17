@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
-using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.CreationTools
 {
     internal class ShipCreation
     {
-        private static readonly Random Rand = new Random();
+        private static readonly Random Rand = new ();
 
         public void AddShips(String universeId, ShipDefaultSettings shipDefaultSettings)
         {
@@ -48,40 +45,40 @@ namespace SWNUniverseGenerator.CreationTools
                                     // Weighted chances for each hull type
                                     hull = hullSwitch switch
                                     {
-                                        var n when (n >= 0 && n < 10) => hullRepo
+                                        >= 0 and < 10 => hullRepo
                                             .Search(h => h.HullType == Hull.HullTypeEnum.StrikeFighter)
                                             .First(),
-                                        var n when (n >= 10 && n < 25) => hullRepo
+                                        >= 10 and < 25 => hullRepo
                                             .Search(h => h.HullType == Hull.HullTypeEnum.Shuttle)
                                             .First(),
-                                        var n when (n >= 25 && n < 50) => hullRepo
+                                        >= 25 and < 50 => hullRepo
                                             .Search(h => h.HullType == Hull.HullTypeEnum.FreeMerchant)
                                             .First(),
-                                        var n when (n >= 50 && n < 60) => hullRepo
+                                        >= 50 and < 60 => hullRepo
                                             .Search(h => h.HullType == Hull.HullTypeEnum.PatrolBoat)
                                             .First(),
-                                        var n when (n >= 60 && n < 72) => hullRepo
+                                        >= 60 and < 72 => hullRepo
                                             .Search(h => h.HullType == Hull.HullTypeEnum.Corvette)
                                             .First(),
-                                        var n when (n >= 72 && n < 81) => hullRepo
+                                        >= 72 and < 81 => hullRepo
                                             .Search(h => h.HullType == Hull.HullTypeEnum.HeavyFrigate)
                                             .First(),
-                                        var n when (n >= 81 && n < 86) => hullRepo
+                                        >= 81 and < 86 => hullRepo
                                             .Search(h => h.HullType == Hull.HullTypeEnum.BulkFreighter)
                                             .First(),
-                                        var n when (n >= 86 && n < 91) => hullRepo
+                                        >= 86 and < 91 => hullRepo
                                             .Search(h => h.HullType == Hull.HullTypeEnum.FleetCruiser)
                                             .First(),
-                                        var n when (n >= 91 && n < 94) => hullRepo
+                                        >= 91 and < 94 => hullRepo
                                             .Search(h => h.HullType == Hull.HullTypeEnum.Battleship)
                                             .First(),
-                                        var n when (n >= 94 && n < 95) => hullRepo
+                                        >= 94 and < 95 => hullRepo
                                             .Search(h => h.HullType == Hull.HullTypeEnum.Carrier)
                                             .First(),
-                                        var n when (n >= 95 && n < 97) => hullRepo
+                                        >= 95 and < 97 => hullRepo
                                             .Search(h => h.HullType == Hull.HullTypeEnum.FreeMerchant)
                                             .First(), // Free Merchant temporary value
-                                        var n when (n >= 97 && n < 100) => hullRepo
+                                        >= 97 and < 100 => hullRepo
                                             .Search(h => h.HullType == Hull.HullTypeEnum.FreeMerchant)
                                             .First(), // Free Merchant temporary value
                                         _ => hullRepo
@@ -157,7 +154,7 @@ namespace SWNUniverseGenerator.CreationTools
                         // ship.Cp = shipSpec.Cp;
 
                         // Set the armaments
-                        using (var armaRepo = new Repository<ShipArmament>(context))
+                        using (var armamentRepo = new Repository<ShipArmament>(context))
                         {
                             foreach (var specArmament in context.SpecArmament.Where(s => s.SpecId == spec.Id))
                             {
@@ -170,7 +167,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 shipArmaments.Add(shipArmament);
                             }
 
-                            armaRepo.AddRange(shipArmaments);
+                            armamentRepo.AddRange(shipArmaments);
                         }
 
                         // Set the defenses
@@ -213,8 +210,6 @@ namespace SWNUniverseGenerator.CreationTools
                         {
                             using (var hullRepo = new Repository<Hull>(context))
                             {
-                                using (var specRepo = new Repository<Spec>(context))
-                                {
                                     var hullCrewMin = ((Hull)hullRepo.Search(h =>
                                         h.Id == ship.HullId).First()).CrewMin;
 
@@ -228,9 +223,8 @@ namespace SWNUniverseGenerator.CreationTools
                                                 hullCrewMax + 1 - (shipDefaultSettings.CrewMemberIds?.Count ?? 0)),
                                             ShipId = ship.Id
                                         });
-                                }
                             }
-
+                            
                             // Set the crewType on the crewMembers
                             using (var crewRepo = new Repository<CrewMember>(context))
                             {

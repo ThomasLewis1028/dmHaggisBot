@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SWNUniverseGenerator;
-using SWNUniverseGenerator.CreationTools;
-using SWNUniverseGenerator.Database;
-using SWNUniverseGenerator.DefaultSettings;
-using SWNUniverseGenerator.Models;
 
 namespace SWNTests;
 

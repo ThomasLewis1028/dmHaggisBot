@@ -505,9 +505,9 @@ namespace SWNUniverseGenerator.Migrations.SeedData
             return JsonConvert.DeserializeObject<List<TSource>>(ReadManifestData<UniverseContext>(json));
         }
 
-        public List<ShipSpec> DeserializeHulls<ShipSpec>(String json) where ShipSpec : BaseEntity
+        public List<TSource> DeserializeHulls<TSource>(String json) where TSource : BaseEntity
         {
-            return JsonConvert.DeserializeObject<List<ShipSpec>>(ReadManifestData<UniverseContext>(json),
+            return JsonConvert.DeserializeObject<List<TSource>>(ReadManifestData<UniverseContext>(json),
                 new EnumConverter());
         }
     }

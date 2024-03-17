@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SWNUniverseGenerator.DefaultSettings;
-using SWNUniverseGenerator.DeserializedObjects;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.CreationTools

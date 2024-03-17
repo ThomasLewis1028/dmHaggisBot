@@ -5,3 +5,4 @@ obj/
 dmHaggisBot/properties.json
 dmHaggisBot/universe.json
 /dmHaggisBot.sln.DotSettings.user
+/SWNUniverseGenerator/Migrations/*.cs

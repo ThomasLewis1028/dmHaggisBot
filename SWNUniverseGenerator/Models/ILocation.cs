@@ -15,6 +15,6 @@ namespace SWNUniverseGenerator.Models
         /// <summary>
         /// All ILocation type objects much implement a Name 
         /// </summary>
-        public new String Name { get; set; }
+        public String Name { get; set; }
     }
 }

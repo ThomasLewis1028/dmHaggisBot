@@ -60,7 +60,7 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
-    [DataRow("Test Full Creation", false)]
+    // [DataRow("Test Full Creation", false)] // Used for testing
     [DataRow("Test Full Creation", true)]
     public void TestFullCreation(String universeName, Boolean cleanup)
     {
@@ -109,6 +109,7 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
+    // [DataRow("Test Full Creation", false)] // Used for testing
     [DataRow("Test Star Class Creation", true)]
     public void TestStarClassCreation(String universeName, Boolean cleanup)
     {
@@ -212,6 +213,7 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
+    // [DataRow("Test Full Creation", false)] // Used for testing
     [DataRow("Test Wide Grid Creation", true)]
     public void TestWideGridCreation(String universeName, Boolean cleanup)
     {
@@ -252,6 +254,7 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
+    // [DataRow("Test Full Creation", false)] // Used for testing
     [DataRow("Test Planet Class Creation", true)]
     public void TestPlanetClassCreation(String universeName, Boolean cleanup)
     {
@@ -298,6 +301,7 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
+    // [DataRow("Test Full Creation", false)] // Used for testing
     [DataRow("Test Character Creation", true)]
     public void TestCharacterCreation(String universeName, Boolean cleanup)
     {
@@ -387,7 +391,7 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
-    [DataRow("Test Ship Creation", false)]
+    // [DataRow("Test Full Creation", false)] // Used for testing
     [DataRow("Test Ship Creation", true)]
     public void TestShipCreation(String universeName, Boolean cleanup)
     {

@@ -24,30 +24,6 @@ namespace SWNUniverseGenerator.CreationTools
     /// </summary>
     public class Creation
     {
-        private static readonly string _localPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        private readonly string _universePath = _localPath + "/UniverseFiles/";
-        private readonly string _dataPath = _localPath + "/Data/";
-        public const string universeExt = ".universe";
-
-        public ShipData ShipData;
-        private WorldInfo _worldInfo;
-        private StarData _starData;
-        private CharData _charData;
-
-        public PoiData PoiData;
-
-        // public ProblemData ProblemData;
-        public SocietyData SocietyData;
-        public AlienData AlienData;
-
-        public NameGeneration MaleFirstNameGeneration;
-        public NameGeneration FemaleFirstNameGeneration;
-        public NameGeneration LastNameGeneration;
-        public List<NameGeneration> CharacterNameGenerations = new();
-
-        public NameGeneration PlanetNameGeneration;
-        public NameGeneration StarNameGeneration;
-
         /// <summary>
         /// Default constructor that requires a path to be passed in
         /// </summary>
@@ -304,33 +280,6 @@ namespace SWNUniverseGenerator.CreationTools
         }
 
         /// <summary>
-        /// This method receives the name of a Universe and deserializes it into a Universe object
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns>
-        /// The universe that matches the name specified
-        /// </returns>
-        /// <exception cref="FileNotFoundException"></exception>
-        public Universe LoadUniverse(string name)
-        {
-            // Set the path to the name
-            var path = new StringBuilder();
-            path.Append(_universePath + "/" + name + universeExt);
-
-            // If none exists throw an exception
-            if (!File.Exists(path.ToString()))
-                throw new FileNotFoundException(path + " not found.");
-
-            // Parse the file into a JObject
-            var univ =
-                JObject.Parse(
-                    File.ReadAllText(path.ToString()));
-
-            // Deserialize the JObject into a Universe and return it
-            return JsonConvert.DeserializeObject<Universe>(univ.ToString());
-        }
-
-        /// <summary>
         /// This method receives the ID for a universe and deletes the entire universe as needed
         /// </summary>
         /// <param name="universeId"></param>
@@ -384,83 +333,6 @@ namespace SWNUniverseGenerator.CreationTools
                 using (var uniRepo = new Repository<Universe>(context))
                     uniRepo.Delete(universeId);
             }
-        }
-
-        /// <summary>
-        /// Method should receive a Universe that it will serialize to a file
-        /// </summary>
-        /// <param name="universe"></param>
-        private void SerializeData(Universe universe)
-        {
-            // Set the path to the file and write it, overwriting the previous file if it exists.
-            var path = _universePath + universe.Name + universeExt;
-            using var file =
-                File.CreateText(path);
-            var serializer = new JsonSerializer();
-            serializer.Serialize(file, universe);
-        }
-
-        /// <summary>
-        /// Receive the path to a data type and return the deserialized version of that data
-        /// </summary>
-        /// <param name="path"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        private T LoadData<T>(String path)
-        {
-            path = _dataPath + path;
-
-            var data =
-                JObject.Parse(
-                    File.ReadAllText(path));
-
-            return JsonConvert.DeserializeObject<T>(data.ToString());
-        }
-
-        /// <summary>
-        /// Retrieve all universe files on disk
-        /// </summary>
-        /// <returns></returns>
-        public List<UniverseInfo> GetUniverseList()
-        {
-            List<UniverseInfo> universeInfos = new();
-            string[] fileListFullPath = Directory.GetFiles(_universePath, "*" + universeExt);
-
-            foreach (var fullPath in fileListFullPath)
-            {
-                var filename = Path.GetFileName(fullPath).Replace(universeExt, "");
-
-                Universe universe = LoadUniverse(filename);
-                UniverseInfo universeInfo = new UniverseInfo()
-                {
-                    // Name = universe.Name,
-                    // GridX = universe.GridX,
-                    // GridY = universe.GridY,
-                    // StarCount = universe.Stars.Count,
-                    // PlanetCount = universe.Planets.Count,
-                    // ShipCount = universe.Ships.Count,
-                    // CharCount = universe.Characters.Count
-                };
-                universeInfos.Add(universeInfo);
-            }
-
-            return universeInfos;
-        }
-
-        /// <summary>
-        /// Class to hold information for brief display.
-        /// </summary>
-        public class UniverseInfo
-        {
-            public String Name { get; set; }
-
-            public int? GridX;
-            public int? GridY;
-
-            public int StarCount;
-            public int PlanetCount;
-            public int ShipCount;
-            public int CharCount;
         }
     }
 }

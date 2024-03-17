@@ -213,7 +213,8 @@ namespace SWNUniverseGenerator.Migrations.SeedData
 
         public List<Hull> GetShipHullData()
         {
-            var result = JsonConvert.DeserializeObject<List<Hull>>(ReadManifestData<UniverseContext>("ShipHull.json"), new EnumConverter());
+            var result = JsonConvert.DeserializeObject<List<Hull>>(ReadManifestData<UniverseContext>("ShipHull.json"),
+                new EnumConverter());
             return result;
         }
 

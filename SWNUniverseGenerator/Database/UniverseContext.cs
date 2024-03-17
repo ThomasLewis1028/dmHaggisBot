@@ -1,6 +1,7 @@
 ﻿using System;
 using LibGit2Sharp;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWNUniverseGenerator.Migrations;
 using SWNUniverseGenerator.Migrations.SeedData;
 using SWNUniverseGenerator.Models;
@@ -153,6 +154,17 @@ namespace SWNUniverseGenerator.Database
                 .WithMany()
                 .HasForeignKey(sh => sh.HullId)
                 .IsRequired();
+
+            // Hulls
+            modelBuilder
+                .Entity<Hull>()
+                .Property(h => h.HullType)
+                .HasConversion(new EnumToStringConverter<Hull.HullTypeEnum>());
+            
+            modelBuilder
+                .Entity<Hull>()
+                .Property(h => h.HullClass)
+                .HasConversion(new EnumToStringConverter<Hull.HullClassEnum>());
 
             // SHIP ARMAMENT
             modelBuilder.Entity<ShipArmament>()

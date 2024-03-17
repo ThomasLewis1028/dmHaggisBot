@@ -7,6 +7,8 @@ namespace SWNUniverseGenerator.Models
     {
         public HullTypeEnum HullType { get; set; }
 
+        public HullClassEnum HullClass { get; set; }
+
         public Int32 Cost { get; set; }
 
         public Int32? Speed { get; set; }
@@ -27,54 +29,32 @@ namespace SWNUniverseGenerator.Models
 
         public Int32 Hardpoints { get; set; }
 
-        public HullClassEnum Class { get; set; }
-
         public String Description { get; set; }
-        
+
         public enum HullTypeEnum
         {
-            [Description("Battleship")]
-            Battleship,
-            [Description("Carrier")]
-            Carrier,
-            [Description("Strike Fighter")]
-            StrikeFighter,
-            [Description("Patrol Boat")]
-            PatrolBoat,
-            [Description("Small Station")]
-            SmallStation,
-            [Description("Bulk Freighter")]
-            BulkFreighter,
-            [Description("Fleet Cruiser")]
-            FleetCruiser,
-            [Description("Corvette")]
-            Corvette,
-            [Description("Free Merchant")]
-            FreeMerchant,
-            [Description("Heavy Frigate")]
-            HeavyFrigate,
-            [Description("Large Station")]
-            LargeStation,
-            [Description("Shuttle")]
-            Shuttle,
-            [Description("Undefined")]
-            Undefined
+            [Description("Battleship")] Battleship,
+            [Description("Carrier")] Carrier,
+            [Description("Strike Fighter")] StrikeFighter,
+            [Description("Patrol Boat")] PatrolBoat,
+            [Description("Small Station")] SmallStation,
+            [Description("Bulk Freighter")] BulkFreighter,
+            [Description("Fleet Cruiser")] FleetCruiser,
+            [Description("Corvette")] Corvette,
+            [Description("Free Merchant")] FreeMerchant,
+            [Description("Heavy Frigate")] HeavyFrigate,
+            [Description("Large Station")] LargeStation,
+            [Description("Shuttle")] Shuttle,
+            [Description("Undefined")] Undefined
         }
 
         public enum HullClassEnum
         {
-            [Description("Capital")]
-            Capital,
-            [Description("Fighter")]
-            Fighter,
-            [Description("Frigate")]
-            Frigate,
-            [Description("Cruiser")]
-            Cruiser,
-            [Description("Undefined")]
-            Undefined
-
+            [Description("Capital")] Capital,
+            [Description("Fighter")] Fighter,
+            [Description("Frigate")] Frigate,
+            [Description("Cruiser")] Cruiser,
+            [Description("Undefined")] Undefined
         }
     }
-    
 }

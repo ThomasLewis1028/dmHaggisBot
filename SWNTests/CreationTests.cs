@@ -399,7 +399,7 @@ public class CreationTests
 
         creation.CreateShips(universeId, new ShipDefaultSettings
         {
-            Count = 10,
+            Count = 100,
             CreateCrew = false,
             HomeId = universeId,
             LocationId = universeId

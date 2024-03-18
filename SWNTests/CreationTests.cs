@@ -301,7 +301,7 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
-    // [DataRow("Test Full Creation", false)] // Used for testing
+    [DataRow("Test Character Creation", false)] // Used for testing
     [DataRow("Test Character Creation", true)]
     public void TestCharacterCreation(String universeName, Boolean cleanup)
     {
@@ -338,6 +338,11 @@ public class CreationTests
             Last = "Doe",
         });
 
+        creation.CreateCharacter(universeId, new CharacterDefaultSettings
+        {
+            Count = 13
+        });
+
         Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) > 0);
         Assert.IsTrue(context.Zones.Count(s => s.UniverseId == universeId) > 0);
         Assert.IsTrue(context.Stars.Count(s => s.UniverseId == universeId) > 0);
@@ -345,28 +350,32 @@ public class CreationTests
 
         List<Character> chars = context.Characters.Where(c => c.UniverseId == universeId).ToList();
 
-        Assert.IsTrue(context.Characters.Count(c => c.UniverseId == universeId) == 2);
-        Assert.IsTrue(chars.Count == 2);
-        Assert.IsTrue(chars.First().First == "John");
-        Assert.IsTrue(chars.First().Last == "Doe");
-        Assert.IsTrue(chars.First().Name == "John Doe");
-        Assert.IsTrue(chars.First().Age == 25);
-        Assert.IsTrue(chars.First().HairStyle == "Long Straight");
-        Assert.IsTrue(chars.First().HairCol == "Brown");
-        Assert.IsTrue(chars.First().EyeCol == "Blue");
-        Assert.IsTrue(chars.First().Title == "Dude");
-        Assert.IsTrue(chars.First().SkinCol == "Pale");
-        Assert.IsTrue(chars.First().Height == 120);
-        Assert.IsTrue(chars.First().Gender == Character.GenderEnum.Male);
-        Assert.IsTrue(chars.First().CrimeChance == 50);
-        Assert.IsTrue(chars.First().InitialReaction == "Warm");
-        Assert.IsTrue(chars.First().CurrentLocationId == context.Planets.First(p => p.UniverseId == universeId).Id);
+        Assert.IsTrue(context.Characters.Count(c => c.UniverseId == universeId) == 15);
+        Assert.IsTrue(chars.Count == 15);
 
-        Assert.IsTrue(chars.Last().First == "Jane");
-        Assert.IsTrue(chars.Last().Last == "Doe");
-        Assert.IsTrue(chars.Last().Gender == Character.GenderEnum.Female);
+        Character john = chars[0];
+        Character jane = chars[1];
+        
+        Assert.IsTrue(john.First == "John");
+        Assert.IsTrue(john.Last == "Doe");
+        Assert.IsTrue(john.Name == "John Doe");
+        Assert.IsTrue(john.Age == 25);
+        Assert.IsTrue(john.HairStyle == "Long Straight");
+        Assert.IsTrue(john.HairCol == "Brown");
+        Assert.IsTrue(john.EyeCol == "Blue");
+        Assert.IsTrue(john.Title == "Dude");
+        Assert.IsTrue(john.SkinCol == "Pale");
+        Assert.IsTrue(john.Height == 120);
+        Assert.IsTrue(john.Gender == Character.GenderEnum.Male);
+        Assert.IsTrue(john.CrimeChance == 50);
+        Assert.IsTrue(john.InitialReaction == "Warm");
+        Assert.IsTrue(john.CurrentLocationId == context.Planets.First(p => p.UniverseId == universeId).Id);
 
-        Assert.IsTrue(chars.First().UniverseId == universeId);
+        Assert.IsTrue(jane.First == "Jane");
+        Assert.IsTrue(jane.Last == "Doe");
+        Assert.IsTrue(jane.Gender == Character.GenderEnum.Female);
+
+        Assert.IsTrue(john.UniverseId == universeId);
 
         // var starMapPath = creation.CreateStarMap(universeId);
 

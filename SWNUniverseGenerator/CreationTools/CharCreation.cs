@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
+using VectSharp.Filters;
 
 namespace SWNUniverseGenerator.CreationTools
 {
@@ -22,8 +24,22 @@ namespace SWNUniverseGenerator.CreationTools
         /// <returns>The newly modified universe</returns>
         public void AddCharacters(String universeId, CharacterDefaultSettings characterDefaultSettings)
         {
+            var maleNameGenerations = new NameGeneration();
+            var femaleNameGenerations = new NameGeneration();
+            var lastNameGenerations = new NameGeneration();
+
             using (var context = new UniverseContext())
             {
+                using (var nameRepo = new Repository<Naming>(context))
+                {
+                    maleNameGenerations.GenerateChain(nameRepo.Search(n => n.NameType == "MaleName").Cast<Naming>()
+                        .ToList());
+                    femaleNameGenerations.GenerateChain(nameRepo.Search(n => n.NameType == "FemaleName").Cast<Naming>()
+                        .ToList());
+                    lastNameGenerations.GenerateChain(nameRepo.Search(n => n.NameType == "LastName").Cast<Naming>()
+                        .ToList());
+                }
+
                 using (var charRepo = new Repository<Character>(context))
                 {
                     List<Character> characters = new();
@@ -50,23 +66,44 @@ namespace SWNUniverseGenerator.CreationTools
                         // First name
                         using (var repo = new Repository<Naming>(context))
                         {
-                            character.First = string.IsNullOrEmpty(characterDefaultSettings.First)
-                                ? character.Gender == Character.GenderEnum.Male
-                                    ? ((Naming)repo.Random(n => n.NameType == "MaleName")).Name
-                                    : ((Naming)repo.Random(n => n.NameType == "FemaleName")).Name
-                                : characterDefaultSettings.First;
+                            if (string.IsNullOrEmpty(characterDefaultSettings.First))
+                            {
+                                var nameRand = Rand.Next(0, 10);
+
+                                if (nameRand > 3)
+                                {
+                                    character.First = character.Gender == Character.GenderEnum.Male
+                                        ? ((Naming)repo.Random(n => n.NameType == "MaleName")).Name
+                                        : ((Naming)repo.Random(n => n.NameType == "FemaleName")).Name;
+                                }
+                                else
+                                {
+                                    character.First = character.Gender == Character.GenderEnum.Male
+                                        ? maleNameGenerations.GenerateName()
+                                        : femaleNameGenerations.GenerateName();
+                                }
+                            }
+                            else
+                                character.First = characterDefaultSettings.First;
                         }
 
                         // Last name
                         using (var repo = new Repository<Naming>(context))
                         {
-                            character.Last = string.IsNullOrEmpty(characterDefaultSettings.Last)
-                                ? ((Naming)repo.Random(n => n.NameType == "LastName")).Name
-                                : characterDefaultSettings.Last;
+                            var nameRand = Rand.Next(0, 10);
+
+                            if (string.IsNullOrEmpty(characterDefaultSettings.Last))
+                            {
+                                if (nameRand > 3)
+                                    character.Last = ((Naming)repo.Random(n => n.NameType == "LastName")).Name;
+                                else
+                                    character.Last = lastNameGenerations.GenerateName();
+                            }
+                            else
+                                character.Last = characterDefaultSettings.Last;
                         }
 
                         // Character age
-
                         character.Age = characterDefaultSettings.Age < 0
                             ? characterDefaultSettings.AgeRange == null ||
                               characterDefaultSettings.AgeRange.Length == 0 ||

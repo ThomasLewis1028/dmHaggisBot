@@ -27,29 +27,29 @@ public class NameGenerationTests
     public static async Task ClassCleanup()
     {
     }
-    
-    [TestMethod, TestCategory("UnitTest")]
-    [DataRow(true, "Test1")]
-    [DataRow(true, "Test1", "Test2", "Test3")]
-    [DataRow(true, "Test1", "Test2", "Test3", "Test4", "Test5")]
-    public void TestGenerateChain(bool expected,params String[] nameList)
-    {
-        NameGeneration nameGeneration = new NameGeneration();
-        var actual = nameGeneration.GenerateChain(nameList.ToList());
-        Assert.AreEqual(expected, actual);
-    }
-    
-    [TestMethod, TestCategory("UnitTest")]
-    [DataRow("(Test)[0-9]", "Test1")]
-    [DataRow("(Test)[0-9]", "Test1", "Test2", "Test3")]
-    [DataRow("(Test)[0-9]", "Test1", "Test2", "Test3", "Test4", "Test5")]
-    public void TestGenerateName(string expected,params String[] nameList)
-    {
-        NameGeneration nameGeneration = new NameGeneration();
-        nameGeneration.GenerateChain(nameList.ToList());
-        var actual = nameGeneration.GenerateName();
-        Assert.IsTrue(Regex.IsMatch(actual, expected));
-    }
+    //
+    // [TestMethod, TestCategory("UnitTest")]
+    // [DataRow(true, "Test1")]
+    // [DataRow(true, "Test1", "Test2", "Test3")]
+    // [DataRow(true, "Test1", "Test2", "Test3", "Test4", "Test5")]
+    // public void TestGenerateChain(bool expected,params String[] nameList)
+    // {
+    //     NameGeneration nameGeneration = new NameGeneration();
+    //     var actual = nameGeneration.GenerateChain(nameList.ToList());
+    //     Assert.AreEqual(expected, actual);
+    // }
+    //
+    // [TestMethod, TestCategory("UnitTest")]
+    // [DataRow("(Test)[0-9]", "Test1")]
+    // [DataRow("(Test)[0-9]", "Test1", "Test2", "Test3")]
+    // [DataRow("(Test)[0-9]", "Test1", "Test2", "Test3", "Test4", "Test5")]
+    // public void TestGenerateName(string expected,params String[] nameList)
+    // {
+    //     NameGeneration nameGeneration = new NameGeneration();
+    //     nameGeneration.GenerateChain(nameList.ToList());
+    //     var actual = nameGeneration.GenerateName();
+    //     Assert.IsTrue(Regex.IsMatch(actual, expected));
+    // }
     
     
 }

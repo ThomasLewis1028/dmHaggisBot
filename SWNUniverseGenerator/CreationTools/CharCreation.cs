@@ -32,11 +32,17 @@ namespace SWNUniverseGenerator.CreationTools
             {
                 using (var nameRepo = new Repository<Naming>(context))
                 {
-                    maleNameGenerations.GenerateChain(nameRepo.Search(n => n.NameType == "MaleName").Cast<Naming>()
+                    maleNameGenerations.GenerateChain(nameRepo
+                        .Search(n => n.NameType == "MaleName")
+                        .Cast<Naming>()
                         .ToList());
-                    femaleNameGenerations.GenerateChain(nameRepo.Search(n => n.NameType == "FemaleName").Cast<Naming>()
+                    femaleNameGenerations.GenerateChain(nameRepo
+                        .Search(n => n.NameType == "FemaleName")
+                        .Cast<Naming>()
                         .ToList());
-                    lastNameGenerations.GenerateChain(nameRepo.Search(n => n.NameType == "LastName").Cast<Naming>()
+                    lastNameGenerations.GenerateChain(nameRepo
+                        .Search(n => n.NameType == "LastName")
+                        .Cast<Naming>()
                         .ToList());
                 }
 

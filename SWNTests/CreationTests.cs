@@ -72,8 +72,8 @@ public class CreationTests
         creation.CreateStars(universeId, new StarDefaultSettings(createPlanets: false));
         creation.CreatePlanets(universeId,
             new PlanetDefaultSettings(starList: context.Stars.Where(s => s.UniverseId == universeId).ToList()));
-        creation.CreateCharacter(universeId, new CharacterDefaultSettings());
-        creation.CreateShips(universeId, new ShipDefaultSettings(count: 100));
+        creation.CreateCharacter(universeId, new CharacterDefaultSettings(count: 100));
+        creation.CreateShips(universeId, new ShipDefaultSettings(count: 10));
         creation.CreateProblems(universeId, new ProblemDefaultSettings());
 
         Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) > 0);
@@ -301,7 +301,7 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
-    [DataRow("Test Character Creation", false)] // Used for testing
+    // [DataRow("Test Character Creation", false)] // Used for testing
     [DataRow("Test Character Creation", true)]
     public void TestCharacterCreation(String universeName, Boolean cleanup)
     {

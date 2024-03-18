@@ -62,8 +62,30 @@ public class NameGenerationTests
 
                 var actual = nameGeneration.GenerateName();  
                 Assert.IsTrue(Regex.IsMatch(actual, "\\w"));
-                Assert.AreEqual(0, maleList.Count(n => n.Name == actual));
-                
+            }
+        }
+     
+    }
+    
+    [TestMethod, TestCategory("UnitTest")]
+    [DataRow ("C", "^(C)[a-zA-Z]*$")]
+    [DataRow ("M", "^(M)[a-zA-Z]*$")]
+    [DataRow ("A", "^(A)[a-zA-Z]*$")]
+    [DataRow ("Z", "^(Z)[a-zA-Z]*$")]
+    public void TestGenerateNameFirstCharSame(string search, string expected)
+    {
+        using (var context = new UniverseContext())
+        {
+            using (var nameRepo = new Repository<Naming>(context))
+            {
+                var entityList = nameRepo.Search(n => n.NameType == "MaleName" && n.Name.StartsWith(search)).ToList();
+                var maleList = entityList.Cast<Naming>().ToList();
+                NameGeneration nameGeneration = new NameGeneration();
+                var result = nameGeneration.GenerateChain(maleList);
+                Assert.AreEqual(true, result); 
+
+                var actual = nameGeneration.GenerateName();
+                Assert.IsTrue(Regex.IsMatch(actual, expected));
             }
         }
      

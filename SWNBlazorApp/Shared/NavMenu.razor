@@ -1,6 +1,8 @@
 ﻿@using SWNBlazorApp.Data
 @using SWNUniverseGenerator.Models
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 
+@inject ProtectedSessionStorage ProtectedSessionStore
 @inject Universe CurrentUniverse
 @inject UniverseService UniverseService
 @inject IMenuService MenuService
@@ -30,7 +32,7 @@
         {
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="/universe">
-                    <span class="oi oi-plus" aria-hidden="true"></span> @UniverseService.GetUniverseAsync().Result.Name
+                    <span class="oi oi-plus" aria-hidden="true"></span> @universeName
                 </NavLink>
             </div>
             <div class="nav-item px-3">
@@ -49,12 +51,19 @@
 
 @code {
     private bool collapseNavMenu = true;
-
+    private string universeName;
+    
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
     
     protected override async Task OnInitializedAsync()
     {
-        CurrentUniverse = UniverseService.GetUniverseAsync().Result;
+        var universeID = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        if (!string.IsNullOrEmpty(universeID.Value))
+        {
+            CurrentUniverse = UniverseService.GetUniverseAsync(universeID.Value).Result;
+            universeName = CurrentUniverse.Name;
+        }
+        
     }
 
     private void ToggleNavMenu()

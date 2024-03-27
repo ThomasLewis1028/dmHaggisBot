@@ -3,13 +3,16 @@
 <PageTitle>Star Data</PageTitle>
 
 @using SWNBlazorApp.Data
-@using SWNUniverseGenerator
 @using SWNUniverseGenerator.DefaultSettings
 @using SWNUniverseGenerator.Models
 @using MudBlazor.Extensions
-@inject CreationService CreationService
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+
+@inject ProtectedSessionStorage ProtectedSessionStore
 @inject UniverseService UniverseService
-@inject Universe CurrentUniverse
+@inject StarService StarService
+@inject PlanetService PlanetService
+@inject ZoneService ZoneService
 
 <h1>Star Data</h1>
 
@@ -126,7 +129,7 @@ else
                           + "/" 
                           + GetZone(context.Id).Y)
                     </MudTd>
-                    <MudTd DataLabel="Planets" class="cursor-pointer">@(GetZone(context.Id).Planets.Count)</MudTd>
+                    <MudTd DataLabel="Planets" class="cursor-pointer">@(GetPlanetCount(context.Id))</MudTd>
                     <MudTd DataLabel="Class" class="cursor-pointer">@context.StarClass</MudTd>
                 </RowTemplate>
                 <PagerContent>
@@ -152,10 +155,10 @@ else
                                   + GetZone(currentStar.Id).Y)
                             </MudText>
 
-                            @if (GetZone(currentStar.Id).Planets.Any())
+                            @if (GetPlanetCount(currentStar.Id) > 0)
                             {
                                 <MudText Typo="Typo.h6">Planets:</MudText>
-                                foreach (var planet in GetZone(currentStar.Id).Planets)
+                                foreach (var planet in GetPlanets(currentStar.Id))
                                 {
                                     <MudText Typo="Typo.body2">@planet - @GetPlanetName(planet.Id)</MudText>
                                 }
@@ -180,32 +183,43 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        CurrentUniverse = UniverseService.GetUniverseAsync().Result;
-        zones = await StarService.GetZonesAsync(CurrentUniverse);
-        stars = await StarService.GetStarsAsync(CurrentUniverse);
+        var universeID = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        if (!string.IsNullOrEmpty(universeID.Value))
+        {
+            zones = await StarService.GetZonesAsync(universeID.Value);
+            stars = await StarService.GetStarsAsync(universeID.Value);
+        }
     }
 
     private String GetPlanetName(String planetId)
     {
-        string[] array = {planetId};
-        return Search.SearchUniverseList(UniverseService.GetUniverseAsync().Result, new SearchDefaultSettings() {Id = array}).First().Name;
+        return PlanetService.GetPlanetAsync(planetId).Result.Name;
     }
 
 
     private void CreateStars()
     {
-        Creation creation = CreationService.GetCreationAsync().Result;
-        Universe universe = UniverseService.GetUniverseAsync().Result;
-
-        creation.CreateStars(universe, new StarDefaultSettings()
-        {
-        });
-        OnInitializedAsync();
+        // Universe universe = UniverseService.GetUniverseAsync().Result;
+        //
+        // creation.CreateStars(universe, new StarDefaultSettings()
+        // {
+        // });
+        // OnInitializedAsync();
     }
 
-    private Zone GetZone(string starId)
+    private Zone GetZone(string zoneId)
     {
-        return zones.Find(z => z.StarId == starId);
+        return zones.Find(z => z.Id == zoneId);
+    }
+    
+    private int GetPlanetCount(string zoneId)
+    {
+        return ZoneService.GetPlanetCount(zoneId).Result;
+    }
+    
+    private List<Planet> GetPlanets(string zoneId)
+    {
+        return PlanetService.GetPlanetsByZoneAsync(zoneId).Result;
     }
 
     private bool StarFilterFunc(Star star) => StarFilter(star, searchString);

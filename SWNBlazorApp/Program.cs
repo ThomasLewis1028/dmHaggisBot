@@ -1,22 +1,16 @@
-using System.Reflection;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using MudBlazor.Services;
 using SWNBlazorApp.Areas.Identity;
 using SWNBlazorApp.Data;
-using SWNUniverseGenerator.Models;
+using SWNUniverseGenerator.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<UniverseContext>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -26,11 +20,10 @@ builder.Services
     .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddMudServices();
 builder.Services.AddSingleton<CharacterService>();
-builder.Services.AddSingleton<CreationService>();
 builder.Services.AddSingleton<UniverseService>();
-builder.Services.AddSingleton<Universe>();
-builder.Services.AddSingleton<Persistence>();
-builder.Services.AddSingleton<SerializeClass>();
+builder.Services.AddSingleton<ZoneService>();
+builder.Services.AddSingleton<PlanetService>();
+builder.Services.AddSingleton<ShipService>();
 builder.Services.AddScoped<IMenuService, MenuService>();
 
 var app = builder.Build();
@@ -49,10 +42,10 @@ else
     app.UseHsts();
 }
 
-if (!File.Exists(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Data/persistence.json"))
-{
-    new SerializeClass().SerializeData(new Persistence());
-}
+// if (!File.Exists(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Data/persistence.json"))
+// {
+//     new SerializeClass().SerializeData(new Persistence());
+// }
 
 if (!Directory.Exists("wwwroot\\images\\starmaps"))
 {

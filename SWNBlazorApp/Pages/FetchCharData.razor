@@ -3,13 +3,16 @@
 <PageTitle>Character Data</PageTitle>
 
 @using SWNBlazorApp.Data
-@using SWNUniverseGenerator
 @using SWNUniverseGenerator.DefaultSettings
 @using SWNUniverseGenerator.Models
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+
+@inject ProtectedSessionStorage ProtectedSessionStore
 @inject CharacterService CharacterService
-@inject CreationService CreationService
 @inject UniverseService UniverseService
 @inject Universe CurrentUniverse
+@inject PlanetService PlanetService
+@inject ShipService ShipService
 @inject IDialogService DialogService
 
 <h1>Character Data</h1>
@@ -115,14 +118,14 @@ else
                         <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Title)">Title</MudTableSortLabel>
                     </MudTh>
                     <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.ShipId)">Ship ID</MudTableSortLabel>
+                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.CurrentLocationId)">Ship ID</MudTableSortLabel>
                     </MudTh>
                 </HeaderContent>
                 <RowTemplate>
                     <MudTd DataLabel="Id" class="cursor-pointer">@context.Id</MudTd>
                     <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
                     <MudTd DataLabel="Title" class="cursor-pointer">@context.Title</MudTd>
-                    <MudTd DataLabel="Ship Id" class="cursor-pointer">@context.ShipId</MudTd>
+                    <MudTd DataLabel="Current Location Id" class="cursor-pointer">@context.CurrentLocationId</MudTd>
                 </RowTemplate>
                 <PagerContent>
                     <MudTablePager PageSizeOptions="new[] {10, 15, 20, 25, 50, 75, 100, int.MaxValue}"/>
@@ -146,19 +149,14 @@ else
                         {
                             <MudText Typo="Typo.body1">Title: @currentCharacter.Title</MudText>
                         }
-                        @if (currentCharacter.ShipId != null)
-                        {
-                            <MudText Typo="Typo.body1">Ship Name: @GetShipName(currentCharacter.ShipId)</MudText>
-                            <MudText Typo="Typo.body1">Ship ID: @currentCharacter.ShipId</MudText>
-                        }
                         <MudText Typo="Typo.body1">Gender: @currentCharacter.Gender</MudText>
                         <MudText Typo="Typo.body1">Skin Color: @currentCharacter.SkinCol</MudText>
                         <MudText Typo="Typo.body1">Hair Style: @currentCharacter.HairStyle</MudText>
                         <MudText Typo="Typo.body1">Hair Color: @currentCharacter.HairCol</MudText>
                         <MudText Typo="Typo.body1">Eye Color: @currentCharacter.EyeCol</MudText>
                         <MudText Typo="Typo.body1">Height: @currentCharacter.Height</MudText>
-                        <MudText Typo="Typo.body1">Birth Planet: @currentCharacter.BirthPlanet - @GetPlanetName(@currentCharacter.BirthPlanet)</MudText>
-                        <MudText Typo="Typo.body1">Current Planet: @currentCharacter.CurrentLocation - @GetPlanetName(@currentCharacter.CurrentLocation)</MudText>
+                        <MudText Typo="Typo.body1">Birth Planet: @currentCharacter.BirthPlanetId  - @GetPlanetName(@currentCharacter.BirthPlanetId)</MudText>
+                        <MudText Typo="Typo.body1">Current Planet: @currentCharacter.CurrentLocationId - @GetPlanetName(@currentCharacter.CurrentLocationId)</MudText>
                         <MudText Typo="Typo.body1">Initial Reaction: @currentCharacter.InitialReaction</MudText>
                         <MudText Typo="Typo.body1">Crime Chance: @currentCharacter.CrimeChance%</MudText>
 
@@ -191,20 +189,23 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        CurrentUniverse = UniverseService.GetUniverseAsync().Result;
-        characters = await CharacterService.GetCharactersAsync(CurrentUniverse);
+        var universeID = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        if (!string.IsNullOrEmpty(universeID.Value))
+        {
+            CurrentUniverse = UniverseService.GetUniverseAsync(universeID.Value).Result;
+            characters = await CharacterService.GetCharactersAsync(universeID.Value);
+        }
+        
     }
 
     private String GetPlanetName(String planetId)
     {
-        string[] array = {planetId};
-        return Search.SearchUniverseList(UniverseService.GetUniverseAsync().Result, new SearchDefaultSettings() {Id = array}).First().Name;
+        return PlanetService.GetPlanetAsync(planetId).Result.Name;
     }
 
     private String GetShipName(String shipId)
     {
-        string[] array = {shipId};
-        return Search.SearchUniverseList(UniverseService.GetUniverseAsync().Result, new SearchDefaultSettings() {Id = array}).First().Name;
+        return ShipService.GetShipsync(shipId).Result.Name;
     }
 
     private void CreateCharacters()
@@ -213,24 +214,24 @@ else
 
     private void CreateCharacter()
     {
-        Creation creation = CreationService.GetCreationAsync().Result;
-        Universe universe = UniverseService.GetUniverseAsync().Result;
-
-        creation.CreateCharacter(universe, new CharacterDefaultSettings()
-        {
-            First = newCharFirstName,
-            Last = newCharLastName,
-            Gender = newCharGender,
-            Age = new[] {newCharAge, newCharAge},
-            HairStyle = newCharHairStyle,
-            HairCol = newCharHairColor,
-            EyeCol = newCharEyeColor,
-            Title = newCharTitle,
-            Count = 1,
-            CrimeChance = new[] {newCharCrimeChance, newCharCrimeChance},
-            ShipId = newCharShipId
-        });
-        OnInitializedAsync();
+        //TODO: Fix
+        // Universe universe = UniverseService.GetUniverseAsync().Result;
+        //
+        // creation.CreateCharacter(universe, new CharacterDefaultSettings()
+        // {
+        //     First = newCharFirstName,
+        //     Last = newCharLastName,
+        //     Gender = newCharGender,
+        //     Age = new[] {newCharAge, newCharAge},
+        //     HairStyle = newCharHairStyle,
+        //     HairCol = newCharHairColor,
+        //     EyeCol = newCharEyeColor,
+        //     Title = newCharTitle,
+        //     Count = 1,
+        //     CrimeChance = new[] {newCharCrimeChance, newCharCrimeChance},
+        //     ShipId = newCharShipId
+        // });
+        // OnInitializedAsync();
     }
 
     private bool CharacterFilterFunc(Character character) => CharacterFilter(character, searchString);

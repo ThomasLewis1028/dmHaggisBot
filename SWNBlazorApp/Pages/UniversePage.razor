@@ -1,12 +1,12 @@
-﻿@using SWNBlazorApp.Data
-@using SWNUniverseGenerator.CreationTools
-@using SWNUniverseGenerator.Models
-@using System.Drawing
-@using System.Reflection
-@page "/universe"
-
+﻿@page "/universe"
 <PageTitle>@CurrentUniverse.Name</PageTitle>
 
+@using SWNBlazorApp.Data
+@using SWNUniverseGenerator.Models
+@using System.Reflection
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+
+@inject ProtectedSessionStorage ProtectedSessionStore
 @inject UniverseService UniverseService
 @inject Universe CurrentUniverse
 
@@ -27,11 +27,15 @@
 
     protected override async Task OnInitializedAsync()
     {
-        CurrentUniverse = UniverseService.GetUniverseAsync().Result;
-
-        if (!File.Exists($"{wwwrootPath+starmapPath}\\{CurrentUniverse.Name}.png"))
+        var universeID = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        if (!string.IsNullOrEmpty(universeID.Value))
         {
-            GrabStarmap();
+            CurrentUniverse = UniverseService.GetUniverseAsync(universeID.Value).Result;
+
+            if (!File.Exists($"{wwwrootPath + starmapPath}\\{CurrentUniverse.Name}.png"))
+            {
+                GrabStarmap();
+            }
         }
     }
 

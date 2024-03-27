@@ -1,15 +1,23 @@
 ﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator;
+using SWNUniverseGenerator.CreationTools;
+using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.Models;
 
 namespace SWNBlazorApp.Data;
 
 public class UniverseService
 {
-    private String dataPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+    private readonly IDbContextFactory<UniverseContext> _contextFactory;
+
+    public UniverseService(IDbContextFactory<UniverseContext> contextFactory)
+    {
+        _contextFactory = contextFactory;
+    }
     
     // public Task<Boolean> SetUniverse(Universe universe)
     // {
@@ -17,42 +25,57 @@ public class UniverseService
     //     return Task.FromResult(true);
     // }
     
-    public Task<Universe> GetUniverseAsync()
+    public Task<Universe> GetUniverseAsync(string universeID)
     {
-        var pers = JObject.Parse(File.ReadAllText(dataPath + "/Data/persistence.json"));
-        Persistence persistence = JsonConvert.DeserializeObject<Persistence>(pers.ToString());
-
-        if (persistence.CurrentUniverseName == null)
-            return Task.FromResult<Universe>(null);
-
-        Universe universe = new Creation().LoadUniverse(persistence.CurrentUniverseName);
+        Universe result;
+        using (var context = _contextFactory.CreateDbContext())
+        {
+            using (var universeRepo = new Repository<Universe>(context))
+            {
+                result = universeRepo.GetById(universeID);
+            }
+        }
         
-        
-        return Task.FromResult(universe);
+        return Task.FromResult(result);
     }
 
-    public Task<List<Creation.UniverseInfo>> GetUniverseListAsync()
+    public Task<List<Universe>> GetUniverseListAsync()
     {
-        return Task.FromResult(new Creation().GetUniverseList());
+        List<Universe> result;
+        using (var context = _contextFactory.CreateDbContext())
+        {
+            using (var repo = new Repository<Universe>(context))
+            {
+                result = repo.GetAll().ToList();
+            }
+        }
+        return Task.FromResult(result);
     }
 
-    public Task<bool> DeleteUniverseAsync(string universeName)
+    public Task<bool> DeleteUniverseAsync(string universeID)
     {
-        new Creation().DeleteUniverse(universeName);
+        bool result;
+        using (var context = _contextFactory.CreateDbContext())
+        {
+            using (var universeRepo = new Repository<Universe>(context))
+            {
+                result = universeRepo.Delete(universeID);
+            }
+        }
         
-        if(File.Exists("wwwroot/images/starmaps/" + universeName + ".png"))
-            File.Delete("wwwroot/images/starmaps/" + universeName + ".png");
+        if(File.Exists("wwwroot/images/starmaps/" + universeID + ".png"))
+            File.Delete("wwwroot/images/starmaps/" + universeID + ".png");
         
-        return Task.FromResult(true);
+        return Task.FromResult(result);
     }
 
     public Task<bool> IsUniverseLoaded()
     {
-        var pers = JObject.Parse(File.ReadAllText(dataPath + "/Data/persistence.json"));
-        Persistence persistence = JsonConvert.DeserializeObject<Persistence>(pers.ToString());
-
-        if (persistence.CurrentUniverseName == null)
-            return Task.FromResult(false);
+        // var pers = JObject.Parse(File.ReadAllText(dataPath + "/Data/persistence.json"));
+        // Persistence persistence = JsonConvert.DeserializeObject<Persistence>(pers.ToString());
+        //
+        // if (persistence.CurrentUniverseName == null)
+        //     return Task.FromResult(false);
 
         return Task.FromResult(true);
     }

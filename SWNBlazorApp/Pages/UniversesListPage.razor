@@ -1,22 +1,18 @@
 ﻿@page "/universes"
 @using SWNBlazorApp.Data
-@using SWNUniverseGenerator
-@using SWNUniverseGenerator.CreationTools
-@using SWNUniverseGenerator.DefaultSettings
 @using SWNUniverseGenerator.Models
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 
 <PageTitle>Universes</PageTitle>
 
+@inject ProtectedSessionStorage ProtectedSessionStore
 @inject UniverseService UniverseService
-@inject CreationService CreationService
 @inject Universe CurrentUniverse
-@inject Persistence Persistence
-@inject SerializeClass SerializeClass
 @inject IMenuService MenuService
 
 <h1>Universes</h1>
 
-<MudText Typo="Typo.h5">Current Universe: @GetUniverseName()</MudText>
+<MudText Typo="Typo.h5">Current Universe: @selectedUniverse.Name</MudText>
 
 <MudGrid>
     <MudItem xs="12" sm="7">
@@ -60,7 +56,7 @@
             </ToolBarContent>
             <HeaderContent>
                 <MudTh>
-                    <MudTableSortLabel SortBy="new Func<Creation.UniverseInfo, object>(x => x.Name)">Universe Name</MudTableSortLabel>
+                    <MudTableSortLabel SortBy="new Func<Universe, object>(x => x.Name)">Universe Name</MudTableSortLabel>
                 </MudTh>
                 <MudTh>Grid Size</MudTh>
                 <MudTh>Star Count</MudTh>
@@ -73,12 +69,12 @@
             <RowTemplate>
                 <MudTd DataLabel="Name">@context.Name</MudTd>
                 <MudTd DataLabel="Grid">@($"{context.GridX}/{context.GridY}")</MudTd>
-                <MudTd DataLabel="StarCount">@context.StarCount</MudTd>
-                <MudTd DataLabel="PlanetCount">@context.PlanetCount</MudTd>
-                <MudTd DataLabel="ShipCount">@context.ShipCount</MudTd>
-                <MudTd DataLabel="CharCount">@context.CharCount</MudTd>
-                <MudTd><MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => LoadUniverse(context.Name))">Load</MudButton></MudTd>
-                <MudTd><MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteUniverse(context.Name))">Delete</MudButton></MudTd>
+                @* <MudTd DataLabel="StarCount">@context.StarCount</MudTd> *@
+                @* <MudTd DataLabel="PlanetCount">@context.PlanetCount</MudTd> *@
+                @* <MudTd DataLabel="ShipCount">@context.ShipCount</MudTd> *@
+                @* <MudTd DataLabel="CharCount">@context.CharCount</MudTd> *@
+                <MudTd><MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => LoadUniverse(context.Id))">Load</MudButton></MudTd>
+                <MudTd><MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteUniverse(context.Id))">Delete</MudButton></MudTd>
             </RowTemplate>
         </MudTable>
     </MudItem>
@@ -98,10 +94,12 @@
     private int gridY = 10;
     MudForm form;
     String[] errors = {};
+    String universeID;
     String universeName;
-    List<Creation.UniverseInfo> UniverseRows = new();
-    private Creation.UniverseInfo selectedUniverse;
-    private string searchString;
+    String searchString;
+    Universe selectedUniverse;
+    List<Universe> UniverseRows = new();
+    
 
     protected override async Task OnInitializedAsync()
     {
@@ -112,53 +110,39 @@
     private async void CreateUniverse()
     {
         _start = DateTime.Now;
-        Creation creation = CreationService.GetCreationAsync().Result;
-
-        CurrentUniverse = creation.CreateUniverse(new UniverseDefaultSettings
-        {
-            Name = universeName,
-            Overwrite = overwrite,
-            GridX = 0,
-            GridY = 0
-        });
-        creation.CreateStars(CurrentUniverse, new StarDefaultSettings());
-        creation.CreatePlanets(CurrentUniverse, new PlanetDefaultSettings());
-        creation.CreateShips(CurrentUniverse, new ShipDefaultSettings());
-        creation.CreateCharacter(CurrentUniverse, new CharacterDefaultSettings());
-        creation.CreateStarMap(CurrentUniverse);
-
-        Persistence.CurrentUniverseName = CurrentUniverse.Name;
-        SerializeClass.SerializeData(Persistence);
+        //TODO: fix
+        // Creation creation = CreationService.GetCreationAsync().Result;
+        //
+        // CurrentUniverse = creation.CreateUniverse(new UniverseDefaultSettings
+        // {
+        //     Name = universeName,
+        //     GridX = 0,
+        //     GridY = 0
+        // });
+        //TODO: fix
+        // creation.CreateStars(CurrentUniverse, new StarDefaultSettings());
+        // creation.CreatePlanets(CurrentUniverse, new PlanetDefaultSettings());
+        // creation.CreateShips(CurrentUniverse, new ShipDefaultSettings());
+        // creation.CreateCharacter(CurrentUniverse, new CharacterDefaultSettings());
+        // creation.CreateStarMap(CurrentUniverse);
 
         _end = DateTime.Now;
         _createdNew = true;
         await OnInitializedAsync();
     }
+    
 
-    private string GetUniverseName()
+    private async void LoadUniverse(String universeId)
     {
-        Task<Universe> task = UniverseService.GetUniverseAsync();
-        String currentUniverseName = task.Result == null ? "None" : task.Result.Name;
-        return currentUniverseName;
-    }
-
-    private async void LoadUniverse(String universeName)
-    {
-        Persistence.CurrentUniverseName = universeName;
-        SerializeClass.SerializeData(Persistence);
+        Task<Universe> task = UniverseService.GetUniverseAsync(universeId);
+        universeName = task.Result == null ? "None" : task.Result.Name;
+        await ProtectedSessionStore.SetAsync("SelectedUniverse", universeId);
         await OnInitializedAsync();
     }
 
-    private async void DeleteUniverse(String universeName)
+    private async void DeleteUniverse(String universeId)
     {
-        if (Persistence.CurrentUniverseName == universeName)
-        {
-            Persistence.CurrentUniverseName = null;
-            SerializeClass.SerializeData(Persistence);
-        }
-        
-        await UniverseService.DeleteUniverseAsync(universeName);
-        
+        await UniverseService.DeleteUniverseAsync(universeId);
         await OnInitializedAsync();
     }
 

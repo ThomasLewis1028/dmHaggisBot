@@ -157,7 +157,7 @@
         Task<Universe> task = UniverseService.GetUniverseAsync(universeId);
         universeName = task.Result == null ? "None" : task.Result.Name;
         await ProtectedSessionStore.SetAsync("SelectedUniverse", universeId);
-        await OnInitializedAsync();
+        MenuService.NotifyChanged();
     }
 
     private async void DeleteUniverse(String universeId)

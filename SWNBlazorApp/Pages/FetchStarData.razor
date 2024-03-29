@@ -16,7 +16,7 @@
 
 <h1>Star Data</h1>
 
-<p>All stars in the current universe</p>
+<p>All stars in the @universeName universe</p>
 
 @if (zones == null)
 {
@@ -179,15 +179,18 @@ else
     private List<Star>? stars;
     private Star currentStar;
     private string searchString;
+    String universeName;
     MudForm form;
 
     protected override async Task OnInitializedAsync()
     {
-        var universeID = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
-        if (!string.IsNullOrEmpty(universeID.Value))
+        var universeId = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        if (!string.IsNullOrEmpty(universeId.Value))
         {
-            zones = await StarService.GetZonesAsync(universeID.Value);
-            stars = await StarService.GetStarsAsync(universeID.Value);
+            Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
+            universeName = task.Result == null ? "None" : task.Result.Name;
+            zones = await StarService.GetZonesAsync(universeId.Value);
+            stars = await StarService.GetStarsAsync(universeId.Value);
         }
     }
 

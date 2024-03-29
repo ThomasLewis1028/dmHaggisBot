@@ -1,5 +1,5 @@
 ﻿@page "/universe"
-<PageTitle>@CurrentUniverse.Name</PageTitle>
+<PageTitle>@universeName</PageTitle>
 
 @using SWNBlazorApp.Data
 @using SWNUniverseGenerator.Models
@@ -8,20 +8,18 @@
 
 @inject ProtectedSessionStorage ProtectedSessionStore
 @inject UniverseService UniverseService
-@inject Universe CurrentUniverse
 
-<h1>@CurrentUniverse.Name</h1>
-
-
+<h1>@universeName</h1>
 <MudGrid>
     <MudItem xs="4">
-        <img src="@(starmapPath + "\\" + CurrentUniverse.Name + ".png")" class="w3-round" style="height:100%; width: 100%; object-fit: contain" xs="5"/>
+        <img src="@(starmapPath + "\\" + universeName + ".png")" class="w3-round" style="height:100%; width: 100%; object-fit: contain" xs="5"/>
         @* <MudImage Src="@(starmapPath + "\\" + CurrentUniverse.Name + ".png")" Class="starmap-image" Alt="Starmap"/> *@
     </MudItem>
 </MudGrid>
 
 
 @code {
+    String universeName;
     private static String wwwrootPath = "wwwroot";
     private static String starmapPath = "\\images\\starmaps";
 
@@ -30,18 +28,18 @@
         var universeID = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
         if (!string.IsNullOrEmpty(universeID.Value))
         {
-            CurrentUniverse = UniverseService.GetUniverseAsync(universeID.Value).Result;
-
-            if (!File.Exists($"{wwwrootPath + starmapPath}\\{CurrentUniverse.Name}.png"))
-            {
-                GrabStarmap();
-            }
+            universeName = UniverseService.GetUniverseAsync(universeID.Value).Result.Name;
+            // if (!File.Exists($"{wwwrootPath + starmapPath}\\{CurrentUniverse.Name}.png"))
+            // {
+            //     GrabStarmap();
+            // }
         }
+        
     }
 
     public void GrabStarmap()
     {
-        File.Copy($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/UniverseFiles/{CurrentUniverse.Name}.png", 
-            $"{wwwrootPath+starmapPath}\\{CurrentUniverse.Name}.png");
+        // File.Copy($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/UniverseFiles/{CurrentUniverse.Name}.png", 
+        //     $"{wwwrootPath+starmapPath}\\{CurrentUniverse.Name}.png");
     }
 }

@@ -88,16 +88,5 @@ public class UniverseService : DataService
     
         return Task.FromResult(result);
     }
-
-    public Task<bool> IsUniverseLoaded()
-    {
-        // var pers = JObject.Parse(File.ReadAllText(dataPath + "/Data/persistence.json"));
-        // Persistence persistence = JsonConvert.DeserializeObject<Persistence>(pers.ToString());
-        //
-        // if (persistence.CurrentUniverseName == null)
-        //     return Task.FromResult(false);
-
-        return Task.FromResult(true);
-    }
 }
 

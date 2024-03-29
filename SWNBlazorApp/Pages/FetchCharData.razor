@@ -17,7 +17,7 @@
 
 <h1>Character Data</h1>
 
-<p>All characters in the current universe</p>
+<p>All characters in the @universeName universe</p>
 
 @if (characters == null)
 {
@@ -171,6 +171,7 @@ else
     private List<Character>? characters;
     private Character currentCharacter;
     private string searchString;
+    String universeName;
     MudForm form;
 
     private string newCharFirstName;
@@ -189,11 +190,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var universeID = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
-        if (!string.IsNullOrEmpty(universeID.Value))
+        var universeId = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        if (!string.IsNullOrEmpty(universeId.Value))
         {
-            CurrentUniverse = UniverseService.GetUniverseAsync(universeID.Value).Result;
-            characters = await CharacterService.GetCharactersAsync(universeID.Value);
+            Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
+            universeName = task.Result == null ? "None" : task.Result.Name;
+            CurrentUniverse = UniverseService.GetUniverseAsync(universeId.Value).Result;
+            characters = await CharacterService.GetCharactersAsync(universeId.Value);
         }
         
     }

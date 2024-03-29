@@ -15,11 +15,10 @@ public class CharacterService : DataService
     public Task<List<Character>> GetCharactersAsync(string universeId)
     {
         List<Character> result;
-        using (var repo = new Repository<Character>(Context))
-        {
-            var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
-            result = entityList.Cast<Character>().ToList();
-        }
+        var repo = new Repository<Character>(Context);
+        var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
+        result = entityList.Cast<Character>().ToList();
+      
         return Task.FromResult(result);
     }
 

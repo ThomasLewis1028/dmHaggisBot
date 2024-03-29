@@ -14,10 +14,9 @@ public class PlanetService : DataService
     public Task<Planet> GetPlanetAsync(string planetId)
     {
         Planet result;
-        using (var repo = new Repository<Planet>(Context))
-        {
-            result = repo.GetById(planetId);
-        }
+        var repo = new Repository<Planet>(Context);
+        result = repo.GetById(planetId);
+
         
         return Task.FromResult(result);
     }
@@ -25,11 +24,9 @@ public class PlanetService : DataService
     public Task<List<Planet>> GetPlanetsAsync(string universeId)
     {
         List<Planet> result;
-        using (var repo = new Repository<Planet>(Context))
-        {
-            var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
-            result = entityList.Cast<Planet>().ToList();
-        }
+        var repo = new Repository<Planet>(Context);
+        var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
+        result = entityList.Cast<Planet>().ToList();
         
         return Task.FromResult(result);
     }
@@ -37,11 +34,9 @@ public class PlanetService : DataService
     public Task<List<Planet>> GetPlanetsByZoneAsync(string zoneId)
     {
         List<Planet> result;
-        using (var repo = new Repository<Planet>(Context))
-        {
-            var entityList = repo.Search(c => c.ZoneId == zoneId).ToList();
-            result = entityList.Cast<Planet>().ToList();
-        }
+        var repo = new Repository<Planet>(Context);
+        var entityList = repo.Search(c => c.ZoneId == zoneId).ToList();
+        result = entityList.Cast<Planet>().ToList();
         
         return Task.FromResult(result);
     }

@@ -125,9 +125,9 @@ else
                     <MudTd DataLabel="Id" class="cursor-pointer">@context.Id</MudTd>
                     <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
                     <MudTd DataLabel="Grid" class="cursor-pointer">
-                        @(GetZone(context.Id).X 
+                        @(GetZone(context.ZoneId).X 
                           + "/" 
-                          + GetZone(context.Id).Y)
+                          + GetZone(context.ZoneId).Y)
                     </MudTd>
                     <MudTd DataLabel="Planets" class="cursor-pointer">@(GetPlanetCount(context.Id))</MudTd>
                     <MudTd DataLabel="Class" class="cursor-pointer">@context.StarClass</MudTd>

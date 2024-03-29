@@ -14,10 +14,8 @@ public class ShipService : DataService
     public Task<Ship> GetShipsync(string shipId)
     {
         Ship result;
-        using (var repo = new Repository<Ship>(Context))
-        {
-            result = repo.GetById(shipId);
-        }
+        var repo = new Repository<Ship>(Context);
+        result = repo.GetById(shipId);
         
         return Task.FromResult(result);
     }
@@ -25,12 +23,10 @@ public class ShipService : DataService
     public Task<List<Ship>> GetZonesAsync(string universeId)
     {
         List<Ship> result;
-        using (var repo = new Repository<Ship>(Context))
-        {
-            var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
-            result = entityList.Cast<Ship>().ToList();
-        }
-        
+        var repo = new Repository<Ship>(Context);
+        var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
+        result = entityList.Cast<Ship>().ToList();
+    
         return Task.FromResult(result);
     }
 }

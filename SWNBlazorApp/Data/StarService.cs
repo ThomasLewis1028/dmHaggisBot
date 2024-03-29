@@ -14,11 +14,9 @@ public class StarService : DataService
     public Task<List<Star>> GetStarsAsync(string universeId)
     {
         List<Star> result;
-        using (var repo = new Repository<Star>(Context))
-        {
-            var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
-            result = entityList.Cast<Star>().ToList();
-        }
+        var repo = new Repository<Star>(Context);
+        var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
+        result = entityList.Cast<Star>().ToList();
         
         return Task.FromResult(result);
     }
@@ -26,11 +24,10 @@ public class StarService : DataService
     public Task<List<Zone>> GetZonesAsync(string universeId)
     {
         List<Zone> result;
-        using (var repo = new Repository<Zone>(Context))
-        {
-            var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
-            result = entityList.Cast<Zone>().ToList();
-        }
+        var repo = new Repository<Zone>(Context);
+        var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
+        result = entityList.Cast<Zone>().ToList();
+        
         
         return Task.FromResult(result);
     }

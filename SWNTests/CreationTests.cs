@@ -61,7 +61,7 @@ public class CreationTests
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
     // [DataRow("Test Full Creation", false)] // Used for testing
-    [DataRow("Test Full Creation", true)]
+    [DataRow("Test Full Creation", false)]
     public void TestFullCreation(String universeName, Boolean cleanup)
     {
         using var context = new UniverseContext();

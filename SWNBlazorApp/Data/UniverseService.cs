@@ -26,10 +26,8 @@ public class UniverseService : DataService
     public Task<Universe> GetUniverseAsync(string universeID)
     {
         Universe result;
-        using (var universeRepo = new Repository<Universe>(Context))
-        {
-            result = universeRepo.GetById(universeID);
-        }
+        var universeRepo = new Repository<Universe>(Context);
+        result = universeRepo.GetById(universeID);
         
         return Task.FromResult(result);
     }
@@ -37,10 +35,8 @@ public class UniverseService : DataService
     public Task<List<Universe>> GetUniverseListAsync()
     {
         List<Universe> result;
-        using (var repo = new Repository<Universe>(Context))
-        {
-            result = repo.GetAll().ToList();
-        }
+        var repo = new Repository<Universe>(Context);
+        result = repo.GetAll().ToList();
         
         return Task.FromResult(result);
     }
@@ -48,10 +44,8 @@ public class UniverseService : DataService
     public Task<bool> DeleteUniverseAsync(string universeID)
     {
         bool result;
-        using (var universeRepo = new Repository<Universe>(Context))
-        {
-            result = universeRepo.Delete(universeID);
-        }
+        var repo = new Repository<Universe>(Context);
+        result = repo.Delete(universeID);
         
         if(File.Exists("wwwroot/images/starmaps/" + universeID + ".png"))
             File.Delete("wwwroot/images/starmaps/" + universeID + ".png");

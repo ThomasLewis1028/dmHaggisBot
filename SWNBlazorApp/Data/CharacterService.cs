@@ -5,25 +5,20 @@ using SWNUniverseGenerator.Models;
 
 namespace SWNBlazorApp.Data;
 
-public class CharacterService
+public class CharacterService : DataService
 {
-    private readonly IDbContextFactory<UniverseContext> _contextFactory;
-
-    public CharacterService(IDbContextFactory<UniverseContext> contextFactory)
+    public CharacterService(UniverseContext context) : base(context)
     {
-        _contextFactory = contextFactory;
-    }
 
+    }
+    
     public Task<List<Character>> GetCharactersAsync(string universeId)
     {
         List<Character> result;
-        using (var context = _contextFactory.CreateDbContext())
+        using (var repo = new Repository<Character>(Context))
         {
-            using (var repo = new Repository<Character>(context))
-            {
-                var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
-                result = entityList.Cast<Character>().ToList();
-            }
+            var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
+            result = entityList.Cast<Character>().ToList();
         }
         return Task.FromResult(result);
     }

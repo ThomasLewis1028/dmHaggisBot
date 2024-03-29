@@ -19,7 +19,7 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
-    [DataRow("Test Grid Creation", true)]
+    [DataRow("Test Grid Creation", false)]
     public void TestGridCreation(String universeName, Boolean cleanup)
     {
         using var context = new UniverseContext();

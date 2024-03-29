@@ -4,6 +4,7 @@ using MudBlazor.Services;
 using SWNBlazorApp.Areas.Identity;
 using SWNBlazorApp.Data;
 using SWNUniverseGenerator.Database;
+using SWNUniverseGenerator.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,19 +13,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<UniverseContext>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+// builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+//     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services
-    .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+// builder.Services
+//     .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddMudServices();
-builder.Services.AddSingleton<CharacterService>();
-builder.Services.AddSingleton<UniverseService>();
-builder.Services.AddSingleton<ZoneService>();
-builder.Services.AddSingleton<PlanetService>();
-builder.Services.AddSingleton<ShipService>();
+
 builder.Services.AddScoped<IMenuService, MenuService>();
+builder.Services.AddTransient<Universe>();
+builder.Services.AddScoped<CharacterService>();
+builder.Services.AddScoped<UniverseService>();
+builder.Services.AddScoped<ZoneService>();
+builder.Services.AddScoped<PlanetService>();
+builder.Services.AddScoped<ShipService>();
+builder.Services.AddScoped<StarService>();
 
 var app = builder.Build();
 app.UseStaticFiles();
@@ -47,10 +51,10 @@ else
 //     new SerializeClass().SerializeData(new Persistence());
 // }
 
-if (!Directory.Exists("wwwroot\\images\\starmaps"))
-{
-    Directory.CreateDirectory("wwwroot\\images\\starmaps");
-}
+// if (!Directory.Exists("wwwroot\\images\\starmaps"))
+// {
+//     Directory.CreateDirectory("wwwroot\\images\\starmaps");
+// }
 
 app.UseHttpsRedirection();
 

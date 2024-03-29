@@ -10,13 +10,11 @@ using SWNUniverseGenerator.Models;
 
 namespace SWNBlazorApp.Data;
 
-public class UniverseService
+public class UniverseService : DataService
 {
-    private readonly IDbContextFactory<UniverseContext> _contextFactory;
-
-    public UniverseService(IDbContextFactory<UniverseContext> contextFactory)
+    public UniverseService(UniverseContext context) : base(context)
     {
-        _contextFactory = contextFactory;
+
     }
     
     // public Task<Boolean> SetUniverse(Universe universe)
@@ -28,12 +26,9 @@ public class UniverseService
     public Task<Universe> GetUniverseAsync(string universeID)
     {
         Universe result;
-        using (var context = _contextFactory.CreateDbContext())
+        using (var universeRepo = new Repository<Universe>(Context))
         {
-            using (var universeRepo = new Repository<Universe>(context))
-            {
-                result = universeRepo.GetById(universeID);
-            }
+            result = universeRepo.GetById(universeID);
         }
         
         return Task.FromResult(result);
@@ -42,25 +37,20 @@ public class UniverseService
     public Task<List<Universe>> GetUniverseListAsync()
     {
         List<Universe> result;
-        using (var context = _contextFactory.CreateDbContext())
+        using (var repo = new Repository<Universe>(Context))
         {
-            using (var repo = new Repository<Universe>(context))
-            {
-                result = repo.GetAll().ToList();
-            }
+            result = repo.GetAll().ToList();
         }
+        
         return Task.FromResult(result);
     }
 
     public Task<bool> DeleteUniverseAsync(string universeID)
     {
         bool result;
-        using (var context = _contextFactory.CreateDbContext())
+        using (var universeRepo = new Repository<Universe>(Context))
         {
-            using (var universeRepo = new Repository<Universe>(context))
-            {
-                result = universeRepo.Delete(universeID);
-            }
+            result = universeRepo.Delete(universeID);
         }
         
         if(File.Exists("wwwroot/images/starmaps/" + universeID + ".png"))

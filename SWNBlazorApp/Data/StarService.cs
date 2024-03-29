@@ -4,40 +4,34 @@ using SWNUniverseGenerator.Models;
 
 namespace SWNBlazorApp.Data;
 
-public class StarService
+public class StarService : DataService
 {
-    private readonly IDbContextFactory<UniverseContext> _contextFactory;
-
-    public StarService(IDbContextFactory<UniverseContext> contextFactory)
+    public StarService(UniverseContext context) : base(context)
     {
-        _contextFactory = contextFactory;
+
     }
     
     public Task<List<Star>> GetStarsAsync(string universeId)
     {
         List<Star> result;
-        using (var context = _contextFactory.CreateDbContext())
+        using (var repo = new Repository<Star>(Context))
         {
-            using (var repo = new Repository<Star>(context))
-            {
-                var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
-                result = entityList.Cast<Star>().ToList();
-            }
+            var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
+            result = entityList.Cast<Star>().ToList();
         }
+        
         return Task.FromResult(result);
     }
     
     public Task<List<Zone>> GetZonesAsync(string universeId)
     {
         List<Zone> result;
-        using (var context = _contextFactory.CreateDbContext())
+        using (var repo = new Repository<Zone>(Context))
         {
-            using (var repo = new Repository<Zone>(context))
-            {
-                var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
-                result = entityList.Cast<Zone>().ToList();
-            }
+            var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
+            result = entityList.Cast<Zone>().ToList();
         }
+        
         return Task.FromResult(result);
     }
 

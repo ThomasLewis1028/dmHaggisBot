@@ -3,7 +3,6 @@
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 
 @inject ProtectedSessionStorage ProtectedSessionStore
-@inject Universe CurrentUniverse
 @inject UniverseService UniverseService
 @inject IMenuService MenuService
 
@@ -51,19 +50,18 @@
 
 @code {
     private bool collapseNavMenu = true;
-    private string universeName;
+    private string universeName = "";
     
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
     
     protected override async Task OnInitializedAsync()
     {
-        var universeID = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
-        if (!string.IsNullOrEmpty(universeID.Value))
-        {
-            CurrentUniverse = UniverseService.GetUniverseAsync(universeID.Value).Result;
-            universeName = CurrentUniverse.Name;
-        }
-        
+        // var universeID = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        // if (!string.IsNullOrEmpty(universeID.Value))
+        // {
+        //     universeName = UniverseService.GetUniverseAsync(universeID.Value).Result.Name;
+        // }
+        //
     }
 
     private void ToggleNavMenu()

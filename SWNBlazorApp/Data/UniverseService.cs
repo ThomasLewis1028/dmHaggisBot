@@ -52,6 +52,42 @@ public class UniverseService : DataService
         
         return Task.FromResult(result);
     }
+    
+    public Task<int>  GetPlanetCount(string universeId)
+    {
+        int result;
+        var repo = new Repository<Planet>(Context);
+        result = repo.Count(c => c.UniverseId == universeId);
+    
+        return Task.FromResult(result);
+    }
+
+    public Task<int>  GetStarCount(string universeId)
+    {
+        int result;
+        var repo = new Repository<Star>(Context);
+        result = repo.Count(c => c.UniverseId == universeId);
+    
+        return Task.FromResult(result);
+    }
+
+    public Task<int>  GetShipCount(string universeId)
+    {
+        int result;
+        var repo = new Repository<Ship>(Context);
+        result = repo.Count(c => c.UniverseId == universeId);
+    
+        return Task.FromResult(result);
+    }
+
+    public Task<int>  GetCharCount(string universeId)
+    {
+        int result;
+        var repo = new Repository<Character>(Context);
+        result = repo.Count(c => c.UniverseId == universeId);
+    
+        return Task.FromResult(result);
+    }
 
     public Task<bool> IsUniverseLoaded()
     {

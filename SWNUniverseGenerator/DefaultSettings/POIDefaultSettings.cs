@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SWNUniverseGenerator.DefaultSettings
 {
@@ -6,7 +7,7 @@ namespace SWNUniverseGenerator.DefaultSettings
     {
         public Int32[] PoiRange { get; set; }
         
-        public String StarId { get; set; }
+        public List<String> LocationId { get; set; }
         
         public String Name { get; set; }
     }

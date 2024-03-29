@@ -67,6 +67,9 @@ namespace SWNUniverseGenerator.Migrations.SeedData
             modelBuilder.Entity<ProblemConflictFocuses>().HasData(GetProblemConflictFocusesData(problemConflictData));
             modelBuilder.Entity<ProblemRestraints>().HasData(GetProblemRestraintsData(problemRestraintData));
             modelBuilder.Entity<ProblemTwists>().HasData(GetProblemTwistsData(problemTwistData));
+
+            // Points of Interest
+            modelBuilder.Entity<PoiData>().HasData(GetPointsOfInterestData());
         }
 
         public List<WorldEnemy> GetWorldEnemyData(List<WorldTag> worldTagData, List<Tag> tagData)
@@ -359,6 +362,13 @@ namespace SWNUniverseGenerator.Migrations.SeedData
 
             AddProblemTwists(twistsList, result);
 
+            return result;
+        }
+        
+        public List<PoiData> GetPointsOfInterestData()
+        {
+            var result =
+                JsonConvert.DeserializeObject<List<PoiData>>(ReadManifestData<UniverseContext>("PointsOfInterest.json"));
             return result;
         }
 

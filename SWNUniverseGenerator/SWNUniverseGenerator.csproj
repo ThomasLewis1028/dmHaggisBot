@@ -26,7 +26,7 @@
       <Resource Include="Migrations\SeedData\alienData.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Migrations\SeedData\pointsOfInterest.json">
+      <Resource Include="Migrations\SeedData\PointsOfInterest.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
       <EmbeddedResource Include="Migrations\SeedData\Origins.json">

@@ -69,10 +69,10 @@
             <RowTemplate>
                 <MudTd DataLabel="Name">@context.Name</MudTd>
                 <MudTd DataLabel="Grid">@($"{context.GridX}/{context.GridY}")</MudTd>
-                @* <MudTd DataLabel="StarCount">@context.StarCount</MudTd> *@
-                @* <MudTd DataLabel="PlanetCount">@context.PlanetCount</MudTd> *@
-                @* <MudTd DataLabel="ShipCount">@context.ShipCount</MudTd> *@
-                @* <MudTd DataLabel="CharCount">@context.CharCount</MudTd> *@
+                <MudTd DataLabel="StarCount">@GetStarCount(context.Id)</MudTd>
+                <MudTd DataLabel="PlanetCount">@GetPlanetCount(context.Id)</MudTd>
+                <MudTd DataLabel="ShipCount">@GetShipCount(context.Id)</MudTd>
+                <MudTd DataLabel="CharCount">@GetCharCount(context.Id)</MudTd>
                 <MudTd><MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => LoadUniverse(context.Id))">Load</MudButton></MudTd>
                 <MudTd><MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteUniverse(context.Id))">Delete</MudButton></MudTd>
             </RowTemplate>
@@ -106,6 +106,26 @@
         UniverseRows = await UniverseService.GetUniverseListAsync();
         MenuService.NotifyChanged();
     }
+    
+    private int GetPlanetCount(string universeId)
+    {
+        return UniverseService.GetPlanetCount(universeId).Result;
+    }
+
+    private int GetStarCount(string universeId)
+    {
+        return UniverseService.GetStarCount(universeId).Result;
+    }
+
+    private int GetShipCount(string universeId)
+    {
+        return UniverseService.GetShipCount(universeId).Result;
+    }
+
+    private int GetCharCount(string universeId)
+    {
+        return UniverseService.GetCharCount(universeId).Result;
+    }
 
     private async void CreateUniverse()
     {
@@ -137,7 +157,7 @@
         Task<Universe> task = UniverseService.GetUniverseAsync(universeId);
         universeName = task.Result == null ? "None" : task.Result.Name;
         await ProtectedSessionStore.SetAsync("SelectedUniverse", universeId);
-        await OnInitializedAsync();
+        MenuService.NotifyChanged();
     }
 
     private async void DeleteUniverse(String universeId)

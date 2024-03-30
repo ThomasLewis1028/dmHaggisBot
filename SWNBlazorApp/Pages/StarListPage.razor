@@ -1,0 +1,169 @@
+﻿@page "/stars"
+
+<PageTitle>Star Data</PageTitle>
+
+@using SWNBlazorApp.Data
+@using SWNUniverseGenerator.DefaultSettings
+@using SWNUniverseGenerator.Models
+@using MudBlazor.Extensions
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject UniverseService UniverseService
+@inject StarService StarService
+@inject PlanetService PlanetService
+@inject ZoneService ZoneService
+
+<h1>Star Data</h1>
+
+<p>All stars in the @universeName universe</p>
+
+@if (zones == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="8">
+            <MudTable Items="@stars.OrderBy(c => c.Id)" Hover="true" SortLabel="Sort By" Filter="new Func<Star, bool>(StarFilterFunc)" @bind-SelectedItem="currentStar">
+                <ToolBarContent>
+                    <MudText Typo="Typo.h6">Star List</MudText>
+                    <MudSpacer/>
+                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Star, object>(x => x.Id)">ID</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Star, object>(x => x.Name)">Name</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>Grid Location</MudTh>
+                    <MudTh>
+                        Planets
+                    </MudTh>
+                    <MudTh>
+                        Class
+                    </MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Id" class="cursor-pointer">@context.Id</MudTd>
+                    <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
+                    <MudTd DataLabel="Grid" class="cursor-pointer">
+                        @(GetZone(context.ZoneId).X 
+                          + "/" 
+                          + GetZone(context.ZoneId).Y)
+                    </MudTd>
+                    <MudTd DataLabel="Planets" class="cursor-pointer">@(GetPlanetCount(context.Id))</MudTd>
+                    <MudTd DataLabel="Class" class="cursor-pointer">@context.StarClass</MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager PageSizeOptions="new[] {10, 15, 20, 25, 50, 75, 100, int.MaxValue}"/>
+                </PagerContent>
+            </MudTable>
+        </MudItem>
+
+        <MudItem xs="4">
+            @*Individual Star Display*@
+            @if (currentStar != null)
+            {
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h4">@currentStar.Name</MudText>
+                            <MudText Typo="Typo.body2">ID: @currentStar.Id</MudText>
+                            <MudText Typo="Typo.body2">Classification: @currentStar.StarClass</MudText>
+                            <MudText Typo="Typo.body2">Color: @currentStar.StarColor.ToDescriptionString()</MudText>
+                            <MudText Typo="Typo.body2"> Location: 
+                                @(GetZone(currentStar.ZoneId).X
+                                  + "/"
+                                  + GetZone(currentStar.ZoneId).Y)
+                            </MudText>
+
+                            @if (GetPlanetCount(currentStar.Id) > 0)
+                            {
+                                <MudText Typo="Typo.h6">Planets:</MudText>
+                                foreach (var planet in GetPlanets(currentStar.Id))
+                                {
+                                    <MudText Typo="Typo.body2">@planet - @GetPlanetName(planet.Id)</MudText>
+                                }
+                            }
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+
+                    </MudCardContent>
+                </MudCard>
+            }
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+    private List<Zone>? zones;
+    private List<Star>? stars;
+    private Star currentStar;
+    private string searchString;
+    String universeName;
+    MudForm form;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var universeId = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        if (!string.IsNullOrEmpty(universeId.Value))
+        {
+            Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
+            universeName = task.Result == null ? "None" : task.Result.Name;
+            zones = await ZoneService.GetZonesAsync(universeId.Value);
+            stars = await StarService.GetStarsAsync(universeId.Value);
+        }
+    }
+
+    private String GetPlanetName(String planetId)
+    {
+        return PlanetService.GetPlanetAsync(planetId).Result.Name;
+    }
+
+
+    private void CreateStars()
+    {
+        // Universe universe = UniverseService.GetUniverseAsync().Result;
+        //
+        // creation.CreateStars(universe, new StarDefaultSettings()
+        // {
+        // });
+        // OnInitializedAsync();
+    }
+
+    private Zone GetZone(string zoneId)
+    {
+        return zones.Find(z => z.Id == zoneId);
+    }
+    
+    private int GetPlanetCount(string zoneId)
+    {
+        return ZoneService.GetPlanetCount(zoneId).Result;
+    }
+    
+    private List<Planet> GetPlanets(string zoneId)
+    {
+        return PlanetService.GetPlanetsByZoneAsync(zoneId).Result;
+    }
+
+    private bool StarFilterFunc(Star star) => StarFilter(star, searchString);
+
+    private bool StarFilter(Star star, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (star.Name.Contains(this.searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (star.Id.Contains(this.searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+}

@@ -52,16 +52,41 @@ public class UniverseService : DataService
         
         return Task.FromResult(result);
     }
-
-    public Task<bool> IsUniverseLoaded()
+    
+    public Task<int>  GetPlanetCount(string universeId)
     {
-        // var pers = JObject.Parse(File.ReadAllText(dataPath + "/Data/persistence.json"));
-        // Persistence persistence = JsonConvert.DeserializeObject<Persistence>(pers.ToString());
-        //
-        // if (persistence.CurrentUniverseName == null)
-        //     return Task.FromResult(false);
+        int result;
+        var repo = new Repository<Planet>(Context);
+        result = repo.Count(c => c.UniverseId == universeId);
+    
+        return Task.FromResult(result);
+    }
 
-        return Task.FromResult(true);
+    public Task<int>  GetStarCount(string universeId)
+    {
+        int result;
+        var repo = new Repository<Star>(Context);
+        result = repo.Count(c => c.UniverseId == universeId);
+    
+        return Task.FromResult(result);
+    }
+
+    public Task<int>  GetShipCount(string universeId)
+    {
+        int result;
+        var repo = new Repository<Ship>(Context);
+        result = repo.Count(c => c.UniverseId == universeId);
+    
+        return Task.FromResult(result);
+    }
+
+    public Task<int>  GetCharCount(string universeId)
+    {
+        int result;
+        var repo = new Repository<Character>(Context);
+        result = repo.Count(c => c.UniverseId == universeId);
+    
+        return Task.FromResult(result);
     }
 }
 

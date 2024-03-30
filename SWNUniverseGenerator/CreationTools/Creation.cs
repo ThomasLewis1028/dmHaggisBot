@@ -225,16 +225,11 @@ namespace SWNUniverseGenerator.CreationTools
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public Universe CreatePoi(Universe universe, PoiDefaultSettings poiDefaultSettings)
+        public bool CreatePoi(String universeId, PoiDefaultSettings poiDefaultSettings)
         {
-            // // If there are no Planets or Locations for the Problems to be tied to then throw an exception
-            // if (universe.Stars == null || universe.Stars.Count == 0)
-            //     throw new FileNotFoundException("No locations have been loaded.");
-            //
-            // // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
-            // universe = new PoiCreation().AddPoi(universe, poiDefaultSettings, PoiData);
-            // SerializeData(universe);
-            return universe;
+            new PoiCreation().AddPoi(universeId, poiDefaultSettings);
+            
+            return true;
         }
 
         /// <summary>
@@ -312,6 +307,9 @@ namespace SWNUniverseGenerator.CreationTools
                 using (var shipRepo = new Repository<Ship>(context))
                     shipRepo.DeleteRange(context.Ships.Where(c => c.UniverseId == universeId).ToList());
 
+                using (var poiRepo = new Repository<PointOfInterest>(context))
+                    poiRepo.DeleteRange(context.PointsOfInterest.Where(c => c.UniverseId == universeId).ToList());
+                
                 using (var planRepo = new Repository<Planet>(context))
                     planRepo.DeleteRange(context.Planets.Where(c => c.UniverseId == universeId).ToList());
 

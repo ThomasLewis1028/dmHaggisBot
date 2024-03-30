@@ -19,7 +19,8 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
-    [DataRow("Test Grid Creation", false)]
+    // [DataRow("Test Grid Creation", false)] // Used for testing
+    [DataRow("Test Grid Creation", true)] 
     public void TestGridCreation(String universeName, Boolean cleanup)
     {
         using var context = new UniverseContext();
@@ -48,7 +49,7 @@ public class CreationTests
             Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) == 0);
             Assert.IsTrue(context.Zones.Count(s => s.UniverseId == universeId) == 0);
             Assert.IsFalse(File.Exists(starMapPath));
-            Assert.IsFalse(File.Exists(starMapPath));
+            Assert.IsFalse(File.Exists(starMapPng));
         }
     }
 
@@ -60,8 +61,8 @@ public class CreationTests
     /// <param name="universeName"></param>
     /// <param name="cleanup"></param>
     [TestMethod, TestCategory("DatabaseTest")]
-    [DataRow("Test Full Creation", false)] // Used for testing
-    // [DataRow("Test Full Creation", true)]
+    // [DataRow("Test Full Creation", false)] // Used for testing
+    [DataRow("Test Full Creation", true)]
     public void TestFullCreation(String universeName, Boolean cleanup)
     {
         using var context = new UniverseContext();
@@ -75,6 +76,7 @@ public class CreationTests
         creation.CreateCharacter(universeId, new CharacterDefaultSettings(count: 100));
         creation.CreateShips(universeId, new ShipDefaultSettings(count: 10));
         creation.CreateProblems(universeId, new ProblemDefaultSettings());
+        creation.CreatePoi(universeId, new PoiDefaultSettings());
 
         Assert.IsTrue(context.Universes.Count(u => u.Id == universeId) > 0);
         Assert.IsTrue(context.Universes.Single(u => u.Id == universeId).GridX == 8);

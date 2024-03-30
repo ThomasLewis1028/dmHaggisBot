@@ -1,6 +1,6 @@
-namespace SWNUniverseGenerator.Migrations.SeedData;
+namespace SWNUniverseGenerator.Models;
 
-public class PoiType
+public class PoiType : BaseEntity
 {
-    
+    public string Type { get; set; }
 }

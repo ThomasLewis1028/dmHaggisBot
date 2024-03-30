@@ -12,34 +12,36 @@
 <h1>@universeName</h1>
 <MudGrid>
     <MudItem xs="4">
-        <img src="@(starmapPath + "\\" + universeName + ".png")" class="w3-round" style="height:100%; width: 100%; object-fit: contain" xs="5"/>
-        @* <MudImage Src="@(starmapPath + "\\" + CurrentUniverse.Name + ".png")" Class="starmap-image" Alt="Starmap"/> *@
+        <img src="@(starmapPath + "/" + universeId + ".svg")" class="w3-round" style="height:100%; width: 100%; object-fit: contain" xs="5"/>
+        @* <MudImage Src="@(starmapPath + "/" + CurrentUniverse.Name + ".png")" Class="starmap-image" Alt="Starmap"/> *@
     </MudItem>
 </MudGrid>
 
 
 @code {
+    String universeId;
     String universeName;
     private static String wwwrootPath = "wwwroot";
-    private static String starmapPath = "\\images\\starmaps";
+    private static String starmapPath = "/images/starmaps";
 
     protected override async Task OnInitializedAsync()
     {
-        var universeID = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
-        if (!string.IsNullOrEmpty(universeID.Value))
+        var result = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        universeId = result.Value;
+        if (!string.IsNullOrEmpty(universeId))
         {
-            universeName = UniverseService.GetUniverseAsync(universeID.Value).Result.Name;
-            // if (!File.Exists($"{wwwrootPath + starmapPath}\\{CurrentUniverse.Name}.png"))
-            // {
-            //     GrabStarmap();
-            // }
+            universeName = UniverseService.GetUniverseAsync(universeId).Result.Name;
+            if (!File.Exists($"{wwwrootPath + starmapPath}/{universeId}.svg"))
+            {
+                GrabStarmap();
+            }
         }
         
     }
 
     public void GrabStarmap()
     {
-        // File.Copy($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/UniverseFiles/{CurrentUniverse.Name}.png", 
-        //     $"{wwwrootPath+starmapPath}\\{CurrentUniverse.Name}.png");
+        File.Copy($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/UniverseFiles/{universeId}.svg", 
+            $"{wwwrootPath+starmapPath}/{universeId}.svg");
     }
 }

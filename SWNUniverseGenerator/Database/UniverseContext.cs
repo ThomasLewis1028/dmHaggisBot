@@ -22,6 +22,9 @@ namespace SWNUniverseGenerator.Database
         public DbSet<Naming> Naming { get; set; }
         public DbSet<Planet> Planets { get; set; }
         public DbSet<PointOfInterest> PointsOfInterest { get; set; }
+        public DbSet<PoiType> PoiTypes { get; set; }
+        public DbSet<PoiOccupiedBy> PoiOccupiedBys { get; set; }
+        public DbSet<PoiSituation> PoiSituations { get; set; }
         public DbSet<Population> Population { get; set; }
         public DbSet<LocationProblem> Problems { get; set; }
         public DbSet<ProblemConflictFocuses> ProblemConflictFocuses { get; set; }
@@ -61,6 +64,8 @@ namespace SWNUniverseGenerator.Database
         {
             base.OnModelCreating(modelBuilder);
             // ZONES
+            modelBuilder.Entity<Zone>().HasKey(e => new { e.Id });
+
             modelBuilder.Entity<Zone>()
                 .HasOne<Universe>()
                 .WithMany()
@@ -76,6 +81,8 @@ namespace SWNUniverseGenerator.Database
                 .WithOne();
 
             // STARS
+            modelBuilder.Entity<Star>().HasKey(e => new { e.Id });
+
             modelBuilder.Entity<Star>()
                 .HasOne<Universe>()
                 .WithMany()
@@ -83,32 +90,35 @@ namespace SWNUniverseGenerator.Database
                 .IsRequired();
 
             // PLANETS
+            modelBuilder.Entity<Planet>().HasKey(e => new { e.Id });
+
             modelBuilder.Entity<Planet>()
                 .HasOne<Zone>()
                 .WithMany()
                 .HasForeignKey(p => p.ZoneId)
                 .IsRequired();
 
-            // POINTS OF INTEREST
-            modelBuilder.Entity<PointOfInterest>()
-                .HasOne<Universe>()
-                .WithMany()
-                .HasForeignKey(p => p.UniverseId)
-                .IsRequired();
-
             ShipModelCreating(modelBuilder);
             CharacterModelCreating(modelBuilder);
             TagModelCreating(modelBuilder);
             ProblemModelCreating(modelBuilder);
+            PoiModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Naming>().HasKey(t => new {t.NameType, t.Name});
-
+            // Naming
+            modelBuilder.Entity<Naming>().HasKey(t => new { t.NameType, t.Name });
 
             new DbInitializer().Seed(modelBuilder);
         }
 
         private void TagModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Tag>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<WorldEnemy>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<WorldFriend>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<WorldComplication>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<WorldPlace>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<WorldThing>().HasKey(e => new { e.Id });
+
             modelBuilder.Entity<WorldEnemy>()
                 .HasOne<Tag>()
                 .WithMany()
@@ -142,6 +152,16 @@ namespace SWNUniverseGenerator.Database
 
         private void ShipModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Ship>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<Hull>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<ShipArmament>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<ShipDefense>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<ShipFitting>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<Spec>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<SpecArmament>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<SpecDefense>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<SpecFitting>().HasKey(e => new { e.Id });
+
             // SHIPS
             modelBuilder.Entity<Ship>()
                 .HasOne<Universe>()
@@ -160,7 +180,7 @@ namespace SWNUniverseGenerator.Database
                 .Entity<Hull>()
                 .Property(h => h.HullType)
                 .HasConversion(new EnumToStringConverter<Hull.HullTypeEnum>());
-            
+
             modelBuilder
                 .Entity<Hull>()
                 .Property(h => h.HullClass)
@@ -229,6 +249,9 @@ namespace SWNUniverseGenerator.Database
 
         private void CharacterModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Character>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<CrewMember>().HasKey(e => new { e.Id });
+
             // CHARACTERS
             modelBuilder.Entity<Character>()
                 .HasOne<Universe>()
@@ -255,10 +278,37 @@ namespace SWNUniverseGenerator.Database
 
         private void ProblemModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ProblemConflictSituations>().HasKey(t => new {t.Situation});
-            modelBuilder.Entity<ProblemConflictFocuses>().HasKey(t => new {t.Focus});
-            modelBuilder.Entity<ProblemRestraints>().HasKey(t => new {t.Restraint});;
-            modelBuilder.Entity<ProblemTwists>().HasKey(t => new {t.Twist});
+            modelBuilder.Entity<ProblemConflictSituations>().HasKey(t => new { t.Situation });
+            modelBuilder.Entity<ProblemConflictFocuses>().HasKey(t => new { t.Focus });
+            modelBuilder.Entity<ProblemRestraints>().HasKey(t => new { t.Restraint });
+            ;
+            modelBuilder.Entity<ProblemTwists>().HasKey(t => new { t.Twist });
+        }
+
+        private void PoiModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PointOfInterest>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<PoiType>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<PoiOccupiedBy>().HasKey(e => new { e.Id });
+            modelBuilder.Entity<PoiSituation>().HasKey(e => new { e.Id });
+
+            modelBuilder.Entity<PointOfInterest>()
+                .HasOne<Universe>()
+                .WithMany()
+                .HasForeignKey(e => e.UniverseId)
+                .IsRequired();
+
+            modelBuilder.Entity<PoiOccupiedBy>()
+                .HasOne<PoiType>()
+                .WithMany()
+                .HasForeignKey(t => t.TypeId)
+                .IsRequired();
+
+            modelBuilder.Entity<PoiSituation>()
+                .HasOne<PoiType>()
+                .WithMany()
+                .HasForeignKey(t => t.TypeId)
+                .IsRequired();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options) =>

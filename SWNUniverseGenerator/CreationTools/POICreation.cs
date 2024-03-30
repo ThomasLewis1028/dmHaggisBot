@@ -5,6 +5,7 @@ using System.Linq;
 using LibGit2Sharp;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
+using SWNUniverseGenerator.Migrations.SeedData;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.CreationTools
@@ -18,6 +19,7 @@ namespace SWNUniverseGenerator.CreationTools
             using var context = new UniverseContext();
             using var poiRepo = new Repository<PointOfInterest>(context);
             using var starRepo = new Repository<Star>(context);
+            using var planetRepo = new Repository<Planet>(context);
 
             List<PointOfInterest> pointOfInterestList = new List<PointOfInterest>();
 
@@ -31,7 +33,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                 foreach (Star star in stars)
                 {
-                    // pointOfInterestList.AddRange(AddPointOfInterest(star, poiDefaultSettings, poiRepo));
+                    pointOfInterestList.AddRange(AddPointOfInterest(star, poiDefaultSettings, poiRepo, context));
                 }
             }
             // Create on only the stars that are listed
@@ -49,41 +51,46 @@ namespace SWNUniverseGenerator.CreationTools
                 }
             }
 
-
+            poiRepo.AddRange(pointOfInterestList);
             return true;
         }
 
-        // private List<PointOfInterest> AddPointOfInterest(Star star, PoiDefaultSettings poiDefaultSettings, Repository<PointOfInterest> poiRepo)
-        // {
-        //     PointOfInterest pointOfInterest;
-        //
-        //     var max = poiDefaultSettings.PoiRange == null || poiDefaultSettings.PoiRange.Length == 0 ||
-        //               poiDefaultSettings.PoiRange[0] == -1 || poiDefaultSettings.PoiRange[1] == -1
-        //         ? Rand.Next(1, 5)
-        //         : Rand.Next(poiDefaultSettings.PoiRange[0], poiDefaultSettings.PoiRange[1] + 1);
-        //
-        //     var poiCount = 0;
-        //
-        //     while (poiCount < max)
-        //     {
-        //         var poi = new PointOfInterest();
-        //
-        //         // Set the POI information with randomized data
-        //         poi.ZoneId = starId;
-        //         poi.Name = star.Name + " " + ToRoman(poiCount + 1);
-        //         poi.Type = poiRepo.Random(p => p.UniverseId);
-        //         var type = poiData.PointsOfInterest[Rand.Next(0, poiData.PointsOfInterest.Count)];
-        //         poi.Type = type.Type;
-        //         poi.OccupiedBy = type.OccupiedBy[Rand.Next(0, type.OccupiedBy.Count)];
-        //         poi.Situation = type.Situation[Rand.Next(0, type.Situation.Count)];
-        //
-        //         universe.PointsOfInterest.Add(poi);
-        //
-        //         poiCount++;
-        //     }
-        //
-        //     return pointOfInterest;
-        // }
+        private List<PointOfInterest> AddPointOfInterest(Star star, PoiDefaultSettings poiDefaultSettings, Repository<PointOfInterest> poiRepo, UniverseContext context)
+        {
+            List<PointOfInterest> pointsOfInterest = new ();
+
+            using var poiTypeRepo = new Repository<PoiType>(context);
+            using var poiOccupiedByRepo = new Repository<PoiOccupiedBy>(context);
+            using var poiSituationRepo = new Repository<PoiSituation>(context);
+        
+            var max = poiDefaultSettings.PoiRange == null || poiDefaultSettings.PoiRange.Length == 0 ||
+                      poiDefaultSettings.PoiRange[0] == -1 || poiDefaultSettings.PoiRange[1] == -1
+                ? Rand.Next(1, 5)
+                : Rand.Next(poiDefaultSettings.PoiRange[0], poiDefaultSettings.PoiRange[1] + 1);
+        
+            var poiCount = 0;
+        
+            while (poiCount < max)
+            {
+                var poiType = (PoiType)poiTypeRepo.Random();
+                var poi = new PointOfInterest
+                {
+                    // Set the POI information with randomized data
+                    UniverseId = star.UniverseId,
+                    ZoneId = star.ZoneId,
+                    Name = star.Name + " " + ToRoman(poiCount + 1),
+                    Type = poiType.Type,
+                    OccupiedBy = ((PoiOccupiedBy)poiOccupiedByRepo.Random(e => e.TypeId == poiType.Id)).OccupiedBy,
+                    Situation = ((PoiSituation)poiSituationRepo.Random(e => e.TypeId == poiType.Id)).Situation
+                };
+                
+                pointsOfInterest.Add(poi);
+        
+                poiCount++;
+            }
+        
+            return pointsOfInterest;
+        }
 
         private static string ToRoman(int number)
         {

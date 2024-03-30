@@ -69,7 +69,10 @@ namespace SWNUniverseGenerator.Migrations.SeedData
             modelBuilder.Entity<ProblemTwists>().HasData(GetProblemTwistsData(problemTwistData));
 
             // Points of Interest
-            modelBuilder.Entity<PoiData>().HasData(GetPointsOfInterestData());
+            var poiData = Deserialize<PoiData>("PointsOfInterest.json");
+            modelBuilder.Entity<PoiType>().HasData(AddPoiTypeData(poiData));
+            modelBuilder.Entity<PoiOccupiedBy>().HasData(AddPoiOccupiedByData(poiData));
+            modelBuilder.Entity<PoiSituation>().HasData(AddPoiSituationData(poiData));
         }
 
         public List<WorldEnemy> GetWorldEnemyData(List<WorldTag> worldTagData, List<Tag> tagData)
@@ -364,11 +367,46 @@ namespace SWNUniverseGenerator.Migrations.SeedData
 
             return result;
         }
-        
-        public List<PoiData> GetPointsOfInterestData()
+
+        public List<PoiType> AddPoiTypeData(List<PoiData> poiData)
         {
-            var result =
-                JsonConvert.DeserializeObject<List<PoiData>>(ReadManifestData<UniverseContext>("PointsOfInterest.json"));
+            var result = new List<PoiType>();
+
+            foreach (var data in poiData)
+            {
+                result.Add(new PoiType() { Type = data.Type, Id = data.Id});
+            }
+
+            return result;
+        }
+
+        public List<PoiOccupiedBy> AddPoiOccupiedByData(List<PoiData> poiData)
+        {
+            var result = new List<PoiOccupiedBy>();
+
+            foreach (var data in poiData)
+            {
+                foreach (var occupiedBy in data.OccupiedBy)
+                {
+                    result.Add(new PoiOccupiedBy() { TypeId = data.Id, OccupiedBy = occupiedBy });
+                }
+            }
+
+            return result;
+        }
+
+        public List<PoiSituation> AddPoiSituationData(List<PoiData> poiData)
+        {
+            var result = new List<PoiSituation>();
+
+            foreach (var data in poiData)
+            {
+                foreach (var situation in data.Situation)
+                {
+                    result.Add(new PoiSituation() { TypeId = data.Id, Situation = situation });
+                }
+            }
+
             return result;
         }
 

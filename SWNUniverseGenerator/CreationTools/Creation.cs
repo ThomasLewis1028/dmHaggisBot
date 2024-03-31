@@ -260,7 +260,7 @@ namespace SWNUniverseGenerator.CreationTools
         /// This method receives the ID for a universe and deletes the entire universe as needed
         /// </summary>
         /// <param name="universeId"></param>
-        public void DeleteUniverse(String universeId)
+        public bool DeleteUniverse(String universeId)
         {
             string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
                           + "/"
@@ -306,9 +306,12 @@ namespace SWNUniverseGenerator.CreationTools
                 using (var zoneRepo = new Repository<Zone>(context))
                     zoneRepo.DeleteRange(context.Zones.Where(c => c.UniverseId == universeId).ToList());
 
-                using (var uniRepo = new Repository<Universe>(context))
-                    uniRepo.Delete(universeId);
+                using var uniRepo = new Repository<Universe>(context);
+                uniRepo.Delete(universeId);
+                
+                return uniRepo.Count(u => u.Id == universeId) == 0;
             }
+
         }
     }
 }

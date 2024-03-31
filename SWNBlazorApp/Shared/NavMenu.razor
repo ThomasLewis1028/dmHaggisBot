@@ -9,7 +9,7 @@
 
 
 <MudDrawer Open="true" Anchor="Anchor.Start" Width="250px" Class="py-3 mud-height-full" Elevation="0" Variant="DrawerVariant.Persistent">
-    <MudNavMenu Bordered="true" Class="mud-width-full">
+    <MudNavMenu Bordered="true" Class="mud-width-full" Rounded="true" Color="Color.Success">
         <MudText Typo="Typo.h6" Class="px-4">Nav Menu</MudText>
         @if(CurrentUniverse.Name != "" || !string.IsNullOrEmpty(CurrentUniverse.Name))
         {
@@ -22,9 +22,9 @@
             <MudNavGroup Title="@CurrentUniverse.Name" Icon="@Icons.Material.Filled.BlurCircular">
                 <MudNavLink Href="/universe" Icon="@Icons.Material.Filled.Map">Star Map</MudNavLink>
                 <MudNavLink Href="/stars" Icon="@Icons.Material.Filled.BrightnessHigh">Stars</MudNavLink>
+                <MudNavLink Href="/planets" Icon="@Icons.Material.Filled.Public">Planets</MudNavLink>
                 <MudNavLink Href="/characters" Icon="@Icons.Material.Filled.Groups2">Characters</MudNavLink>
                 <MudNavLink Href="/ships" Icon="@Icons.Material.Filled.Rocket">Ships</MudNavLink>
-                <MudNavLink Href="/planets" Icon="@Icons.Material.Filled.Public">Planets</MudNavLink>
             </MudNavGroup>
         }
     </MudNavMenu>

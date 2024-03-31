@@ -8,18 +8,18 @@
 @inject IMenuService MenuService
 
 
-<MudDrawer Open="true" Anchor="Anchor.Start" Width="250px" Class="py-3 mud-height-full" Elevation="0" Variant="DrawerVariant.Persistent">
+<MudDrawer Open="true" Anchor="Anchor.Start" Width="250px" Height="100%" Class="py-3" Elevation="0" Variant="DrawerVariant.Persistent">
     <MudNavMenu Bordered="true" Class="mud-width-full" Rounded="true" Color="Color.Success">
         <MudText Typo="Typo.h6" Class="px-4">Nav Menu</MudText>
-        @if(CurrentUniverse.Name != "" || !string.IsNullOrEmpty(CurrentUniverse.Name))
+        @if (CurrentUniverse.Name != "" || !string.IsNullOrEmpty(CurrentUniverse.Name))
         {
             <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">@CurrentUniverse.Name</MudText>
         }
         <MudDivider Class="my-2"/>
-        <MudNavLink Href="/universes" Icon="@Icons.Material.Filled.Workspaces">Universes</MudNavLink>
+        <MudNavLink Href="/universes" Icon="@Icons.Material.Filled.SpaceDashboard">Universes</MudNavLink>
         @if (CurrentUniverse.Name != "" || !string.IsNullOrEmpty(CurrentUniverse.Name))
         {
-            <MudNavGroup Title="@CurrentUniverse.Name" Icon="@Icons.Material.Filled.BlurCircular">
+            <MudNavGroup Title="@CurrentUniverse.Name" Icon="@Icons.Material.Filled.Hive">
                 <MudNavLink Href="/universe" Icon="@Icons.Material.Filled.Map">Star Map</MudNavLink>
                 <MudNavLink Href="/stars" Icon="@Icons.Material.Filled.BrightnessHigh">Stars</MudNavLink>
                 <MudNavLink Href="/planets" Icon="@Icons.Material.Filled.Public">Planets</MudNavLink>

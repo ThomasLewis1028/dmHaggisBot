@@ -21,6 +21,8 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
         <PackageReference Include="MudBlazor" Version="6.1.9" />
         <PackageReference Include="MudBlazor.Markdown" Version="0.1.0" />
         <PackageReference Include="MudBlazor.ThemeManager" Version="1.0.7" />

@@ -2,12 +2,13 @@
 @using SWNBlazorApp.Data
 @using SWNUniverseGenerator.Models
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using SWNUniverseGenerator.CreationTools
+@using SWNUniverseGenerator.DefaultSettings
 
 <PageTitle>Universes</PageTitle>
 
 @inject ProtectedSessionStorage ProtectedSessionStore
 @inject UniverseService UniverseService
-@inject Universe CurrentUniverse
 @inject IMenuService MenuService
 
 <h1>Universes</h1>
@@ -131,20 +132,16 @@
     {
         _start = DateTime.Now;
         //TODO: fix
-        // Creation creation = CreationService.GetCreationAsync().Result;
-        //
-        // CurrentUniverse = creation.CreateUniverse(new UniverseDefaultSettings
-        // {
-        //     Name = universeName,
-        //     GridX = 0,
-        //     GridY = 0
-        // });
-        //TODO: fix
-        // creation.CreateStars(CurrentUniverse, new StarDefaultSettings());
-        // creation.CreatePlanets(CurrentUniverse, new PlanetDefaultSettings());
-        // creation.CreateShips(CurrentUniverse, new ShipDefaultSettings());
-        // creation.CreateCharacter(CurrentUniverse, new CharacterDefaultSettings());
-        // creation.CreateStarMap(CurrentUniverse);
+        Creation creation = new Creation();
+        UniverseDefaultSettings uds = new UniverseDefaultSettings()
+        {
+            UniverseId = new Universe().Id,
+            Name = universeName
+        };
+        
+        creation.CreateFullUniverse(universeDefaultSettings: uds);
+
+        LoadUniverse(uds.UniverseId);
 
         _end = DateTime.Now;
         _createdNew = true;

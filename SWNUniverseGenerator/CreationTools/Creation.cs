@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
@@ -28,7 +29,7 @@ namespace SWNUniverseGenerator.CreationTools
         /// <param name="universeDefaultSettings"></param>
         /// <returns>The newly created Universe ID</returns>
         /// <exception cref="IOException"></exception>
-        public bool CreateFullUniverse(UniverseDefaultSettings universeDefaultSettings)
+        public async Task<bool> CreateFullUniverse(UniverseDefaultSettings universeDefaultSettings)
         {
             universeDefaultSettings.StarDefaultSettings.UniverseId = universeDefaultSettings.UniverseId;
             universeDefaultSettings.PlanetDefaultSettings.UniverseId = universeDefaultSettings.UniverseId;
@@ -38,10 +39,14 @@ namespace SWNUniverseGenerator.CreationTools
             
             CreateUniverse(universeDefaultSettings);
             CreateZones(universeDefaultSettings);
+            
             CreateStars(universeDefaultSettings.StarDefaultSettings);
+            
             CreatePlanets(universeDefaultSettings.PlanetDefaultSettings);
-            CreateCharacter(universeDefaultSettings.CharacterDefaultSettings);
-            CreateShips(universeDefaultSettings.ShipDefaultSettings);
+            
+            await CreateCharacter(universeDefaultSettings.CharacterDefaultSettings);
+            await CreateShips(universeDefaultSettings.ShipDefaultSettings);
+            // CreateStarMap(universeDefaultSettings.UniverseId);
 
             return true;
         }
@@ -155,12 +160,12 @@ namespace SWNUniverseGenerator.CreationTools
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public bool CreateShips(ShipDefaultSettings shipDefaultSettings)
+        public Task<bool> CreateShips(ShipDefaultSettings shipDefaultSettings)
         {
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
             new ShipCreation().AddShips(shipDefaultSettings);
 
-            return true;
+            return Task.FromResult(true);
         }
 
         /// <summary>
@@ -174,12 +179,12 @@ namespace SWNUniverseGenerator.CreationTools
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public bool CreateCharacter(CharacterDefaultSettings characterDefaultSettings)
+        public Task<bool> CreateCharacter(CharacterDefaultSettings characterDefaultSettings)
         {
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
             new CharCreation().AddCharacters(characterDefaultSettings);
 
-            return true;
+            return Task.FromResult(true);
         }
 
         /// <summary>

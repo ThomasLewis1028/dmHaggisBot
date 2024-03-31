@@ -18,9 +18,7 @@ namespace SWNUniverseGenerator.CreationTools
         /// This function handles all Character creation. Should receive a Universe to edit and a set of
         /// CharacterDefaultSettings that will be used to set defaults.
         /// </summary>
-        /// <param name="universeId"></param>
         /// <param name="characterDefaultSettings"></param>
-        /// <returns>The newly modified universe</returns>
         public void AddCharacters(CharacterDefaultSettings characterDefaultSettings)
         {
             var maleNameGenerations = new NameGeneration();

@@ -29,6 +29,7 @@ builder.Services.AddScoped<ZoneService>();
 builder.Services.AddScoped<PlanetService>();
 builder.Services.AddScoped<ShipService>();
 builder.Services.AddScoped<StarService>();
+builder.Services.AddScoped<CrewMemberService>();
 
 var app = builder.Build();
 app.UseStaticFiles();

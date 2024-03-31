@@ -1,0 +1,283 @@
+@page "/ships"
+
+<PageTitle>Ship Data</PageTitle>
+
+@using SWNBlazorApp.Data
+@using SWNUniverseGenerator.DefaultSettings
+@using SWNUniverseGenerator.Models
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using MudBlazor.Extensions
+
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject CharacterService CharacterService
+@inject UniverseService UniverseService
+@inject Universe CurrentUniverse
+@inject PlanetService PlanetService
+@inject StarService StarService
+@inject ShipService ShipService
+@inject CrewMemberService CrewMemberService
+@inject IDialogService DialogService
+
+<h1>Ship Data</h1>
+
+<p>All ships in the @universeName universe</p>
+
+@if (ships == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="12">
+            @* <MudExpansionPanels> *@
+            @*     $1$ Character Creation #1# *@
+            @*     <MudExpansionPanel Text="Character Creation"> *@
+            @*         <MudItem xs="12" sm="6"> *@
+            @*             <MudPaper Class="pa-4"> *@
+            @*                 <MudForm @ref="form"> *@
+            @*                     <MudGrid> *@
+            @*                         <MudItem xs="4"> *@
+            @*                             <MudTextField T="String" Label="First Name" Required="false" @bind-Value="newCharFirstName"/> *@
+            @*                         </MudItem> *@
+            @*                         <MudItem xs="4"> *@
+            @*                             <MudTextField T="String" Label="Last Name" Required="false" @bind-Value="newCharLastName"/> *@
+            @*                         </MudItem> *@
+            @*                         <MudItem xs="1"> *@
+            @*                             <MudTextField T="int" Label="Age" Required="false" @bind-Value="newCharAge"/> *@
+            @*                         </MudItem> *@
+            @*                         <MudItem xs="3"> *@
+            @*                             <MudSelect T="Character.GenderEnum" Label="Gender" Required="true" @bind-Value="newCharGender"> *@
+            @*                                 <MudSelectItem Value="@Character.GenderEnum.Undefined"/> *@
+            @*                                 <MudSelectItem Value="@Character.GenderEnum.Male"/> *@
+            @*                                 <MudSelectItem Value="@Character.GenderEnum.Female"/> *@
+            @*                             </MudSelect> *@
+            @*                         </MudItem> *@
+            @* *@
+            @*                         <MudItem xs="4"> *@
+            @*                             <MudTextField T="String" Label="Hair Color" Required="false" @bind-Value="newCharHairColor"/> *@
+            @*                         </MudItem> *@
+            @*                         <MudItem xs="4"> *@
+            @*                             <MudTextField T="String" Label="Hair Style" Required="false" @bind-Value="newCharHairStyle"/> *@
+            @*                         </MudItem> *@
+            @*                         <MudItem xs="4"> *@
+            @*                             <MudTextField T="String" Label="Eye Color" Required="false" @bind-Value="newCharEyeColor"/> *@
+            @*                         </MudItem> *@
+            @* *@
+            @*                         <MudItem xs="6"> *@
+            @*                             <MudTextField T="String" Label="Title" Required="false" @bind-Value="newCharTitle"/> *@
+            @*                         </MudItem> *@
+            @*                         <MudItem xs="6"> *@
+            @*                             <MudTextField T="String" Label="Ship Id" Required="false" @bind-Value="newCharShipId"/> *@
+            @*                         </MudItem> *@
+            @* *@
+            @*                         <MudItem xs="6"> *@
+            @*                             <MudTextField T="String" Label="Birth Planet ID" Required="false" @bind-Value="newCharBirthPlanetId"/> *@
+            @*                         </MudItem> *@
+            @*                         <MudItem xs="6"> *@
+            @*                             <MudTextField T="String" Label="Current Planet ID" Required="false" @bind-Value="newCharCurrPlanetId"/> *@
+            @*                         </MudItem> *@
+            @* *@
+            @*                         <MudItem xs="2"> *@
+            @*                             <MudTextField T="int" Label="Crime Chance %" Required="false" @bind-Value="newCharCrimeChance"/> *@
+            @*                         </MudItem> *@
+            @*                         <MudItem xs="10"> *@
+            @*                             <MudTextField T="String" Label="Initial Reaction" Required="false" @bind-Value="newCharInitialReaction"/> *@
+            @*                         </MudItem> *@
+            @*                     </MudGrid> *@
+            @*                 </MudForm> *@
+            @*             </MudPaper> *@
+            @*             <MudPaper Class="pa-4 mt-4"> *@
+            @*                 <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CreateShip())">Create Character</MudButton> *@
+            @*                 <MudButton Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" OnClick="@(() => form.Reset())" Class="mx-2">Reset</MudButton> *@
+            @*             </MudPaper> *@
+            @*         </MudItem> *@
+            @*         <MudItem xs="12" sm="6"> *@
+            @*             <MudPaper Class="pa-4 mud-height-full"> *@
+            @* *@
+            @*             </MudPaper> *@
+            @*         </MudItem> *@
+            @*     </MudExpansionPanel> *@
+            @* </MudExpansionPanels> *@
+        </MudItem>
+        @* Ship List *@
+        <MudItem xs="8">
+            <MudTable Items="@ships.OrderBy(c => c.Id)" Hover="true" SortLabel="Sort By" Filter="new Func<Ship, bool>(ShipFilterFunc)" @bind-SelectedItem="currentShip">
+                <ToolBarContent>
+                    <MudText Typo="Typo.h6">Ship List</MudText>
+                    <MudSpacer/>
+                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.Name)">Name</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.HullId)">Class</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.HullId)">Hull</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        Crew Count
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.Cp)">Combat Power</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.CrewSkill)">Crew Skill</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        Location
+                    </MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
+                    <MudTd DataLabel="Title" class="cursor-pointer">@GetClass(context.HullId)</MudTd>
+                    <MudTd DataLabel="Title" class="cursor-pointer">@GetHull(context.HullId)</MudTd>
+                    <MudTd DataLabel="Name" class="cursor-pointer">@GetCrewCount(context.Id)</MudTd>
+                    <MudTd DataLabel="Ship" class="cursor-pointer">@context.Cp</MudTd>
+                    <MudTd DataLabel="Title" class="cursor-pointer">@context.CrewSkill</MudTd>
+                    <MudTd DataLabel="Title" class="cursor-pointer">@GetLocationName(@context.LocationId)</MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>
+                </PagerContent>
+            </MudTable>
+        </MudItem>
+
+        <MudItem xs="4">
+            @*Individual Ship Display*@
+            @if (currentShip != null)
+            {
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6">@currentShip.Name</MudText>
+                            <MudText Typo="Typo.body2">@currentShip.Id</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        @* @if(currentCharacter.Title != null) *@
+                        @* { *@
+                        @*     <MudText Typo="Typo.body1">Title: @currentCharacter.Title</MudText> *@
+                        @* } *@
+                        @* <MudText Typo="Typo.body1">Gender: @currentCharacter.Gender</MudText> *@
+                        @* <MudText Typo="Typo.body1">Skin Color: @currentCharacter.SkinCol</MudText> *@
+                        @* <MudText Typo="Typo.body1">Hair Style: @currentCharacter.HairStyle</MudText> *@
+                        @* <MudText Typo="Typo.body1">Hair Color: @currentCharacter.HairCol</MudText> *@
+                        @* <MudText Typo="Typo.body1">Eye Color: @currentCharacter.EyeCol</MudText> *@
+                        @* <MudText Typo="Typo.body1">Height: @currentCharacter.Height</MudText> *@
+                        @* <MudText Typo="Typo.body1">Ship: @GetShipName(currentCharacter.Id)</MudText> *@
+                        @* <MudText Typo="Typo.body1">Birth Planet: @GetPlanetName(@currentCharacter.BirthPlanetId)</MudText> *@
+                        @* <MudText Typo="Typo.body1">Current Planet: @GetPlanetName(@currentCharacter.CurrentLocationId)</MudText> *@
+                        @* <MudText Typo="Typo.body1">Initial Reaction: @currentCharacter.InitialReaction</MudText> *@
+                        @* <MudText Typo="Typo.body1">Crime Chance: @currentCharacter.CrimeChance%</MudText> *@
+
+                    </MudCardContent>
+                </MudCard>
+            }
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+    private List<Character>? characters;
+    private List<Ship>? ships;
+    private Ship currentShip;
+    private string searchString;
+    String universeName;
+    MudForm form;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var universeId = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        if (!string.IsNullOrEmpty(universeId.Value))
+        {
+            Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
+            universeName = task.Result == null ? "None" : task.Result.Name;
+            CurrentUniverse = UniverseService.GetUniverseAsync(universeId.Value).Result;
+            ships = await ShipService.GetShipsAsync(universeId.Value);
+        }
+    }
+
+
+    private string GetLocationName(string locId)
+    {
+        switch (locId)
+        {
+            case var _ when locId.StartsWith("P-"): return GetPlanetName(locId);
+            case var _ when locId.StartsWith("SH-"):
+                if (ships != null) return ships.First(sh => sh.Id == locId).Name;
+                break;
+            case var _ when locId.StartsWith("S-"): return GetStarName(locId);
+            case var _ when locId.StartsWith("Z-"): return locId;
+        }
+
+        return "";
+    }
+
+    private String GetPlanetName(String planetId)
+    {
+        return PlanetService.GetPlanetAsync(planetId).Result.Name;
+    }
+
+    private String GetStarName(String starId)
+    {
+        return StarService.GetStarAsync(starId).Result.Name;
+    }
+
+    private int GetCrewCount(string shipId)
+    {
+        return CrewMemberService.GetCrewMemberCount(shipId).Result;
+    }
+
+    private string GetHull(string hullId)
+    {
+        return ShipService.GetShipHull(hullId).Result.HullType.ToDescriptionString();
+    }
+
+
+    private string GetClass(string hullId)
+    {
+        return ShipService.GetShipHull(hullId).Result.HullClass.ToDescriptionString();
+    }
+
+    private void CreateShip()
+    {
+        //TODO: Fix
+        // Universe universe = UniverseService.GetUniverseAsync().Result;
+        //
+        // creation.CreateCharacter(universe, new CharacterDefaultSettings()
+        // {
+        //     First = newCharFirstName,
+        //     Last = newCharLastName,
+        //     Gender = newCharGender,
+        //     Age = new[] {newCharAge, newCharAge},
+        //     HairStyle = newCharHairStyle,
+        //     HairCol = newCharHairColor,
+        //     EyeCol = newCharEyeColor,
+        //     Title = newCharTitle,
+        //     Count = 1,
+        //     CrimeChance = new[] {newCharCrimeChance, newCharCrimeChance},
+        //     ShipId = newCharShipId
+        // });
+        // OnInitializedAsync();
+    }
+
+    private bool ShipFilterFunc(Ship ship) => ShipFilter(ship, searchString);
+
+    private bool ShipFilter(Ship ship, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (ship.Name.Contains(this.searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (ship.Id.Contains(this.searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+}

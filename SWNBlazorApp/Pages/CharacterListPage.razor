@@ -13,6 +13,7 @@
 @inject Universe CurrentUniverse
 @inject PlanetService PlanetService
 @inject ShipService ShipService
+@inject CrewMemberService CrewMemberService
 @inject IDialogService DialogService
 
 <h1>Character Data</h1>
@@ -109,23 +110,23 @@ else
                 </ToolBarContent>
                 <HeaderContent>
                     <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Id)">ID</MudTableSortLabel>
+                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Name)">Name</MudTableSortLabel>
                     </MudTh>
                     <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Name)">Name</MudTableSortLabel>
+                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Gender)">Gender</MudTableSortLabel>
                     </MudTh>
                     <MudTh>
                         <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Title)">Title</MudTableSortLabel>
                     </MudTh>
                     <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.CurrentLocationId)">Ship ID</MudTableSortLabel>
+                        <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.Name)">Ship</MudTableSortLabel>
                     </MudTh>
                 </HeaderContent>
                 <RowTemplate>
-                    <MudTd DataLabel="Id" class="cursor-pointer">@context.Id</MudTd>
                     <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
+                    <MudTd DataLabel="Ship" class="cursor-pointer">@context.Gender</MudTd>
                     <MudTd DataLabel="Title" class="cursor-pointer">@context.Title</MudTd>
-                    <MudTd DataLabel="Current Location Id" class="cursor-pointer">@context.CurrentLocationId</MudTd>
+                    <MudTd DataLabel="Title" class="cursor-pointer">@GetShipName(context.Id)</MudTd>
                 </RowTemplate>
                 <PagerContent>
                     <MudTablePager PageSizeOptions="new[] {10, 15, 20, 25, 50, 75, 100, int.MaxValue}"/>
@@ -155,8 +156,9 @@ else
                         <MudText Typo="Typo.body1">Hair Color: @currentCharacter.HairCol</MudText>
                         <MudText Typo="Typo.body1">Eye Color: @currentCharacter.EyeCol</MudText>
                         <MudText Typo="Typo.body1">Height: @currentCharacter.Height</MudText>
-                        <MudText Typo="Typo.body1">Birth Planet: @currentCharacter.BirthPlanetId  - @GetPlanetName(@currentCharacter.BirthPlanetId)</MudText>
-                        <MudText Typo="Typo.body1">Current Planet: @currentCharacter.CurrentLocationId - @GetPlanetName(@currentCharacter.CurrentLocationId)</MudText>
+                        <MudText Typo="Typo.body1">Ship: @GetShipName(currentCharacter.Id)</MudText>
+                        <MudText Typo="Typo.body1">Birth Planet: @GetPlanetName(@currentCharacter.BirthPlanetId)</MudText>
+                        <MudText Typo="Typo.body1">Current Planet: @GetPlanetName(@currentCharacter.CurrentLocationId)</MudText>
                         <MudText Typo="Typo.body1">Initial Reaction: @currentCharacter.InitialReaction</MudText>
                         <MudText Typo="Typo.body1">Crime Chance: @currentCharacter.CrimeChance%</MudText>
 
@@ -198,7 +200,6 @@ else
             CurrentUniverse = UniverseService.GetUniverseAsync(universeId.Value).Result;
             characters = await CharacterService.GetCharactersAsync(universeId.Value);
         }
-        
     }
 
     private String GetPlanetName(String planetId)
@@ -206,9 +207,15 @@ else
         return PlanetService.GetPlanetAsync(planetId).Result.Name;
     }
 
-    private String GetShipName(String shipId)
+    private String GetShipName(String charId)
     {
-        return ShipService.GetShipsync(shipId).Result.Name;
+        var result = CrewMemberService.GetCrewMemberAsync(charId).Result;
+        if (result != null)
+        {
+            return ShipService.GetShipAsync(result.ShipId).Result.Name;
+        }
+        
+        return null;
     }
 
     private void CreateCharacters()

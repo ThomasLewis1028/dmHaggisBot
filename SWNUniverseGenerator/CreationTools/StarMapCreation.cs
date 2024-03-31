@@ -12,7 +12,7 @@ using VectSharp.SVG;
 
 namespace SWNUniverseGenerator.CreationTools
 {
-    public class GridCreation
+    public class StarMapCreation
     {
         private static readonly Random Rand = new();
         private const float Hypotenuse = 150; // hypotenuse for each side of the hex
@@ -21,7 +21,7 @@ namespace SWNUniverseGenerator.CreationTools
         private static readonly float Cosign = (float)Math.Cos(IntRadians); // cos(30)
         private static readonly float Sine = (float)Math.Sin(IntRadians); // sin(30)
 
-        public String CreateGrid(string universeId, UniverseContext universeContext)
+        public String GenerateStarMap(string universeId, UniverseContext universeContext)
         {
             int gridX;
             int gridY;

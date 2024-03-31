@@ -258,7 +258,7 @@ namespace SWNUniverseGenerator.CreationTools
             using var context = new UniverseContext();
             using var planRepo = new Repository<Planet>(context);
 
-            return new GridCreation().CreateGrid(universeId, context);
+            return new StarMapCreation().GenerateStarMap(universeId, context);
         }
 
         /// <summary>

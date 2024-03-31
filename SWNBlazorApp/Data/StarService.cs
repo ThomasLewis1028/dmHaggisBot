@@ -10,6 +10,13 @@ public class StarService : DataService
     {
 
     }
+    public Task<Star> GetStarAsync(string starId)
+    {
+        var repo = new Repository<Star>(Context);
+        var result = repo.GetById(starId);
+        
+        return Task.FromResult(result);
+    }
     
     public Task<List<Star>> GetStarsAsync(string universeId)
     {

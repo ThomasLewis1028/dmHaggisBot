@@ -36,7 +36,7 @@ public class CreationTests
         Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) > 0);
 
         var starMapPath = creation.CreateStarMap(uds.UniverseId);
-        var starMapPng = new GridCreation().GetPng(uds.UniverseId);
+        var starMapPng = new StarMapCreation().GetPng(uds.UniverseId);
 
         Assert.IsTrue(File.Exists(starMapPath));
         Assert.IsTrue(File.Exists(starMapPng));

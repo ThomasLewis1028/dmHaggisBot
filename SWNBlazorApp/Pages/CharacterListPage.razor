@@ -151,28 +151,77 @@ else
                     </MudCardHeader>
                     <MudCardContent>
                         <MudGrid>
-                            <MudItem xs="3" Class="border-solid border-2 mud-border-primary pa-4">
-                                <MudIcon Icon="@Icons.Material.Filled.Person" Style="font-size: 10rem"/>
+                            <MudItem xs="3">
+                                <MudImage Src="images/abstract-user-flat-1.svg" Alt="No Image" Elevation="25" Fluid="true" Class="border-solid border-2 mud-border-primary pa-4"/>
                             </MudItem>
                             <MudItem xs="9">
                                 @if (currentCharacter.Title != null)
                                 {
                                     <MudText Typo="Typo.body1">Title: @currentCharacter.Title</MudText>
                                 }
-                                <MudText Typo="Typo.body1">Gender: @currentCharacter.Gender</MudText>
-                                <MudText Typo="Typo.body1">Skin Color: @currentCharacter.SkinCol</MudText>
-                                <MudText Typo="Typo.body1">Hair Style: @currentCharacter.HairStyle</MudText>
-                                <MudText Typo="Typo.body1">Hair Color: @currentCharacter.HairCol</MudText>
-                                <MudText Typo="Typo.body1">Eye Color: @currentCharacter.EyeCol</MudText>
-                                <MudText Typo="Typo.body1">Height: @currentCharacter.Height</MudText>
-                                @if (GetShipName(currentCharacter.Id) != null)
-                                {
-                                    <MudText Typo="Typo.body1">Ship: @GetShipName(currentCharacter.Id)</MudText>
-                                }
-                                <MudText Typo="Typo.body1">Birth Planet: @GetPlanetName(@currentCharacter.BirthPlanetId)</MudText>
-                                <MudText Typo="Typo.body1">Current Planet: @GetPlanetName(@currentCharacter.CurrentLocationId)</MudText>
-                                <MudText Typo="Typo.body1">Initial Reaction: @currentCharacter.InitialReaction</MudText>
-                                <MudText Typo="Typo.body1">Crime Chance: @currentCharacter.CrimeChance%</MudText>
+                                <MudGrid>
+                                    <MudItem xs="12">
+                                        <MudText Typo="Typo.h6">Physical Traits</MudText>
+                                    </MudItem>
+                                    <MudItem xs="3">
+                                        <MudText Typo="Typo.body1"><b>Gender:</b> @currentCharacter.Gender</MudText>
+                                    </MudItem>
+                                    <MudItem xs="3">
+                                        <MudText Typo="Typo.body1"><b>Skin Color:</b> @currentCharacter.SkinCol</MudText>
+                                    </MudItem>
+                                    <MudItem xs="6">
+                                        <MudText Typo="Typo.body1"><b>Height:</b> @currentCharacter.Height cm</MudText>
+                                    </MudItem>
+
+                                    <MudItem xs="4">
+                                        <MudText Typo="Typo.body1"><b>Eye Color:</b> @currentCharacter.EyeCol</MudText>
+                                    </MudItem>
+                                    <MudItem xs="4">
+                                        <MudText Typo="Typo.body1"><b>Hair Style:</b> @currentCharacter.HairStyle</MudText>
+                                    </MudItem>
+                                    <MudItem xs="4">
+                                        <MudText Typo="Typo.body1"><b>Hair Style:</b> @currentCharacter.HairCol</MudText>
+                                    </MudItem>
+
+
+                                    <MudDivider/>
+                                    <MudItem xs="12">
+                                        <MudText Typo="Typo.h6">Biographic Information</MudText>
+                                    </MudItem>
+                                    <MudItem xs="3">
+                                        <MudText Typo="Typo.body1"><b>Birth Planet:</b> @GetPlanetName(currentCharacter.BirthPlanetId)</MudText>
+                                    </MudItem>
+
+                                    @if (GetShipName(currentCharacter.Id) != null)
+                                    {
+                                        <MudDivider/>
+                                        <MudItem xs="12">
+                                            <MudText Typo="Typo.h6">Employment Information</MudText>
+                                        </MudItem>
+                                        <MudItem xs="12">
+                                            <MudText Typo="Typo.body1"><b>Ship:</b> @GetShipName(currentCharacter.Id)</MudText>
+                                        </MudItem>
+                                    }
+
+                                    @if (_isAdmin)
+                                    {
+                                        <MudDivider/>
+                                        <MudItem xs="12">
+                                            <MudText Typo="Typo.h6">Admin View</MudText>
+                                        </MudItem>
+                                        <MudItem xs="12">
+                                            <MudText Typo="Typo.body1"><b>Current Planet:</b> @GetPlanetName(currentCharacter.CurrentLocationId)</MudText>
+                                        </MudItem>
+                                        <MudItem xs="6">
+                                            <MudText Typo="Typo.body1"><b>Initial Reaction:</b> @currentCharacter.InitialReaction</MudText>
+                                        </MudItem>
+                                        <MudItem xs="6">
+                                            <MudText Typo="Typo.body1"><b>Crime Chance:</b> @currentCharacter.CrimeChance%</MudText>
+                                        </MudItem>
+                                    }
+
+
+                                </MudGrid>
                             </MudItem>
                         </MudGrid>
                     </MudCardContent>
@@ -186,6 +235,7 @@ else
     private List<Character>? characters;
     private Character currentCharacter;
     private string searchString;
+    private bool _isAdmin = false;
     String universeName;
     MudForm form;
 
@@ -254,7 +304,7 @@ else
             Height = newCharHeight,
             Title = newCharTitle,
             Count = 1,
-            CrimeChance = new[] {newCharCrimeChance, newCharCrimeChance},
+            CrimeChance = new[] { newCharCrimeChance, newCharCrimeChance },
             ShipId = newCharShipId,
             BirthPlanetId = newCharBirthPlanetId,
             CurrentPlanetId = newCharCurrPlanetId,

@@ -56,4 +56,14 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Shared\Assets\Images\abstract-user-flat-4.svg" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="wwwroot\images\abstract-user-flat-4.svg">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+    </ItemGroup>
+
 </Project>

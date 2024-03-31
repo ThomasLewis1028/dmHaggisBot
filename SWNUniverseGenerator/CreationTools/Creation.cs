@@ -21,57 +21,40 @@ namespace SWNUniverseGenerator.CreationTools
     public class Creation
     {
         /// <summary>
-        /// Default constructor that requires a path to be passed in
-        /// </summary>
-        public Creation()
-        {
-            // TODO: Fix name generation scripts
-            // MaleFirstNameGeneration = new NameGeneration();
-            // MaleFirstNameGeneration.GenerateChain(_charData.MaleName);
-            //
-            // FemaleFirstNameGeneration = new NameGeneration();
-            // FemaleFirstNameGeneration.GenerateChain(_charData.FemaleName);
-            //
-            // StarNameGeneration = new NameGeneration();
-            // StarNameGeneration.GenerateChain(_starData.Stars);
-            //
-            // PlanetNameGeneration = new NameGeneration();
-            // PlanetNameGeneration.GenerateChain(_starData.Planets);
-
-            // LastNameGeneration = new NameGeneration();
-            // LastNameGeneration.GenerateChain(_charData.LastName);
-
-            // CharacterNameGenerations.Add(MaleFirstNameGeneration);
-            // CharacterNameGenerations.Add(FemaleFirstNameGeneration);
-            // CharacterNameGenerations.Add(LastNameGeneration);
-        }
-
-        /// <summary>
         /// This requires a set of UniverseDefaultSettings to create a Universe
         /// 
         /// If no names or grids are set use the defaults of "Universe" and [8, 10]
         /// </summary>
         /// <param name="universeDefaultSettings"></param>
-        /// <param name="context"></param>
-        /// <returns>The newly created Universe</returns>
+        /// <returns>The newly created Universe ID</returns>
         /// <exception cref="IOException"></exception>
-        public string CreateUniverse(UniverseDefaultSettings universeDefaultSettings, UniverseContext context)
+        public bool CreateFullUniverse(UniverseDefaultSettings universeDefaultSettings)
         {
-            string universeId = GenerateUniverse(universeDefaultSettings, context);
+            universeDefaultSettings.StarDefaultSettings.UniverseId = universeDefaultSettings.UniverseId;
+            universeDefaultSettings.PlanetDefaultSettings.UniverseId = universeDefaultSettings.UniverseId;
+            universeDefaultSettings.ShipDefaultSettings.UniverseId = universeDefaultSettings.UniverseId;
+            universeDefaultSettings.CharacterDefaultSettings.UniverseId = universeDefaultSettings.UniverseId;
+            universeDefaultSettings.PoiDefaultSettings.UniverseId = universeDefaultSettings.UniverseId;
+            
+            CreateUniverse(universeDefaultSettings);
+            CreateZones(universeDefaultSettings);
+            CreateStars(universeDefaultSettings.StarDefaultSettings);
+            CreatePlanets(universeDefaultSettings.PlanetDefaultSettings);
+            CreateCharacter(universeDefaultSettings.CharacterDefaultSettings);
+            CreateShips(universeDefaultSettings.ShipDefaultSettings);
 
-            GenerateZones(universeDefaultSettings, context, universeId);
-
-            return universeId;
+            return true;
         }
 
         /// <summary>
-        /// 
+        /// Generate the initial values for the universe
         /// </summary>
         /// <param name="universeDefaultSettings"></param>
-        /// <param name="context"></param>
         /// <returns></returns>
-        private static string GenerateUniverse(UniverseDefaultSettings universeDefaultSettings, UniverseContext context)
+        public bool CreateUniverse(UniverseDefaultSettings universeDefaultSettings)
         {
+            using var context = new UniverseContext();
+            
             // Create the Universe with the values specified, or defaults
             var universe = new Universe
             {
@@ -80,22 +63,26 @@ namespace SWNUniverseGenerator.CreationTools
                 GridY = universeDefaultSettings.GridY
             };
 
+            if (universeDefaultSettings.UniverseId != null)
+                universe.Id = universeDefaultSettings.UniverseId;
+            else
+                universeDefaultSettings.UniverseId = universe.Id;
+            
             // Add the Universe to the database
             using (var univRepo = new Repository<Universe>(context))
                 univRepo.Add(universe);
 
-            return universe.Id;
+            return true;
         }
 
         /// <summary>
-        /// 
+        /// Generate the zones for the grid system in the Universe
         /// </summary>
         /// <param name="universeDefaultSettings"></param>
-        /// <param name="context"></param>
-        /// <param name="universeId"></param>
-        private static bool GenerateZones(UniverseDefaultSettings universeDefaultSettings, UniverseContext context,
-            string universeId)
+        public bool CreateZones(UniverseDefaultSettings universeDefaultSettings)
         {
+            using var context = new UniverseContext();
+
             List<Zone> zones = new();
             // Add the Zones to the Universe
             for (var i = 0; i < universeDefaultSettings.GridX; i++)
@@ -106,7 +93,7 @@ namespace SWNUniverseGenerator.CreationTools
                     {
                         X = i,
                         Y = j,
-                        UniverseId = universeId
+                        UniverseId = universeDefaultSettings.UniverseId
                     };
 
                     zones.Add(zone);
@@ -130,10 +117,10 @@ namespace SWNUniverseGenerator.CreationTools
         /// True at the end
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public bool CreateStars(String universeId, StarDefaultSettings starDefaultSettings)
+        public bool CreateStars(StarDefaultSettings starDefaultSettings)
         {
             // Set the Universe to the Universe returned from StarCreation.AddStars and serialize/return it
-            new StarCreation().AddStars(universeId, starDefaultSettings);
+            new StarCreation().AddStars(starDefaultSettings);
 
             return true;
         }
@@ -149,10 +136,10 @@ namespace SWNUniverseGenerator.CreationTools
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public bool CreatePlanets(String universeId, PlanetDefaultSettings planetDefaultSettings)
+        public bool CreatePlanets(PlanetDefaultSettings planetDefaultSettings)
         {
             // Set the Universe to the Universe returned from PlanetCreation.AddPlanets and serialize/return it
-            new PlanetCreation().AddPlanets(universeId, planetDefaultSettings);
+            new PlanetCreation().AddPlanets(planetDefaultSettings);
 
             return true;
         }
@@ -168,10 +155,10 @@ namespace SWNUniverseGenerator.CreationTools
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public bool CreateShips(String universeId, ShipDefaultSettings shipDefaultSettings)
+        public bool CreateShips(ShipDefaultSettings shipDefaultSettings)
         {
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
-            new ShipCreation().AddShips(universeId, shipDefaultSettings);
+            new ShipCreation().AddShips(shipDefaultSettings);
 
             return true;
         }
@@ -187,10 +174,10 @@ namespace SWNUniverseGenerator.CreationTools
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public bool CreateCharacter(String universeId, CharacterDefaultSettings characterDefaultSettings)
+        public bool CreateCharacter(CharacterDefaultSettings characterDefaultSettings)
         {
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
-            new CharCreation().AddCharacters(universeId, characterDefaultSettings);
+            new CharCreation().AddCharacters(characterDefaultSettings);
 
             return true;
         }
@@ -206,7 +193,7 @@ namespace SWNUniverseGenerator.CreationTools
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public bool CreateProblems(String universeId, ProblemDefaultSettings problemDefaultSettings)
+        public bool CreateProblems(ProblemDefaultSettings problemDefaultSettings)
         {
             // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
             // new ProblemCreation().AddProblems(universeId, problemDefaultSettings);
@@ -225,10 +212,10 @@ namespace SWNUniverseGenerator.CreationTools
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public bool CreatePoi(String universeId, PoiDefaultSettings poiDefaultSettings)
+        public bool CreatePoi(PoiDefaultSettings poiDefaultSettings)
         {
-            new PoiCreation().AddPoi(universeId, poiDefaultSettings);
-            
+            new PoiCreation().AddPoi(poiDefaultSettings);
+
             return true;
         }
 
@@ -243,7 +230,7 @@ namespace SWNUniverseGenerator.CreationTools
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public Universe CreateAliens(Universe universe, AlienDefaultSettings alienDefaultSettings)
+        public bool CreateAliens(AlienDefaultSettings alienDefaultSettings)
         {
             // // If there are no Planets or Locations for the Problems to be tied to then throw an exception
             // if (universe.Stars == null || universe.Stars.Count == 0)
@@ -252,7 +239,7 @@ namespace SWNUniverseGenerator.CreationTools
             // // Set the Universe to the Universe return from ProblemCreation.AddProblems and serialize/return it
             // universe = new AlienCreation().AddAliens(universe, alienDefaultSettings, AlienData);
             // SerializeData(universe);
-            return universe;
+            return true;
         }
 
         /// <summary>
@@ -309,7 +296,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                 using (var poiRepo = new Repository<PointOfInterest>(context))
                     poiRepo.DeleteRange(context.PointsOfInterest.Where(c => c.UniverseId == universeId).ToList());
-                
+
                 using (var planRepo = new Repository<Planet>(context))
                     planRepo.DeleteRange(context.Planets.Where(c => c.UniverseId == universeId).ToList());
 

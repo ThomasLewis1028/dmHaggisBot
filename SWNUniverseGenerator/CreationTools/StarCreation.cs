@@ -23,14 +23,14 @@ namespace SWNUniverseGenerator.CreationTools
         /// <returns>
         /// A newly modified Universe
         /// </returns>
-        public void AddStars(string universeId, StarDefaultSettings starDefaultSettings)
+        public void AddStars(StarDefaultSettings starDefaultSettings)
         {
             using (var context = new UniverseContext())
             {
                 using (var starRepo = new Repository<Star>(context))
                 {
-                    List<Star> stars = new ();
-                    
+                    List<Star> stars = new();
+
                     // Set the number of stars to create. The default is 1d10+20 
                     var starCount = starDefaultSettings.StarCount;
 
@@ -39,7 +39,7 @@ namespace SWNUniverseGenerator.CreationTools
                     {
                         var star = new Star()
                         {
-                            UniverseId = universeId
+                            UniverseId = starDefaultSettings.UniverseId
                         };
 
                         // Set Zone of the Star
@@ -47,7 +47,8 @@ namespace SWNUniverseGenerator.CreationTools
                         {
                             while (true)
                             {
-                                var zoneId = ((Zone) zoneRepo.Random(z => z.UniverseId == universeId)).Id;
+                                var zoneId =
+                                    ((Zone)zoneRepo.Random(z => z.UniverseId == starDefaultSettings.UniverseId)).Id;
 
                                 if (starRepo.Search(s => s.ZoneId == zoneId).Any())
                                     continue;
@@ -69,7 +70,8 @@ namespace SWNUniverseGenerator.CreationTools
                             }
 
                             // If that Name exists roll a new one 
-                            if (!starRepo.Any(a => a.Name == star.Name && a.UniverseId == universeId))
+                            if (!starRepo.Any(
+                                    a => a.Name == star.Name && a.UniverseId == starDefaultSettings.UniverseId))
                                 break;
                         }
 
@@ -107,15 +109,16 @@ namespace SWNUniverseGenerator.CreationTools
 
                         if (starDefaultSettings.CreatePlanets)
                         {
-                            new PlanetCreation().AddPlanets(universeId, new PlanetDefaultSettings
+                            new PlanetCreation().AddPlanets(new PlanetDefaultSettings
                             {
-                                StarList = new List<Star>{star}
+                                UniverseId = starDefaultSettings.UniverseId,
+                                StarList = new List<Star> { star }
                             });
                         }
 
                         sCount++;
                     }
-                    
+
                     starRepo.AddRange(stars);
                 }
             }

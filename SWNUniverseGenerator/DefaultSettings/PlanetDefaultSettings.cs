@@ -10,9 +10,11 @@ namespace SWNUniverseGenerator.DefaultSettings
     public class PlanetDefaultSettings
     {
         public PlanetDefaultSettings(
+            string universeId = null,
             Tuple<Int32, Int32> planetRange = null, 
             List<Star> starList = null)
         {
+            UniverseId = universeId;
             PlanetRange = planetRange ?? new Tuple<Int32, Int32>(0, 3);
             Name = null;
             StarList = starList;
@@ -33,5 +35,7 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// By default, it will generate planets for each star
         /// </summary>
         public List<Star> StarList { get; set; }
+        
+        public string UniverseId { get; set; }
     }
 }

@@ -10,16 +10,6 @@ namespace SWNUniverseGenerator.Models
     public class Universe: BaseEntity
     {
         /// <summary>
-        /// Default constructor to create a blank universe
-        /// </summary>
-        public Universe() : base()
-        {
-            Name = null;
-            GridX = -1;
-            GridY = -1;
-        }
-
-        /// <summary>
         /// The Name of a Universe
         /// To be used with setting a fileName.
         /// </summary>

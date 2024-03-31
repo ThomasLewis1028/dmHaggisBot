@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using LibGit2Sharp;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
+using Tag = SWNUniverseGenerator.Models.Tag;
 
 namespace SWNUniverseGenerator.CreationTools
 {
@@ -22,63 +25,68 @@ namespace SWNUniverseGenerator.CreationTools
         /// <returns>
         /// The newly updated Universe
         /// </returns>
-        public bool AddPlanets(String universeId, PlanetDefaultSettings planetDefaultSettings)
+        public bool AddPlanets(PlanetDefaultSettings planetDefaultSettings)
         {
+            using var context = new UniverseContext();
+
             if (planetDefaultSettings.StarList == null)
-                throw new Exception("StarList cannot be null");
+            {
+                using (var starRepo = new Repository<Star>(context))
+                {
+                    planetDefaultSettings.StarList =
+                        starRepo.Search(e => e.UniverseId == planetDefaultSettings.UniverseId).ToList().Cast<Star>().ToList();
+                }
+            }
 
             if (planetDefaultSettings.StarList != null)
                 if (planetDefaultSettings.StarList.Count > 1 && !string.IsNullOrEmpty(planetDefaultSettings.Name))
                     throw new Exception("Cannot combine list of Stars and Named Planets");
 
-            using (var context = new UniverseContext())
+            using (var planetRepo = new Repository<Planet>(context))
             {
-                using (var planetRepo = new Repository<Planet>(context))
+                List<Planet> planets = new();
+
+                // Iterate through each star and add planets
+                foreach (var star in planetDefaultSettings.StarList)
                 {
-                    List<Planet> planets = new();
+                    int pMax;
 
-                    // Iterate through each star and add planets
-                    foreach (var star in planetDefaultSettings.StarList)
+                    // Set the random number of Planets that will be created for a given Star 
+                    if (string.IsNullOrEmpty(planetDefaultSettings.Name))
                     {
-                        int pMax;
+                        pMax = Rand.Next(planetDefaultSettings.PlanetRange.Item1,
+                            planetDefaultSettings.PlanetRange.Item2 + 1);
 
-                        // Set the random number of Planets that will be created for a given Star 
-                        if (string.IsNullOrEmpty(planetDefaultSettings.Name))
-                        {
-                            pMax = Rand.Next(planetDefaultSettings.PlanetRange.Item1,
-                                planetDefaultSettings.PlanetRange.Item2 + 1);
-
-                            if (pMax == 0)
-                                pMax = Rand.NextDouble() < 0.75
-                                    ? 1
-                                    : 0;
-                        }
-                        // If there is a specified name, only allow one Planet to be created
-                        else
-                            pMax = 1;
-
-                        var pCount = 0;
-
-                        while (pCount < pMax)
-                            pCount = CreatePlanet(universeId, planetDefaultSettings, context, planetRepo, star, pCount,
-                                planets);
-
-                        planetRepo.AddRange(planets);
-                        planets.Clear();
+                        if (pMax == 0)
+                            pMax = Rand.NextDouble() < 0.75
+                                ? 1
+                                : 0;
                     }
+                    // If there is a specified name, only allow one Planet to be created
+                    else
+                        pMax = 1;
+
+                    var pCount = 0;
+
+                    while (pCount < pMax)
+                        pCount = CreatePlanet(planetDefaultSettings, context, planetRepo, star, pCount,
+                            planets);
+
+                    planetRepo.AddRange(planets);
+                    planets.Clear();
                 }
             }
 
             return true;
         }
 
-        private static int CreatePlanet(string universeId, PlanetDefaultSettings planetDefaultSettings,
+        private static int CreatePlanet(PlanetDefaultSettings planetDefaultSettings,
             UniverseContext context,
             Repository<Planet> planetRepo, Star star, int pCount, List<Planet> planets)
         {
             var planet = new Planet
             {
-                UniverseId = universeId
+                UniverseId = planetDefaultSettings.UniverseId
                 // Society = new Society(), Ruler = new Ruler(), Ruled = new Ruled(), Flavor = new Flavor()
             };
 
@@ -94,12 +102,18 @@ namespace SWNUniverseGenerator.CreationTools
                 }
 
                 // No planets can share a name
-                if (!planetRepo.Any(a => a.UniverseId == universeId && a.Name == planet.Name))
+                if (!planetRepo.Any(a => a.UniverseId == planetDefaultSettings.UniverseId && a.Name == planet.Name))
                     break;
             }
 
             // Set the Planet information from either a randomized value or specified information
             planet.ZoneId = star.ZoneId;
+
+            bool barren = false;
+
+            if (pCount > 0)
+            {
+            }
 
             using (var repo = new Repository<Tag>(context))
             {

@@ -6,52 +6,27 @@
 @inject UniverseService UniverseService
 @inject IMenuService MenuService
 
-<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">SWNBlazorApp</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="universes">
-                <span class="oi oi-plus" aria-hidden="true"></span> Universe List
-            </NavLink>
-        </div>
-        @if (IsUniverseLoaded())
+<MudPaper Width="250px" Class="py-3" Elevation="0">
+    <MudNavMenu Bordered="true" Class="mud-width-full">
+        <MudText Typo="Typo.h6" Class="px-4">Nav Menu</MudText>
+        @if(universeName != "" || !string.IsNullOrEmpty(universeName))
         {
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="/universe">
-                    <span class="oi oi-plus" aria-hidden="true"></span> @universeName
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="stars">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> List Stars
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="characters">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> List NPCs
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="ships">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> List Ships
-                </NavLink>
-            </div>
+            <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">@universeName</MudText>
         }
-    </nav>
-</div>
+        <MudDivider Class="my-2"/>
+        <MudNavLink Href="/universes"><MudIcon Icon="@Icons.Material.Filled.Workspaces"/>  Universes</MudNavLink>
+        @if (universeName != "" || !string.IsNullOrEmpty(universeName))
+        {
+            <MudNavGroup Title="@universeName">
+                <MudNavLink Href="/universe"><MudIcon Icon="@Icons.Material.Filled.Map"/> Star Map</MudNavLink>
+                <MudNavLink Href="/stars"><MudIcon Icon="@Icons.Material.Filled.BrightnessHigh"/> Star List</MudNavLink>
+                <MudNavLink Href="/characters"><MudIcon Icon="@Icons.Material.Filled.Person"/> Character List</MudNavLink>
+                <MudNavLink Href="/ships"><MudIcon Icon="@Icons.Material.Filled.Rocket"/> Ship List</MudNavLink>
+            </MudNavGroup>
+        }
+    </MudNavMenu>
+</MudPaper>
 
 @code {
     private bool collapseNavMenu = true;
@@ -78,9 +53,10 @@
         collapseNavMenu = !collapseNavMenu;
     }
 
-    private void MenuChanged(EventArgs e)
+    private async Task MenuChanged(EventArgs e)
     {
-        InvokeAsync(StateHasChanged);
+        await InvokeAsync(StateHasChanged);
+        await OnAfterRenderAsync(true);
     }
 
 }

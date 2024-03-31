@@ -3,20 +3,18 @@
 <PageTitle>Ship Data</PageTitle>
 
 @using SWNBlazorApp.Data
-@using SWNUniverseGenerator.DefaultSettings
 @using SWNUniverseGenerator.Models
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @using MudBlazor.Extensions
 
 @inject ProtectedSessionStorage ProtectedSessionStore
-@inject CharacterService CharacterService
 @inject UniverseService UniverseService
 @inject Universe CurrentUniverse
 @inject PlanetService PlanetService
 @inject StarService StarService
 @inject ShipService ShipService
+@inject ZoneService ZoneService
 @inject CrewMemberService CrewMemberService
-@inject IDialogService DialogService
 
 <h1>Ship Data</h1>
 
@@ -108,7 +106,7 @@ else
                 <ToolBarContent>
                     <MudText Typo="Typo.h6">Ship List</MudText>
                     <MudSpacer/>
-                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
                 </ToolBarContent>
                 <HeaderContent>
                     <MudTh>
@@ -118,6 +116,7 @@ else
                         <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.HullId)">Class</MudTableSortLabel>
                     </MudTh>
                     <MudTh>
+
                         <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.HullId)">Hull</MudTableSortLabel>
                     </MudTh>
                     <MudTh>
@@ -140,7 +139,9 @@ else
                     <MudTd DataLabel="Name" class="cursor-pointer">@GetCrewCount(context.Id)</MudTd>
                     <MudTd DataLabel="Ship" class="cursor-pointer">@context.Cp</MudTd>
                     <MudTd DataLabel="Title" class="cursor-pointer">@context.CrewSkill</MudTd>
-                    <MudTd DataLabel="Title" class="cursor-pointer">@GetLocationName(@context.LocationId)</MudTd>
+                    <MudTd DataLabel="Title" class="cursor-pointer">
+                        <MudIcon Icon="@GetLocationType(context.LocationId).icon" Color="@GetLocationType(context.LocationId).color"/> @GetLocationName(@context.LocationId)
+                    </MudTd>
                 </RowTemplate>
                 <PagerContent>
                     <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>
@@ -190,6 +191,7 @@ else
     private string searchString;
     String universeName;
     MudForm form;
+    private string[] icons = { Icons.Material.Filled.Rocket };
 
     protected override async Task OnInitializedAsync()
     {
@@ -203,6 +205,22 @@ else
         }
     }
 
+    private (String icon, Color color) GetLocationType(string locId)
+    {
+        switch (locId)
+        {
+            case var _ when locId.StartsWith("P-"): return (Icons.Material.Filled.Public, Color.Success);
+
+            case var _ when locId.StartsWith("SH-"):
+                if (ships != null) return (Icons.Material.Filled.Rocket, Color.Info);
+                break;
+            case var _ when locId.StartsWith("S-"): return (Icons.Material.Filled.BrightnessHigh, Color.Warning);
+            case var _ when locId.StartsWith("SC-"): return (Icons.Material.Filled.Hexagon, Color.Primary);
+            default: return (Icons.Material.Filled.Info, Color.Error);
+        }
+
+        return (null, Color.Default)!;
+    }
 
     private string GetLocationName(string locId)
     {
@@ -213,10 +231,17 @@ else
                 if (ships != null) return ships.First(sh => sh.Id == locId).Name;
                 break;
             case var _ when locId.StartsWith("S-"): return GetStarName(locId);
-            case var _ when locId.StartsWith("Z-"): return locId;
+            case var _ when locId.StartsWith("SC-"): return GetZoneCoords(locId);
+            default: return locId;
         }
 
         return "";
+    }
+
+    private String GetZoneCoords(string zoneId)
+    {
+        var result = ZoneService.GetZoneAsync(zoneId);
+        return "X:" + result.Result.X + " - Y:" + result.Result.Y;
     }
 
     private String GetPlanetName(String planetId)

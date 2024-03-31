@@ -21,6 +21,14 @@ public class ZoneService : DataService<ZoneService>
         return Task.FromResult(result);
     }
 
+    public Task<Zone> GetZoneAsync(string zoneId)
+    {
+        var repo = new Repository<Zone>(_context);
+        var result = repo.GetById(zoneId);
+
+        return Task.FromResult(result);
+    }
+
     public Task<int> GetPlanetCount(string zoneId)
     {
         int result;

@@ -22,6 +22,7 @@ namespace SWNUniverseGenerator.Models
                     Ship _ => ("SH-" + id),
                     Job _ => ("J-" + id),
                     Alien _ => ("X-" + id),
+                    Zone _ => ("SC-" + id),
                     // Location _ => ("L-" + id),
                     _ => ("Z-" + id)
                 };

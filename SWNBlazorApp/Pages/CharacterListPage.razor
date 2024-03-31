@@ -156,7 +156,10 @@ else
                         <MudText Typo="Typo.body1">Hair Color: @currentCharacter.HairCol</MudText>
                         <MudText Typo="Typo.body1">Eye Color: @currentCharacter.EyeCol</MudText>
                         <MudText Typo="Typo.body1">Height: @currentCharacter.Height</MudText>
-                        <MudText Typo="Typo.body1">Ship: @GetShipName(currentCharacter.Id)</MudText>
+                        @if(GetShipName(currentCharacter.Id) != null)
+                        {
+                            <MudText Typo="Typo.body1">Ship: @GetShipName(currentCharacter.Id)</MudText>
+                        }
                         <MudText Typo="Typo.body1">Birth Planet: @GetPlanetName(@currentCharacter.BirthPlanetId)</MudText>
                         <MudText Typo="Typo.body1">Current Planet: @GetPlanetName(@currentCharacter.CurrentLocationId)</MudText>
                         <MudText Typo="Typo.body1">Initial Reaction: @currentCharacter.InitialReaction</MudText>

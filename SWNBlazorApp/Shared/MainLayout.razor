@@ -11,16 +11,32 @@
     </div>
 
     <main>
-        <div class="top-row px-4 auth">
-            <LoginDisplay/>
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+        @* <div class="top-row px-4 auth"> *@
+        @*     <LoginDisplay/> *@
+        @*     <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a> *@
+        @* </div> *@
 
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
-<MudThemeProvider/>
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
+
+@code{
+
+    private bool _isDarkMode;
+    private MudThemeProvider _mudThemeProvider;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            StateHasChanged();
+        }
+    }
+
+}

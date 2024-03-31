@@ -129,7 +129,7 @@ else
                     <MudTd DataLabel="Title" class="cursor-pointer">@GetShipName(context.Id)</MudTd>
                 </RowTemplate>
                 <PagerContent>
-                    <MudTablePager PageSizeOptions="new[] {10, 15, 20, 25, 50, 75, 100, int.MaxValue}"/>
+                    <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>
                 </PagerContent>
             </MudTable>
         </MudItem>
@@ -146,25 +146,31 @@ else
                         </CardHeaderContent>
                     </MudCardHeader>
                     <MudCardContent>
-                        @if(currentCharacter.Title != null)
-                        {
-                            <MudText Typo="Typo.body1">Title: @currentCharacter.Title</MudText>
-                        }
-                        <MudText Typo="Typo.body1">Gender: @currentCharacter.Gender</MudText>
-                        <MudText Typo="Typo.body1">Skin Color: @currentCharacter.SkinCol</MudText>
-                        <MudText Typo="Typo.body1">Hair Style: @currentCharacter.HairStyle</MudText>
-                        <MudText Typo="Typo.body1">Hair Color: @currentCharacter.HairCol</MudText>
-                        <MudText Typo="Typo.body1">Eye Color: @currentCharacter.EyeCol</MudText>
-                        <MudText Typo="Typo.body1">Height: @currentCharacter.Height</MudText>
-                        @if(GetShipName(currentCharacter.Id) != null)
-                        {
-                            <MudText Typo="Typo.body1">Ship: @GetShipName(currentCharacter.Id)</MudText>
-                        }
-                        <MudText Typo="Typo.body1">Birth Planet: @GetPlanetName(@currentCharacter.BirthPlanetId)</MudText>
-                        <MudText Typo="Typo.body1">Current Planet: @GetPlanetName(@currentCharacter.CurrentLocationId)</MudText>
-                        <MudText Typo="Typo.body1">Initial Reaction: @currentCharacter.InitialReaction</MudText>
-                        <MudText Typo="Typo.body1">Crime Chance: @currentCharacter.CrimeChance%</MudText>
-
+                        <MudGrid>
+                            <MudItem xs="3" Class="border-solid border-2 mud-border-primary pa-4">
+                                <MudIcon Icon="@Icons.Material.Filled.Person" Style="font-size: 10rem"/>
+                            </MudItem>
+                            <MudItem xs="9">
+                                @if (currentCharacter.Title != null)
+                                {
+                                    <MudText Typo="Typo.body1">Title: @currentCharacter.Title</MudText>
+                                }
+                                <MudText Typo="Typo.body1">Gender: @currentCharacter.Gender</MudText>
+                                <MudText Typo="Typo.body1">Skin Color: @currentCharacter.SkinCol</MudText>
+                                <MudText Typo="Typo.body1">Hair Style: @currentCharacter.HairStyle</MudText>
+                                <MudText Typo="Typo.body1">Hair Color: @currentCharacter.HairCol</MudText>
+                                <MudText Typo="Typo.body1">Eye Color: @currentCharacter.EyeCol</MudText>
+                                <MudText Typo="Typo.body1">Height: @currentCharacter.Height</MudText>
+                                @if (GetShipName(currentCharacter.Id) != null)
+                                {
+                                    <MudText Typo="Typo.body1">Ship: @GetShipName(currentCharacter.Id)</MudText>
+                                }
+                                <MudText Typo="Typo.body1">Birth Planet: @GetPlanetName(@currentCharacter.BirthPlanetId)</MudText>
+                                <MudText Typo="Typo.body1">Current Planet: @GetPlanetName(@currentCharacter.CurrentLocationId)</MudText>
+                                <MudText Typo="Typo.body1">Initial Reaction: @currentCharacter.InitialReaction</MudText>
+                                <MudText Typo="Typo.body1">Crime Chance: @currentCharacter.CrimeChance%</MudText>
+                            </MudItem>
+                        </MudGrid>
                     </MudCardContent>
                 </MudCard>
             }
@@ -193,6 +199,7 @@ else
     private int newCharCrimeChance;
     private string newCharInitialReaction;
 
+
     protected override async Task OnInitializedAsync()
     {
         var universeId = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
@@ -217,7 +224,7 @@ else
         {
             return ShipService.GetShipAsync(result.ShipId).Result.Name;
         }
-        
+
         return null;
     }
 

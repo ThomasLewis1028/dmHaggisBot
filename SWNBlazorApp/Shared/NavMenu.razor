@@ -4,42 +4,46 @@
 
 @inject ProtectedSessionStorage ProtectedSessionStore
 @inject UniverseService UniverseService
+@inject Universe CurrentUniverse
 @inject IMenuService MenuService
 
 
-<MudPaper Width="250px" Class="py-3" Elevation="0">
+<MudDrawer Open="true" Anchor="Anchor.Start" Width="250px" Class="py-3 mud-height-full" Elevation="0" Variant="DrawerVariant.Persistent">
     <MudNavMenu Bordered="true" Class="mud-width-full">
         <MudText Typo="Typo.h6" Class="px-4">Nav Menu</MudText>
-        @if(universeName != "" || !string.IsNullOrEmpty(universeName))
+        @if(CurrentUniverse.Name != "" || !string.IsNullOrEmpty(CurrentUniverse.Name))
         {
-            <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">@universeName</MudText>
+            <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">@CurrentUniverse.Name</MudText>
         }
         <MudDivider Class="my-2"/>
         <MudNavLink Href="/universes"><MudIcon Icon="@Icons.Material.Filled.Workspaces"/>  Universes</MudNavLink>
-        @if (universeName != "" || !string.IsNullOrEmpty(universeName))
+        @if (CurrentUniverse.Name != "" || !string.IsNullOrEmpty(CurrentUniverse.Name))
         {
-            <MudNavGroup Title="@universeName">
+            <MudNavGroup Title="@CurrentUniverse.Name">
                 <MudNavLink Href="/universe"><MudIcon Icon="@Icons.Material.Filled.Map"/> Star Map</MudNavLink>
                 <MudNavLink Href="/stars"><MudIcon Icon="@Icons.Material.Filled.BrightnessHigh"/> Star List</MudNavLink>
-                <MudNavLink Href="/characters"><MudIcon Icon="@Icons.Material.Filled.Person"/> Character List</MudNavLink>
+                <MudNavLink Href="/characters"><MudIcon Icon="@Icons.Material.Filled.People"/> Character List</MudNavLink>
                 <MudNavLink Href="/ships"><MudIcon Icon="@Icons.Material.Filled.Rocket"/> Ship List</MudNavLink>
             </MudNavGroup>
         }
     </MudNavMenu>
-</MudPaper>
+</MudDrawer>
 
 @code {
     private bool collapseNavMenu = true;
+    private bool open = true;
     String universeName;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        var universeID = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
-        if (!string.IsNullOrEmpty(universeID.Value))
+        var universeId = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        if (!string.IsNullOrEmpty(universeId.Value))
         {
-            universeName = UniverseService.GetUniverseAsync(universeID.Value).Result.Name;
+            Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
+            universeName = task.Result == null ? "None" : task.Result.Name;
+            CurrentUniverse = UniverseService.GetUniverseAsync(universeId.Value).Result;
         }
     }
 

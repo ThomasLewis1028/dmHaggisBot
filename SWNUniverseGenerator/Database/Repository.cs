@@ -14,7 +14,7 @@ namespace SWNUniverseGenerator.Database
         where TEntity : class, IEntity
     {
         private readonly UniverseContext _dbContext;
-        private readonly ILogger<TEntity> _logger;
+        
         public Repository(UniverseContext dbContext)
         {
             _dbContext = dbContext;

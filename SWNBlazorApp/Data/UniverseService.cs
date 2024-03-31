@@ -43,12 +43,10 @@ public class UniverseService : DataService
 
     public Task<bool> DeleteUniverseAsync(string universeID)
     {
-        bool result;
-        var repo = new Repository<Universe>(Context);
-        result = repo.Delete(universeID);
+        var result = new Creation().DeleteUniverse(universeID);
         
-        if(File.Exists("wwwroot/images/starmaps/" + universeID + ".png"))
-            File.Delete("wwwroot/images/starmaps/" + universeID + ".png");
+        if(File.Exists("wwwroot/images/starmaps/" + universeID + ".svg"))
+            File.Delete("wwwroot/images/starmaps/" + universeID + ".svg");
         
         return Task.FromResult(result);
     }

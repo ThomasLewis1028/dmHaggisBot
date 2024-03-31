@@ -9,19 +9,23 @@ namespace SWNUniverseGenerator.DefaultSettings
     public class StarDefaultSettings
     {
         /// <summary>
-        /// 
+        /// Default constructor with default values
         /// </summary>
         /// <param name="starCount"></param>
         /// <param name="name"></param>
         /// <param name="starClass"></param>
         /// <param name="starColor"></param>
         /// <param name="createPlanets"></param>
-        public StarDefaultSettings(Int32 starCount = -1, String name = null,
+        public StarDefaultSettings(
+            string universeId = null,
+            Int32 starCount = -1,
+            String name = null,
             Star.StarClassEnum starClass = Star.StarClassEnum.Undefined,
             Star.StarColorEnum starColor = Star.StarColorEnum.Undefined,
             Boolean createPlanets = true)
         {
-            StarCount = starCount < 0 ? new Random().Next(1, 10+1) + 20 : starCount;
+            UniverseId = universeId;
+            StarCount = starCount < 0 ? new Random().Next(1, 10 + 1) + 20 : starCount;
             Name = name;
             StarClass = starClass;
             StarColor = starColor;
@@ -38,7 +42,7 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// Cannot be used with a StarCount
         /// </summary>
         public String Name { get; set; }
-        
+
         public Boolean CreatePlanets { get; set; }
 
         /// <summary>
@@ -50,5 +54,7 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// Store the Color of a Star you would like to create
         /// </summary>
         public Star.StarColorEnum StarColor { get; set; }
+        
+        public string UniverseId { get; set; }
     }
 }

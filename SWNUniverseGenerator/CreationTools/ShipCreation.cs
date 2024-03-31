@@ -11,7 +11,7 @@ namespace SWNUniverseGenerator.CreationTools
     {
         private static readonly Random Rand = new ();
 
-        public void AddShips(String universeId, ShipDefaultSettings shipDefaultSettings)
+        public void AddShips(ShipDefaultSettings shipDefaultSettings)
         {
             using (var context = new UniverseContext())
             {
@@ -29,7 +29,7 @@ namespace SWNUniverseGenerator.CreationTools
                     {
                         var ship = new Ship()
                         {
-                            UniverseId = universeId
+                            UniverseId = shipDefaultSettings.UniverseId
                         };
 
                         Spec spec;
@@ -140,10 +140,10 @@ namespace SWNUniverseGenerator.CreationTools
                         using (var repo = new Repository<Planet>(context))
                         {
                             ship.HomeId = String.IsNullOrEmpty(shipDefaultSettings.HomeId)
-                                ? repo.Random(p => p.UniverseId == universeId).Id
+                                ? repo.Random(p => p.UniverseId == shipDefaultSettings.UniverseId).Id
                                 : shipDefaultSettings.HomeId;
                             ship.LocationId = String.IsNullOrEmpty(shipDefaultSettings.LocationId)
-                                ? repo.Random(p => p.UniverseId == universeId).Id
+                                ? repo.Random(p => p.UniverseId == shipDefaultSettings.UniverseId).Id
                                 : shipDefaultSettings.LocationId;
                         }
 
@@ -162,7 +162,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 {
                                     ArmamentId = specArmament.ArmamentId,
                                     ShipId = ship.Id,
-                                    UniverseId = universeId
+                                    UniverseId = shipDefaultSettings.UniverseId
                                 };
                                 shipArmaments.Add(shipArmament);
                             }
@@ -179,7 +179,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 {
                                     DefenseId = specDefense.DefenseId,
                                     ShipId = ship.Id,
-                                    UniverseId = universeId
+                                    UniverseId = shipDefaultSettings.UniverseId
                                 };
                                 shipDefenses.Add(shipDefense);
                             }
@@ -196,7 +196,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 {
                                     FittingId = specFitting.FittingId,
                                     ShipId = ship.Id,
-                                    UniverseId = universeId
+                                    UniverseId = shipDefaultSettings.UniverseId
                                 };
                                 shipFittings.Add(shipFitting);
                             }
@@ -216,9 +216,10 @@ namespace SWNUniverseGenerator.CreationTools
                                     var hullCrewMax = ((Hull)hullRepo.Search(h =>
                                         h.Id == ship.HullId).First()).CrewMax;
 
-                                    new CharCreation().AddCharacters(universeId,
+                                    new CharCreation().AddCharacters(
                                         new CharacterDefaultSettings
                                         {
+                                            UniverseId = shipDefaultSettings.UniverseId,
                                             Count = Rand.Next(hullCrewMin,
                                                 hullCrewMax + 1 - (shipDefaultSettings.CrewMemberIds?.Count ?? 0)),
                                             ShipId = ship.Id
@@ -282,8 +283,9 @@ namespace SWNUniverseGenerator.CreationTools
 
                             if (fighterBayCount > 0)
                             {
-                                new ShipCreation().AddShips(universeId, new ShipDefaultSettings
+                                new ShipCreation().AddShips(new ShipDefaultSettings
                                 {
+                                    UniverseId = shipDefaultSettings.UniverseId,
                                     Count = fighterBayCount,
                                     HullClass = Hull.HullClassEnum.Fighter,
                                     HomeId = ship.Id,
@@ -294,8 +296,9 @@ namespace SWNUniverseGenerator.CreationTools
 
                             if (frigateBayCount > 0)
                             {
-                                new ShipCreation().AddShips(universeId, new ShipDefaultSettings
+                                new ShipCreation().AddShips(new ShipDefaultSettings
                                 {
+                                    UniverseId = shipDefaultSettings.UniverseId,
                                     Count = frigateBayCount,
                                     HullClass = Hull.HullClassEnum.Frigate,
                                     HomeId = ship.Id,

@@ -7,13 +7,16 @@ namespace SWNUniverseGenerator.DefaultSettings
 {
     public class ShipDefaultSettings
     {
-        public ShipDefaultSettings(Int32 count = 10,
+        public ShipDefaultSettings(
+            string universeId = null,
+            Int32 count = 10,
             String homeId = null,
             String locationId = null,
             Hull.HullTypeEnum hullType = Hull.HullTypeEnum.Undefined,
             Hull.HullClassEnum hullClass = Hull.HullClassEnum.Undefined
         )
         {
+            UniverseId = universeId;
             Count = count;
             Id = null;
             Name = null;
@@ -30,6 +33,8 @@ namespace SWNUniverseGenerator.DefaultSettings
             LocationId = locationId;
         }
 
+        public string UniverseId { get; set; }
+        
         public Int32 Count { get; set; }
 
         public String Id { get; set; }

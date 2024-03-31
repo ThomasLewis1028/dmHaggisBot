@@ -14,7 +14,7 @@ namespace SWNUniverseGenerator.CreationTools
     {
         private static readonly Random Rand = new Random();
 
-        public bool AddPoi(String universeId, PoiDefaultSettings poiDefaultSettings)
+        public bool AddPoi(PoiDefaultSettings poiDefaultSettings)
         {
             using var context = new UniverseContext();
             using var poiRepo = new Repository<PointOfInterest>(context);
@@ -27,7 +27,7 @@ namespace SWNUniverseGenerator.CreationTools
             if (poiDefaultSettings.LocationId == null)
             {
                 List<Star> stars = starRepo
-                    .Search(s => s.UniverseId == universeId)
+                    .Search(s => s.UniverseId == poiDefaultSettings.UniverseId)
                     .Cast<Star>()
                     .ToList();
 
@@ -40,7 +40,7 @@ namespace SWNUniverseGenerator.CreationTools
             else
             {
                 List<Star> stars = starRepo
-                    .Search(s => s.UniverseId == universeId
+                    .Search(s => s.UniverseId == poiDefaultSettings.UniverseId
                                  && poiDefaultSettings.LocationId.Contains(s.Id))
                     .Cast<Star>()
                     .ToList();

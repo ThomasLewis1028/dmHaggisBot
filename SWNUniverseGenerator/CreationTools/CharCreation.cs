@@ -4,7 +4,6 @@ using System.Linq;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
-using VectSharp.Filters;
 
 namespace SWNUniverseGenerator.CreationTools
 {
@@ -19,10 +18,8 @@ namespace SWNUniverseGenerator.CreationTools
         /// This function handles all Character creation. Should receive a Universe to edit and a set of
         /// CharacterDefaultSettings that will be used to set defaults.
         /// </summary>
-        /// <param name="universeId"></param>
         /// <param name="characterDefaultSettings"></param>
-        /// <returns>The newly modified universe</returns>
-        public void AddCharacters(String universeId, CharacterDefaultSettings characterDefaultSettings)
+        public void AddCharacters(CharacterDefaultSettings characterDefaultSettings)
         {
             var maleNameGenerations = new NameGeneration();
             var femaleNameGenerations = new NameGeneration();
@@ -56,7 +53,7 @@ namespace SWNUniverseGenerator.CreationTools
                         // Create the character with the specified first and last name
                         var character = new Character()
                         {
-                            UniverseId = universeId
+                            UniverseId = characterDefaultSettings.UniverseId
                         };
 
                         // Set sheet bounds including sheet# and row count.
@@ -159,12 +156,16 @@ namespace SWNUniverseGenerator.CreationTools
                         {
                             // Character birth planet
                             character.BirthPlanetId = characterDefaultSettings.BirthPlanetId
-                                                      ?? repo.Random(p => p.UniverseId == universeId).Id;
+                                                      ?? repo.Random(p =>
+                                                          p.UniverseId == characterDefaultSettings.UniverseId).Id;
 
                             // Character current planet
                             character.CurrentLocationId = characterDefaultSettings.CurrentPlanetId
                                                           ?? (Rand.Next(0, 100) < 5
-                                                              ? repo.Random(p => p.UniverseId == universeId).Id
+                                                              ? repo.Random(p =>
+                                                                      p.UniverseId == characterDefaultSettings
+                                                                          .UniverseId)
+                                                                  .Id
                                                               : character.BirthPlanetId);
                         }
 
@@ -191,7 +192,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 {
                                     ShipId = characterDefaultSettings.ShipId,
                                     CharacterId = character.Id,
-                                    UniverseId = universeId
+                                    UniverseId = characterDefaultSettings.UniverseId
                                 };
 
                                 crewRepo.Add(crewMember);

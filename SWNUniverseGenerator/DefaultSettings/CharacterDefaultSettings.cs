@@ -8,8 +8,9 @@ namespace SWNUniverseGenerator.DefaultSettings
     /// </summary>
     public class CharacterDefaultSettings
     {
-        public CharacterDefaultSettings(Int32 count = 1000)
+        public CharacterDefaultSettings(Int32 count = 1000, string universeId = null)
         {
+            UniverseId = universeId;
             First = null;
             Last = null;
             AgeRange = null;
@@ -28,7 +29,7 @@ namespace SWNUniverseGenerator.DefaultSettings
             CurrentPlanetId = null;
             InitialReaction = null;
         }
-        
+
         /// <summary>
         /// This value should be a string for a first name
         /// </summary>
@@ -116,5 +117,7 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// This value should be a description of the attitude towards the players
         /// </summary>
         public String InitialReaction { get; set; }
+        
+        public string UniverseId { get; set; }
     }
 }

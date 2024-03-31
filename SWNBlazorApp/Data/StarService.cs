@@ -8,34 +8,51 @@ public class StarService : DataService<StarService>
 {
     public StarService(UniverseContext context, ILogger<StarService> logger) : base(context, logger)
     {
-
     }
+
     public Task<Star> GetStarAsync(string starId)
     {
         var repo = new Repository<Star>(_context);
         var result = repo.GetById(starId);
-        
+
         return Task.FromResult(result);
     }
-    
+
     public Task<List<Star>> GetStarsAsync(string universeId)
     {
         List<Star> result;
         var repo = new Repository<Star>(_context);
         var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
         result = entityList.Cast<Star>().ToList();
-        
+
         return Task.FromResult(result);
     }
-    
+
+
+    public Task<Star> GetStarByZoneAsync(string zoneId)
+    {
+        var repo = new Repository<Star>(_context);
+        var result = (Star)repo.Search(s => s.ZoneId == zoneId).First();
+
+        return Task.FromResult(result);
+    }
+
+    public Task<Zone> GetZoneAsync(string zoneId)
+    {
+        var repo = new Repository<Zone>(_context);
+        var result = repo.GetById(zoneId);
+
+        return Task.FromResult(result);
+    }
+
     public Task<List<Zone>> GetZonesAsync(string universeId)
     {
         List<Zone> result;
         var repo = new Repository<Zone>(_context);
         var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
         result = entityList.Cast<Zone>().ToList();
-        
-        
+
+
         return Task.FromResult(result);
     }
 
@@ -44,7 +61,7 @@ public class StarService : DataService<StarService>
         // CreationService creationService = new CreationService();
         // Creation creation = creationService.GetCreationAsync().Result;
 
-        
+
         return Task.FromResult(true);
-    } 
+    }
 }

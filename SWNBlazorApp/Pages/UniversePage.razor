@@ -21,6 +21,7 @@
                     <MudIconButton Icon="@Icons.Material.Filled.ZoomOut" OnClick="() => zoomLevel-=10"/>
                     <MudSlider @bind-Value="@zoomLevel" Color="Color.Primary" Max="2000" Min="680"/>
                     <MudIconButton Icon="@Icons.Material.Filled.ZoomIn" OnClick="() => zoomLevel+=10"/>
+                    <MudIconButton Icon="@Icons.Material.Filled.Replay" OnClick="() => zoomLevel=680"/>
                     <MudSpacer/>
                 </MudToolBar>
                 <MudPaper Class="overflow-scroll" Height="80vh">

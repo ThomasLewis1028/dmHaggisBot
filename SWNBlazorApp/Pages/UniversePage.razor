@@ -14,7 +14,20 @@
 <h1>@CurrentUniverse.Name</h1>
 <MudGrid>
     <MudItem xs="4">
-        <MudImage Src="@(starmapPath + "/" + CurrentUniverse.Id + ".svg")" Alt="Starmap"/>
+        <MudContainer Fixed="true" MaxWidth="MaxWidth.ExtraExtraLarge">
+            <MudPaper Outlined="true">
+                <MudToolBar>
+                    <MudSpacer/>
+                    <MudIconButton Icon="@Icons.Material.Filled.ZoomOut" OnClick="() => zoomLevel-=10"/>
+                    <MudSlider @bind-Value="@zoomLevel" Color="Color.Primary" Max="2000" Min="680"/>
+                    <MudIconButton Icon="@Icons.Material.Filled.ZoomIn" OnClick="() => zoomLevel+=10"/>
+                    <MudSpacer/>
+                </MudToolBar>
+                <MudPaper Class="overflow-scroll" Height="80vh">
+                    <MudImage ObjectFit="ObjectFit.ScaleDown" Width="@zoomLevel" Src="@(starmapPath + "/" + CurrentUniverse.Id + ".svg")" Alt="Starmap"/>
+                </MudPaper>
+            </MudPaper>
+        </MudContainer>
     </MudItem>
 </MudGrid>
 
@@ -22,6 +35,7 @@
 @code {
     private static String wwwrootPath = "wwwroot";
     private static String starmapPath = "/images/starmaps";
+    private int zoomLevel = 680;
 
     protected override async Task OnInitializedAsync()
     {
@@ -30,6 +44,7 @@
         {
             CurrentUniverse = UniverseService.GetUniverseAsync(universeId.Value).Result;
         }
+
         if (CurrentUniverse != null)
         {
             if (!File.Exists($"{wwwrootPath + starmapPath}/{CurrentUniverse.Id}.svg"))
@@ -37,7 +52,6 @@
                 GrabStarmap();
             }
         }
-        
     }
 
     public void GrabStarmap()
@@ -50,7 +64,8 @@
             Creation creation = new Creation();
             creation.CreateStarMap(CurrentUniverse.Id);
         }
-        
+
         File.Copy(remotePath, localPath);
     }
+
 }

@@ -48,7 +48,7 @@ else
                                         <MudTextField T="int" Label="Age" Required="false" @bind-Value="newCharAge"/>
                                     </MudItem>
                                     <MudItem xs="3">
-                                        <MudSelect T="Character.GenderEnum" Label="Gender" Required="true" @bind-Value="newCharGender">
+                                        <MudSelect T="Character.GenderEnum" Label="Gender" Required="false" @bind-Value="newCharGender">
                                             <MudSelectItem Value="@Character.GenderEnum.Undefined"/>
                                             <MudSelectItem Value="@Character.GenderEnum.Male"/>
                                             <MudSelectItem Value="@Character.GenderEnum.Female"/>

@@ -4,16 +4,16 @@ using SWNUniverseGenerator.Models;
 
 namespace SWNBlazorApp.Data;
 
-public class CrewMemberService : DataService
+public class CrewMemberService : DataService<CrewMemberService>
 {
-    public CrewMemberService(UniverseContext context) : base(context)
+    public CrewMemberService(UniverseContext context, ILogger<CrewMemberService> logger) : base(context, logger)
     {
 
     }
     
     public Task<CrewMember> GetCrewMemberAsync(string charId)
     {
-        var repo = new Repository<CrewMember>(Context);
+        var repo = new Repository<CrewMember>(_context);
         var result = (CrewMember)repo.Search(cm => cm.CharacterId == charId).FirstOrDefault()!;
         
         return Task.FromResult(result);
@@ -22,7 +22,7 @@ public class CrewMemberService : DataService
     public Task<List<CrewMember>> GetCrewMembersAsync(string universeId)
     {
         List<CrewMember> result;
-        var repo = new Repository<CrewMember>(Context);
+        var repo = new Repository<CrewMember>(_context);
         var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
         result = entityList.Cast<CrewMember>().ToList();
     
@@ -31,7 +31,7 @@ public class CrewMemberService : DataService
 
     public Task<int> GetCrewMemberCount(string shipId)
     {
-        var repo = new Repository<CrewMember>(Context);
+        var repo = new Repository<CrewMember>(_context);
         var result = repo.Count(cm => cm.ShipId == shipId);
 
         return Task.FromResult(result);

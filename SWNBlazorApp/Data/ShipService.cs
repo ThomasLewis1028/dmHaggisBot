@@ -32,7 +32,7 @@ public class ShipService : DataService<ShipService>
 
     public Task<Hull> GetShipHull(string hullId)
     {
-        var repo = new Repository<Hull>(Context);
+        var repo = new Repository<Hull>(_context);
         var result = repo.GetById(hullId);
 
         return Task.FromResult(result);

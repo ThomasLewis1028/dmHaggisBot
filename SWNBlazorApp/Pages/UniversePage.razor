@@ -1,37 +1,38 @@
 ﻿@page "/universe"
-<PageTitle>@universeName</PageTitle>
+<PageTitle>@CurrentUniverse.Name</PageTitle>
 
 @using SWNBlazorApp.Data
 @using SWNUniverseGenerator.Models
 @using System.Reflection
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using SWNUniverseGenerator.CreationTools
 
 @inject ProtectedSessionStorage ProtectedSessionStore
 @inject UniverseService UniverseService
+@inject Universe CurrentUniverse
 
-<h1>@universeName</h1>
+<h1>@CurrentUniverse.Name</h1>
 <MudGrid>
     <MudItem xs="4">
-        <img src="@(starmapPath + "/" + universeId + ".svg")" class="w3-round" style="height:100%; width: 100%; object-fit: contain" xs="5"/>
-        @* <MudImage Src="@(starmapPath + "/" + CurrentUniverse.Name + ".png")" Class="starmap-image" Alt="Starmap"/> *@
+        <MudImage Src="@(starmapPath + "/" + CurrentUniverse.Id + ".svg")" Alt="Starmap"/>
     </MudItem>
 </MudGrid>
 
 
 @code {
-    String universeId;
-    String universeName;
     private static String wwwrootPath = "wwwroot";
     private static String starmapPath = "/images/starmaps";
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
-        universeId = result.Value;
-        if (!string.IsNullOrEmpty(universeId))
+        var universeId = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        if (!string.IsNullOrEmpty(universeId.Value))
         {
-            universeName = UniverseService.GetUniverseAsync(universeId).Result.Name;
-            if (!File.Exists($"{wwwrootPath + starmapPath}/{universeId}.svg"))
+            CurrentUniverse = UniverseService.GetUniverseAsync(universeId.Value).Result;
+        }
+        if (CurrentUniverse != null)
+        {
+            if (!File.Exists($"{wwwrootPath + starmapPath}/{CurrentUniverse.Id}.svg"))
             {
                 GrabStarmap();
             }
@@ -41,7 +42,15 @@
 
     public void GrabStarmap()
     {
-        File.Copy($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/UniverseFiles/{universeId}.svg", 
-            $"{wwwrootPath+starmapPath}/{universeId}.svg");
+        var remotePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/{CurrentUniverse.Id}.svg";
+        var localPath = $"{wwwrootPath + starmapPath}/{CurrentUniverse.Id}.svg";
+
+        if (!File.Exists(remotePath))
+        {
+            Creation creation = new Creation();
+            creation.CreateStarMap(CurrentUniverse.Id);
+        }
+        
+        File.Copy(remotePath, localPath);
     }
 }

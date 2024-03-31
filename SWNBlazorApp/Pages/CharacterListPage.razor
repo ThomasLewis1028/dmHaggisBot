@@ -15,11 +15,10 @@
 @inject PlanetService PlanetService
 @inject ShipService ShipService
 @inject CrewMemberService CrewMemberService
-@inject IDialogService DialogService
 
 <h1>Character Data</h1>
 
-<p>All characters in the @universeName universe</p>
+<p>All characters in the @CurrentUniverse.Name universe</p>
 
 @if (characters == null)
 {
@@ -236,7 +235,6 @@ else
     private Character currentCharacter;
     private string searchString;
     private bool _isAdmin = false;
-    String universeName;
     MudForm form;
 
     private string newCharFirstName;
@@ -261,7 +259,6 @@ else
         if (!string.IsNullOrEmpty(universeId.Value))
         {
             Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
-            universeName = task.Result == null ? "None" : task.Result.Name;
             CurrentUniverse = UniverseService.GetUniverseAsync(universeId.Value).Result;
             characters = await CharacterService.GetCharactersAsync(universeId.Value);
         }

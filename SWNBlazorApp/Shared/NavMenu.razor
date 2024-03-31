@@ -16,14 +16,14 @@
             <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">@CurrentUniverse.Name</MudText>
         }
         <MudDivider Class="my-2"/>
-        <MudNavLink Href="/universes"><MudIcon Icon="@Icons.Material.Filled.Workspaces"/>  Universes</MudNavLink>
+        <MudNavLink Href="/universes" Icon="@Icons.Material.Filled.Workspaces">Universes</MudNavLink>
         @if (CurrentUniverse.Name != "" || !string.IsNullOrEmpty(CurrentUniverse.Name))
         {
-            <MudNavGroup Title="@CurrentUniverse.Name">
-                <MudNavLink Href="/universe"><MudIcon Icon="@Icons.Material.Filled.Map"/> Star Map</MudNavLink>
-                <MudNavLink Href="/stars"><MudIcon Icon="@Icons.Material.Filled.BrightnessHigh"/> Star List</MudNavLink>
-                <MudNavLink Href="/characters"><MudIcon Icon="@Icons.Material.Filled.People"/> Character List</MudNavLink>
-                <MudNavLink Href="/ships"><MudIcon Icon="@Icons.Material.Filled.Rocket"/> Ship List</MudNavLink>
+            <MudNavGroup Title="@CurrentUniverse.Name" Icon="@Icons.Material.Filled.BlurCircular">
+                <MudNavLink Href="/universe" Icon="@Icons.Material.Filled.Map">Star Map</MudNavLink>
+                <MudNavLink Href="/stars" Icon="@Icons.Material.Filled.BrightnessHigh">Star List</MudNavLink>
+                <MudNavLink Href="/characters" Icon="@Icons.Material.Filled.People">Character List</MudNavLink>
+                <MudNavLink Href="/ships" Icon="@Icons.Material.Filled.Rocket">Ship List</MudNavLink>
             </MudNavGroup>
         }
     </MudNavMenu>
@@ -32,7 +32,6 @@
 @code {
     private bool collapseNavMenu = true;
     private bool open = true;
-    String universeName;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -42,14 +41,8 @@
         if (!string.IsNullOrEmpty(universeId.Value))
         {
             Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
-            universeName = task.Result == null ? "None" : task.Result.Name;
             CurrentUniverse = UniverseService.GetUniverseAsync(universeId.Value).Result;
         }
-    }
-
-    private bool IsUniverseLoaded()
-    {
-        return !string.IsNullOrEmpty(universeName);
     }
 
     private void ToggleNavMenu()

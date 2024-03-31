@@ -5,11 +5,13 @@
 @using SWNUniverseGenerator.CreationTools
 @using SWNUniverseGenerator.DefaultSettings
 
+
 <PageTitle>Universes</PageTitle>
 
 @inject ProtectedSessionStorage ProtectedSessionStore
 @inject UniverseService UniverseService
 @inject IMenuService MenuService
+@inject IDialogService DialogService
 
 <h1>Universes</h1>
 
@@ -29,7 +31,7 @@
                     <MudItem xs="2">
                         <MudTextField T="int" Label="Grid Y" @bind-Value="gridY"></MudTextField>
                     </MudItem>
-                    
+
                     <MudItem xs="4">
                         <MudCheckBox T="bool" Label="Overwrite Existing Universe?" @bind-Checked="overwrite"/>
                     </MudItem>
@@ -74,8 +76,12 @@
                 <MudTd DataLabel="PlanetCount">@GetPlanetCount(context.Id)</MudTd>
                 <MudTd DataLabel="ShipCount">@GetShipCount(context.Id)</MudTd>
                 <MudTd DataLabel="CharCount">@GetCharCount(context.Id)</MudTd>
-                <MudTd><MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => LoadUniverse(context.Id))">Load</MudButton></MudTd>
-                <MudTd><MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteUniverse(context.Id))">Delete</MudButton></MudTd>
+                <MudTd>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => LoadUniverse(context.Id))">Load</MudButton>
+                </MudTd>
+                <MudTd>
+                    <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteUniverse(context.Id, context.Name))">Delete</MudButton>
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </MudItem>
@@ -94,20 +100,20 @@
     private int gridX = 8;
     private int gridY = 10;
     MudForm form;
-    String[] errors = {};
+    String[] errors = { };
     String universeID;
     String universeName;
     String searchString;
     Universe selectedUniverse;
     List<Universe> UniverseRows = new();
-    
+
 
     protected override async Task OnInitializedAsync()
     {
         UniverseRows = await UniverseService.GetUniverseListAsync();
         MenuService.NotifyChanged();
     }
-    
+
     private int GetPlanetCount(string universeId)
     {
         return UniverseService.GetPlanetCount(universeId).Result;
@@ -138,7 +144,7 @@
             UniverseId = new Universe().Id,
             Name = universeName
         };
-        
+
         creation.CreateFullUniverse(universeDefaultSettings: uds);
 
         LoadUniverse(uds.UniverseId);
@@ -147,7 +153,7 @@
         _createdNew = true;
         await OnInitializedAsync();
     }
-    
+
 
     private async void LoadUniverse(String universeId)
     {
@@ -157,8 +163,19 @@
         MenuService.NotifyChanged();
     }
 
-    private async void DeleteUniverse(String universeId)
+    private async void DeleteUniverse(String universeId, String universeName)
     {
+        bool? result = await DialogService.ShowMessageBox(
+            "Warning",
+            "You are about to delete universe " + universeName + ".\nThis action cannot be undone.",
+            yesText: "Delete",
+            cancelText: "Cancel");
+
+        if (result != true)
+        {
+            return;
+        }
+        
         await UniverseService.DeleteUniverseAsync(universeId);
         await OnInitializedAsync();
     }

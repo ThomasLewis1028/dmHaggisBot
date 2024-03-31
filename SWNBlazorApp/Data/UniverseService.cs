@@ -10,32 +10,27 @@ using SWNUniverseGenerator.Models;
 
 namespace SWNBlazorApp.Data;
 
-public class UniverseService : DataService
+public class UniverseService : DataService<UniverseService>
 {
-    public UniverseService(UniverseContext context) : base(context)
+    public UniverseService(UniverseContext context, ILogger<UniverseService> logger) : base(context, logger)
     {
 
     }
     
-    // public Task<Boolean> SetUniverse(Universe universe)
-    // {
-    //     _universe = universe;
-    //     return Task.FromResult(true);
-    // }
-    
     public Task<Universe> GetUniverseAsync(string universeID)
     {
+        _logger.LogInformation("Get Universe: " + universeID);
         Universe result;
-        var universeRepo = new Repository<Universe>(Context);
+        var universeRepo = new Repository<Universe>(_context);
         result = universeRepo.GetById(universeID);
-        
+        _logger.LogInformation("Got Universe: " + result.Name);
         return Task.FromResult(result);
     }
 
     public Task<List<Universe>> GetUniverseListAsync()
     {
         List<Universe> result;
-        var repo = new Repository<Universe>(Context);
+        var repo = new Repository<Universe>(_context);
         result = repo.GetAll().ToList();
         
         return Task.FromResult(result);
@@ -54,7 +49,7 @@ public class UniverseService : DataService
     public Task<int>  GetPlanetCount(string universeId)
     {
         int result;
-        var repo = new Repository<Planet>(Context);
+        var repo = new Repository<Planet>(_context);
         result = repo.Count(c => c.UniverseId == universeId);
     
         return Task.FromResult(result);
@@ -63,7 +58,7 @@ public class UniverseService : DataService
     public Task<int>  GetStarCount(string universeId)
     {
         int result;
-        var repo = new Repository<Star>(Context);
+        var repo = new Repository<Star>(_context);
         result = repo.Count(c => c.UniverseId == universeId);
     
         return Task.FromResult(result);
@@ -72,7 +67,7 @@ public class UniverseService : DataService
     public Task<int>  GetShipCount(string universeId)
     {
         int result;
-        var repo = new Repository<Ship>(Context);
+        var repo = new Repository<Ship>(_context);
         result = repo.Count(c => c.UniverseId == universeId);
     
         return Task.FromResult(result);
@@ -81,7 +76,7 @@ public class UniverseService : DataService
     public Task<int>  GetCharCount(string universeId)
     {
         int result;
-        var repo = new Repository<Character>(Context);
+        var repo = new Repository<Character>(_context);
         result = repo.Count(c => c.UniverseId == universeId);
     
         return Task.FromResult(result);

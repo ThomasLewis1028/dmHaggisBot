@@ -4,6 +4,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.Database
@@ -12,10 +14,11 @@ namespace SWNUniverseGenerator.Database
         where TEntity : class, IEntity
     {
         private readonly UniverseContext _dbContext;
-
+        private readonly ILogger<TEntity> _logger;
         public Repository(UniverseContext dbContext)
         {
             _dbContext = dbContext;
+            
         }
 
         public IQueryable<TEntity> GetAll()

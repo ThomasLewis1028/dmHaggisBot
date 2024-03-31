@@ -5,9 +5,9 @@ using SWNUniverseGenerator.Models;
 
 namespace SWNBlazorApp.Data;
 
-public class CharacterService : DataService
+public class CharacterService : DataService<CharacterService>
 {
-    public CharacterService(UniverseContext context) : base(context)
+    public CharacterService(UniverseContext context, ILogger<CharacterService> logger) : base(context, logger)
     {
 
     }
@@ -15,7 +15,7 @@ public class CharacterService : DataService
     public Task<List<Character>> GetCharactersAsync(string universeId)
     {
         List<Character> result;
-        var repo = new Repository<Character>(Context);
+        var repo = new Repository<Character>(_context);
         var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
         result = entityList.Cast<Character>().ToList();
       

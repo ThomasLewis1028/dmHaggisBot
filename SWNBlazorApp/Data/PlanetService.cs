@@ -4,9 +4,9 @@ using SWNUniverseGenerator.Models;
 
 namespace SWNBlazorApp.Data;
 
-public class PlanetService : DataService
+public class PlanetService : DataService<PlanetService>
 {
-    public PlanetService(UniverseContext context) : base(context)
+    public PlanetService(UniverseContext context, ILogger<PlanetService> logger) : base(context, logger)
     {
 
     }
@@ -14,7 +14,7 @@ public class PlanetService : DataService
     public Task<Planet> GetPlanetAsync(string planetId)
     {
         Planet result;
-        var repo = new Repository<Planet>(Context);
+        var repo = new Repository<Planet>(_context);
         result = repo.GetById(planetId);
 
         
@@ -24,7 +24,7 @@ public class PlanetService : DataService
     public Task<List<Planet>> GetPlanetsAsync(string universeId)
     {
         List<Planet> result;
-        var repo = new Repository<Planet>(Context);
+        var repo = new Repository<Planet>(_context);
         var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
         result = entityList.Cast<Planet>().ToList();
         
@@ -34,7 +34,7 @@ public class PlanetService : DataService
     public Task<List<Planet>> GetPlanetsByZoneAsync(string zoneId)
     {
         List<Planet> result;
-        var repo = new Repository<Planet>(Context);
+        var repo = new Repository<Planet>(_context);
         var entityList = repo.Search(c => c.ZoneId == zoneId).ToList();
         result = entityList.Cast<Planet>().ToList();
         

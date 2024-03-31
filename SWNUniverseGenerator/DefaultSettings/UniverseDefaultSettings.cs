@@ -14,7 +14,7 @@ namespace SWNUniverseGenerator.DefaultSettings
             int gridX = 8,
             int gridY = 10)
         {
-            UniverseId = universeId;
+            UniverseId = universeId ?? new Universe().Id;
             Name = name;
             GridX = gridX;
             GridY = gridY;

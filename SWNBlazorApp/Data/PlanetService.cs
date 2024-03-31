@@ -31,6 +31,15 @@ public class PlanetService : DataService<PlanetService>
         return Task.FromResult(result);
     }
 
+    public Task<TechLevel> GetPlanetTechLevel(string techLevelId)
+    {
+        TechLevel result;
+        var repo = new Repository<TechLevel>(_context);
+        result = repo.GetById(techLevelId);
+        
+        return Task.FromResult(result);
+    }
+
     public Task<List<Planet>> GetPlanetsByZoneAsync(string zoneId)
     {
         List<Planet> result;

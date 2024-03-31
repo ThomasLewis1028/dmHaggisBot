@@ -37,10 +37,13 @@ else
                 </ToolBarContent>
                 <HeaderContent>
                     <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Planet, object>(x => x.Name)">Name</MudTableSortLabel>
+                        <MudTableSortLabel SortBy="new Func<Planet, object>(x => x.Name)">Planet</MudTableSortLabel>
                     </MudTh>
                     <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Planet?, object>(x => GetStarName(x.ZoneId))">Name</MudTableSortLabel>
+                        <MudTableSortLabel SortBy="new Func<Planet, object>(x => GetTechLevel(x.TechLevel).Type)">Tech Level</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Planet?, object>(x => GetStarName(x.ZoneId))">Star</MudTableSortLabel>
                     </MudTh>
                     <MudTh>
                         Grid Location
@@ -48,6 +51,9 @@ else
                 </HeaderContent>
                 <RowTemplate>
                     <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
+                    <MudTd DataLabel="Grid" class="cursor-pointer">
+                        @(GetTechLevel(context.TechLevel).Type)
+                    </MudTd>
                     <MudTd DataLabel="Grid" class="cursor-pointer">
                         @(GetStarName(context.ZoneId))
                     </MudTd>
@@ -100,10 +106,12 @@ else
             planets = await PlanetService.GetPlanetsAsync(universeId.Value);
         }
     }
-        
-    private List<Planet> GetPlanets(string zoneId)
+
+
+    private TechLevel GetTechLevel(string techLevelId)
     {
-        return PlanetService.GetPlanetsByZoneAsync(zoneId).Result;
+        var result = PlanetService.GetPlanetTechLevel(techLevelId).Result;
+        return result;
     }
     
     private String GetStarName(String zoneId)

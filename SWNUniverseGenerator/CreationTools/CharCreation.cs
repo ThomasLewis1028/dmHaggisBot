@@ -27,21 +27,21 @@ namespace SWNUniverseGenerator.CreationTools
 
             using (var context = new UniverseContext())
             {
-                using (var nameRepo = new Repository<Naming>(context))
-                {
-                    maleNameGenerations.GenerateChain(nameRepo
-                        .Search(n => n.NameType == "MaleName")
-                        .Cast<Naming>()
-                        .ToList());
-                    femaleNameGenerations.GenerateChain(nameRepo
-                        .Search(n => n.NameType == "FemaleName")
-                        .Cast<Naming>()
-                        .ToList());
-                    lastNameGenerations.GenerateChain(nameRepo
-                        .Search(n => n.NameType == "LastName")
-                        .Cast<Naming>()
-                        .ToList());
-                }
+                // using (var nameRepo = new Repository<Naming>(context))
+                // {
+                //     maleNameGenerations.GenerateChain(nameRepo
+                //         .Search(n => n.NameType == "MaleName")
+                //         .Cast<Naming>()
+                //         .ToList());
+                //     femaleNameGenerations.GenerateChain(nameRepo
+                //         .Search(n => n.NameType == "FemaleName")
+                //         .Cast<Naming>()
+                //         .ToList());
+                //     lastNameGenerations.GenerateChain(nameRepo
+                //         .Search(n => n.NameType == "LastName")
+                //         .Cast<Naming>()
+                //         .ToList());
+                // }
 
                 using (var charRepo = new Repository<Character>(context))
                 {
@@ -72,6 +72,7 @@ namespace SWNUniverseGenerator.CreationTools
                             if (string.IsNullOrEmpty(characterDefaultSettings.First))
                             {
                                 var nameRand = Rand.Next(0, 10);
+                                nameRand = 4;
 
                                 if (nameRand > 3)
                                 {
@@ -97,6 +98,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                             if (string.IsNullOrEmpty(characterDefaultSettings.Last))
                             {
+                                nameRand = 4;
                                 if (nameRand > 3)
                                     character.Last = ((Naming)repo.Random(n => n.NameType == "LastName")).Name;
                                 else

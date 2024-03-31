@@ -6,6 +6,7 @@
 @using SWNUniverseGenerator.DefaultSettings
 @using SWNUniverseGenerator.Models
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using SWNUniverseGenerator.CreationTools
 
 @inject ProtectedSessionStorage ProtectedSessionStore
 @inject CharacterService CharacterService
@@ -54,14 +55,17 @@ else
                                         </MudSelect>
                                     </MudItem>
 
-                                    <MudItem xs="4">
+                                    <MudItem xs="3">
                                         <MudTextField T="String" Label="Hair Color" Required="false" @bind-Value="newCharHairColor"/>
                                     </MudItem>
-                                    <MudItem xs="4">
+                                    <MudItem xs="3">
                                         <MudTextField T="String" Label="Hair Style" Required="false" @bind-Value="newCharHairStyle"/>
                                     </MudItem>
-                                    <MudItem xs="4">
+                                    <MudItem xs="3">
                                         <MudTextField T="String" Label="Eye Color" Required="false" @bind-Value="newCharEyeColor"/>
+                                    </MudItem>
+                                    <MudItem xs="3">
+                                        <MudTextField T="int" Label="Height" Required="false" @bind-Value="newCharHeight"/>
                                     </MudItem>
 
                                     <MudItem xs="6">
@@ -194,6 +198,7 @@ else
     private string newCharHairColor;
     private string newCharHairStyle;
     private string newCharEyeColor;
+    private int newCharHeight;
     private string newCharBirthPlanetId;
     private string newCharCurrPlanetId;
     private int newCharCrimeChance;
@@ -235,23 +240,27 @@ else
     private void CreateCharacter()
     {
         //TODO: Fix
-        // Universe universe = UniverseService.GetUniverseAsync().Result;
-        //
-        // creation.CreateCharacter(universe, new CharacterDefaultSettings()
-        // {
-        //     First = newCharFirstName,
-        //     Last = newCharLastName,
-        //     Gender = newCharGender,
-        //     Age = new[] {newCharAge, newCharAge},
-        //     HairStyle = newCharHairStyle,
-        //     HairCol = newCharHairColor,
-        //     EyeCol = newCharEyeColor,
-        //     Title = newCharTitle,
-        //     Count = 1,
-        //     CrimeChance = new[] {newCharCrimeChance, newCharCrimeChance},
-        //     ShipId = newCharShipId
-        // });
-        // OnInitializedAsync();
+        Creation creation = new Creation();
+        creation.CreateCharacter(new CharacterDefaultSettings()
+        {
+            UniverseId = CurrentUniverse.Id,
+            First = newCharFirstName,
+            Last = newCharLastName,
+            Gender = newCharGender,
+            Age = newCharAge,
+            HairStyle = newCharHairStyle,
+            HairCol = newCharHairColor,
+            EyeCol = newCharEyeColor,
+            Height = newCharHeight,
+            Title = newCharTitle,
+            Count = 1,
+            CrimeChance = new[] {newCharCrimeChance, newCharCrimeChance},
+            ShipId = newCharShipId,
+            BirthPlanetId = newCharBirthPlanetId,
+            CurrentPlanetId = newCharCurrPlanetId,
+            InitialReaction = newCharInitialReaction
+        });
+        OnInitializedAsync();
     }
 
     private bool CharacterFilterFunc(Character character) => CharacterFilter(character, searchString);

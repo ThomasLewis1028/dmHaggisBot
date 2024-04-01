@@ -15,25 +15,25 @@
 
 <h1>Universes</h1>
 
-<MudText Typo="Typo.h5">Current Universe: @universeName</MudText>
+<MudText Typo="Typo.h5">Current Universe: @_universeName</MudText>
 
 <MudGrid>
     <MudItem xs="12" sm="7">
         <MudPaper Class="pa-4">
-            <MudForm @ref="form" @bind-Errors="@errors">
+            <MudForm @ref="_form" @bind-Errors="@_errors">
                 <MudGrid>
                     <MudItem xs="8">
-                        <MudTextField T="String" Label="Universe Name" Required="false" @bind-Value="universeName"/>
+                        <MudTextField T="String" Label="Universe Name" Required="false" @bind-Value="_newUniverseName"/>
                     </MudItem>
                     <MudItem xs="2">
-                        <MudTextField T="int" Label="Grid X" @bind-Value="gridX"></MudTextField>
+                        <MudTextField T="int" Label="Grid X" @bind-Value="_newGridX"></MudTextField>
                     </MudItem>
                     <MudItem xs="2">
-                        <MudTextField T="int" Label="Grid Y" @bind-Value="gridY"></MudTextField>
+                        <MudTextField T="int" Label="Grid Y" @bind-Value="_newGridY"></MudTextField>
                     </MudItem>
 
                     <MudItem xs="4">
-                        <MudCheckBox T="bool" Label="Overwrite Existing Universe?" @bind-Checked="overwrite"/>
+                        <MudCheckBox T="bool" Label="Overwrite Existing Universe?" @bind-Checked="_overwrite"/>
                     </MudItem>
                     <MudItem xs="4">
                         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CreateUniverse())">Create Universe</MudButton>
@@ -44,18 +44,18 @@
     </MudItem>
     <MudItem xs="12" sm="5">
         <MudPaper Class="pa-4 mud-height-full">
-            <MudText Typo="Typo.subtitle2">@($"Errors ({errors.Length})")</MudText>
-            @foreach (var error in errors)
+            <MudText Typo="Typo.subtitle2">@($"Errors ({_errors.Length})")</MudText>
+            @foreach (var error in _errors)
             {
                 <MudText Color="@Color.Error">@error</MudText>
             }
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="12">
-        <MudTable Items="@universes" Hover="true" SortLabel="Sort By" @bind-SelectedItem="selectedUniverse">
+        <MudTable Items="@_universes" Hover="true" SortLabel="Sort By" @bind-SelectedItem="_selectedUniverse">
             <ToolBarContent>
                 <MudText Typo="Typo.h6">Universe List</MudText>
-                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
             </ToolBarContent>
             <HeaderContent>
                 <MudTh>
@@ -94,17 +94,18 @@
 
 @code {
     private bool _createdNew;
-    private bool overwrite;
+    private bool _overwrite;
     private DateTime _start;
     private DateTime _end;
-    private int gridX = 8;
-    private int gridY = 10;
-    MudForm form;
-    String[] errors = { };
-    String universeName = "None";
-    String searchString;
-    Universe selectedUniverse;
-    List<Universe> universes = new();
+    private int _newGridX = 8;
+    private int _newGridY = 10;
+    MudForm _form;
+    String[] _errors = { };
+    string _universeName = "None";
+    string _newUniverseName; 
+    String _searchString;
+    Universe _selectedUniverse;
+    List<Universe> _universes = new();
 
 
     protected override async Task OnInitializedAsync()
@@ -113,10 +114,10 @@
         if (!string.IsNullOrEmpty(universeId.Value))
         {
             Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
-            universeName = task.Result.Name;
+            _universeName = task.Result.Name;
         }
         
-        universes = await UniverseService.GetUniverseListAsync();
+        _universes = await UniverseService.GetUniverseListAsync();
         StateHasChanged();
         MenuService.NotifyChanged();
     }
@@ -149,7 +150,7 @@
         UniverseDefaultSettings uds = new UniverseDefaultSettings()
         {
             UniverseId = new Universe().Id,
-            Name = universeName
+            Name = _universeName
         };
 
         await creation.CreateFullUniverse(universeDefaultSettings: uds);
@@ -168,7 +169,7 @@
     private async void LoadUniverse(String universeId)
     {
         Task<Universe> task = UniverseService.GetUniverseAsync(universeId);
-        universeName = task.Result == null ? "None" : task.Result.Name;
+        _universeName = task.Result == null ? "None" : task.Result.Name;
         await ProtectedSessionStore.SetAsync("SelectedUniverse", universeId);
         
         StateHasChanged();

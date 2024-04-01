@@ -61,7 +61,7 @@
     {
         MenuService.OnChanged += MenuChanged;
         StateHasChanged();
-        var t = ReloadNavMenu();
+        _ = ReloadNavMenu();
     }
 
     private async Task ReloadNavMenu()
@@ -77,7 +77,7 @@
     private void MenuChanged(object? sender, EventArgs e)
     {
         StateHasChanged();
-        var t = ReloadNavMenu();
+        _ = ReloadNavMenu();
     }
 
 }

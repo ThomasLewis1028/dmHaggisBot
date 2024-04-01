@@ -30,75 +30,6 @@ else
 {
     <MudGrid>
         <MudItem xs="12">
-            @* <MudExpansionPanels> *@
-            @*     $1$ Character Creation #1# *@
-            @*     <MudExpansionPanel Text="Character Creation"> *@
-            @*         <MudItem xs="12" sm="6"> *@
-            @*             <MudPaper Class="pa-4"> *@
-            @*                 <MudForm @ref="form"> *@
-            @*                     <MudGrid> *@
-            @*                         <MudItem xs="4"> *@
-            @*                             <MudTextField T="String" Label="First Name" Required="false" @bind-Value="newCharFirstName"/> *@
-            @*                         </MudItem> *@
-            @*                         <MudItem xs="4"> *@
-            @*                             <MudTextField T="String" Label="Last Name" Required="false" @bind-Value="newCharLastName"/> *@
-            @*                         </MudItem> *@
-            @*                         <MudItem xs="1"> *@
-            @*                             <MudTextField T="int" Label="Age" Required="false" @bind-Value="newCharAge"/> *@
-            @*                         </MudItem> *@
-            @*                         <MudItem xs="3"> *@
-            @*                             <MudSelect T="Character.GenderEnum" Label="Gender" Required="true" @bind-Value="newCharGender"> *@
-            @*                                 <MudSelectItem Value="@Character.GenderEnum.Undefined"/> *@
-            @*                                 <MudSelectItem Value="@Character.GenderEnum.Male"/> *@
-            @*                                 <MudSelectItem Value="@Character.GenderEnum.Female"/> *@
-            @*                             </MudSelect> *@
-            @*                         </MudItem> *@
-            @* *@
-            @*                         <MudItem xs="4"> *@
-            @*                             <MudTextField T="String" Label="Hair Color" Required="false" @bind-Value="newCharHairColor"/> *@
-            @*                         </MudItem> *@
-            @*                         <MudItem xs="4"> *@
-            @*                             <MudTextField T="String" Label="Hair Style" Required="false" @bind-Value="newCharHairStyle"/> *@
-            @*                         </MudItem> *@
-            @*                         <MudItem xs="4"> *@
-            @*                             <MudTextField T="String" Label="Eye Color" Required="false" @bind-Value="newCharEyeColor"/> *@
-            @*                         </MudItem> *@
-            @* *@
-            @*                         <MudItem xs="6"> *@
-            @*                             <MudTextField T="String" Label="Title" Required="false" @bind-Value="newCharTitle"/> *@
-            @*                         </MudItem> *@
-            @*                         <MudItem xs="6"> *@
-            @*                             <MudTextField T="String" Label="Ship Id" Required="false" @bind-Value="newCharShipId"/> *@
-            @*                         </MudItem> *@
-            @* *@
-            @*                         <MudItem xs="6"> *@
-            @*                             <MudTextField T="String" Label="Birth Planet ID" Required="false" @bind-Value="newCharBirthPlanetId"/> *@
-            @*                         </MudItem> *@
-            @*                         <MudItem xs="6"> *@
-            @*                             <MudTextField T="String" Label="Current Planet ID" Required="false" @bind-Value="newCharCurrPlanetId"/> *@
-            @*                         </MudItem> *@
-            @* *@
-            @*                         <MudItem xs="2"> *@
-            @*                             <MudTextField T="int" Label="Crime Chance %" Required="false" @bind-Value="newCharCrimeChance"/> *@
-            @*                         </MudItem> *@
-            @*                         <MudItem xs="10"> *@
-            @*                             <MudTextField T="String" Label="Initial Reaction" Required="false" @bind-Value="newCharInitialReaction"/> *@
-            @*                         </MudItem> *@
-            @*                     </MudGrid> *@
-            @*                 </MudForm> *@
-            @*             </MudPaper> *@
-            @*             <MudPaper Class="pa-4 mt-4"> *@
-            @*                 <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CreateShip())">Create Character</MudButton> *@
-            @*                 <MudButton Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" OnClick="@(() => form.Reset())" Class="mx-2">Reset</MudButton> *@
-            @*             </MudPaper> *@
-            @*         </MudItem> *@
-            @*         <MudItem xs="12" sm="6"> *@
-            @*             <MudPaper Class="pa-4 mud-height-full"> *@
-            @* *@
-            @*             </MudPaper> *@
-            @*         </MudItem> *@
-            @*     </MudExpansionPanel> *@
-            @* </MudExpansionPanels> *@
         </MudItem>
         @* Ship List *@
         <MudItem xs="8">
@@ -106,7 +37,7 @@ else
                 <ToolBarContent>
                     <MudText Typo="Typo.h6">Ship List</MudText>
                     <MudSpacer/>
-                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                 </ToolBarContent>
                 <HeaderContent>
                     <MudTh>
@@ -191,7 +122,7 @@ else
     private string searchString;
     String universeName;
     MudForm form;
-    private string[] icons = { Icons.Material.Filled.Rocket };
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -257,6 +188,11 @@ else
     private int GetCrewCount(string shipId)
     {
         return CrewMemberService.GetCrewMemberCount(shipId).Result;
+    }
+
+    private List<CrewMember> GetCrewMembers(string shipId)
+    {
+        return CrewMemberService.GetCrewMembersAsync(shipId).Result;
     }
 
     private string GetHull(string hullId)

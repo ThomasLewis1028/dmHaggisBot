@@ -12,14 +12,14 @@
 <MudDrawer Open="true" Anchor="Anchor.Start" Width="250px" Height="100%" Class="py-3" Elevation="0" Variant="DrawerVariant.Persistent">
     <MudNavMenu Bordered="true" Class="mud-width-full" Rounded="true" Color="Color.Success">
         <MudText Typo="Typo.h6" Class="px-4">Nav Menu</MudText>
-        @if (currentUniverse != null)
+        @if (!string.IsNullOrEmpty(_universeName))
         {
-            <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">@currentUniverse.Name</MudText>
+            <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">@_universeName</MudText>
         }
         <MudDivider Class="my-2"/>
         <MudNavLink Href="/universes" Icon="@Icons.Material.Filled.SpaceDashboard">Universes</MudNavLink>
 
-        @if (currentUniverse != null)
+        @if (!string.IsNullOrEmpty(_universeName))
         {
             <MudNavGroup Title="Universe" Icon="@Icons.Material.Filled.Hive">
                 <MudNavLink Href="/universe" Icon="@Icons.Material.Filled.Map">Star Map</MudNavLink>
@@ -34,11 +34,12 @@
 </MudDrawer>
 
 @code {
-    private bool collapseNavMenu = true;
-    private bool open = true;
-    private Universe currentUniverse;
+    private bool _collapseNavMenu = true;
+    private bool _open = true;
+    private string _universeName = "";
+    private string _universeId = "";
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -47,13 +48,14 @@
         if (!string.IsNullOrEmpty(universeId.Value))
         {
             Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
-            currentUniverse = task.Result;
+            _universeName = task.Result.Name;
+            _universeId = task.Result.Id;
         }
     }
 
     private void ToggleNavMenu()
     {
-        collapseNavMenu = !collapseNavMenu;
+        _collapseNavMenu = !_collapseNavMenu;
     }
 
 

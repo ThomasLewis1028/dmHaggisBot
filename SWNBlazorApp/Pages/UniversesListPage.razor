@@ -52,7 +52,7 @@
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="12">
-        <MudTable Items="@UniverseRows" Hover="true" SortLabel="Sort By" @bind-SelectedItem="selectedUniverse">
+        <MudTable Items="@universes" Hover="true" SortLabel="Sort By" @bind-SelectedItem="selectedUniverse">
             <ToolBarContent>
                 <MudText Typo="Typo.h6">Universe List</MudText>
                 <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
@@ -101,16 +101,23 @@
     private int gridY = 10;
     MudForm form;
     String[] errors = { };
-    String universeID;
-    String universeName;
+    String universeName = "None";
     String searchString;
     Universe selectedUniverse;
-    List<Universe> UniverseRows = new();
+    List<Universe> universes = new();
 
 
     protected override async Task OnInitializedAsync()
     {
-        UniverseRows = await UniverseService.GetUniverseListAsync();
+        var universeId = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        if (!string.IsNullOrEmpty(universeId.Value))
+        {
+            Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
+            universeName = task.Result.Name;
+        }
+        
+        universes = await UniverseService.GetUniverseListAsync();
+        StateHasChanged();
         MenuService.NotifyChanged();
     }
 
@@ -145,12 +152,15 @@
             Name = universeName
         };
 
-        creation.CreateFullUniverse(universeDefaultSettings: uds);
+        await creation.CreateFullUniverse(universeDefaultSettings: uds);
 
         LoadUniverse(uds.UniverseId);
 
         _end = DateTime.Now;
         _createdNew = true;
+        
+        StateHasChanged();
+        MenuService.NotifyChanged();
         await OnInitializedAsync();
     }
 
@@ -160,7 +170,10 @@
         Task<Universe> task = UniverseService.GetUniverseAsync(universeId);
         universeName = task.Result == null ? "None" : task.Result.Name;
         await ProtectedSessionStore.SetAsync("SelectedUniverse", universeId);
+        
+        StateHasChanged();
         MenuService.NotifyChanged();
+        await OnInitializedAsync();
     }
 
     private async void DeleteUniverse(String universeId, String universeName)
@@ -177,6 +190,7 @@
         }
         
         await UniverseService.DeleteUniverseAsync(universeId);
+        StateHasChanged();
         await OnInitializedAsync();
     }
 

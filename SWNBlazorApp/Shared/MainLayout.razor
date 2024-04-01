@@ -1,4 +1,9 @@
-﻿@inherits LayoutComponentBase
+﻿@using SWNBlazorApp.Data
+@inherits LayoutComponentBase
+
+@implements IDisposable
+
+@inject IMenuService MenuService
 
 <PageTitle>SWNBlazorApp</PageTitle>
 
@@ -30,4 +35,20 @@
         }
     }
 
+    
+    protected override void OnInitialized()
+    {
+        MenuService.OnChanged += MenuChanged;
+    }
+    
+    void IDisposable.Dispose()
+    {
+        MenuService.OnChanged -= MenuChanged;
+    }
+    
+    private void MenuChanged(object? sender, EventArgs e)
+    {
+        StateHasChanged();
+        OnInitialized();
+    }
 }

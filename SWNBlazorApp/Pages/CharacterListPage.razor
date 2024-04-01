@@ -11,14 +11,15 @@
 @inject ProtectedSessionStorage ProtectedSessionStore
 @inject CharacterService CharacterService
 @inject UniverseService UniverseService
-@inject Universe CurrentUniverse
 @inject PlanetService PlanetService
 @inject ShipService ShipService
 @inject CrewMemberService CrewMemberService
+@inject IMenuService MenuService
 
 <h1>Character Data</h1>
 
-<p>All characters in @CurrentUniverse.Name</p>
+<p>All characters in @universeName</p>
+                   
 
 @if (characters == null)
 {
@@ -235,6 +236,8 @@ else
     private Character currentCharacter;
     private string searchString;
     private bool _isAdmin = false;
+    private Universe currentUniverse;
+    private string universeName;
     MudForm form;
 
     private string newCharFirstName;
@@ -259,9 +262,12 @@ else
         if (!string.IsNullOrEmpty(universeId.Value))
         {
             Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
-            CurrentUniverse = UniverseService.GetUniverseAsync(universeId.Value).Result;
+            currentUniverse = task.Result;
+            universeName = currentUniverse.Name;
             characters = await CharacterService.GetCharactersAsync(universeId.Value);
         }
+        StateHasChanged();
+        MenuService.NotifyChanged();
     }
 
     private String GetPlanetName(String planetId)
@@ -280,17 +286,13 @@ else
         return null;
     }
 
-    private void CreateCharacters()
-    {
-    }
-
     private void CreateCharacter()
     {
         //TODO: Fix
         Creation creation = new Creation();
         creation.CreateCharacter(new CharacterDefaultSettings()
         {
-            UniverseId = CurrentUniverse.Id,
+            UniverseId = currentUniverse.Id,
             First = newCharFirstName,
             Last = newCharLastName,
             Gender = newCharGender,

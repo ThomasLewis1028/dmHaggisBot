@@ -1,4 +1,6 @@
-﻿namespace SWNBlazorApp.Data;
+﻿using MudBlazor.Interfaces;
+
+namespace SWNBlazorApp.Data;
 
 public interface IMenuService
 {
@@ -9,8 +11,9 @@ public interface IMenuService
 public class MenuService : IMenuService
 {
     public event EventHandler<EventArgs>? OnChanged;
+
     public void NotifyChanged()
     {
-        
+        OnChanged?.Invoke(this, EventArgs.Empty);
     }
 }

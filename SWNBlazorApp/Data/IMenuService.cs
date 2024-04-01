@@ -1,6 +1,4 @@
-﻿using MudBlazor.Interfaces;
-
-namespace SWNBlazorApp.Data;
+﻿namespace SWNBlazorApp.Data;
 
 public interface IMenuService
 {

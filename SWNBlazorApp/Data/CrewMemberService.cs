@@ -19,11 +19,11 @@ public class CrewMemberService : DataService<CrewMemberService>
         return Task.FromResult(result);
     }
     
-    public Task<List<CrewMember>> GetCrewMembersAsync(string universeId)
+    public Task<List<CrewMember>> GetCrewMembersAsync(string shipId)
     {
         List<CrewMember> result;
         var repo = new Repository<CrewMember>(_context);
-        var entityList = repo.Search(c => c.UniverseId == universeId).ToList();
+        var entityList = repo.Search(c => c.ShipId == shipId).ToList();
         result = entityList.Cast<CrewMember>().ToList();
     
         return Task.FromResult(result);

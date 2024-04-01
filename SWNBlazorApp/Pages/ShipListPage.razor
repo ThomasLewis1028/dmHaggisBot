@@ -15,6 +15,7 @@
 @inject ShipService ShipService
 @inject ZoneService ZoneService
 @inject CrewMemberService CrewMemberService
+@inject CharacterService CharacterService
 
 <h1>Ship Data</h1>
 
@@ -33,7 +34,7 @@ else
         </MudItem>
         @* Ship List *@
         <MudItem xs="8">
-            <MudTable Items="@ships.OrderBy(c => c.Id)" Hover="true" SortLabel="Sort By" Filter="new Func<Ship, bool>(ShipFilterFunc)" @bind-SelectedItem="currentShip">
+            <MudTable T="Ship" Items="@ships.OrderBy(c => c.Id)" Hover="true" SortLabel="Sort By" Filter="new Func<Ship, bool>(ShipFilterFunc)" OnRowClick="RowClickEvent" Breakpoint="Breakpoint.Sm">
                 <ToolBarContent>
                     <MudText Typo="Typo.h6">Ship List</MudText>
                     <MudSpacer/>
@@ -65,15 +66,40 @@ else
                 </HeaderContent>
                 <RowTemplate>
                     <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
-                    <MudTd DataLabel="Title" class="cursor-pointer">@GetClass(context.HullId)</MudTd>
-                    <MudTd DataLabel="Title" class="cursor-pointer">@GetHull(context.HullId)</MudTd>
-                    <MudTd DataLabel="Name" class="cursor-pointer">@GetCrewCount(context.Id)</MudTd>
-                    <MudTd DataLabel="Ship" class="cursor-pointer">@context.Cp</MudTd>
-                    <MudTd DataLabel="Title" class="cursor-pointer">@context.CrewSkill</MudTd>
-                    <MudTd DataLabel="Title" class="cursor-pointer">
+                    <MudTd DataLabel="Class" class="cursor-pointer">@GetClass(context.HullId)</MudTd>
+                    <MudTd DataLabel="Hull" class="cursor-pointer">@GetHull(context.HullId)</MudTd>
+                    <MudTd DataLabel="CrewCount" class="cursor-pointer">@GetCrewCount(context.Id)</MudTd>
+                    <MudTd DataLabel="CombatPower" class="cursor-pointer">@context.Cp</MudTd>
+                    <MudTd DataLabel="ScrewSkill" class="cursor-pointer">@context.CrewSkill</MudTd>
+                    <MudTd DataLabel="Location" class="cursor-pointer">
                         <MudIcon Icon="@GetLocationType(context.LocationId).icon" Color="@GetLocationType(context.LocationId).color"/> @GetLocationName(@context.LocationId)
                     </MudTd>
                 </RowTemplate>
+                <ChildRowContent>
+                    @if (context == currentShip && GetCrewCount(context.Id) > 0)
+                    {
+                        <MudTr>
+                            <td colspan="4">
+                                <MudCard Elevation="0">
+                                    <MudCardContent Class="pa-0">
+                                        <MudTable Items="@GetCrewMembers(currentShip.Id)" Context="characterContext" Hover="true" Breakpoint="Breakpoint.Sm">
+                                            <HeaderContent>
+                                                <MudTh>Title</MudTh>
+                                                <MudTh>Name</MudTh>
+                                                <MudTh>Gender</MudTh>
+                                            </HeaderContent>
+                                            <RowTemplate>
+                                                <MudTd DataLabel="CharTitle" class="cursor-pointer">@GetCharacter(characterContext.CharacterId).Title</MudTd>
+                                                <MudTd DataLabel="CharTitle" class="cursor-pointer">@GetCharacter(characterContext.CharacterId).Name</MudTd>
+                                                <MudTd DataLabel="CharTitle" class="cursor-pointer">@GetCharacter(characterContext.CharacterId).Gender</MudTd>
+                                            </RowTemplate>
+                                        </MudTable>
+                                    </MudCardContent>
+                                </MudCard>
+                            </td>
+                        </MudTr>
+                    }
+                </ChildRowContent>
                 <PagerContent>
                     <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>
                 </PagerContent>
@@ -153,6 +179,18 @@ else
         return (null, Color.Default)!;
     }
 
+    private void RowClickEvent(TableRowClickEventArgs<Ship> tableRowClickEventArgs)
+    {
+        if (currentShip != tableRowClickEventArgs.Item)
+        {
+            currentShip = tableRowClickEventArgs.Item;
+        }
+        else
+        {
+            currentShip = null;
+        }
+    }
+
     private string GetLocationName(string locId)
     {
         switch (locId)
@@ -193,6 +231,11 @@ else
     private List<CrewMember> GetCrewMembers(string shipId)
     {
         return CrewMemberService.GetCrewMembersAsync(shipId).Result;
+    }
+
+    private Character GetCharacter(string charId)
+    {
+        return CharacterService.GetCharacterAsync(charId).Result;
     }
 
     private string GetHull(string hullId)

@@ -11,6 +11,15 @@ public class CharacterService : DataService<CharacterService>
     {
 
     }
+
+    public Task<Character> GetCharacterAsync(string charId)
+    {
+        Character result;
+        var repo = new Repository<Character>(_context);
+        result = repo.GetById(charId);
+        
+        return Task.FromResult(result);
+    }
     
     public Task<List<Character>> GetCharactersAsync(string universeId)
     {

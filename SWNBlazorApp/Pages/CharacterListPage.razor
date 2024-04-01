@@ -19,7 +19,7 @@
 <h1>Character Data</h1>
 
 <p>All characters in @universeName</p>
-                   
+
 
 @if (characters == null)
 {
@@ -30,11 +30,13 @@
 else
 {
     <MudGrid>
-        <MudItem xs="12">
-            <MudExpansionPanels>
-                @* Character Creation *@
-                <MudExpansionPanel Text="Character Creation">
-                    <MudItem xs="12" sm="6">
+    <MudItem xs="12" sm="8">
+        <MudExpansionPanels>
+            @* Character Creation Expansion*@
+            <MudExpansionPanel Text="Character Creation">
+                <MudGrid>
+                    @* Character Creation Form*@
+                    <MudItem xs="5" sm="5">
                         <MudPaper Class="pa-4">
                             <MudForm @ref="form">
                                 <MudGrid>
@@ -96,138 +98,256 @@ else
                             <MudButton Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" OnClick="@(() => form.Reset())" Class="mx-2">Reset</MudButton>
                         </MudPaper>
                     </MudItem>
-                    <MudItem xs="12" sm="6">
-                        <MudPaper Class="pa-4 mud-height-full">
 
+                    @* Preview Card *@
+                    <MudItem xs="7" sm="7">
+                        <MudPaper Elevation="2">
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h6">@newCharFirstName @newCharLastName</MudText>
+                                    <MudText Typo="Typo.body2">User Id</MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                            <MudCardContent>
+                                <MudGrid>
+                                    <MudItem xs="3">
+                                        <MudImage Src="images/abstract-user-flat-1.svg" Alt="No Image" Elevation="25" Fluid="true" Class="border-solid border-2 mud-border-primary pa-4"/>
+                                    </MudItem>
+                                    <MudItem xs="9">
+                                        <MudText Typo="Typo.body1">Title: @newCharTitle</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <MudText Typo="Typo.h6">Physical Traits</MudText>
+                                            </MudItem>
+                                            <MudItem xs="3">
+                                                <MudText Typo="Typo.body1">
+                                                    <b>Gender:</b> @newCharGender
+                                                </MudText>
+                                            </MudItem>
+                                            <MudItem xs="3">
+                                                <MudText Typo="Typo.body1">
+                                                    <b>Skin Color:</b>
+                                                </MudText>
+                                            </MudItem>
+                                            <MudItem xs="6">
+                                                <MudText Typo="Typo.body1"><b>Height:</b> @newCharHeight cm</MudText>
+                                            </MudItem>
+
+                                            <MudItem xs="4">
+                                                <MudText Typo="Typo.body1">
+                                                    <b>Eye Color:</b> @newCharEyeColor
+                                                </MudText>
+                                            </MudItem>
+                                            <MudItem xs="4">
+                                                <MudText Typo="Typo.body1">
+                                                    <b>Hair Style:</b> @newCharHairStyle
+                                                </MudText>
+                                            </MudItem>
+                                            <MudItem xs="4">
+                                                <MudText Typo="Typo.body1">
+                                                    <b>Hair Color:</b> @newCharHairColor
+                                                </MudText>
+                                            </MudItem>
+
+
+                                            <MudDivider/>
+                                            <MudItem xs="12">
+                                                <MudText Typo="Typo.h6">Biographic Information</MudText>
+                                            </MudItem>
+                                            <MudItem xs="3">
+                                                <MudText Typo="Typo.body1">
+                                                    <b>Birth Planet:</b> @GetPlanetName(newCharBirthPlanetId)
+                                                </MudText>
+                                            </MudItem>
+
+                                            <MudDivider/>
+                                            <MudItem xs="12">
+                                                <MudText Typo="Typo.h6">Employment Information</MudText>
+                                            </MudItem>
+                                            <MudItem xs="12">
+                                                <MudText Typo="Typo.body1">
+                                                    <b>Ship:</b> @GetShipName(newCharShipId)
+                                                </MudText>
+                                            </MudItem>
+
+                                            <MudDivider/>
+                                            <MudItem xs="12">
+                                                <MudText Typo="Typo.h6">Admin View</MudText>
+                                            </MudItem>
+                                            <MudItem xs="12">
+                                                <MudText Typo="Typo.body1">
+                                                    <b>Current Planet:</b> @GetPlanetName(newCharCurrPlanetId)
+                                                </MudText>
+                                            </MudItem>
+                                            <MudItem xs="6">
+                                                <MudText Typo="Typo.body1">
+                                                    <b>Initial Reaction:</b> @newCharInitialReaction
+                                                </MudText>
+                                            </MudItem>
+                                            <MudItem xs="6">
+                                                <MudText Typo="Typo.body1"><b>Crime Chance:</b> @newCharCrimeChance%</MudText>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudCardContent>
                         </MudPaper>
                     </MudItem>
-                </MudExpansionPanel>
-            </MudExpansionPanels>
-        </MudItem>
-        @* Character List *@
-        <MudItem xs="8">
-            <MudTable Items="@characters.OrderBy(c => c.Id)" Hover="true" SortLabel="Sort By" Filter="new Func<Character, bool>(CharacterFilterFunc)" @bind-SelectedItem="currentCharacter">
-                <ToolBarContent>
-                    <MudText Typo="Typo.h6">Character List</MudText>
-                    <MudSpacer/>
-                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                </ToolBarContent>
-                <HeaderContent>
-                    <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Name)">Name</MudTableSortLabel>
-                    </MudTh>
-                    <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Gender)">Gender</MudTableSortLabel>
-                    </MudTh>
-                    <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Title)">Title</MudTableSortLabel>
-                    </MudTh>
-                    <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.Name)">Ship</MudTableSortLabel>
-                    </MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
-                    <MudTd DataLabel="Ship" class="cursor-pointer">@context.Gender</MudTd>
-                    <MudTd DataLabel="Title" class="cursor-pointer">@context.Title</MudTd>
-                    <MudTd DataLabel="Title" class="cursor-pointer">@GetShipName(context.Id)</MudTd>
-                </RowTemplate>
-                <PagerContent>
-                    <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>
-                </PagerContent>
-            </MudTable>
-        </MudItem>
-
-        <MudItem xs="4">
-            @*Individual Character Display*@
-            @if (currentCharacter != null)
+                </MudGrid>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4 mud-height-full">
+            <MudText Typo="Typo.subtitle2">@($"Errors ({_errors.Length})")</MudText>
+            @foreach (var error in _errors)
             {
-                <MudCard>
-                    <MudCardHeader>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.h6">@currentCharacter.Name</MudText>
-                            <MudText Typo="Typo.body2">@currentCharacter.Id</MudText>
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudGrid>
-                            <MudItem xs="3">
-                                <MudImage Src="images/abstract-user-flat-1.svg" Alt="No Image" Elevation="25" Fluid="true" Class="border-solid border-2 mud-border-primary pa-4"/>
-                            </MudItem>
-                            <MudItem xs="9">
-                                @if (currentCharacter.Title != null)
+                <MudText Color="@Color.Error">@error</MudText>
+            }
+        </MudPaper>
+    </MudItem>
+    @* Character List *@
+    <MudItem xs="8">
+        <MudTable Items="@characters.OrderBy(c => c.Id)" Hover="true" SortLabel="Sort By" Filter="new Func<Character, bool>(CharacterFilterFunc)" @bind-SelectedItem="currentCharacter">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Character List</MudText>
+                <MudSpacer/>
+                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Name)">Name</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Gender)">Gender</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Title)">Title</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.Name)">Ship</MudTableSortLabel>
+                </MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
+                <MudTd DataLabel="Ship" class="cursor-pointer">@context.Gender</MudTd>
+                <MudTd DataLabel="Title" class="cursor-pointer">@context.Title</MudTd>
+                <MudTd DataLabel="Title" class="cursor-pointer">@GetShipName(context.Id)</MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>
+            </PagerContent>
+        </MudTable>
+    </MudItem>
+
+    <MudItem xs="4">
+        @*Individual Character Display*@
+        @if (currentCharacter != null)
+        {
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">@currentCharacter.Name</MudText>
+                        <MudText Typo="Typo.body2">@currentCharacter.Id</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudGrid>
+                        <MudItem xs="3">
+                            <MudImage Src="images/abstract-user-flat-1.svg" Alt="No Image" Elevation="25" Fluid="true" Class="border-solid border-2 mud-border-primary pa-4"/>
+                        </MudItem>
+                        <MudItem xs="9">
+                            @if (currentCharacter.Title != null)
+                            {
+                                <MudText Typo="Typo.body1">Title: @currentCharacter.Title</MudText>
+                            }
+                            <MudGrid>
+                                <MudItem xs="12">
+                                    <MudText Typo="Typo.h6">Physical Traits</MudText>
+                                </MudItem>
+                                <MudItem xs="3">
+                                    <MudText Typo="Typo.body1">
+                                        <b>Gender:</b> @currentCharacter.Gender
+                                    </MudText>
+                                </MudItem>
+                                <MudItem xs="3">
+                                    <MudText Typo="Typo.body1">
+                                        <b>Skin Color:</b> @currentCharacter.SkinCol
+                                    </MudText>
+                                </MudItem>
+                                <MudItem xs="6">
+                                    <MudText Typo="Typo.body1"><b>Height:</b> @currentCharacter.Height cm</MudText>
+                                </MudItem>
+
+                                <MudItem xs="4">
+                                    <MudText Typo="Typo.body1">
+                                        <b>Eye Color:</b> @currentCharacter.EyeCol
+                                    </MudText>
+                                </MudItem>
+                                <MudItem xs="4">
+                                    <MudText Typo="Typo.body1">
+                                        <b>Hair Style:</b> @currentCharacter.HairStyle
+                                    </MudText>
+                                </MudItem>
+                                <MudItem xs="4">
+                                    <MudText Typo="Typo.body1">
+                                        <b>Hair Color:</b> @currentCharacter.HairCol
+                                    </MudText>
+                                </MudItem>
+
+
+                                <MudDivider/>
+                                <MudItem xs="12">
+                                    <MudText Typo="Typo.h6">Biographic Information</MudText>
+                                </MudItem>
+                                <MudItem xs="3">
+                                    <MudText Typo="Typo.body1">
+                                        <b>Birth Planet:</b> @GetPlanetName(currentCharacter.BirthPlanetId)
+                                    </MudText>
+                                </MudItem>
+
+                                @if (GetShipName(currentCharacter.Id) != null)
                                 {
-                                    <MudText Typo="Typo.body1">Title: @currentCharacter.Title</MudText>
-                                }
-                                <MudGrid>
-                                    <MudItem xs="12">
-                                        <MudText Typo="Typo.h6">Physical Traits</MudText>
-                                    </MudItem>
-                                    <MudItem xs="3">
-                                        <MudText Typo="Typo.body1"><b>Gender:</b> @currentCharacter.Gender</MudText>
-                                    </MudItem>
-                                    <MudItem xs="3">
-                                        <MudText Typo="Typo.body1"><b>Skin Color:</b> @currentCharacter.SkinCol</MudText>
-                                    </MudItem>
-                                    <MudItem xs="6">
-                                        <MudText Typo="Typo.body1"><b>Height:</b> @currentCharacter.Height cm</MudText>
-                                    </MudItem>
-
-                                    <MudItem xs="4">
-                                        <MudText Typo="Typo.body1"><b>Eye Color:</b> @currentCharacter.EyeCol</MudText>
-                                    </MudItem>
-                                    <MudItem xs="4">
-                                        <MudText Typo="Typo.body1"><b>Hair Style:</b> @currentCharacter.HairStyle</MudText>
-                                    </MudItem>
-                                    <MudItem xs="4">
-                                        <MudText Typo="Typo.body1"><b>Hair Style:</b> @currentCharacter.HairCol</MudText>
-                                    </MudItem>
-
-
                                     <MudDivider/>
                                     <MudItem xs="12">
-                                        <MudText Typo="Typo.h6">Biographic Information</MudText>
+                                        <MudText Typo="Typo.h6">Employment Information</MudText>
                                     </MudItem>
-                                    <MudItem xs="3">
-                                        <MudText Typo="Typo.body1"><b>Birth Planet:</b> @GetPlanetName(currentCharacter.BirthPlanetId)</MudText>
+                                    <MudItem xs="12">
+                                        <MudText Typo="Typo.body1">
+                                            <b>Ship:</b> @GetShipName(currentCharacter.Id)
+                                        </MudText>
                                     </MudItem>
+                                }
 
-                                    @if (GetShipName(currentCharacter.Id) != null)
-                                    {
-                                        <MudDivider/>
-                                        <MudItem xs="12">
-                                            <MudText Typo="Typo.h6">Employment Information</MudText>
-                                        </MudItem>
-                                        <MudItem xs="12">
-                                            <MudText Typo="Typo.body1"><b>Ship:</b> @GetShipName(currentCharacter.Id)</MudText>
-                                        </MudItem>
-                                    }
-
-                                    @if (_isAdmin)
-                                    {
-                                        <MudDivider/>
-                                        <MudItem xs="12">
-                                            <MudText Typo="Typo.h6">Admin View</MudText>
-                                        </MudItem>
-                                        <MudItem xs="12">
-                                            <MudText Typo="Typo.body1"><b>Current Planet:</b> @GetPlanetName(currentCharacter.CurrentLocationId)</MudText>
-                                        </MudItem>
-                                        <MudItem xs="6">
-                                            <MudText Typo="Typo.body1"><b>Initial Reaction:</b> @currentCharacter.InitialReaction</MudText>
-                                        </MudItem>
-                                        <MudItem xs="6">
-                                            <MudText Typo="Typo.body1"><b>Crime Chance:</b> @currentCharacter.CrimeChance%</MudText>
-                                        </MudItem>
-                                    }
+                                @if (_isAdmin)
+                                {
+                                    <MudDivider/>
+                                    <MudItem xs="12">
+                                        <MudText Typo="Typo.h6">Admin View</MudText>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudText Typo="Typo.body1">
+                                            <b>Current Planet:</b> @GetPlanetName(currentCharacter.CurrentLocationId)
+                                        </MudText>
+                                    </MudItem>
+                                    <MudItem xs="6">
+                                        <MudText Typo="Typo.body1">
+                                            <b>Initial Reaction:</b> @currentCharacter.InitialReaction
+                                        </MudText>
+                                    </MudItem>
+                                    <MudItem xs="6">
+                                        <MudText Typo="Typo.body1"><b>Crime Chance:</b> @currentCharacter.CrimeChance%</MudText>
+                                    </MudItem>
+                                }
 
 
-                                </MudGrid>
-                            </MudItem>
-                        </MudGrid>
-                    </MudCardContent>
-                </MudCard>
-            }
-        </MudItem>
+                            </MudGrid>
+                        </MudItem>
+                    </MudGrid>
+                </MudCardContent>
+            </MudCard>
+        }
+    </MudItem>
     </MudGrid>
 }
 
@@ -240,6 +360,7 @@ else
     private string universeName;
     MudForm form;
 
+    String[] _errors = { };
     private string newCharFirstName;
     private string newCharLastName;
     private int newCharAge;
@@ -266,13 +387,15 @@ else
             universeName = currentUniverse.Name;
             characters = await CharacterService.GetCharactersAsync(universeId.Value);
         }
+
         StateHasChanged();
         MenuService.NotifyChanged();
     }
 
     private String GetPlanetName(String planetId)
     {
-        return PlanetService.GetPlanetAsync(planetId).Result.Name;
+        var result = PlanetService.GetPlanetAsync(planetId).Result;
+        return result != null ? result.Name : "";
     }
 
     private String GetShipName(String charId)
@@ -283,7 +406,7 @@ else
             return ShipService.GetShipAsync(result.ShipId).Result.Name;
         }
 
-        return null;
+        return "";
     }
 
     private void CreateCharacter()

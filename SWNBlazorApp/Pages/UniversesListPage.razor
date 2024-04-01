@@ -19,28 +19,32 @@
 
 <MudGrid>
     <MudItem xs="12" sm="7">
-        <MudPaper Class="pa-4">
-            <MudForm @ref="_form" @bind-Errors="@_errors">
-                <MudGrid>
-                    <MudItem xs="8">
-                        <MudTextField T="String" Label="Universe Name" Required="false" @bind-Value="_newUniverseName"/>
-                    </MudItem>
-                    <MudItem xs="2">
-                        <MudTextField T="int" Label="Grid X" @bind-Value="_newGridX"></MudTextField>
-                    </MudItem>
-                    <MudItem xs="2">
-                        <MudTextField T="int" Label="Grid Y" @bind-Value="_newGridY"></MudTextField>
-                    </MudItem>
+        <MudExpansionPanels>
+            <MudExpansionPanel Text="Universe Creation">
+                <MudPaper Class="pa-4">
+                    <MudForm @ref="_form" @bind-Errors="@_errors">
+                        <MudGrid>
+                            <MudItem xs="8">
+                                <MudTextField T="String" Label="Universe Name" Required="false" @bind-Value="_newUniverseName"/>
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudTextField T="int" Label="Grid X" @bind-Value="_newGridX"></MudTextField>
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudTextField T="int" Label="Grid Y" @bind-Value="_newGridY"></MudTextField>
+                            </MudItem>
 
-                    <MudItem xs="4">
-                        <MudCheckBox T="bool" Label="Overwrite Existing Universe?" @bind-Checked="_overwrite"/>
-                    </MudItem>
-                    <MudItem xs="4">
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CreateUniverse())">Create Universe</MudButton>
-                    </MudItem>
-                </MudGrid>
-            </MudForm>
-        </MudPaper>
+                            <MudItem xs="4">
+                                <MudCheckBox T="bool" Label="Overwrite Existing Universe?" @bind-Checked="_overwrite"/>
+                            </MudItem>
+                            <MudItem xs="4">
+                                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CreateUniverse())">Create Universe</MudButton>
+                            </MudItem>
+                        </MudGrid>
+                    </MudForm>
+                </MudPaper>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
     </MudItem>
     <MudItem xs="12" sm="5">
         <MudPaper Class="pa-4 mud-height-full">
@@ -102,7 +106,7 @@
     MudForm _form;
     String[] _errors = { };
     string _universeName = "None";
-    string _newUniverseName; 
+    string _newUniverseName;
     String _searchString;
     Universe _selectedUniverse;
     List<Universe> _universes = new();
@@ -116,7 +120,7 @@
             Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
             _universeName = task.Result.Name;
         }
-        
+
         _universes = await UniverseService.GetUniverseListAsync();
         StateHasChanged();
         MenuService.NotifyChanged();
@@ -150,7 +154,7 @@
         UniverseDefaultSettings uds = new UniverseDefaultSettings()
         {
             UniverseId = new Universe().Id,
-            Name = _universeName
+            Name = _newUniverseName
         };
 
         await creation.CreateFullUniverse(universeDefaultSettings: uds);
@@ -159,7 +163,7 @@
 
         _end = DateTime.Now;
         _createdNew = true;
-        
+
         StateHasChanged();
         MenuService.NotifyChanged();
         await OnInitializedAsync();
@@ -171,7 +175,7 @@
         Task<Universe> task = UniverseService.GetUniverseAsync(universeId);
         _universeName = task.Result == null ? "None" : task.Result.Name;
         await ProtectedSessionStore.SetAsync("SelectedUniverse", universeId);
-        
+
         StateHasChanged();
         MenuService.NotifyChanged();
         await OnInitializedAsync();
@@ -189,7 +193,7 @@
         {
             return;
         }
-        
+
         await UniverseService.DeleteUniverseAsync(universeId);
         StateHasChanged();
         await OnInitializedAsync();

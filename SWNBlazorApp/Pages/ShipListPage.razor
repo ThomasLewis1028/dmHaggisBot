@@ -75,12 +75,18 @@ else
                         <MudIcon Icon="@GetLocationType(context.LocationId).icon" Color="@GetLocationType(context.LocationId).color"/> @GetLocationName(@context.LocationId)
                     </MudTd>
                 </RowTemplate>
+                @* Crew Member Sub Table *@
                 <ChildRowContent>
                     @if (context == currentShip && GetCrewCount(context.Id) > 0)
                     {
                         <MudTr>
-                            <td colspan="4">
-                                <MudCard Elevation="0">
+                            <td colspan="5">
+                                <MudCard Elevation="0" Outlined="true">
+                                    <MudCardHeader>
+                                        <CardHeaderContent>
+                                            <MudText>Crew Members on <strong>@context.Name</strong></MudText>
+                                        </CardHeaderContent>
+                                    </MudCardHeader>
                                     <MudCardContent Class="pa-0">
                                         <MudTable Items="@GetCrewMembers(currentShip.Id)" Context="characterContext" Hover="true" Breakpoint="Breakpoint.Sm">
                                             <HeaderContent>
@@ -181,6 +187,8 @@ else
 
     private void RowClickEvent(TableRowClickEventArgs<Ship> tableRowClickEventArgs)
     {
+        if (tableRowClickEventArgs.Item == null)
+            return;
         if (currentShip != tableRowClickEventArgs.Item)
         {
             currentShip = tableRowClickEventArgs.Item;

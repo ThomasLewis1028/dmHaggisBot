@@ -66,6 +66,9 @@
             creation.CreateStarMap(CurrentUniverse.Id);
         }
 
+        if (!Directory.Exists(wwwrootPath + starmapPath))
+            Directory.CreateDirectory(wwwrootPath + starmapPath);
+
         File.Copy(remotePath, localPath);
     }
 

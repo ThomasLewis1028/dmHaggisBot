@@ -55,7 +55,7 @@
         }
     }
 
-    public void GrabStarmap()
+    private void GrabStarmap()
     {
         var remotePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/{CurrentUniverse.Id}.svg";
         var localPath = $"{wwwrootPath + starmapPath}/{CurrentUniverse.Id}.svg";

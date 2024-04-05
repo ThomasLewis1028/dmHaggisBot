@@ -10,7 +10,7 @@
 
 
 <MudDrawer Open="true" Anchor="Anchor.Start" Width="250px" Height="100%" Class="py-3" Elevation="0" Variant="DrawerVariant.Persistent">
-    <MudNavMenu Bordered="true" Class="mud-width-full" Rounded="true" Color="Color.Success">
+    <MudNavMenu Bordered="true" Class="mud-width-full" Rounded="true" Color="Color.Success" >
         <MudText Typo="Typo.h6" Class="px-4">Nav Menu</MudText>
         @if (!string.IsNullOrEmpty(_universeName))
         {
@@ -21,7 +21,7 @@
 
         @if (!string.IsNullOrEmpty(_universeName))
         {
-            <MudNavGroup Title="Universe" Icon="@Icons.Material.Filled.Hive">
+            <MudNavGroup Title="Universe" Icon="@Icons.Material.Filled.Hive" @bind-Expanded=_open>
                 <MudNavLink Href="/universe" Icon="@Icons.Material.Filled.Map">Star Map</MudNavLink>
                 <MudNavLink Href="/stars" Icon="@Icons.Material.Filled.BrightnessHigh">Stars</MudNavLink>
                 <MudNavLink Href="/planets" Icon="@Icons.Material.Filled.Public">Planets</MudNavLink>
@@ -58,7 +58,6 @@
         _collapseNavMenu = !_collapseNavMenu;
     }
 
-
     protected override void OnInitialized()
     {
         MenuService.OnChanged += MenuChanged;
@@ -81,5 +80,4 @@
         StateHasChanged();
         _ = ReloadNavMenu();
     }
-
 }

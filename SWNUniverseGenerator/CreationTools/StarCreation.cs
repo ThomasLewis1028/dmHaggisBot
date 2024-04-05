@@ -50,7 +50,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 var zoneId =
                                     ((Zone)zoneRepo.Random(z => z.UniverseId == starDefaultSettings.UniverseId)).Id;
 
-                                if (starRepo.Search(s => s.ZoneId == zoneId).Any())
+                                if (stars.Exists(s => s.ZoneId == zoneId))
                                     continue;
 
                                 star.ZoneId = zoneId;
@@ -70,7 +70,7 @@ namespace SWNUniverseGenerator.CreationTools
                             }
 
                             // If that Name exists roll a new one 
-                            if (!starRepo.Any(
+                            if (!stars.Exists(
                                     a => a.Name == star.Name && a.UniverseId == starDefaultSettings.UniverseId))
                                 break;
                         }

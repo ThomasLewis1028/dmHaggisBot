@@ -22,7 +22,7 @@ namespace SWNUniverseGenerator.DefaultSettings
             String name = null,
             Star.StarClassEnum starClass = Star.StarClassEnum.Undefined,
             Star.StarColorEnum starColor = Star.StarColorEnum.Undefined,
-            Boolean createPlanets = true)
+            Boolean createPlanets = false)
         {
             UniverseId = universeId;
             StarCount = starCount < 0 ? new Random().Next(1, 10 + 1) + 20 : starCount;

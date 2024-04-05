@@ -36,32 +36,38 @@ else
                 </ToolBarContent>
                 <HeaderContent>
                     <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Star, object>(x => x.Id)">ID</MudTableSortLabel>
-                    </MudTh>
-                    <MudTh>
                         <MudTableSortLabel SortBy="new Func<Star, object>(x => x.Name)">Name</MudTableSortLabel>
                     </MudTh>
-                    <MudTh>Grid Location</MudTh>
+                    <MudTh>
+                        Grid X
+                    </MudTh>
+                    <MudTh>
+                        Grid Y
+                    </MudTh>
                     <MudTh>
                         Planets
                     </MudTh>
                     <MudTh>
                         Class
                     </MudTh>
+                    <MudTh>
+                        Color
+                    </MudTh>
                 </HeaderContent>
                 <RowTemplate>
-                    <MudTd DataLabel="Id" class="cursor-pointer">@context.Id</MudTd>
                     <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
-                    <MudTd DataLabel="Grid" class="cursor-pointer">
-                        @(GetZone(context.ZoneId).X 
-                          + "/" 
-                          + GetZone(context.ZoneId).Y)
+                    <MudTd DataLabel="GridX" class="cursor-pointer">
+                        @(GetZone(context.ZoneId).X)
                     </MudTd>
-                    <MudTd DataLabel="Planets" class="cursor-pointer">@(GetPlanetCount(context.Id))</MudTd>
+                    <MudTd DataLabel="GridY" class="cursor-pointer">
+                        @(GetZone(context.ZoneId).Y)
+                    </MudTd>
+                    <MudTd DataLabel="Planets" class="cursor-pointer">@(GetPlanetCount(context.ZoneId))</MudTd>
                     <MudTd DataLabel="Class" class="cursor-pointer">@context.StarClass</MudTd>
+                    <MudTd DataLabel="Color" class="cursor-pointer">@context.StarColor</MudTd>
                 </RowTemplate>
                 <PagerContent>
-                    <MudTablePager PageSizeOptions="new[] {10, 15, 20, 25, 50, 75, 100, int.MaxValue}"/>
+                    <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>
                 </PagerContent>
             </MudTable>
         </MudItem>
@@ -70,33 +76,61 @@ else
             @*Individual Star Display*@
             @if (currentStar != null)
             {
-                <MudCard>
-                    <MudCardHeader>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.h4">@currentStar.Name</MudText>
-                            <MudText Typo="Typo.body2">ID: @currentStar.Id</MudText>
-                            <MudText Typo="Typo.body2">Classification: @currentStar.StarClass</MudText>
-                            <MudText Typo="Typo.body2">Color: @currentStar.StarColor.ToDescriptionString()</MudText>
-                            <MudText Typo="Typo.body2"> Location: 
-                                @(GetZone(currentStar.ZoneId).X
-                                  + "/"
-                                  + GetZone(currentStar.ZoneId).Y)
-                            </MudText>
+                <MudTabs>
+                    <MudTabPanel Text="Star">
+                        <MudCard>
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h4">@currentStar.Name</MudText>
+                                    <MudText Typo="Typo.body2">
+                                        <strong>ID: </strong>@currentStar.Id
+                                    </MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                            <MudCardContent>
+                                <MudText Typo="Typo.body2">
+                                    <strong>Classification: </strong>@currentStar.StarClass
+                                </MudText>
+                                <MudText Typo="Typo.body2">
+                                    <strong>Color: </strong>@currentStar.StarColor.ToDescriptionString()
+                                </MudText>
+                                <MudText Typo="Typo.body2">
+                                    <strong>Location:</strong>
+                                    X:@(GetZone(currentStar.ZoneId).X
+                                        + " - Y:"
+                                        + GetZone(currentStar.ZoneId).Y)
+                                </MudText>
 
-                            @if (GetPlanetCount(currentStar.Id) > 0)
-                            {
-                                <MudText Typo="Typo.h6">Planets:</MudText>
-                                foreach (var planet in GetPlanets(currentStar.Id))
-                                {
-                                    <MudText Typo="Typo.body2">@planet - @GetPlanetName(planet.Id)</MudText>
-                                }
-                            }
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
 
-                    </MudCardContent>
-                </MudCard>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudTabPanel>
+                    @if (GetPlanetCount(currentStar.ZoneId) > 0)
+                    {
+                        <MudTabPanel Text="Planets">
+                            <MudCard>
+                                <MudCardHeader>
+                                    <CardHeaderContent>
+                                        <MudText>Planets around <strong>@currentStar.Name</strong></MudText>
+                                    </CardHeaderContent>
+                                </MudCardHeader>
+                                <MudCardContent Class="pa-0">
+                                    <MudTable Items="@GetPlanets(currentStar.ZoneId)" Context="planetContext" Hover="true" Breakpoint="Breakpoint.Sm">
+                                        <HeaderContent>
+                                            <MudTh>Name</MudTh>
+                                            <MudTh>Tech Level</MudTh>
+                                        </HeaderContent>
+                                        <RowTemplate>
+                                            <MudTd DataLabel="PlanetName" class="cursor-pointer">@planetContext.Name</MudTd>
+                                            <MudTd DataLabel="PlanetTechLevel" class="cursor-pointer">@GetTechLevel(planetContext.TechLevel).Type</MudTd>
+                                        </RowTemplate>
+                                    </MudTable>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudTabPanel>
+                    }
+
+                </MudTabs>
             }
         </MudItem>
     </MudGrid>
@@ -142,15 +176,21 @@ else
     {
         return zones.Find(z => z.Id == zoneId);
     }
-    
+
     private int GetPlanetCount(string zoneId)
     {
         return ZoneService.GetPlanetCount(zoneId).Result;
     }
-    
+
     private List<Planet> GetPlanets(string zoneId)
     {
         return PlanetService.GetPlanetsByZoneAsync(zoneId).Result;
+    }
+
+    private TechLevel GetTechLevel(string techLevelId)
+    {
+        var result = PlanetService.GetPlanetTechLevel(techLevelId).Result;
+        return result;
     }
 
     private bool StarFilterFunc(Star star) => StarFilter(star, searchString);

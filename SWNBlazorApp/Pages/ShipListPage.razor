@@ -117,7 +117,7 @@ else
                     @if (GetCrewCount(currentShip.Id) > 0)
                     {
                         <MudTabPanel Text="Crew">
-                            <MudCard Elevation="0" Outlined="true">
+                            <MudCard>
                                 <MudCardHeader>
                                     <CardHeaderContent>
                                         <MudText>
@@ -137,8 +137,8 @@ else
                                         </HeaderContent>
                                         <RowTemplate>
                                             <MudTd DataLabel="CharTitle" class="cursor-pointer">@GetCharacter(characterContext.CharacterId).Title</MudTd>
-                                            <MudTd DataLabel="CharTitle" class="cursor-pointer">@GetCharacter(characterContext.CharacterId).Name</MudTd>
-                                            <MudTd DataLabel="CharTitle" class="cursor-pointer">@GetCharacter(characterContext.CharacterId).Gender</MudTd>
+                                            <MudTd DataLabel="CharName" class="cursor-pointer">@GetCharacter(characterContext.CharacterId).Name</MudTd>
+                                            <MudTd DataLabel="CharGender" class="cursor-pointer">@GetCharacter(characterContext.CharacterId).Gender</MudTd>
                                         </RowTemplate>
                                         <PagerContent>
                                             <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>

@@ -12,6 +12,7 @@
 @inject UniverseService UniverseService
 @inject IMenuService MenuService
 @inject IDialogService DialogService
+@inject ISnackbar Snackbar
 
 <h1>Universes</h1>
 
@@ -38,7 +39,7 @@
                                 <MudCheckBox T="bool" Label="Overwrite Existing Universe?" @bind-Checked="_overwrite"/>
                             </MudItem>
                             <MudItem xs="4">
-                                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CreateUniverse())">Create Universe</MudButton>
+                                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => FireCreation())">Create Universe</MudButton>
                             </MudItem>
                         </MudGrid>
                     </MudForm>
@@ -91,16 +92,24 @@
     </MudItem>
 </MudGrid>
 
-@if (_createdNew)
-{
-    <p role="status">Universe Created in @((_end - _start).TotalMilliseconds)ms</p>
-}
+@* Loading *@
+<MudDialog @bind-IsVisible="_creationLoading" Options="null">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Build"/> Creating New Universe
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>Please wait @_newUniverseName is being created...</MudText>
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
+    </DialogContent>
+</MudDialog>
 
 @code {
-    private bool _createdNew;
     private bool _overwrite;
     private DateTime _start;
     private DateTime _end;
+    private TimeSpan _totalTime;
     private int _newGridX = 8;
     private int _newGridY = 10;
     MudForm _form;
@@ -110,7 +119,9 @@
     String _searchString;
     Universe _selectedUniverse;
     List<Universe> _universes = new();
-
+    bool _creationLoading;
+    void OpenLoadingModal() => _creationLoading = true;
+    void CloseLoadingModal() => _creationLoading = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -146,23 +157,41 @@
         return UniverseService.GetCharCount(universeId).Result;
     }
 
-    private async void CreateUniverse()
+    private void FireCreation()
+    {
+        OpenLoadingModal();
+        
+        _ = CreateUniverse();
+        
+        CloseLoadingModal();
+    }
+
+    private async Task CreateUniverse()
     {
         _start = DateTime.Now;
-        //TODO: fix
+
         Creation creation = new Creation();
         UniverseDefaultSettings uds = new UniverseDefaultSettings()
         {
             UniverseId = new Universe().Id,
             Name = _newUniverseName
         };
-
-        await creation.CreateFullUniverse(universeDefaultSettings: uds);
-
+        
+        var result = await creation.CreateFullUniverse(universeDefaultSettings: uds);
+        
+        if (result)
+        {
+            _end = DateTime.Now;
+            _totalTime = _end - _start;
+        
+            Snackbar.Add($"{_newUniverseName} created in {_totalTime.Seconds} seconds", Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add($"Failed to create {_newUniverseName} ", Severity.Error);
+        }
+        
         LoadUniverse(uds.UniverseId);
-
-        _end = DateTime.Now;
-        _createdNew = true;
 
         StateHasChanged();
         MenuService.NotifyChanged();
@@ -175,6 +204,8 @@
         Task<Universe> task = UniverseService.GetUniverseAsync(universeId);
         _universeName = task.Result == null ? "None" : task.Result.Name;
         await ProtectedSessionStore.SetAsync("SelectedUniverse", universeId);
+
+        Snackbar.Add($"{_universeName} loaded", Severity.Success);
 
         StateHasChanged();
         MenuService.NotifyChanged();
@@ -191,8 +222,11 @@
 
         if (result != true)
         {
+            Snackbar.Add($"Failed to delete {universeName}", Severity.Error);
             return;
         }
+
+        Snackbar.Add($"{universeName} deleted", Severity.Success);
 
         await UniverseService.DeleteUniverseAsync(universeId);
         StateHasChanged();

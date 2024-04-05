@@ -11,18 +11,12 @@ namespace SWNUniverseGenerator.DefaultSettings
     {
         public PlanetDefaultSettings(
             string universeId = null,
-            Tuple<Int32, Int32> planetRange = null, 
             List<Star> starList = null)
         {
             UniverseId = universeId;
-            PlanetRange = planetRange ?? new Tuple<Int32, Int32>(0, 3);
             Name = null;
             StarList = starList;
         }
-        /// <summary>
-        /// Store an upper and lower bound on the number of planets to be created
-        /// </summary>
-        public Tuple<Int32, Int32> PlanetRange { get; set; }
 
         /// <summary>
         /// Store the Name of a Planet for creation

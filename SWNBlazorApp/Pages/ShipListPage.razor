@@ -6,16 +6,19 @@
 @using SWNUniverseGenerator.Models
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @using MudBlazor.Extensions
+@using SWNUniverseGenerator.CreationTools
+@using SWNUniverseGenerator.DefaultSettings
 
 @inject ProtectedSessionStorage ProtectedSessionStore
 @inject UniverseService UniverseService
-@inject Universe CurrentUniverse
 @inject PlanetService PlanetService
 @inject StarService StarService
 @inject ShipService ShipService
 @inject ZoneService ZoneService
 @inject CrewMemberService CrewMemberService
 @inject CharacterService CharacterService
+@inject IMenuService MenuService
+@inject ISnackbar Snackbar
 
 <h1>Ship Data</h1>
 
@@ -30,128 +33,277 @@
 else
 {
     <MudGrid>
-        <MudItem xs="12">
-        </MudItem>
-        @* Ship List *@
-        <MudItem xs="8">
-            <MudTable T="Ship" Items="@_ships.OrderBy(c => c.Id)" Hover="true" SortLabel="Sort By" Filter="new Func<Ship, bool>(ShipFilterFunc)" OnRowClick="RowClickEvent" Breakpoint="Breakpoint.Sm">
-                <ToolBarContent>
-                    <MudText Typo="Typo.h6">Ship List</MudText>
-                    <MudSpacer/>
-                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                </ToolBarContent>
-                <HeaderContent>
-                    <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.Name)">Name</MudTableSortLabel>
-                    </MudTh>
-                    <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.HullId)">Class</MudTableSortLabel>
-                    </MudTh>
-                    <MudTh>
+    <MudItem xs="12" sm="8">
+        <MudExpansionPanels>
+            @* Ship Creation Expansion*@
+            <MudExpansionPanel Text="Ship Creation">
+                <MudGrid>
+                    @* Ship Creation Form*@
+                    <MudItem xs="5" sm="5">
+                        <MudPaper Class="pa-4">
+                            <MudForm @ref="form">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudTextField T="String" Label="Ship Name" Required="false" @bind-Value="_newShipName"/>
+                                    </MudItem>
+                                    
+                                    <MudItem xs="3">
+                                        <MudSelect T="Hull.HullTypeEnum" Label="Hull Type" Required="false" @bind-Value="_newShipHullType">
+                                            <MudSelectItem Value="@Hull.HullTypeEnum.Undefined">Undefined</MudSelectItem>
+                                            <MudSelectItem Value="@Hull.HullTypeEnum.StrikeFighter">Strike Fighter</MudSelectItem>
+                                            <MudSelectItem Value="@Hull.HullTypeEnum.Shuttle">Shuttle</MudSelectItem>
+                                            <MudSelectItem Value="@Hull.HullTypeEnum.PatrolBoat">Patrol Boat</MudSelectItem>
+                                            <MudSelectItem Value="@Hull.HullTypeEnum.FreeMerchant">Free Merchant</MudSelectItem>
+                                            <MudSelectItem Value="@Hull.HullTypeEnum.HeavyFrigate">Heavy Frigate</MudSelectItem>
+                                            <MudSelectItem Value="@Hull.HullTypeEnum.Corvette">Corvette</MudSelectItem>
+                                            <MudSelectItem Value="@Hull.HullTypeEnum.BulkFreighter">Bulk Freighter</MudSelectItem>
+                                            <MudSelectItem Value="@Hull.HullTypeEnum.FleetCruiser">Fleet Cruiser</MudSelectItem>
+                                            <MudSelectItem Value="@Hull.HullTypeEnum.Battleship">Battleship</MudSelectItem>
+                                            <MudSelectItem Value="@Hull.HullTypeEnum.Carrier">Carrier</MudSelectItem>
+                                            <MudSelectItem Value="@Hull.HullTypeEnum.SmallStation">Small Station</MudSelectItem>
+                                            <MudSelectItem Value="@Hull.HullTypeEnum.LargeStation">Large Station</MudSelectItem>
+                                        </MudSelect>
+                                    </MudItem>
+                                    
+                                    @* <MudItem xs="3"> *@
+                                    @*     <MudSelect T="Hull.H" Label="Hull Type" Required="false" @bind-Value="@newSds.HullType"> *@
+                                    @*         @foreach (var hullType in Enum.GetValues(typeof(Hull.HullTypeEnum))) *@
+                                    @*         { *@
+                                    @*             <MudSelectItem Value="@hullType"/> *@
+                                    @*         } *@
+                                    @*     </MudSelect> *@
+                                    @* </MudItem> *@
 
-                        <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.HullId)">Hull</MudTableSortLabel>
-                    </MudTh>
-                    <MudTh>
-                        Crew Count
-                    </MudTh>
-                    <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.Cp)">Combat Power</MudTableSortLabel>
-                    </MudTh>
-                    <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.CrewSkill)">Crew Skill</MudTableSortLabel>
-                    </MudTh>
-                    <MudTh>
-                        Location
-                    </MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
-                    <MudTd DataLabel="Class" class="cursor-pointer">@GetClass(context.HullId)</MudTd>
-                    <MudTd DataLabel="Hull" class="cursor-pointer">@GetHull(context.HullId)</MudTd>
-                    <MudTd DataLabel="CrewCount" class="cursor-pointer">@GetCrewCount(context.Id)</MudTd>
-                    <MudTd DataLabel="CombatPower" class="cursor-pointer">@context.Cp</MudTd>
-                    <MudTd DataLabel="ScrewSkill" class="cursor-pointer">@context.CrewSkill</MudTd>
-                    <MudTd DataLabel="Location" class="cursor-pointer">
-                        <MudIcon Icon="@GetLocationType(context.LocationId).icon" Color="@GetLocationType(context.LocationId).color"/> @GetLocationName(@context.LocationId)
-                    </MudTd>
-                </RowTemplate>
-                <PagerContent>
-                    <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>
-                </PagerContent>
-            </MudTable>
-        </MudItem>
-
-        <MudItem xs="4">
-            @*Individual Ship Display*@
-            @if (currentShip != null)
+                                    <MudItem xs="1">
+                                        <MudCheckBox T="bool" Label="Create Crew" Required="false" @bind-Value="_newShipCreateCrew"/>
+                                    </MudItem>
+                                    
+                                    @* <MudItem xs="3"> *@
+                                    @*     <MudTextField T="String" Label="Hair Color" Required="false" @bind-Value="newCharHairColor"/> *@
+                                    @* </MudItem> *@
+                                    
+                                </MudGrid>
+                            </MudForm>
+                        </MudPaper>
+                        <MudPaper Class="pa-4 mt-4">
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CreateShip())">Create Ship</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" OnClick="@(() => form.Reset())" Class="mx-2">Reset</MudButton>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4 mud-height-full">
+            <MudText Typo="Typo.subtitle2">@($"Errors ({_errors.Length})")</MudText>
+            @foreach (var error in _errors)
             {
-                <MudTabs>
-                    <MudTabPanel Text="Ship">
-                        <MudCard>
-                            <MudCardHeader>
-                                <CardHeaderContent>
-                                    <MudText Typo="Typo.h6">@currentShip.Name</MudText>
-                                    <MudText Typo="Typo.body2">@currentShip.Id</MudText>
-                                </CardHeaderContent>
-                            </MudCardHeader>
-                            <MudCardContent>
-                                @* @if(currentCharacter.Title != null) *@
-                                @* { *@
-                                @*     <MudText Typo="Typo.body1">Title: @currentCharacter.Title</MudText> *@
-                                @* } *@
-                                @* <MudText Typo="Typo.body1">Gender: @currentCharacter.Gender</MudText> *@
-                                @* <MudText Typo="Typo.body1">Skin Color: @currentCharacter.SkinCol</MudText> *@
-                                @* <MudText Typo="Typo.body1">Hair Style: @currentCharacter.HairStyle</MudText> *@
-                                @* <MudText Typo="Typo.body1">Hair Color: @currentCharacter.HairCol</MudText> *@
-                                @* <MudText Typo="Typo.body1">Eye Color: @currentCharacter.EyeCol</MudText> *@
-                                @* <MudText Typo="Typo.body1">Height: @currentCharacter.Height</MudText> *@
-                                @* <MudText Typo="Typo.body1">Ship: @GetShipName(currentCharacter.Id)</MudText> *@
-                                @* <MudText Typo="Typo.body1">Birth Planet: @GetPlanetName(@currentCharacter.BirthPlanetId)</MudText> *@
-                                @* <MudText Typo="Typo.body1">Current Planet: @GetPlanetName(@currentCharacter.CurrentLocationId)</MudText> *@
-                                @* <MudText Typo="Typo.body1">Initial Reaction: @currentCharacter.InitialReaction</MudText> *@
-                                @* <MudText Typo="Typo.body1">Crime Chance: @currentCharacter.CrimeChance%</MudText> *@
-
-                            </MudCardContent>
-                        </MudCard>
-                    </MudTabPanel>
-                    @if (GetCrewCount(currentShip.Id) > 0)
-                    {
-                        <MudTabPanel Text="Crew">
-                            <MudCard>
-                                <MudCardHeader>
-                                    <CardHeaderContent>
-                                        <MudText>
-                                            Crew Members on
-                                            <strong>
-                                                @currentShip.Name
-                                            </strong>
-                                        </MudText>
-                                    </CardHeaderContent>
-                                </MudCardHeader>
-                                <MudCardContent Class="pa-0">
-                                    <MudTable Items="@GetCrewMembers(currentShip.Id)" Context="characterContext" Hover="true" Breakpoint="Breakpoint.Sm">
-                                        <HeaderContent>
-                                            <MudTh>Title</MudTh>
-                                            <MudTh>Name</MudTh>
-                                            <MudTh>Gender</MudTh>
-                                        </HeaderContent>
-                                        <RowTemplate>
-                                            <MudTd DataLabel="CharTitle" class="cursor-pointer">@GetCharacter(characterContext.CharacterId).Title</MudTd>
-                                            <MudTd DataLabel="CharName" class="cursor-pointer">@GetCharacter(characterContext.CharacterId).Name</MudTd>
-                                            <MudTd DataLabel="CharGender" class="cursor-pointer">@GetCharacter(characterContext.CharacterId).Gender</MudTd>
-                                        </RowTemplate>
-                                        <PagerContent>
-                                            <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>
-                                        </PagerContent>
-                                    </MudTable>
-
-                                </MudCardContent>
-                            </MudCard>
-                        </MudTabPanel>
-                    }
-                </MudTabs>
+                <MudText Color="@Color.Error">@error</MudText>
             }
-        </MudItem>
+        </MudPaper>
+    </MudItem>
+    @* Ship List *@
+    <MudItem xs="7">
+        <MudTable T="Ship" Items="@_ships.OrderBy(c => c.Name)" Hover="true" SortLabel="Sort By" Filter="new Func<Ship, bool>(ShipFilterFunc)" OnRowClick="RowClickEvent" Breakpoint="Breakpoint.Sm">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Ship List</MudText>
+                <MudSpacer/>
+                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.Name)">Name</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.HullId)">Class</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+
+                    <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.HullId)">Hull</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    Crew Count
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.Cp)">Combat Power</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.CrewSkill)">Crew Skill</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    Location
+                </MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
+                <MudTd DataLabel="Class" class="cursor-pointer">@GetClass(context.HullId)</MudTd>
+                <MudTd DataLabel="Hull" class="cursor-pointer">@GetHull(context.HullId)</MudTd>
+                <MudTd DataLabel="CrewCount" class="cursor-pointer">@GetCrewCount(context.Id)</MudTd>
+                <MudTd DataLabel="CombatPower" class="cursor-pointer">@context.Cp</MudTd>
+                <MudTd DataLabel="ScrewSkill" class="cursor-pointer">@context.CrewSkill</MudTd>
+                <MudTd DataLabel="Location" class="cursor-pointer">
+                    <MudIcon Icon="@GetLocationType(context.LocationId).icon" Color="@GetLocationType(context.LocationId).color"/> @GetLocationName(@context.LocationId)
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>
+            </PagerContent>
+        </MudTable>
+    </MudItem>
+
+    <MudItem xs="5">
+        @*Individual Ship Display*@
+        @if (currentShip != null)
+        {
+            <MudTabs>
+                @* Ship Tab *@
+                <MudTabPanel Text="Ship">
+                    <MudCard>
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.h6">@currentShip.Name</MudText>
+                                <MudText Typo="Typo.body2">@currentShip.Id</MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudText></MudText>
+                        </MudCardContent>
+                    </MudCard>
+                </MudTabPanel>
+                @* Armaments Tab *@
+                <MudTabPanel Text="Armaments" Disabled="@(GetShipArmamentCount(currentShip.Id) == 0)">
+                    <MudCard>
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText>Armaments on <strong>@currentShip.Name</strong></MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent Class="pa-0">
+                            <MudTable Items="@GetShipArmaments(currentShip.Id).OrderBy(e => e.Type)" Context="armamentContext" Hover="true" Breakpoint="Breakpoint.Sm">
+                                <HeaderContent>
+                                    <MudTh>Type</MudTh>
+                                    <MudTh>Cost</MudTh>
+                                    <MudTh>Ammo Cost</MudTh>
+                                    <MudTh>Damage</MudTh>
+                                    <MudTh>Power</MudTh>
+                                    <MudTh>Mass</MudTh>
+                                    <MudTh>Hardpoints</MudTh>
+                                    <MudTh>Tech Level</MudTh>
+                                    <MudTh>Qualities</MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="Type" class="cursor-pointer">@armamentContext.Type</MudTd>
+                                    <MudTd DataLabel="Cost" class="cursor-pointer">@armamentContext.Cost</MudTd>
+                                    <MudTd DataLabel="AmmoCost" class="cursor-pointer">@armamentContext.AmmoCost</MudTd>
+                                    <MudTd DataLabel="Damage" class="cursor-pointer">@armamentContext.Dmg</MudTd>
+                                    <MudTd DataLabel="Power" class="cursor-pointer">@armamentContext.Power</MudTd>
+                                    <MudTd DataLabel="Mass" class="cursor-pointer">@armamentContext.Mass</MudTd>
+                                    <MudTd DataLabel="Hardpoints" class="cursor-pointer">@armamentContext.Hardpoints</MudTd>
+                                    <MudTd DataLabel="TechLevel" class="cursor-pointer">@armamentContext.TechLevel</MudTd>
+                                    <MudTd DataLabel="Qualities" class="cursor-pointer">@armamentContext.Qualities</MudTd>
+                                </RowTemplate>
+                            </MudTable>
+                        </MudCardContent>
+                    </MudCard>
+                </MudTabPanel>
+                @* Defenses Tab *@
+                <MudTabPanel Text="Defenses" Disabled="@(GetShipADefenseCount(currentShip.Id) == 0)">
+                    <MudCard>
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText>Armaments on <strong>@currentShip.Name</strong></MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent Class="pa-0">
+                            <MudTable Items="@GetShipDefenses(currentShip.Id).OrderBy(e => e.Type)" Context="defenseContext" Hover="true" Breakpoint="Breakpoint.Sm">
+                                <HeaderContent>
+                                    <MudTh>Type</MudTh>
+                                    <MudTh>Cost</MudTh>
+                                    <MudTh>Power</MudTh>
+                                    <MudTh>Mass</MudTh>
+                                    <MudTh>Effect</MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="Type" class="cursor-pointer">@defenseContext.Type</MudTd>
+                                    <MudTd DataLabel="Cost" class="cursor-pointer">@defenseContext.Cost</MudTd>
+                                    <MudTd DataLabel="Power" class="cursor-pointer">@defenseContext.Power</MudTd>
+                                    <MudTd DataLabel="Mass" class="cursor-pointer">@defenseContext.Mass</MudTd>
+                                    <MudTd DataLabel="TechLevel" class="cursor-pointer">@defenseContext.Effect</MudTd>
+                                </RowTemplate>
+                                <PagerContent>
+                                    <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>
+                                </PagerContent>
+                            </MudTable>
+                        </MudCardContent>
+                    </MudCard>
+                </MudTabPanel>
+                @* Fittings Tab *@
+                <MudTabPanel Text="Fittings" Disabled="@(GetShipFittingCount(currentShip.Id) == 0)">
+                    <MudCard>
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText>Armaments on <strong>@currentShip.Name</strong></MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent Class="pa-0">
+                            <MudTable Items="@GetShipFittings(currentShip.Id).OrderBy(e => e.Type)" Context="fittingContext" Hover="true" Breakpoint="Breakpoint.Sm">
+                                <HeaderContent>
+                                    <MudTh>Type</MudTh>
+                                    <MudTh>Cost</MudTh>
+                                    <MudTh>Power</MudTh>
+                                    <MudTh>Mass</MudTh>
+                                    <MudTh>Effect</MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="Type" class="cursor-pointer">@fittingContext.Type</MudTd>
+                                    <MudTd DataLabel="Cost" class="cursor-pointer">@fittingContext.Cost</MudTd>
+                                    <MudTd DataLabel="Power" class="cursor-pointer">@fittingContext.Power</MudTd>
+                                    <MudTd DataLabel="Mass" class="cursor-pointer">@fittingContext.Mass</MudTd>
+                                    <MudTd DataLabel="Hardpoints" class="cursor-pointer">@fittingContext.Effect</MudTd>
+                                </RowTemplate>
+                                <PagerContent>
+                                    <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>
+                                </PagerContent>
+                            </MudTable>
+                        </MudCardContent>
+                    </MudCard>
+                </MudTabPanel>
+                @* Crew Tab *@
+                <MudTabPanel Text="Crew" Disabled="@(GetCrewCount(currentShip.Id) == 0)">
+                    <MudCard>
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText>
+                                    Crew Members on
+                                    <strong>
+                                        @currentShip.Name
+                                    </strong>
+                                </MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent Class="pa-0">
+                            <MudTable Items="@GetCrewMembers(currentShip.Id)" Context="characterContext" Hover="true" Breakpoint="Breakpoint.Sm">
+                                <HeaderContent>
+                                    <MudTh>Title</MudTh>
+                                    <MudTh>Name</MudTh>
+                                    <MudTh>Gender</MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="CharTitle" class="cursor-pointer">@GetCharacter(characterContext.CharacterId).Title</MudTd>
+                                    <MudTd DataLabel="CharName" class="cursor-pointer">@GetCharacter(characterContext.CharacterId).Name</MudTd>
+                                    <MudTd DataLabel="CharGender" class="cursor-pointer">@GetCharacter(characterContext.CharacterId).Gender</MudTd>
+                                </RowTemplate>
+                                <PagerContent>
+                                    <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>
+                                </PagerContent>
+                            </MudTable>
+                        </MudCardContent>
+                    </MudCard>
+                </MudTabPanel>
+            </MudTabs>
+        }
+    </MudItem>
     </MudGrid>
 }
 
@@ -159,10 +311,16 @@ else
     private List<Character>? characters;
     private List<Ship>? _ships;
     private Ship currentShip;
+    private Universe currentUniverse;
     private string searchString;
     String universeName;
     MudForm form;
+    String[] _errors = { };
 
+    private string _newShipName;
+    private Hull.HullTypeEnum _newShipHullType = Hull.HullTypeEnum.Undefined;
+    private bool _newShipCreateCrew = false;
+    
 
     protected override async Task OnInitializedAsync()
     {
@@ -171,9 +329,12 @@ else
         {
             Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
             universeName = task.Result == null ? "None" : task.Result.Name;
-            CurrentUniverse = UniverseService.GetUniverseAsync(universeId.Value).Result;
+            currentUniverse = UniverseService.GetUniverseAsync(universeId.Value).Result;
             _ships = await ShipService.GetShipsAsync(universeId.Value);
         }
+        
+        StateHasChanged();
+        MenuService.NotifyChanged();
     }
 
     private (String icon, Color color) GetLocationType(string locId)
@@ -258,32 +419,55 @@ else
         return ShipService.GetShipHull(hullId).Result.HullType.ToDescriptionString();
     }
 
-
     private string GetClass(string hullId)
     {
         return ShipService.GetShipHull(hullId).Result.HullClass.ToDescriptionString();
     }
 
+    private int GetShipArmamentCount(string shipId)
+    {
+        return ShipService.GetShipArmamentCount(shipId).Result;
+    }
+
+    private int GetShipADefenseCount(string shipId)
+    {
+        return ShipService.GetShipDefenseCount(shipId).Result;
+    }
+
+    private int GetShipFittingCount(string shipId)
+    {
+        return ShipService.GetShipFittingCount(shipId).Result;
+    }
+
+    private List<Armament> GetShipArmaments(string shipId)
+    {
+        return ShipService.GetShipArmaments(shipId).Result;
+    }
+
+    private List<Defense> GetShipDefenses(string shipId)
+    {
+        return ShipService.GetShipDefenses(shipId).Result;
+    }
+
+    private List<Fitting> GetShipFittings(string shipId)
+    {
+        return ShipService.GetShipFittings(shipId).Result;
+    }
+
     private void CreateShip()
     {
-        //TODO: Fix
-        // Universe universe = UniverseService.GetUniverseAsync().Result;
-        //
-        // creation.CreateCharacter(universe, new CharacterDefaultSettings()
-        // {
-        //     First = newCharFirstName,
-        //     Last = newCharLastName,
-        //     Gender = newCharGender,
-        //     Age = new[] {newCharAge, newCharAge},
-        //     HairStyle = newCharHairStyle,
-        //     HairCol = newCharHairColor,
-        //     EyeCol = newCharEyeColor,
-        //     Title = newCharTitle,
-        //     Count = 1,
-        //     CrimeChance = new[] {newCharCrimeChance, newCharCrimeChance},
-        //     ShipId = newCharShipId
-        // });
-        // OnInitializedAsync();
+        Creation creation = new Creation();
+        creation.CreateShips(new ShipDefaultSettings()
+        {
+            UniverseId = currentUniverse.Id,
+            Count = 1,
+            Name = _newShipName,
+            CreateCrew = _newShipCreateCrew,
+            HullType = _newShipHullType,
+        });
+        
+        Snackbar.Add($"Ship created", Severity.Success);
+        OnInitializedAsync();
     }
 
     private bool ShipFilterFunc(Ship ship) => ShipFilter(ship, searchString);
@@ -298,5 +482,4 @@ else
             return true;
         return false;
     }
-
 }

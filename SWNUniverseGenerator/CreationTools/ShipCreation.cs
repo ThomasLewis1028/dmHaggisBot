@@ -136,6 +136,10 @@ namespace SWNUniverseGenerator.CreationTools
                                 }
                             }
                         }
+                        else
+                        {
+                            ship.Name = shipDefaultSettings.Name;
+                        }
 
                         using (var repo = new Repository<Planet>(context))
                         {

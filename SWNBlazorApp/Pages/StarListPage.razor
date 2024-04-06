@@ -105,31 +105,27 @@ else
                             </MudCardContent>
                         </MudCard>
                     </MudTabPanel>
-                    @if (GetPlanetCount(currentStar.ZoneId) > 0)
-                    {
-                        <MudTabPanel Text="Planets">
-                            <MudCard>
-                                <MudCardHeader>
-                                    <CardHeaderContent>
-                                        <MudText>Planets around <strong>@currentStar.Name</strong></MudText>
-                                    </CardHeaderContent>
-                                </MudCardHeader>
-                                <MudCardContent Class="pa-0">
-                                    <MudTable Items="@GetPlanets(currentStar.ZoneId)" Context="planetContext" Hover="true" Breakpoint="Breakpoint.Sm">
-                                        <HeaderContent>
-                                            <MudTh>Name</MudTh>
-                                            <MudTh>Tech Level</MudTh>
-                                        </HeaderContent>
-                                        <RowTemplate>
-                                            <MudTd DataLabel="PlanetName" class="cursor-pointer">@planetContext.Name</MudTd>
-                                            <MudTd DataLabel="PlanetTechLevel" class="cursor-pointer">@GetTechLevel(planetContext.TechLevel).Type</MudTd>
-                                        </RowTemplate>
-                                    </MudTable>
-                                </MudCardContent>
-                            </MudCard>
-                        </MudTabPanel>
-                    }
-
+                    <MudTabPanel Text="Planets" Disabled="@(GetPlanetCount(currentStar.ZoneId) == 0)">
+                        <MudCard>
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText>Planets around <strong>@currentStar.Name</strong></MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                            <MudCardContent Class="pa-0">
+                                <MudTable Items="@GetPlanets(currentStar.ZoneId)" Context="planetContext" Hover="true" Breakpoint="Breakpoint.Sm">
+                                    <HeaderContent>
+                                        <MudTh>Name</MudTh>
+                                        <MudTh>Tech Level</MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="PlanetName" class="cursor-pointer">@planetContext.Name</MudTd>
+                                        <MudTd DataLabel="PlanetTechLevel" class="cursor-pointer">@GetTechLevel(planetContext.TechLevel).Type</MudTd>
+                                    </RowTemplate>
+                                </MudTable>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudTabPanel>
                 </MudTabs>
             }
         </MudItem>

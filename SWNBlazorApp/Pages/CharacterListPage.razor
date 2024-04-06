@@ -36,7 +36,7 @@ else
             <MudExpansionPanel Text="Character Creation">
                 <MudGrid>
                     @* Character Creation Form*@
-                    <MudItem xs="5" sm="5">
+                    <MudItem xs="12" sm="12">
                         <MudPaper Class="pa-4">
                             <MudForm @ref="form">
                                 <MudGrid>
@@ -67,7 +67,7 @@ else
                                         <MudTextField T="String" Label="Eye Color" Required="false" @bind-Value="newCharEyeColor"/>
                                     </MudItem>
                                     <MudItem xs="3">
-                                        <MudTextField T="int" Label="Height" Required="false" @bind-Value="newCharHeight"/>
+                                        <MudTextField T="int" Label="Height (cm)" Required="false" @bind-Value="newCharHeight"/>
                                     </MudItem>
 
                                     <MudItem xs="6">
@@ -96,101 +96,6 @@ else
                         <MudPaper Class="pa-4 mt-4">
                             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CreateCharacter())">Create Character</MudButton>
                             <MudButton Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" OnClick="@(() => form.Reset())" Class="mx-2">Reset</MudButton>
-                        </MudPaper>
-                    </MudItem>
-
-                    @* Preview Card *@
-                    <MudItem xs="7" sm="7">
-                        <MudPaper Elevation="2">
-                            <MudCardHeader>
-                                <CardHeaderContent>
-                                    <MudText Typo="Typo.h6">@newCharFirstName @newCharLastName</MudText>
-                                    <MudText Typo="Typo.body2">User Id</MudText>
-                                </CardHeaderContent>
-                            </MudCardHeader>
-                            <MudCardContent>
-                                <MudGrid>
-                                    <MudItem xs="3">
-                                        <MudImage Src="images/abstract-user-flat-1.svg" Alt="No Image" Elevation="25" Fluid="true" Class="border-solid border-2 mud-border-primary pa-4"/>
-                                    </MudItem>
-                                    <MudItem xs="9">
-                                        <MudText Typo="Typo.body1">Title: @newCharTitle</MudText>
-                                        <MudGrid>
-                                            <MudItem xs="12">
-                                                <MudText Typo="Typo.h6">Physical Traits</MudText>
-                                            </MudItem>
-                                            <MudItem xs="3">
-                                                <MudText Typo="Typo.body1">
-                                                    <b>Gender:</b> @newCharGender
-                                                </MudText>
-                                            </MudItem>
-                                            <MudItem xs="3">
-                                                <MudText Typo="Typo.body1">
-                                                    <b>Skin Color:</b>
-                                                </MudText>
-                                            </MudItem>
-                                            <MudItem xs="6">
-                                                <MudText Typo="Typo.body1"><b>Height:</b> @newCharHeight cm</MudText>
-                                            </MudItem>
-
-                                            <MudItem xs="4">
-                                                <MudText Typo="Typo.body1">
-                                                    <b>Eye Color:</b> @newCharEyeColor
-                                                </MudText>
-                                            </MudItem>
-                                            <MudItem xs="4">
-                                                <MudText Typo="Typo.body1">
-                                                    <b>Hair Style:</b> @newCharHairStyle
-                                                </MudText>
-                                            </MudItem>
-                                            <MudItem xs="4">
-                                                <MudText Typo="Typo.body1">
-                                                    <b>Hair Color:</b> @newCharHairColor
-                                                </MudText>
-                                            </MudItem>
-
-
-                                            <MudDivider/>
-                                            <MudItem xs="12">
-                                                <MudText Typo="Typo.h6">Biographic Information</MudText>
-                                            </MudItem>
-                                            <MudItem xs="3">
-                                                <MudText Typo="Typo.body1">
-                                                    <b>Birth Planet:</b> @GetPlanetName(newCharBirthPlanetId)
-                                                </MudText>
-                                            </MudItem>
-
-                                            <MudDivider/>
-                                            <MudItem xs="12">
-                                                <MudText Typo="Typo.h6">Employment Information</MudText>
-                                            </MudItem>
-                                            <MudItem xs="12">
-                                                <MudText Typo="Typo.body1">
-                                                    <b>Ship:</b> @GetShipName(newCharShipId)
-                                                </MudText>
-                                            </MudItem>
-
-                                            <MudDivider/>
-                                            <MudItem xs="12">
-                                                <MudText Typo="Typo.h6">Admin View</MudText>
-                                            </MudItem>
-                                            <MudItem xs="12">
-                                                <MudText Typo="Typo.body1">
-                                                    <b>Current Planet:</b> @GetPlanetName(newCharCurrPlanetId)
-                                                </MudText>
-                                            </MudItem>
-                                            <MudItem xs="6">
-                                                <MudText Typo="Typo.body1">
-                                                    <b>Initial Reaction:</b> @newCharInitialReaction
-                                                </MudText>
-                                            </MudItem>
-                                            <MudItem xs="6">
-                                                <MudText Typo="Typo.body1"><b>Crime Chance:</b> @newCharCrimeChance%</MudText>
-                                            </MudItem>
-                                        </MudGrid>
-                                    </MudItem>
-                                </MudGrid>
-                            </MudCardContent>
                         </MudPaper>
                     </MudItem>
                 </MudGrid>

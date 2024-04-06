@@ -21,7 +21,7 @@
 
         @if (!string.IsNullOrEmpty(_universeName))
         {
-            <MudNavGroup Title="Universe" Icon="@Icons.Material.Filled.Hive" @bind-Expanded=_open>
+            <MudNavGroup Title="@_universeName" Icon="@Icons.Material.Filled.Hive" @bind-Expanded=_open>
                 <MudNavLink Href="/universe" Icon="@Icons.Material.Filled.Map">Star Map</MudNavLink>
                 <MudNavLink Href="/stars" Icon="@Icons.Material.Filled.BrightnessHigh">Stars</MudNavLink>
                 <MudNavLink Href="/planets" Icon="@Icons.Material.Filled.Public">Planets</MudNavLink>

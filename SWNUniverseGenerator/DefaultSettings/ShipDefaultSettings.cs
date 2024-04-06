@@ -12,6 +12,7 @@ namespace SWNUniverseGenerator.DefaultSettings
             Int32 count = 10,
             String homeId = null,
             String locationId = null,
+            String name = null,
             Hull.HullTypeEnum hullType = Hull.HullTypeEnum.Undefined,
             Hull.HullClassEnum hullClass = Hull.HullClassEnum.Undefined
         )
@@ -19,7 +20,7 @@ namespace SWNUniverseGenerator.DefaultSettings
             UniverseId = universeId;
             Count = count;
             Id = null;
-            Name = null;
+            Name = name;
             CreateCrew = true;
             CaptainId = null;
             PilotId = null;

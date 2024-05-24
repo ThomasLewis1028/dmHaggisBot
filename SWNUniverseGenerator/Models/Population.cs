@@ -16,5 +16,14 @@ namespace SWNUniverseGenerator.Models
         /// Stores the Description of the Population
         /// </summary>
         public String Description { get; set; }
+        
+        public int MinRoll { get; set; }
+        
+        public int MaxRoll { get; set; }
+        
+        public Int64 MinPop { get; set; }
+        
+        public Int64 MaxPop { get; set; }
+        
     }
 }

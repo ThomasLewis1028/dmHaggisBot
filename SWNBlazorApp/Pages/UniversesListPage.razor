@@ -71,6 +71,7 @@
                 <MudTh>Planet Count</MudTh>
                 <MudTh>Ship Count</MudTh>
                 <MudTh>Character Count</MudTh>
+                <MudTh>POI Count</MudTh>
                 <MudTh>Load Universe</MudTh>
                 <MudTh>Delete Universe</MudTh>
             </HeaderContent>
@@ -81,6 +82,7 @@
                 <MudTd DataLabel="PlanetCount">@GetPlanetCount(context.Id)</MudTd>
                 <MudTd DataLabel="ShipCount">@GetShipCount(context.Id)</MudTd>
                 <MudTd DataLabel="CharCount">@GetCharCount(context.Id)</MudTd>
+                <MudTd DataLabel="POICount">@GetPOICount(context.Id)</MudTd>
                 <MudTd>
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => LoadUniverse(context.Id))">Load</MudButton>
                 </MudTd>
@@ -155,6 +157,11 @@
     private int GetCharCount(string universeId)
     {
         return UniverseService.GetCharCount(universeId).Result;
+    }
+    
+    private int GetPOICount(string universeId)
+    {
+        return UniverseService.GetPOICount(universeId).Result;
     }
 
     private void FireCreation()

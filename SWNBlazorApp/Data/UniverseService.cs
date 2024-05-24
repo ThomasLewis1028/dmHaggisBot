@@ -81,5 +81,14 @@ public class UniverseService : DataService<UniverseService>
     
         return Task.FromResult(result);
     }
+    
+    public Task<int>  GetPOICount(string universeId)
+    {
+        int result;
+        var repo = new Repository<PointOfInterest>(_context);
+        result = repo.Count(c => c.UniverseId == universeId);
+    
+        return Task.FromResult(result);
+    }
 }
 

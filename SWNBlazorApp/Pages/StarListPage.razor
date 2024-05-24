@@ -126,7 +126,28 @@ else
                             </MudCardContent>
                         </MudCard>
                     </MudTabPanel>
-                </MudTabs>
+                        <MudTabPanel Text="POI" Disabled="@(GetPOICount(currentStar.Id) == 0)">
+                            <MudCard>
+                                <MudCardHeader>
+                                    <CardHeaderContent>
+                                        <MudText>Points of Interest around <strong>@currentStar.Name</strong></MudText>
+                                    </CardHeaderContent>
+                                </MudCardHeader>
+                                <MudCardContent Class="pa-0">
+                                    <MudTable Items="@GetPOIs(currentStar.Id)" Context="poiContext" Hover="true" Breakpoint="Breakpoint.Sm">
+                                        <HeaderContent>
+                                            <MudTh>Name</MudTh>
+                                            <MudTh>Type</MudTh>
+                                        </HeaderContent>
+                                        <RowTemplate>
+                                            <MudTd DataLabel="POIName" class="cursor-pointer">@poiContext.Name</MudTd>
+                                            <MudTd DataLabel="Type" class="cursor-pointer">@poiContext.Type</MudTd>
+                                        </RowTemplate>
+                                    </MudTable>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudTabPanel>
+                    </MudTabs>
             }
         </MudItem>
     </MudGrid>
@@ -172,12 +193,22 @@ else
     {
         return zones.Find(z => z.Id == zoneId);
     }
+    
+    private int GetPOICount(string starID)
+    {
+        return StarService.GetPOICountAsync(starID).Result;
+    }
+    
+    private List<PointOfInterest> GetPOIs(string starID)
+    {
+        return StarService.GetPOIsByStarAsync(starID).Result;
+    }
 
     private int GetPlanetCount(string zoneId)
     {
         return ZoneService.GetPlanetCount(zoneId).Result;
     }
-
+    
     private List<Planet> GetPlanets(string zoneId)
     {
         return PlanetService.GetPlanetsByZoneAsync(zoneId).Result;

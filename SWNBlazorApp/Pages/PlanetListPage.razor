@@ -73,17 +73,42 @@ else
             @*Individual Star Display*@
             @if (currentPlanet != null)
             {
-                <MudCard>
-                    <MudCardHeader>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.h4">@currentPlanet.Name</MudText>
-                            <MudText Typo="Typo.body2">ID: @currentPlanet.Id</MudText>
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
+                <MudTabs>
+                    <MudTabPanel Text="Planet">
+                        <MudCard>
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h4">@currentPlanet.Name</MudText>
+                                    <MudText Typo="Typo.body2">ID: @currentPlanet.Id</MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                            <MudCardContent>
 
-                    </MudCardContent>
-                </MudCard>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudTabPanel>
+                    <MudTabPanel Text="POI" Disabled="@(GetPOICount(currentPlanet.Id) == 0)">
+                        <MudCard>
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText>Points of Interest around <strong>@currentPlanet.Name</strong></MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                            <MudCardContent Class="pa-0">
+                                <MudTable Items="@GetPOIs(currentPlanet.Id)" Context="poiContext" Hover="true" Breakpoint="Breakpoint.Sm">
+                                    <HeaderContent>
+                                        <MudTh>Name</MudTh>
+                                        <MudTh>Type</MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="POIName" class="cursor-pointer">@poiContext.Name</MudTd>
+                                        <MudTd DataLabel="Type" class="cursor-pointer">@poiContext.Type</MudTd>
+                                    </RowTemplate>
+                                </MudTable>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudTabPanel>
+                </MudTabs>
             }
         </MudItem>
     </MudGrid>
@@ -123,6 +148,16 @@ else
     private Zone GetZone(string zoneId)
     {
         return StarService.GetZoneAsync(zoneId).Result;
+    }
+    
+    private int GetPOICount(string planetID)
+    {
+        return PlanetService.GetPOICountAsync(planetID).Result;
+    }
+    
+    private List<PointOfInterest> GetPOIs(string planetID)
+    {
+        return PlanetService.GetPOIsByStarAsync(planetID).Result;
     }
     
     private bool PlanetFilterFunc(Planet planet) => PlanetFilter(planet, searchString);

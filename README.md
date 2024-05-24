@@ -37,6 +37,8 @@ The SWNUniverseGenerator is the primary tool for the creation of the universe.
 
 The SWNUG relies on a set of JSON files to create the foundation for which the universe can be built upon. This includes personData.json, worldTags.json, starData.json and others to be added as I create the classes and gather information. Data such as character names and hairstyles or planet/star names were gathered from various sources including [Mongo Bay](https://names.mongabay.com/) or Wikipedia.
 
+City name list was taken from [Simple Maps](https://simplemaps.com/data/world-cities) using their free city list.
+
 The information is stored in a SQLite database file using a code-first methodology where I built the classes I needed, then build the database from those connections.
 
 There is a single entry-point to the data and that is through `Creation.cs` and all other function are marked as internal and private.

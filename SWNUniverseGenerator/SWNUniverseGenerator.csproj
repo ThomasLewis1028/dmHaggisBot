@@ -157,11 +157,19 @@
       <EmbeddedResource Include="Migrations\SeedData\WorldTag.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
+      <None Remove="Migrations\SeedData\CityNames.json" />
+      <EmbeddedResource Include="Migrations\SeedData\CityNames.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
       <Compile Remove="Migrations\20230301021722_1.cs" />
       <Compile Remove="Migrations\20230301021722_1.Designer.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="OBSOLETE\worldgen2.2a.c_" />
     </ItemGroup>
 
 </Project>

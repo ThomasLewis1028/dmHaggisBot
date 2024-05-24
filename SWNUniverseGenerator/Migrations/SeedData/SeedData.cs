@@ -290,6 +290,9 @@ namespace SWNUniverseGenerator.Migrations.SeedData
             names = JsonConvert.DeserializeObject<List<String>>(ReadManifestData<UniverseContext>("Preset.json"));
             AddNames(names, result, "Preset");
 
+            names = JsonConvert.DeserializeObject<List<String>>(ReadManifestData<UniverseContext>("CityNames.json"));
+            AddNames(names, result, "City");
+
             return result;
         }
 

@@ -239,7 +239,8 @@ public class CreationTests
         {
             UniverseId = uds.UniverseId,
             Name = "Planet McPlanetface",
-            StarList = new List<Star> { context.Stars.First(s => s.UniverseId == uds.UniverseId) }
+            Population = 1234,
+            StarList = new List<Star> { context.Stars.First(s => s.UniverseId == uds.UniverseId), }
         });
 
         Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
@@ -249,6 +250,7 @@ public class CreationTests
         Assert.IsTrue(context.Planets.First(s => s.UniverseId == uds.UniverseId).UniverseId == uds.UniverseId);
         Assert.IsTrue(
             context.Planets.Count(p => p.UniverseId == uds.UniverseId && p.Name == "Planet McPlanetface") == 1);
+        Assert.IsTrue(context.Planets.First(p => p.Name == "Planet McPlanetface").Population == 1234);
 
         var starMapPath = creation.CreateStarMap(uds.UniverseId);
 

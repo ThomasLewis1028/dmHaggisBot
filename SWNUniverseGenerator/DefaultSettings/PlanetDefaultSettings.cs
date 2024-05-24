@@ -11,7 +11,8 @@ namespace SWNUniverseGenerator.DefaultSettings
     {
         public PlanetDefaultSettings(
             string universeId = null,
-            List<Star> starList = null)
+            List<Star> starList = null,
+            Int64 population = -1)
         {
             UniverseId = universeId;
             Name = null;
@@ -31,5 +32,7 @@ namespace SWNUniverseGenerator.DefaultSettings
         public List<Star> StarList { get; set; }
         
         public string UniverseId { get; set; }
+        
+        public Int64 Population { get; set; }
     }
 }

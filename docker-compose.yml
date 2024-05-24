@@ -4,3 +4,6 @@
     build:
       context: .
       dockerfile: SWNBlazorApp/Dockerfile
+    ports:
+      - 80:80
+      - 443:443

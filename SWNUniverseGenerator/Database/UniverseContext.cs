@@ -76,9 +76,9 @@ namespace SWNUniverseGenerator.Database
                 .HasMany<Star>()
                 .WithOne();
 
-            modelBuilder.Entity<Zone>()
-                .HasMany<PointOfInterest>()
-                .WithOne();
+            // modelBuilder.Entity<Zone>()
+            //     .HasMany<PointOfInterest>()
+            //     .WithOne();
 
             // STARS
             modelBuilder.Entity<Star>().HasKey(e => new { e.Id });

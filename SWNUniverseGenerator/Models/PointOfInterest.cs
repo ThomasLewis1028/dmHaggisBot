@@ -33,6 +33,9 @@ namespace SWNUniverseGenerator.Models
         /// </summary>
         public String UniverseId { get; set; }
         
-        public String ZoneId { get; set; }
+        /// <summary>
+        /// A string value for the generic location a given PointOfInterest is tied to
+        /// </summary>
+        public String LocationId { get; set; }
     }
 }

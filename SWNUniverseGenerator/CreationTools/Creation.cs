@@ -46,7 +46,7 @@ namespace SWNUniverseGenerator.CreationTools
             
             await CreateCharacter(universeDefaultSettings.CharacterDefaultSettings);
             await CreateShips(universeDefaultSettings.ShipDefaultSettings);
-            // CreateStarMap(universeDefaultSettings.UniverseId);
+            await CreatePoi(universeDefaultSettings.PoiDefaultSettings);
 
             return true;
         }
@@ -217,11 +217,11 @@ namespace SWNUniverseGenerator.CreationTools
         /// Return the newly edited Universe
         /// </returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public bool CreatePoi(PoiDefaultSettings poiDefaultSettings)
+        public Task<bool>  CreatePoi(PoiDefaultSettings poiDefaultSettings)
         {
             new PoiCreation().AddPoi(poiDefaultSettings);
 
-            return true;
+            return Task.FromResult(true);
         }
 
         /// <summary>

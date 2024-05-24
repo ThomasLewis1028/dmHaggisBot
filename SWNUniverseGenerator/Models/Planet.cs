@@ -3,7 +3,7 @@
 namespace SWNUniverseGenerator.Models
 {
     /// <summary>
-    /// Planet object that stores all of the necessary information about a Planet
+    /// Planet object that stores all the necessary information about a Planet
     /// </summary>
     public class Planet : BaseEntity, ILocation
     {
@@ -54,7 +54,7 @@ namespace SWNUniverseGenerator.Models
         /// <summary>
         /// This implements a Population class from WorldInfo.cs and specifies the Population of a Planet
         /// </summary>
-        public String Population { get; set; }
+        public Int64 Population { get; set; }
 
         /// <summary>
         /// This implements a TechLevel class from WorldInfo.cs and specifies the Tech Level for a Planet
@@ -80,14 +80,6 @@ namespace SWNUniverseGenerator.Models
         /// This is a "Point of Contact" between the Primary Planet and a non-Primary Planet
         /// </summary>
         public String Contact { get; set; }
-
-        // public Society Society { get; set; }
-        //
-        // public Ruler Ruler { get; set; }
-        //
-        // public Ruled Ruled { get; set; }
-        //
-        // public Flavor Flavor { get; set; }
     }
 
     public class Society

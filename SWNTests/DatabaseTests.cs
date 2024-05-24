@@ -143,7 +143,7 @@ public class DatabaseTests
                 Biosphere = "Clouds",
                 Contact = "Bob",
                 Origin = "God",
-                Population = (10000 * i).ToString(),
+                Population = (10000 * i),
                 Relationship = "It's Complicated",
                 Temperature = "HOT",
                 IsPrimary = false,

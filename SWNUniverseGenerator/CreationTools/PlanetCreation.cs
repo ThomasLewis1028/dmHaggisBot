@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LibGit2Sharp;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
@@ -124,7 +123,13 @@ namespace SWNUniverseGenerator.CreationTools
                 planet.Biosphere = repo.Random().Id;
 
             using (var repo = new Repository<Population>(context))
-                planet.Population = repo.Random().Id;
+            {
+                var popRoll = Rand.Next(1, 7) + Rand.Next(1, 7);
+
+                Population pop = repo.Search(p => p.MinRoll <= popRoll && p.MaxRoll >= popRoll).Cast<Population>().First();
+                
+                planet.Population = Rand.NextInt64(pop.MinPop, pop.MaxPop);
+            }
 
             using (var repo = new Repository<TechLevel>(context))
                 planet.TechLevel = repo.Random().Id;

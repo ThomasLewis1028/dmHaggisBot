@@ -23,6 +23,7 @@ builder.Services.AddScoped<CharacterService>();
 builder.Services.AddScoped<UniverseService>();
 builder.Services.AddScoped<ZoneService>();
 builder.Services.AddScoped<PlanetService>();
+builder.Services.AddScoped<CityService>();
 builder.Services.AddScoped<PointOfInterestService>();
 builder.Services.AddScoped<ShipService>();
 builder.Services.AddScoped<StarService>();

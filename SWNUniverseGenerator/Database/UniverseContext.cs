@@ -21,6 +21,7 @@ namespace SWNUniverseGenerator.Database
         public DbSet<Hull> Hull { get; set; }
         public DbSet<Naming> Naming { get; set; }
         public DbSet<Planet> Planets { get; set; }
+        public DbSet<City> Cities { get; set; }
         public DbSet<PointOfInterest> PointsOfInterest { get; set; }
         public DbSet<PoiType> PoiTypes { get; set; }
         public DbSet<PoiOccupiedBy> PoiOccupiedBys { get; set; }
@@ -96,6 +97,15 @@ namespace SWNUniverseGenerator.Database
                 .HasOne<Zone>()
                 .WithMany()
                 .HasForeignKey(p => p.ZoneId)
+                .IsRequired();
+            
+            // CITIES
+            modelBuilder.Entity<City>().HasKey(e => new { e.Id });
+
+            modelBuilder.Entity<City>()
+                .HasOne<Planet>()
+                .WithMany()
+                .HasForeignKey(c => c.PlanetId)
                 .IsRequired();
 
             ShipModelCreating(modelBuilder);

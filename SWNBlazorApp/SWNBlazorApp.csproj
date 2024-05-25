@@ -66,4 +66,8 @@
       </EmbeddedResource>
     </ItemGroup>
 
+    <ItemGroup>
+      <AdditionalFiles Include="Pages\CityListPage.razor" />
+    </ItemGroup>
+
 </Project>

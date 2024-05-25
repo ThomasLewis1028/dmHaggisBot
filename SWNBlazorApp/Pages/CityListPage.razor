@@ -1,0 +1,123 @@
+@page "/cities"
+
+<PageTitle>Cities</PageTitle>
+
+@using SWNBlazorApp.Data
+@using SWNUniverseGenerator.DefaultSettings
+@using SWNUniverseGenerator.Models
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using SWNUniverseGenerator.CreationTools
+
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject UniverseService UniverseService
+@inject Universe CurrentUniverse
+@inject PlanetService PlanetService
+@inject CityService CityService
+@inject StarService StarService
+
+<h1>City List</h1>
+
+<p>All cities in @CurrentUniverse.Name</p>
+
+
+@if (cities == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="8">
+            <MudTable Items="@cities.OrderBy(c => c.Id)" Hover="true" SortLabel="Sort By" Filter="new Func<City, bool>(CityFilterFunc)" @bind-SelectedItem="currentCity">
+                <ToolBarContent>
+                    <MudText Typo="Typo.h6">City List</MudText>
+                    <MudSpacer/>
+                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<City, object>(x => x.Name)">City</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<City, object>(x => x.Population)">Population</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<City?, object>(x => GetPlanetName(x.PlanetId))">Planet</MudTableSortLabel>
+                    </MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
+                    <MudTd DataLabel="Population" class="cursor-pointer">
+                        @context.Population.ToString("##,###")
+                    </MudTd>
+                    <MudTd DataLabel="Planet" class="cursor-pointer">
+                        @(GetPlanetName(context.PlanetId))
+                    </MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager PageSizeOptions="new[] {10, 15, 20, 25, 50, 75, 100, int.MaxValue}"/>
+                </PagerContent>
+            </MudTable>
+        </MudItem>
+
+        <MudItem xs="4">
+            @*Individual Star Display*@
+            @if (currentCity != null)
+            {
+                <MudTabs>
+                    <MudTabPanel Text="City">
+                        <MudCard>
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h4">@currentCity.Name</MudText>
+                                    <MudText Typo="Typo.body2">ID: @currentCity.Id</MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                            <MudCardContent>
+
+                            </MudCardContent>
+                        </MudCard>
+                    </MudTabPanel>
+                </MudTabs>
+            }
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+    private List<City>? cities;
+    private City currentCity;
+    private string searchString;
+    private bool _isAdmin = false;
+    MudForm form;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var universeId = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        if (!string.IsNullOrEmpty(universeId.Value))
+        {
+            Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
+            CurrentUniverse = UniverseService.GetUniverseAsync(universeId.Value).Result;
+            cities = await CityService.GetCitiesAsync(universeId.Value);
+        }
+    }
+
+    private String GetPlanetName(String cityId)
+    {
+        return PlanetService.GetPlanetAsync(cityId).Result.Name;
+    }
+    private bool CityFilterFunc(City city) => CityFilter(city, searchString);
+
+    private bool CityFilter(City city, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (city.Name.Contains(this.searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (city.Id.Contains(this.searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}

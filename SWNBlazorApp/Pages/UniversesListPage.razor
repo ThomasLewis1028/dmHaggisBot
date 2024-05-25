@@ -81,7 +81,7 @@
                 <MudTd DataLabel="StarCount">@GetStarCount(context.Id)</MudTd>
                 <MudTd DataLabel="PlanetCount">@GetPlanetCount(context.Id)</MudTd>
                 <MudTd DataLabel="ShipCount">@GetShipCount(context.Id)</MudTd>
-                <MudTd DataLabel="CharCount">@GetCharCount(context.Id)</MudTd>
+                <MudTd DataLabel="CharCount">@GetCharCount(context.Id).ToString("##,###")</MudTd>
                 <MudTd DataLabel="POICount">@GetPOICount(context.Id)</MudTd>
                 <MudTd>
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => LoadUniverse(context.Id))">Load</MudButton>

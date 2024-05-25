@@ -12,7 +12,7 @@ namespace SWNUniverseGenerator.DefaultSettings
         public CityDefaultSettings(
             string universeId = null,
             List<Planet> planetList = null,
-            int population = -1)
+            long population = -1)
         {
             UniverseId = universeId;
             Name = null;
@@ -34,6 +34,6 @@ namespace SWNUniverseGenerator.DefaultSettings
         
         public string UniverseId { get; set; }
         
-        public int Population { get; set; }
+        public long Population { get; set; }
     }
 }

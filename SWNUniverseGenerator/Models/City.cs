@@ -9,19 +9,22 @@ namespace SWNUniverseGenerator.Models
             Id = this.GenerateId();
         }
         
-        public City(String name, String planetId)
+        public City(String name, String planetId, String universeId)
         {
             Id = this.GenerateId();
             Name = name;
             PlanetId = planetId;
+            UniverseId = universeId;
         }   
         
         public String Id { get; set; }
 
         public String Name { get; set; }
 
-        public String PlanetId { get; }
+        public String PlanetId { get; set; }
 
-        public Int32 Pop { get; set; }
+        public Int64 Population { get; set; }
+        
+        public String UniverseId { get; set; }
     }
 }

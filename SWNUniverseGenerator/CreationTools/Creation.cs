@@ -46,6 +46,7 @@ namespace SWNUniverseGenerator.CreationTools
             universeDefaultSettings.ShipDefaultSettings.UniverseId = universeDefaultSettings.UniverseId;
             universeDefaultSettings.CharacterDefaultSettings.UniverseId = universeDefaultSettings.UniverseId;
             universeDefaultSettings.PoiDefaultSettings.UniverseId = universeDefaultSettings.UniverseId;
+            universeDefaultSettings.CityDefaultSettings.UniverseId = universeDefaultSettings.UniverseId;
             
             CreateUniverse(universeDefaultSettings);
             CreateZones(universeDefaultSettings);
@@ -53,6 +54,8 @@ namespace SWNUniverseGenerator.CreationTools
             CreateStars(universeDefaultSettings.StarDefaultSettings);
             
             CreatePlanets(universeDefaultSettings.PlanetDefaultSettings);
+
+            CreateCities(universeDefaultSettings.CityDefaultSettings);
             
             await CreateCharacter(universeDefaultSettings.CharacterDefaultSettings);
             await CreateShips(universeDefaultSettings.ShipDefaultSettings);
@@ -156,6 +159,20 @@ namespace SWNUniverseGenerator.CreationTools
         {
             // Set the Universe to the Universe returned from PlanetCreation.AddPlanets and serialize/return it
             new PlanetCreation().AddPlanets(planetDefaultSettings);
+
+            return true;
+        }
+
+        /// <summary>
+        /// This method should receive the CityDefaultSettings
+        /// </summary>
+        /// <param name="cityDefaultSettings"></param>
+        /// <returns>
+        /// True
+        /// </returns>
+        public bool CreateCities(CityDefaultSettings cityDefaultSettings)
+        {
+            new CityCreation().AddCities(cityDefaultSettings);
 
             return true;
         }

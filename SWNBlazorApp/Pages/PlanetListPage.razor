@@ -40,6 +40,12 @@ else
                         <MudTableSortLabel SortBy="new Func<Planet, object>(x => x.Name)">Planet</MudTableSortLabel>
                     </MudTh>
                     <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Planet, object>(x => x.Population)">Population</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortBy="new Func<Planet, object>(x => GetCityCount(x.Id))">Cities</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
                         <MudTableSortLabel SortBy="new Func<Planet, object>(x => GetTechLevel(x.TechLevel).Type)">Tech Level</MudTableSortLabel>
                     </MudTh>
                     <MudTh>
@@ -51,7 +57,11 @@ else
                 </HeaderContent>
                 <RowTemplate>
                     <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
-                    <MudTd DataLabel="Grid" class="cursor-pointer">
+                    <MudTd DataLabel="Pop" class="cursor-pointer">@context.Population.ToString("##,###")</MudTd>
+                    <MudTd DataLabel="Cities" class="cursor-pointer">
+                        @GetCityCount(context.Id)
+                    </MudTd>
+                    <MudTd DataLabel="TechLevel" class="cursor-pointer">
                         @(GetTechLevel(context.TechLevel).Type)
                     </MudTd>
                     <MudTd DataLabel="Grid" class="cursor-pointer">
@@ -108,6 +118,27 @@ else
                             </MudCardContent>
                         </MudCard>
                     </MudTabPanel>
+                    <MudTabPanel Text="Cities" Disabled="@(GetCityCount(currentPlanet.Id) == 0)">
+                        <MudCard>
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText>Cities on <strong>@currentPlanet.Name</strong></MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                            <MudCardContent Class="pa-0">
+                                <MudTable Items="@GetCities(currentPlanet.Id)" Context="cityContext" Hover="true" Breakpoint="Breakpoint.Sm">
+                                    <HeaderContent>
+                                        <MudTh>Name</MudTh>
+                                        <MudTh>Population</MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="CityName" class="cursor-pointer">@cityContext.Name</MudTd>
+                                        <MudTd DataLabel="Pop" class="cursor-pointer">@cityContext.Population.ToString("##,###")</MudTd>
+                                    </RowTemplate>
+                                </MudTable>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudTabPanel>
                 </MudTabs>
             }
         </MudItem>
@@ -120,7 +151,7 @@ else
     private string searchString;
     private bool _isAdmin = false;
     MudForm form;
-    
+
     protected override async Task OnInitializedAsync()
     {
         var universeId = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
@@ -138,28 +169,39 @@ else
         var result = PlanetService.GetPlanetTechLevel(techLevelId).Result;
         return result;
     }
-    
+
     private String GetStarName(String zoneId)
     {
         var result = StarService.GetStarByZoneAsync(zoneId).Result;
         return StarService.GetStarAsync(result.Id).Result.Name;
     }
-    
+
     private Zone GetZone(string zoneId)
     {
         return StarService.GetZoneAsync(zoneId).Result;
     }
-    
+
     private int GetPOICount(string planetID)
     {
         return PlanetService.GetPOICountAsync(planetID).Result;
     }
-    
+
+
+    private int GetCityCount(string planetID)
+    {
+        return PlanetService.GetCityCountAsync(planetID).Result;
+    }
+
     private List<PointOfInterest> GetPOIs(string planetID)
     {
         return PlanetService.GetPOIsByStarAsync(planetID).Result;
     }
-    
+
+    private List<City> GetCities(string planetID)
+    {
+        return PlanetService.GetCitiesbyPlanetAsync(planetID).Result;
+    }
+
     private bool PlanetFilterFunc(Planet planet) => PlanetFilter(planet, searchString);
 
     private bool PlanetFilter(Planet planet, string searchString)

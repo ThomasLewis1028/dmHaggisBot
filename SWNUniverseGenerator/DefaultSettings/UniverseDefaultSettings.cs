@@ -23,6 +23,7 @@ namespace SWNUniverseGenerator.DefaultSettings
             CharacterDefaultSettings = new CharacterDefaultSettings(universeId: universeId);
             ShipDefaultSettings = new ShipDefaultSettings(universeId: universeId);
             PoiDefaultSettings = new PoiDefaultSettings(universeId: universeId);
+            CityDefaultSettings = new CityDefaultSettings(universeId: universeId);
         }
 
         /// <summary>
@@ -54,5 +55,7 @@ namespace SWNUniverseGenerator.DefaultSettings
         public CharacterDefaultSettings CharacterDefaultSettings { get; set; }
 
         public PoiDefaultSettings PoiDefaultSettings { get; set; }
+        
+        public CityDefaultSettings CityDefaultSettings { get; set; }
     }
 }

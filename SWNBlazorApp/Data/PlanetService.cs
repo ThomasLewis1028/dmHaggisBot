@@ -58,6 +58,15 @@ public class PlanetService : DataService<PlanetService>
     
         return Task.FromResult(result);
     }
+
+    public Task<int> GetCityCountAsync(string planetID)
+    {
+        int result;
+        var repo = new Repository<City>(_context);
+        result = repo.Count(c => c.PlanetId == planetID);
+    
+        return Task.FromResult(result);
+    }
     
     public Task<List<PointOfInterest>> GetPOIsByStarAsync(string planetID)
     {
@@ -65,6 +74,17 @@ public class PlanetService : DataService<PlanetService>
         var repo = new Repository<PointOfInterest>(_context);
         var entityList = repo.Search(c => c.LocationId == planetID).ToList();
         result = entityList.Cast<PointOfInterest>().ToList();
+        
+        return Task.FromResult(result);
+    }
+    
+    
+    public Task<List<City>> GetCitiesbyPlanetAsync(string planetID)
+    {
+        List<City> result;
+        var repo = new Repository<City>(_context);
+        var entityList = repo.Search(c => c.PlanetId == planetID).ToList();
+        result = entityList.Cast<City>().ToList();
         
         return Task.FromResult(result);
     }

@@ -17,6 +17,7 @@ namespace SWNUniverseGenerator.DefaultSettings
             UniverseId = universeId;
             Name = null;
             StarList = starList;
+            Population = population;
         }
 
         /// <summary>

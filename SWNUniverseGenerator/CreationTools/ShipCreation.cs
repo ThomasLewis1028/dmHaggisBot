@@ -226,7 +226,8 @@ namespace SWNUniverseGenerator.CreationTools
                                             UniverseId = shipDefaultSettings.UniverseId,
                                             Count = Rand.Next(hullCrewMin,
                                                 hullCrewMax + 1 - (shipDefaultSettings.CrewMemberIds?.Count ?? 0)),
-                                            ShipId = ship.Id
+                                            ShipId = ship.Id,
+                                            Balanced = (false,0)
                                         });
                             }
                             

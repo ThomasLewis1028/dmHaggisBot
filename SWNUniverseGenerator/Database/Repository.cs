@@ -67,6 +67,11 @@ namespace SWNUniverseGenerator.Database
                 .Count(query);
         }
 
+        public Int64 Sum(Expression<System.Func<TEntity, Int64>> query)
+        {
+            return _dbContext.Set<TEntity>().Sum(query);
+        }
+
         public TEntity GetById(string id)
         {
             return _dbContext.Set<TEntity>()

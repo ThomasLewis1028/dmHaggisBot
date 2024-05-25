@@ -8,7 +8,7 @@ namespace SWNUniverseGenerator.DefaultSettings
     /// </summary>
     public class CharacterDefaultSettings
     {
-        public CharacterDefaultSettings(Int32 count = 1000, string universeId = null)
+        public CharacterDefaultSettings(Int32 count = 10000, string universeId = null)
         {
             UniverseId = universeId;
             First = null;
@@ -22,6 +22,7 @@ namespace SWNUniverseGenerator.DefaultSettings
             Height = -1;
             Title = null;
             Count = count;
+            Balanced = (true, 10);
             Gender = Character.GenderEnum.Undefined;
             CrimeChance = null;
             ShipId = null;
@@ -92,6 +93,11 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// This value should be the number of times you will create a new character with the given values
         /// </summary>
         public Int32 Count { get; set; }
+        
+        /// <summary>
+        /// This value will determine if the generation should be truly random, or if it should balance out.
+        /// </summary>
+        public (bool Balanced, int Minimum) Balanced { get; set; }
         
         /// <summary>
         /// This value should be the range that you wish to randomly pick from to create a CrimeChance

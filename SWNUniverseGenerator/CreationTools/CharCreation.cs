@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
@@ -10,10 +11,15 @@ namespace SWNUniverseGenerator.CreationTools
     /// <summary>
     /// This class holds the functions for creating Characters and adding them to the Universe.
     /// </summary>
-    internal class CharCreation
+    internal class CharCreation : ContextService<CharCreation>
     {
         private static readonly Random Rand = new();
 
+        public CharCreation(UniverseContext context) : base(context)
+        {
+
+        }
+        
         /// <summary>
         /// This function handles all Character creation. Should receive a Universe to edit and a set of
         /// CharacterDefaultSettings that will be used to set defaults.
@@ -33,8 +39,7 @@ namespace SWNUniverseGenerator.CreationTools
             //     throw new Exception("Cannot combine balanced character creation with a specified number of characters");
 
 
-            using (var context = new UniverseContext())
-            {
+
                 // using (var nameRepo = new Repository<Naming>(context))
                 // {
                 //     maleNameGenerations.GenerateChain(nameRepo
@@ -51,13 +56,13 @@ namespace SWNUniverseGenerator.CreationTools
                 //         .ToList());
                 // }
 
-                using (var charRepo = new Repository<Character>(context))
+                using (var charRepo = new Repository<Character>(_context))
                 {
                     List<Character> characters = new();
 
                     if (characterDefaultSettings.Balanced.Balanced)
                     {
-                        using (var planetRepo = new Repository<Planet>(context))
+                        using (var planetRepo = new Repository<Planet>(_context))
                         {
                             var totalPop = planetRepo.Search(e => e.UniverseId == characterDefaultSettings.UniverseId).Cast<Planet>().Sum(e => e.Population);
                             var percentage = (double)characterDefaultSettings.Count / totalPop;
@@ -72,7 +77,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 while (cCount < max)
                                 {
                                     characterDefaultSettings.BirthPlanetId = planet.Id;
-                                    cCount = CreateCharacter(characterDefaultSettings, context, maleNameGenerations,
+                                    cCount = CreateCharacter(characterDefaultSettings, _context, maleNameGenerations,
                                         femaleNameGenerations, lastNameGenerations, charRepo, characters, cCount);
 
                                     if (cCount % 100 != 0) continue;
@@ -87,7 +92,7 @@ namespace SWNUniverseGenerator.CreationTools
                         var cCount = 0;
                         while (cCount < characterDefaultSettings.Count)
                         {
-                            cCount = CreateCharacter(characterDefaultSettings, context, maleNameGenerations,
+                            cCount = CreateCharacter(characterDefaultSettings, _context, maleNameGenerations,
                                 femaleNameGenerations, lastNameGenerations, charRepo, characters, cCount);
                             
                             if (cCount % 100 == 0)
@@ -101,7 +106,6 @@ namespace SWNUniverseGenerator.CreationTools
                     charRepo.UpdateRange(characters);
                     characters.Clear();
                 }
-            }
         }
 
         private static int CreateCharacter(CharacterDefaultSettings characterDefaultSettings, UniverseContext context,

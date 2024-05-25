@@ -20,14 +20,13 @@ namespace SWNUniverseGenerator.CreationTools
     /// Error handling is done inside the Creation tools themselves besides checking if the files exist or if the
     /// necessary "parents" have been created
     /// </summary>
-    public class Creation
+    public class Creation: ContextService<Creation>
     {
-        protected readonly ILogger<Creation> _logger;
+        private static readonly Random Rand = new();
 
-        public Creation()
+        public Creation(UniverseContext context) : base(context)
         {
-            var loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
-            _logger = loggerFactory.CreateLogger<Creation>();
+
         }
         
         /// <summary>
@@ -69,7 +68,6 @@ namespace SWNUniverseGenerator.CreationTools
         /// <returns></returns>
         public bool CreateUniverse(UniverseDefaultSettings universeDefaultSettings)
         {
-            using var context = new UniverseContext();
             
             // Create the Universe with the values specified, or defaults
             var universe = new Universe
@@ -85,7 +83,7 @@ namespace SWNUniverseGenerator.CreationTools
                 universeDefaultSettings.UniverseId = universe.Id;
             
             // Add the Universe to the database
-            using (var univRepo = new Repository<Universe>(context))
+            using (var univRepo = new Repository<Universe>(_context))
                 univRepo.Add(universe);
 
             return true;
@@ -97,8 +95,6 @@ namespace SWNUniverseGenerator.CreationTools
         /// <param name="universeDefaultSettings"></param>
         public bool CreateZones(UniverseDefaultSettings universeDefaultSettings)
         {
-            using var context = new UniverseContext();
-
             List<Zone> zones = new();
             // Add the Zones to the Universe
             for (var i = 0; i < universeDefaultSettings.GridX; i++)
@@ -116,7 +112,7 @@ namespace SWNUniverseGenerator.CreationTools
                 }
             }
 
-            using var zoneRepo = new Repository<Zone>(context);
+            using var zoneRepo = new Repository<Zone>(_context);
             bool result = zoneRepo.AddRange(zones);
 
             return result;
@@ -136,7 +132,7 @@ namespace SWNUniverseGenerator.CreationTools
         public bool CreateStars(StarDefaultSettings starDefaultSettings)
         {
             // Set the Universe to the Universe returned from StarCreation.AddStars and serialize/return it
-            new StarCreation().AddStars(starDefaultSettings);
+            new StarCreation(_context).AddStars(starDefaultSettings);
 
             return true;
         }
@@ -155,7 +151,7 @@ namespace SWNUniverseGenerator.CreationTools
         public bool CreatePlanets(PlanetDefaultSettings planetDefaultSettings)
         {
             // Set the Universe to the Universe returned from PlanetCreation.AddPlanets and serialize/return it
-            new PlanetCreation().AddPlanets(planetDefaultSettings);
+            new PlanetCreation(_context).AddPlanets(planetDefaultSettings);
 
             return true;
         }
@@ -174,7 +170,7 @@ namespace SWNUniverseGenerator.CreationTools
         public Task<bool> CreateShips(ShipDefaultSettings shipDefaultSettings)
         {
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
-            new ShipCreation().AddShips(shipDefaultSettings);
+            new ShipCreation(_context).AddShips(shipDefaultSettings);
 
             return Task.FromResult(true);
         }
@@ -193,7 +189,7 @@ namespace SWNUniverseGenerator.CreationTools
         public Task<bool> CreateCharacter(CharacterDefaultSettings characterDefaultSettings)
         {
             // Set the Universe to the Universe returned from CharCreation.AddCharacters and serialize/return it
-            new CharCreation().AddCharacters(characterDefaultSettings);
+            new CharCreation(_context).AddCharacters(characterDefaultSettings);
 
             return Task.FromResult(true);
         }
@@ -230,7 +226,7 @@ namespace SWNUniverseGenerator.CreationTools
         /// <exception cref="FileNotFoundException"></exception>
         public Task<bool>  CreatePoi(PoiDefaultSettings poiDefaultSettings)
         {
-            new PoiCreation().AddPoi(poiDefaultSettings);
+            new PoiCreation(_context).AddPoi(poiDefaultSettings);
 
             return Task.FromResult(true);
         }
@@ -262,14 +258,14 @@ namespace SWNUniverseGenerator.CreationTools
         /// This method receives a universe file and generates an image in the background
         /// </summary>
         /// <param name="universeId"></param>
+        /// <param name="path"></param>
         /// <exception cref="FileNotFoundException"></exception>
-        public String CreateStarMap(String universeId)
+        public String CreateStarMap(string universeId, String path)
         {
             // If there are no Planets or Locations for the Problems to be tied to then throw an exception
-            using var context = new UniverseContext();
-            using var planRepo = new Repository<Planet>(context);
+            using var planRepo = new Repository<Planet>(_context);
 
-            return new StarMapCreation().GenerateStarMap(universeId, context);
+            return new StarMapCreation(_context).GenerateStarMap(universeId, path);
         }
 
         /// <summary>
@@ -290,43 +286,40 @@ namespace SWNUniverseGenerator.CreationTools
                 File.Delete(path
                             + ".png");
 
-            using (var context = new UniverseContext())
-            {
-                using (var crewRepo = new Repository<CrewMember>(context))
-                    crewRepo.DeleteRange(context.CrewMember.Where(c => c.UniverseId == universeId).ToList());
+                using (var crewRepo = new Repository<CrewMember>(_context))
+                    crewRepo.DeleteRange(_context.CrewMember.Where(c => c.UniverseId == universeId).ToList());
 
-                using (var charRepo = new Repository<Character>(context))
-                    charRepo.DeleteRange(context.Characters.Where(c => c.UniverseId == universeId).ToList());
+                using (var charRepo = new Repository<Character>(_context))
+                    charRepo.DeleteRange(_context.Characters.Where(c => c.UniverseId == universeId).ToList());
 
-                using (var armamentRepo = new Repository<ShipArmament>(context))
-                    armamentRepo.DeleteRange(context.ShipArmament.Where(c => c.UniverseId == universeId).ToList());
+                using (var armamentRepo = new Repository<ShipArmament>(_context))
+                    armamentRepo.DeleteRange(_context.ShipArmament.Where(c => c.UniverseId == universeId).ToList());
 
-                using (var defRepo = new Repository<ShipDefense>(context))
-                    defRepo.DeleteRange(context.ShipDefense.Where(c => c.UniverseId == universeId).ToList());
+                using (var defRepo = new Repository<ShipDefense>(_context))
+                    defRepo.DeleteRange(_context.ShipDefense.Where(c => c.UniverseId == universeId).ToList());
 
-                using (var fitRepo = new Repository<ShipFitting>(context))
-                    fitRepo.DeleteRange(context.ShipFitting.Where(c => c.UniverseId == universeId).ToList());
+                using (var fitRepo = new Repository<ShipFitting>(_context))
+                    fitRepo.DeleteRange(_context.ShipFitting.Where(c => c.UniverseId == universeId).ToList());
 
-                using (var shipRepo = new Repository<Ship>(context))
-                    shipRepo.DeleteRange(context.Ships.Where(c => c.UniverseId == universeId).ToList());
+                using (var shipRepo = new Repository<Ship>(_context))
+                    shipRepo.DeleteRange(_context.Ships.Where(c => c.UniverseId == universeId).ToList());
 
-                using (var poiRepo = new Repository<PointOfInterest>(context))
-                    poiRepo.DeleteRange(context.PointsOfInterest.Where(c => c.UniverseId == universeId).ToList());
+                using (var poiRepo = new Repository<PointOfInterest>(_context))
+                    poiRepo.DeleteRange(_context.PointsOfInterest.Where(c => c.UniverseId == universeId).ToList());
 
-                using (var planRepo = new Repository<Planet>(context))
-                    planRepo.DeleteRange(context.Planets.Where(c => c.UniverseId == universeId).ToList());
+                using (var planRepo = new Repository<Planet>(_context))
+                    planRepo.DeleteRange(_context.Planets.Where(c => c.UniverseId == universeId).ToList());
 
-                using (var starRepo = new Repository<Star>(context))
-                    starRepo.DeleteRange(context.Stars.Where(c => c.UniverseId == universeId).ToList());
+                using (var starRepo = new Repository<Star>(_context))
+                    starRepo.DeleteRange(_context.Stars.Where(c => c.UniverseId == universeId).ToList());
 
-                using (var zoneRepo = new Repository<Zone>(context))
-                    zoneRepo.DeleteRange(context.Zones.Where(c => c.UniverseId == universeId).ToList());
+                using (var zoneRepo = new Repository<Zone>(_context))
+                    zoneRepo.DeleteRange(_context.Zones.Where(c => c.UniverseId == universeId).ToList());
 
-                using var uniRepo = new Repository<Universe>(context);
+                using var uniRepo = new Repository<Universe>(_context);
                 uniRepo.Delete(universeId);
                 
                 return uniRepo.Count(u => u.Id == universeId) == 0;
-            }
 
         }
     }

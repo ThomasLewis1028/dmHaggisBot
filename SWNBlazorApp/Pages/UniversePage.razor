@@ -57,14 +57,10 @@
 
     private void GrabStarmap()
     {
-        var remotePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/{CurrentUniverse.Id}.svg";
+        var remotePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
         var localPath = $"{wwwrootPath + starmapPath}/{CurrentUniverse.Id}.svg";
 
-        if (!File.Exists(remotePath))
-        {
-            Creation creation = new Creation();
-            creation.CreateStarMap(CurrentUniverse.Id);
-        }
+        UniverseService.GrabStarmap(CurrentUniverse.Id, remotePath);
 
         if (!Directory.Exists(wwwrootPath + starmapPath))
             Directory.CreateDirectory(wwwrootPath + starmapPath);

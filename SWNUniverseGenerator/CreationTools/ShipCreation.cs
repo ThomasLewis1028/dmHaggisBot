@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.CreationTools
 {
-    internal class ShipCreation
+    internal class ShipCreation: ContextService<ShipCreation>
     {
-        private static readonly Random Rand = new ();
+        private static readonly Random Rand = new();
+
+        public ShipCreation(UniverseContext context) : base(context)
+        {
+
+        }
 
         public void AddShips(ShipDefaultSettings shipDefaultSettings)
         {
-            using (var context = new UniverseContext())
-            {
-                using (var shipRepo = new Repository<Ship>(context))
+
+                using (var shipRepo = new Repository<Ship>(_context))
                 {
                     List<Ship> ships = new();
                     List<ShipArmament> shipArmaments = new();
@@ -34,9 +39,9 @@ namespace SWNUniverseGenerator.CreationTools
 
                         Spec spec;
 
-                        using (var specRepo = new Repository<Spec>(context))
+                        using (var specRepo = new Repository<Spec>(_context))
                         {
-                            using (var hullRepo = new Repository<Hull>(context))
+                            using (var hullRepo = new Repository<Hull>(_context))
                             {
                                 IEntity hull;
                                 if (shipDefaultSettings.HullType == Hull.HullTypeEnum.Undefined)
@@ -107,7 +112,7 @@ namespace SWNUniverseGenerator.CreationTools
                                 var name = "";
                                 var nameType = Rand.Next(0, 100);
 
-                                using (var nameRepo = new Repository<Naming>(context))
+                                using (var nameRepo = new Repository<Naming>(_context))
                                 {
                                     if (nameType > 0)
                                     {
@@ -141,7 +146,7 @@ namespace SWNUniverseGenerator.CreationTools
                             ship.Name = shipDefaultSettings.Name;
                         }
 
-                        using (var repo = new Repository<Planet>(context))
+                        using (var repo = new Repository<Planet>(_context))
                         {
                             ship.HomeId = String.IsNullOrEmpty(shipDefaultSettings.HomeId)
                                 ? repo.Random(p => p.UniverseId == shipDefaultSettings.UniverseId).Id
@@ -158,9 +163,9 @@ namespace SWNUniverseGenerator.CreationTools
                         // ship.Cp = shipSpec.Cp;
 
                         // Set the armaments
-                        using (var armamentRepo = new Repository<ShipArmament>(context))
+                        using (var armamentRepo = new Repository<ShipArmament>(_context))
                         {
-                            foreach (var specArmament in context.SpecArmament.Where(s => s.SpecId == spec.Id))
+                            foreach (var specArmament in _context.SpecArmament.Where(s => s.SpecId == spec.Id))
                             {
                                 var shipArmament = new ShipArmament()
                                 {
@@ -175,9 +180,9 @@ namespace SWNUniverseGenerator.CreationTools
                         }
 
                         // Set the defenses
-                        using (var defRepo = new Repository<ShipDefense>(context))
+                        using (var defRepo = new Repository<ShipDefense>(_context))
                         {
-                            foreach (var specDefense in context.SpecDefense.Where(s => s.SpecId == spec.Id))
+                            foreach (var specDefense in _context.SpecDefense.Where(s => s.SpecId == spec.Id))
                             {
                                 var shipDefense = new ShipDefense()
                                 {
@@ -192,9 +197,9 @@ namespace SWNUniverseGenerator.CreationTools
                         }
 
                         // Set the fittings
-                        using (var fitRepo = new Repository<ShipFitting>(context))
+                        using (var fitRepo = new Repository<ShipFitting>(_context))
                         {
-                            foreach (var specFitting in context.SpecFitting.Where(s => s.SpecId == spec.Id))
+                            foreach (var specFitting in _context.SpecFitting.Where(s => s.SpecId == spec.Id))
                             {
                                 var shipFitting = new ShipFitting()
                                 {
@@ -212,7 +217,7 @@ namespace SWNUniverseGenerator.CreationTools
                         // Create the crew for the ship
                         if (shipDefaultSettings.CreateCrew)
                         {
-                            using (var hullRepo = new Repository<Hull>(context))
+                            using (var hullRepo = new Repository<Hull>(_context))
                             {
                                     var hullCrewMin = ((Hull)hullRepo.Search(h =>
                                         h.Id == ship.HullId).First()).CrewMin;
@@ -220,7 +225,7 @@ namespace SWNUniverseGenerator.CreationTools
                                     var hullCrewMax = ((Hull)hullRepo.Search(h =>
                                         h.Id == ship.HullId).First()).CrewMax;
 
-                                    new CharCreation().AddCharacters(
+                                    new CharCreation(_context).AddCharacters(
                                         new CharacterDefaultSettings
                                         {
                                             UniverseId = shipDefaultSettings.UniverseId,
@@ -232,7 +237,7 @@ namespace SWNUniverseGenerator.CreationTools
                             }
                             
                             // Set the crewType on the crewMembers
-                            using (var crewRepo = new Repository<CrewMember>(context))
+                            using (var crewRepo = new Repository<CrewMember>(_context))
                             {
                                 List<CrewMember> crewMembers = new();
                                 for (int i = 0; i < crewRepo.Count(c => c.ShipId == ship.Id); i++)
@@ -242,27 +247,27 @@ namespace SWNUniverseGenerator.CreationTools
                                     switch (i)
                                     {
                                         case 0:
-                                            crew = context.CrewMember.Skip(i).Take(1).First();
+                                            crew = _context.CrewMember.Skip(i).Take(1).First();
                                             crew.CrewType = CrewMember.CrewEnum.Captain;
                                             break;
                                         case 1:
-                                            crew = context.CrewMember.Skip(i).Take(1).First();
+                                            crew = _context.CrewMember.Skip(i).Take(1).First();
                                             crew.CrewType = CrewMember.CrewEnum.Pilot;
                                             break;
                                         case 2:
-                                            crew = context.CrewMember.Skip(i).Take(1).First();
+                                            crew = _context.CrewMember.Skip(i).Take(1).First();
                                             crew.CrewType = CrewMember.CrewEnum.Gunner;
                                             break;
                                         case 3:
-                                            crew = context.CrewMember.Skip(i).Take(1).First();
+                                            crew = _context.CrewMember.Skip(i).Take(1).First();
                                             crew.CrewType = CrewMember.CrewEnum.Engineer;
                                             break;
                                         case 4:
-                                            crew = context.CrewMember.Skip(i).Take(1).First();
+                                            crew = _context.CrewMember.Skip(i).Take(1).First();
                                             crew.CrewType = CrewMember.CrewEnum.Communications;
                                             break;
                                         default:
-                                            crew = context.CrewMember.Skip(i).Take(1).First();
+                                            crew = _context.CrewMember.Skip(i).Take(1).First();
                                             crew.CrewType = CrewMember.CrewEnum.Crew;
                                             break;
                                     }
@@ -276,7 +281,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                         // TODO: Fix this to work with new models
                         // If the ship has the Ship Bay/Fighter or Ship Bay/Frigate fitting, generate a ship to go in that space
-                        using (var fittingRepo = new Repository<Fitting>(context))
+                        using (var fittingRepo = new Repository<Fitting>(_context))
                         {
                             var fighterBayCount = shipFittings.Count(sf =>
                                 sf.FittingId == fittingRepo.Search(f => f.Type == "Ship bay/fighter").First().Id);
@@ -288,7 +293,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                             if (fighterBayCount > 0)
                             {
-                                new ShipCreation().AddShips(new ShipDefaultSettings
+                                AddShips(new ShipDefaultSettings
                                 {
                                     UniverseId = shipDefaultSettings.UniverseId,
                                     Count = fighterBayCount,
@@ -301,7 +306,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                             if (frigateBayCount > 0)
                             {
-                                new ShipCreation().AddShips(new ShipDefaultSettings
+                                AddShips(new ShipDefaultSettings
                                 {
                                     UniverseId = shipDefaultSettings.UniverseId,
                                     Count = frigateBayCount,
@@ -329,7 +334,6 @@ namespace SWNUniverseGenerator.CreationTools
                     shipDefenses.Clear();
                     shipFittings.Clear();
                 }
-            }
         }
     }
 }

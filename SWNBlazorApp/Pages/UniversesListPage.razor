@@ -176,15 +176,13 @@
     private async Task CreateUniverse()
     {
         _start = DateTime.Now;
-
-        Creation creation = new Creation();
         UniverseDefaultSettings uds = new UniverseDefaultSettings()
         {
             UniverseId = new Universe().Id,
             Name = _newUniverseName
         };
         
-        var result = await creation.CreateFullUniverse(universeDefaultSettings: uds);
+        var result = await UniverseService.CreateUniverse(uds);
         
         if (result)
         {

@@ -1,22 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
 
 namespace SWNUniverseGenerator.CreationTools
 {
-    internal class PoiCreation
+    internal class PoiCreation: ContextService<PoiCreation>
     {
-        private static readonly Random Rand = new Random();
+        private static readonly Random Rand = new();
+
+        public PoiCreation(UniverseContext context) : base(context)
+        {
+
+        }
 
         public bool AddPoi(PoiDefaultSettings poiDefaultSettings)
         {
-            using var context = new UniverseContext();
-            using var poiRepo = new Repository<PointOfInterest>(context);
-            using var starRepo = new Repository<Star>(context);
-            using var planetRepo = new Repository<Planet>(context);
+            using var poiRepo = new Repository<PointOfInterest>(_context);
+            using var starRepo = new Repository<Star>(_context);
+            using var planetRepo = new Repository<Planet>(_context);
 
             List<PointOfInterest> pointOfInterestList = new List<PointOfInterest>();
 
@@ -30,7 +35,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                 foreach (Star star in stars)
                 {
-                    pointOfInterestList.AddRange(AddPointOfInterest(star, poiDefaultSettings, poiRepo, context));
+                    pointOfInterestList.AddRange(AddPointOfInterest(star, poiDefaultSettings, poiRepo, _context));
                 }
                 
                 List<Planet> planets = planetRepo
@@ -40,7 +45,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                 foreach (Planet planet in planets)
                 {
-                    pointOfInterestList.AddRange(AddPointOfInterest(planet, poiDefaultSettings, poiRepo, context));
+                    pointOfInterestList.AddRange(AddPointOfInterest(planet, poiDefaultSettings, poiRepo, _context));
                 }
             }
             // Create on only the stars that are listed
@@ -54,7 +59,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                 foreach (Star star in stars)
                 {
-                    pointOfInterestList.AddRange(AddPointOfInterest(star, poiDefaultSettings, poiRepo, context));
+                    pointOfInterestList.AddRange(AddPointOfInterest(star, poiDefaultSettings, poiRepo, _context));
                 }
                 
                 List<Planet> planets = planetRepo
@@ -65,7 +70,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                 foreach (Planet planet in planets)
                 {
-                    pointOfInterestList.AddRange(AddPointOfInterest(planet, poiDefaultSettings, poiRepo, context));
+                    pointOfInterestList.AddRange(AddPointOfInterest(planet, poiDefaultSettings, poiRepo, _context));
                 }
             }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
@@ -11,10 +12,14 @@ namespace SWNUniverseGenerator.CreationTools
     /// <summary>
     /// This class holds all the necessary functions for creating Planets and adding them to the Universe
     /// </summary>
-    internal class PlanetCreation
+    internal class PlanetCreation: ContextService<PlanetCreation>
     {
         private static readonly Random Rand = new();
 
+        public PlanetCreation(UniverseContext context) : base(context)
+        {
+
+        }
         /// <summary>
         /// This function receives a Universe and a PlanetDefaultSettings to create planets based on
         /// specified information
@@ -26,11 +31,10 @@ namespace SWNUniverseGenerator.CreationTools
         /// </returns>
         public bool AddPlanets(PlanetDefaultSettings planetDefaultSettings)
         {
-            using var context = new UniverseContext();
 
             if (planetDefaultSettings.StarList == null)
             {
-                using (var starRepo = new Repository<Star>(context))
+                using (var starRepo = new Repository<Star>(_context))
                 {
                     planetDefaultSettings.StarList =
                         starRepo.Search(e => e.UniverseId == planetDefaultSettings.UniverseId).ToList().Cast<Star>()
@@ -42,7 +46,7 @@ namespace SWNUniverseGenerator.CreationTools
                 if (planetDefaultSettings.StarList.Count > 1 && !string.IsNullOrEmpty(planetDefaultSettings.Name))
                     throw new Exception("Cannot combine list of Stars and Named Planets");
 
-            using (var planetRepo = new Repository<Planet>(context))
+            using (var planetRepo = new Repository<Planet>(_context))
             {
                 List<Planet> planets = new();
 
@@ -60,7 +64,7 @@ namespace SWNUniverseGenerator.CreationTools
                     var pCount = 0;
 
                     while (pCount < pMax)
-                        pCount = CreatePlanet(planetDefaultSettings, context, planetRepo, star, pCount,
+                        pCount = CreatePlanet(planetDefaultSettings, _context, planetRepo, star, pCount,
                             planets);
 
                     planetRepo.AddRange(planets);

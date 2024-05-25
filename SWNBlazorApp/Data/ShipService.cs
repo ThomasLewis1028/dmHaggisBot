@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SWNUniverseGenerator.CreationTools;
 using SWNUniverseGenerator.Database;
+using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
 
 namespace SWNBlazorApp.Data;
@@ -105,5 +107,11 @@ public class ShipService : DataService<ShipService>
         var repo = new Repository<ShipFitting>(_context);
         var result = repo.Count(a => a.ShipId == shipId);
         return Task.FromResult(result);
+    }
+    
+    public void CreateShip(ShipDefaultSettings defaultSettings)
+    {
+        Creation creation = new Creation(_context);
+        creation.CreateShips(defaultSettings);
     }
 }

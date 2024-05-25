@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SWNUniverseGenerator;
+using SWNUniverseGenerator.CreationTools;
 using SWNUniverseGenerator.Database;
+using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
 
 namespace SWNBlazorApp.Data;
@@ -39,4 +41,11 @@ public class CharacterService : DataService<CharacterService>
         
         return Task.FromResult(true);
     } 
+    
+    public void CreateCharacter(CharacterDefaultSettings characterDefaultSettings)
+    {
+        //TODO: Fix
+        Creation creation = new Creation(_context);
+        creation.CreateCharacter(characterDefaultSettings);
+    }
 }

@@ -456,16 +456,15 @@ else
 
     private void CreateShip()
     {
-        Creation creation = new Creation();
-        creation.CreateShips(new ShipDefaultSettings()
+        var shipDefaultSettings = new ShipDefaultSettings()
         {
             UniverseId = currentUniverse.Id,
             Count = 1,
             Name = _newShipName,
             CreateCrew = _newShipCreateCrew,
             HullType = _newShipHullType,
-        });
-        
+        };
+        ShipService.CreateShip(shipDefaultSettings);
         Snackbar.Add($"Ship created", Severity.Success);
         OnInitializedAsync();
     }

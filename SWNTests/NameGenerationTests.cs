@@ -13,56 +13,53 @@ namespace SWNTests;
 public class NameGenerationTests
 {
     
+    protected UniverseContext _context;
+
     /// <summary>
     /// Runs 1 time prior to all tests for setup 
     /// </summary>
     /// <param name="testContext"></param>
     [ClassInitialize]
-    public static async Task ClassInitialize(TestContext testContext)
+    public void ClassInitialize(TestContext testContext)
     {
+        _context = new UniverseContext();
     }
 
     /// <summary>
     /// Runs 1 time when tests are all complete and used for cleanup tasks
     /// </summary>
     [ClassCleanup]
-    public static async Task ClassCleanup()
+    public void ClassCleanup()
     {
     }
     
     [TestMethod, TestCategory("UnitTest")]
     public void TestGenerateChain()
     {
-        using (var context = new UniverseContext())
+        using (var nameRepo = new Repository<Naming>(_context))
         {
-            using (var nameRepo = new Repository<Naming>(context))
-            {
-                var entityList = nameRepo.Search(n => n.NameType == "MaleName").ToList();
-                var maleList = entityList.Cast<Naming>().ToList();
-                NameGeneration nameGeneration = new NameGeneration();
-                var actual = nameGeneration.GenerateChain(maleList);
-                
-                Assert.AreEqual(true, actual);                
-            }
+            var entityList = nameRepo.Search(n => n.NameType == "MaleName").ToList();
+            var maleList = entityList.Cast<Naming>().ToList();
+            NameGeneration nameGeneration = new NameGeneration();
+            var actual = nameGeneration.GenerateChain(maleList);
+            
+            Assert.AreEqual(true, actual);                
         }
     }
     
     [TestMethod, TestCategory("UnitTest")]
     public void TestGenerateName()
     {
-        using (var context = new UniverseContext())
+        using (var nameRepo = new Repository<Naming>(_context))
         {
-            using (var nameRepo = new Repository<Naming>(context))
-            {
-                var entityList = nameRepo.Search(n => n.NameType == "MaleName").ToList();
-                var maleList = entityList.Cast<Naming>().ToList();
-                NameGeneration nameGeneration = new NameGeneration();
-                var result = nameGeneration.GenerateChain(maleList);
-                Assert.AreEqual(true, result); 
+            var entityList = nameRepo.Search(n => n.NameType == "MaleName").ToList();
+            var maleList = entityList.Cast<Naming>().ToList();
+            NameGeneration nameGeneration = new NameGeneration();
+            var result = nameGeneration.GenerateChain(maleList);
+            Assert.AreEqual(true, result); 
 
-                var actual = nameGeneration.GenerateName();  
-                Assert.IsTrue(Regex.IsMatch(actual, "\\w"));
-            }
+            var actual = nameGeneration.GenerateName();  
+            Assert.IsTrue(Regex.IsMatch(actual, "\\w"));
         }
      
     }
@@ -74,20 +71,16 @@ public class NameGenerationTests
     [DataRow ("Z", "^(Z)[a-zA-Z]*$")]
     public void TestGenerateNameFirstCharSame(string search, string expected)
     {
-        using (var context = new UniverseContext())
+        using (var nameRepo = new Repository<Naming>(_context))
         {
-            using (var nameRepo = new Repository<Naming>(context))
-            {
-                var entityList = nameRepo.Search(n => n.NameType == "MaleName" && n.Name.StartsWith(search)).ToList();
-                var maleList = entityList.Cast<Naming>().ToList();
-                NameGeneration nameGeneration = new NameGeneration();
-                var result = nameGeneration.GenerateChain(maleList);
-                Assert.AreEqual(true, result); 
+            var entityList = nameRepo.Search(n => n.NameType == "MaleName" && n.Name.StartsWith(search)).ToList();
+            var maleList = entityList.Cast<Naming>().ToList();
+            NameGeneration nameGeneration = new NameGeneration();
+            var result = nameGeneration.GenerateChain(maleList);
+            Assert.AreEqual(true, result); 
 
-                var actual = nameGeneration.GenerateName();
-                Assert.IsTrue(Regex.IsMatch(actual, expected));
-            }
+            var actual = nameGeneration.GenerateName();
+            Assert.IsTrue(Regex.IsMatch(actual, expected));
         }
-     
     }
 }

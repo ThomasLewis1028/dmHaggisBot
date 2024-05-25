@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.Models;
 using VectSharp;
@@ -12,20 +13,26 @@ using VectSharp.SVG;
 
 namespace SWNUniverseGenerator.CreationTools
 {
-    public class StarMapCreation
+    public class StarMapCreation: ContextService<StarMapCreation>
     {
         private static readonly Random Rand = new();
+
+        public StarMapCreation(UniverseContext context) : base(context)
+        {
+
+        }
+        
         private const float Hypotenuse = 150; // hypotenuse for each side of the hex
         private const int IntAngle = 30; // angle in degrees because I can actually write that down
         private const double IntRadians = IntAngle * (Math.PI / 180); // degrees to radians
         private static readonly float Cosign = (float)Math.Cos(IntRadians); // cos(30)
         private static readonly float Sine = (float)Math.Sin(IntRadians); // sin(30)
 
-        public String GenerateStarMap(string universeId, UniverseContext universeContext)
+        public String GenerateStarMap(string universeId, string path)
         {
             int gridX;
             int gridY;
-            using (var univRepo = new Repository<Universe>(universeContext))
+            using (var univRepo = new Repository<Universe>(_context))
             {
                 gridX = ((Universe)univRepo.Search(u => u.Id == universeId).First()).GridX;
                 gridY = ((Universe)univRepo.Search(u => u.Id == universeId).First()).GridY;
@@ -126,19 +133,19 @@ namespace SWNUniverseGenerator.CreationTools
                 g.StrokePath(hexPath, gridPen, gridPenThickness);
 
                 // Go through each zone
-                using (var zoneRepo = new Repository<Zone>(universeContext))
+                using (var zoneRepo = new Repository<Zone>(_context))
                 {
                     String zoneId = zoneRepo.Search(z => z.UniverseId == universeId
                                                          && z.X == hex.X
                                                          && z.Y == hex.Y)
                         .First().Id;
 
-                    var planets = new Repository<Planet>(universeContext)
+                    var planets = new Repository<Planet>(_context)
                         .Search(p => p.ZoneId == zoneId).ToList();
 
                     Star star = null;
-                    if (new Repository<Star>(universeContext).Count(s => s.ZoneId == zoneId) > 0)
-                        star = (Star)new Repository<Star>(universeContext)
+                    if (new Repository<Star>(_context).Count(s => s.ZoneId == zoneId) > 0)
+                        star = (Star)new Repository<Star>(_context)
                             .Search(s => s.ZoneId == zoneId).ToList().First();
 
                     // Planets
@@ -222,13 +229,8 @@ namespace SWNUniverseGenerator.CreationTools
                 }
             }
 
-            var svgPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-                          + "/"
-                          + universeId
-                          + ".svg";
-
+            var svgPath = path + "/" + universeId + ".svg";
             grid.SaveAsSVG(svgPath);
-
             return svgPath;
         }
 

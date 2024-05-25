@@ -2,6 +2,7 @@
 using LibGit2Sharp;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Configuration;
 using SWNUniverseGenerator.Migrations;
 using SWNUniverseGenerator.Migrations.SeedData;
 using SWNUniverseGenerator.Models;
@@ -11,6 +12,8 @@ namespace SWNUniverseGenerator.Database
 {
     public class UniverseContext : DbContext
     {
+        protected readonly IConfiguration Configuration;
+        
         public DbSet<Armament> Armament { get; set; }
         public DbSet<Atmosphere> Atmosphere { get; set; }
         public DbSet<Biosphere> Biosphere { get; set; }
@@ -53,11 +56,9 @@ namespace SWNUniverseGenerator.Database
 
         public string DbPath { get; }
 
-        public UniverseContext()
+        public UniverseContext(IConfiguration configuration)
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = System.IO.Path.Join(path, "universe.db");
+            Configuration = configuration;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -312,7 +313,6 @@ namespace SWNUniverseGenerator.Database
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options) =>
-            options
-                .UseSqlite($"Data Source={DbPath}");
+            options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
     }
 }

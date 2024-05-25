@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SWNUniverseGenerator.CreationTools;
 using SWNUniverseGenerator.Database;
@@ -13,6 +15,26 @@ namespace SWNTests;
 [TestClass]
 public class CreationTests
 {
+    protected UniverseContext _context;
+
+    /// <summary>
+    /// Runs 1 time prior to all tests for setup 
+    /// </summary>
+    /// <param name="testContext"></param>
+    [ClassInitialize]
+    public void ClassInitialize(TestContext testContext)
+    {
+        _context = new UniverseContext();
+    }
+
+    /// <summary>
+    /// Runs 1 time when tests are all complete and used for cleanup tasks
+    /// </summary>
+    [ClassCleanup]
+    public void ClassCleanup()
+    {
+    }
+    
     /// <summary>
     /// Test the creation of a grid with a width of 20x20
     /// </summary>
@@ -23,8 +45,7 @@ public class CreationTests
     [DataRow("Test Grid Creation", true)]
     public void TestGridCreation(String universeName, Boolean cleanup)
     {
-        using var context = new UniverseContext();
-        Creation creation = new Creation();
+        Creation creation = new Creation(_context);
         UniverseDefaultSettings uds = new UniverseDefaultSettings(
             name: universeName,
             universeId: new Universe().Id);
@@ -32,11 +53,12 @@ public class CreationTests
         creation.CreateUniverse(universeDefaultSettings: uds);
         creation.CreateZones(universeDefaultSettings: uds);
 
-        Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Zones.Count(s => s.UniverseId == uds.UniverseId) > 0);
 
-        var starMapPath = creation.CreateStarMap(uds.UniverseId);
-        var starMapPng = new StarMapCreation().GetPng(uds.UniverseId);
+        var remotePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
+        var starMapPath = creation.CreateStarMap(remotePath, uds.UniverseId);
+        var starMapPng = new StarMapCreation(_context).GetPng(uds.UniverseId);
 
         Assert.IsTrue(File.Exists(starMapPath));
         Assert.IsTrue(File.Exists(starMapPng));
@@ -45,8 +67,8 @@ public class CreationTests
         {
             creation.DeleteUniverse(uds.UniverseId);
 
-            Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
             Assert.IsFalse(File.Exists(starMapPath));
             Assert.IsFalse(File.Exists(starMapPng));
         }
@@ -62,8 +84,7 @@ public class CreationTests
     [DataRow("Test Wide Grid Creation", true)]
     public void TestWideGridCreation(String universeName, Boolean cleanup)
     {
-        using var context = new UniverseContext();
-        Creation creation = new Creation();
+        Creation creation = new Creation(_context);
         UniverseDefaultSettings uds = new UniverseDefaultSettings
         {
             UniverseId = new Universe().Id,
@@ -75,12 +96,13 @@ public class CreationTests
         creation.CreateUniverse(universeDefaultSettings: uds);
         creation.CreateZones(universeDefaultSettings: uds);
 
-        Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Universes.Single(u => u.Id == uds.UniverseId).GridX == 20);
-        Assert.IsTrue(context.Universes.Single(u => u.Id == uds.UniverseId).GridY == 20);
+        Assert.IsTrue(_context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Zones.Count(s => s.UniverseId == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Universes.Single(u => u.Id == uds.UniverseId).GridX == 20);
+        Assert.IsTrue(_context.Universes.Single(u => u.Id == uds.UniverseId).GridY == 20);
 
-        var starMapPath = creation.CreateStarMap(uds.UniverseId);
+        var remotePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
+        var starMapPath = creation.CreateStarMap(remotePath, uds.UniverseId);
 
         Assert.IsTrue(File.Exists(starMapPath));
 
@@ -88,8 +110,8 @@ public class CreationTests
         {
             creation.DeleteUniverse(uds.UniverseId);
 
-            Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
             Assert.IsFalse(File.Exists(starMapPath));
         }
     }
@@ -104,8 +126,7 @@ public class CreationTests
     [DataRow("Test Star Class Creation", true)]
     public void TestStarClassCreation(String universeName, Boolean cleanup)
     {
-        using var context = new UniverseContext();
-        Creation creation = new Creation();
+        Creation creation = new Creation(_context);
 
         UniverseDefaultSettings uds = new UniverseDefaultSettings
         {
@@ -168,10 +189,10 @@ public class CreationTests
         });
 
 
-        List<Star> stars = context.Stars.Where(s => s.UniverseId == uds.UniverseId).ToList();
+        List<Star> stars = _context.Stars.Where(s => s.UniverseId == uds.UniverseId).ToList();
 
-        Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Zones.Count(z => z.UniverseId == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Zones.Count(z => z.UniverseId == uds.UniverseId) > 0);
         Assert.IsTrue(stars.Count == 7);
 
         Assert.IsTrue(stars.First().Name == "Starry McStarface");
@@ -196,7 +217,8 @@ public class CreationTests
 
         Assert.IsTrue(stars.First().UniverseId == uds.UniverseId);
 
-        var starMapPath = creation.CreateStarMap(uds.UniverseId);
+        var remotePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
+        var starMapPath = creation.CreateStarMap(remotePath, uds.UniverseId);
 
         Assert.IsTrue(File.Exists(starMapPath));
 
@@ -204,10 +226,10 @@ public class CreationTests
         {
             creation.DeleteUniverse(uds.UniverseId);
 
-            Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Stars.Count(s => s.UniverseId == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Planets.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Stars.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Planets.Count(s => s.UniverseId == uds.UniverseId) == 0);
             Assert.IsFalse(File.Exists(starMapPath));
         }
     }
@@ -222,8 +244,7 @@ public class CreationTests
     [DataRow("Test Planet Class Creation", true)]
     public void TestPlanetClassCreation(String universeName, Boolean cleanup)
     {
-        using var context = new UniverseContext();
-        Creation creation = new Creation();
+        Creation creation = new Creation(_context);
 
         UniverseDefaultSettings uds = new UniverseDefaultSettings
         {
@@ -240,19 +261,20 @@ public class CreationTests
             UniverseId = uds.UniverseId,
             Name = "Planet McPlanetface",
             Population = 1234,
-            StarList = new List<Star> { context.Stars.First(s => s.UniverseId == uds.UniverseId), }
+            StarList = new List<Star> { _context.Stars.First(s => s.UniverseId == uds.UniverseId), }
         });
 
-        Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Stars.Count(s => s.UniverseId == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Planets.Count(s => s.UniverseId == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Planets.First(s => s.UniverseId == uds.UniverseId).UniverseId == uds.UniverseId);
+        Assert.IsTrue(_context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Zones.Count(s => s.UniverseId == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Stars.Count(s => s.UniverseId == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Planets.Count(s => s.UniverseId == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Planets.First(s => s.UniverseId == uds.UniverseId).UniverseId == uds.UniverseId);
         Assert.IsTrue(
-            context.Planets.Count(p => p.UniverseId == uds.UniverseId && p.Name == "Planet McPlanetface") == 1);
-        Assert.IsTrue(context.Planets.First(p => p.Name == "Planet McPlanetface").Population == 1234);
+            _context.Planets.Count(p => p.UniverseId == uds.UniverseId && p.Name == "Planet McPlanetface") == 1);
+        Assert.IsTrue(_context.Planets.First(p => p.Name == "Planet McPlanetface").Population == 1234);
 
-        var starMapPath = creation.CreateStarMap(uds.UniverseId);
+        var remotePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
+        var starMapPath = creation.CreateStarMap(remotePath, uds.UniverseId);
 
         Assert.IsTrue(File.Exists(starMapPath));
 
@@ -260,10 +282,10 @@ public class CreationTests
         {
             creation.DeleteUniverse(uds.UniverseId);
 
-            Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Stars.Count(s => s.UniverseId == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Planets.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Stars.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Planets.Count(s => s.UniverseId == uds.UniverseId) == 0);
             Assert.IsFalse(File.Exists(starMapPath));
         }
     }
@@ -278,8 +300,7 @@ public class CreationTests
     [DataRow("Test Character Creation", true)]
     public void TestCharacterCreation(String universeName, Boolean cleanup)
     {
-        using var context = new UniverseContext();
-        Creation creation = new Creation();
+        Creation creation = new Creation(_context);
 
         UniverseDefaultSettings uds = new UniverseDefaultSettings
         {
@@ -313,7 +334,7 @@ public class CreationTests
             SkinCol = "Pale",
             Title = "Dude",
             Height = 120,
-            CurrentPlanetId = context.Planets.First(p => p.UniverseId == uds.UniverseId).Id,
+            CurrentPlanetId = _context.Planets.First(p => p.UniverseId == uds.UniverseId).Id,
             CrimeChance = new[] { 50, 50 },
             InitialReaction = "Warm"
         });
@@ -335,14 +356,14 @@ public class CreationTests
             Count = 13
         });
 
-        Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Stars.Count(s => s.UniverseId == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Planets.Count(s => s.UniverseId == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Zones.Count(s => s.UniverseId == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Stars.Count(s => s.UniverseId == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Planets.Count(s => s.UniverseId == uds.UniverseId) > 0);
 
-        List<Character> chars = context.Characters.Where(c => c.UniverseId == uds.UniverseId).ToList();
+        List<Character> chars = _context.Characters.Where(c => c.UniverseId == uds.UniverseId).ToList();
 
-        Assert.IsTrue(context.Characters.Count(c => c.UniverseId == uds.UniverseId) == 15);
+        Assert.IsTrue(_context.Characters.Count(c => c.UniverseId == uds.UniverseId) == 15);
         Assert.IsTrue(chars.Count == 15);
 
         Character john = chars[0];
@@ -361,7 +382,7 @@ public class CreationTests
         Assert.IsTrue(john.Gender == Character.GenderEnum.Male);
         Assert.IsTrue(john.CrimeChance == 50);
         Assert.IsTrue(john.InitialReaction == "Warm");
-        Assert.IsTrue(john.CurrentLocationId == context.Planets.First(p => p.UniverseId == uds.UniverseId).Id);
+        Assert.IsTrue(john.CurrentLocationId == _context.Planets.First(p => p.UniverseId == uds.UniverseId).Id);
 
         Assert.IsTrue(jane.First == "Jane");
         Assert.IsTrue(jane.Last == "Doe");
@@ -373,10 +394,10 @@ public class CreationTests
         {
             creation.DeleteUniverse(uds.UniverseId);
 
-            Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Stars.Count(s => s.UniverseId == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Planets.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Stars.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Planets.Count(s => s.UniverseId == uds.UniverseId) == 0);
         }
     }
 
@@ -390,8 +411,7 @@ public class CreationTests
     [DataRow("Test Ship Creation", true)]
     public void TestShipCreation(String universeName, Boolean cleanup)
     {
-        using var context = new UniverseContext();
-        Creation creation = new Creation();
+        Creation creation = new Creation(_context);
         UniverseDefaultSettings uds = new UniverseDefaultSettings
         {
             UniverseId = new Universe().Id,
@@ -418,17 +438,17 @@ public class CreationTests
             HullType = Hull.HullTypeEnum.Carrier
         });
 
-        Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Ships.Count(s => s.UniverseId == uds.UniverseId) >= 10);
+        Assert.IsTrue(_context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Ships.Count(s => s.UniverseId == uds.UniverseId) >= 10);
 
         if (cleanup)
         {
             creation.DeleteUniverse(uds.UniverseId);
 
-            Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Stars.Count(s => s.UniverseId == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Planets.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Stars.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Planets.Count(s => s.UniverseId == uds.UniverseId) == 0);
         }
     }
 
@@ -444,8 +464,7 @@ public class CreationTests
     [DataRow("Test Full Creation", true)]
     public void TestFullCreation(String universeName, Boolean cleanup)
     {
-        using var context = new UniverseContext();
-        Creation creation = new Creation();
+        Creation creation = new Creation(_context);
         UniverseDefaultSettings uds = new UniverseDefaultSettings
         {
             Name = universeName,
@@ -459,16 +478,17 @@ public class CreationTests
 
         creation.CreateFullUniverse(universeDefaultSettings: uds);
 
-        Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Universes.Single(u => u.Id == uds.UniverseId).GridX == 8);
-        Assert.IsTrue(context.Universes.Single(u => u.Id == uds.UniverseId).GridY == 10);
-        Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Stars.Count(s => s.UniverseId == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Planets.Count(s => s.UniverseId == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Characters.Count(s => s.UniverseId == uds.UniverseId) > 0);
-        Assert.IsTrue(context.Ships.Count(s => s.UniverseId == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Universes.Single(u => u.Id == uds.UniverseId).GridX == 8);
+        Assert.IsTrue(_context.Universes.Single(u => u.Id == uds.UniverseId).GridY == 10);
+        Assert.IsTrue(_context.Zones.Count(s => s.UniverseId == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Stars.Count(s => s.UniverseId == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Planets.Count(s => s.UniverseId == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Characters.Count(s => s.UniverseId == uds.UniverseId) > 0);
+        Assert.IsTrue(_context.Ships.Count(s => s.UniverseId == uds.UniverseId) > 0);
 
-        var starMapPath = creation.CreateStarMap(uds.UniverseId);
+        var remotePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
+        var starMapPath = creation.CreateStarMap(remotePath, uds.UniverseId);
 
         Assert.IsTrue(File.Exists(starMapPath));
 
@@ -476,12 +496,12 @@ public class CreationTests
         {
             creation.DeleteUniverse(uds.UniverseId);
 
-            Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Stars.Count(s => s.UniverseId == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Planets.Count(s => s.UniverseId == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Characters.Count(c => c.UniverseId == uds.UniverseId) == 0);
-            Assert.IsTrue(context.Ships.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Stars.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Planets.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Characters.Count(c => c.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(_context.Ships.Count(s => s.UniverseId == uds.UniverseId) == 0);
             Assert.IsFalse(File.Exists(starMapPath));
         }
     }

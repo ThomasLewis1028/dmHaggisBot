@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
@@ -10,9 +11,14 @@ namespace SWNUniverseGenerator.CreationTools
     /// <summary>
     /// This class contains the necessary functions for creating a Star
     /// </summary>
-    internal class StarCreation
+    internal class StarCreation: ContextService<StarCreation>
     {
-        private static readonly Random Rand = new Random();
+        private static readonly Random Rand = new();
+
+        public StarCreation(UniverseContext context) : base(context)
+        {
+
+        }
 
         /// <summary>
         /// This function will receive a Universe and a StarDefaultSettings object and create Stars from the data
@@ -25,9 +31,7 @@ namespace SWNUniverseGenerator.CreationTools
         /// </returns>
         public void AddStars(StarDefaultSettings starDefaultSettings)
         {
-            using (var context = new UniverseContext())
-            {
-                using (var starRepo = new Repository<Star>(context))
+                using (var starRepo = new Repository<Star>(_context))
                 {
                     List<Star> stars = new();
 
@@ -43,7 +47,7 @@ namespace SWNUniverseGenerator.CreationTools
                         };
 
                         // Set Zone of the Star
-                        using (var zoneRepo = new Repository<Zone>(context))
+                        using (var zoneRepo = new Repository<Zone>(_context))
                         {
                             while (true)
                             {
@@ -62,7 +66,7 @@ namespace SWNUniverseGenerator.CreationTools
                         while (true)
                         {
                             // Pick a random Name for the Star
-                            using (var nameRepo = new Repository<Naming>(context))
+                            using (var nameRepo = new Repository<Naming>(_context))
                             {
                                 star.Name = string.IsNullOrEmpty(starDefaultSettings.Name)
                                     ? ((Naming)nameRepo.Random(n => n.NameType == "Star")).Name
@@ -109,7 +113,7 @@ namespace SWNUniverseGenerator.CreationTools
 
                         if (starDefaultSettings.CreatePlanets)
                         {
-                            new PlanetCreation().AddPlanets(new PlanetDefaultSettings
+                            new PlanetCreation(_context).AddPlanets(new PlanetDefaultSettings
                             {
                                 UniverseId = starDefaultSettings.UniverseId,
                                 StarList = new List<Star> { star }
@@ -121,7 +125,6 @@ namespace SWNUniverseGenerator.CreationTools
 
                     starRepo.AddRange(stars);
                 }
-            }
         }
     }
 }

@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using SWNUniverseGenerator;
 using SWNUniverseGenerator.CreationTools;
 using SWNUniverseGenerator.Database;
+using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
 
 namespace SWNBlazorApp.Data;
@@ -16,7 +17,13 @@ public class UniverseService : DataService<UniverseService>
     {
 
     }
-    
+
+    public async Task<bool> CreateUniverse(UniverseDefaultSettings uds)
+    {
+        Creation creation = new Creation(_context);
+        return await creation.CreateFullUniverse(uds);
+    }
+
     public Task<Universe> GetUniverseAsync(string universeID)
     {
         _logger.LogInformation("Get Universe: " + universeID);
@@ -38,7 +45,7 @@ public class UniverseService : DataService<UniverseService>
 
     public Task<bool> DeleteUniverseAsync(string universeID)
     {
-        var result = new Creation().DeleteUniverse(universeID);
+        var result = new Creation(_context).DeleteUniverse(universeID);
         
         if(File.Exists("wwwroot/images/starmaps/" + universeID + ".svg"))
             File.Delete("wwwroot/images/starmaps/" + universeID + ".svg");
@@ -89,6 +96,15 @@ public class UniverseService : DataService<UniverseService>
         result = repo.Count(c => c.UniverseId == universeId);
     
         return Task.FromResult(result);
+    }
+    
+    public void GrabStarmap(string universeId, string path)
+    {
+        if (!File.Exists(path))
+        {
+            Creation creation = new Creation(_context);
+            creation.CreateStarMap(universeId, path);
+        }
     }
 }
 

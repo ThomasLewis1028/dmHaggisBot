@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SWNUniverseGenerator;
 using SWNUniverseGenerator.Database;
@@ -13,29 +14,21 @@ namespace SWNTests;
 public class NameGenerationTests
 {
     
-    protected UniverseContext _context;
-
-    /// <summary>
-    /// Runs 1 time prior to all tests for setup 
-    /// </summary>
-    /// <param name="testContext"></param>
-    [ClassInitialize]
-    public void ClassInitialize(TestContext testContext)
+    
+    private IConfiguration InitConfiguration()
     {
-        _context = new UniverseContext();
+        IConfiguration config = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.Development.json")
+            .Build();
+        return config;
     }
 
-    /// <summary>
-    /// Runs 1 time when tests are all complete and used for cleanup tasks
-    /// </summary>
-    [ClassCleanup]
-    public void ClassCleanup()
-    {
-    }
     
     [TestMethod, TestCategory("UnitTest")]
     public void TestGenerateChain()
     {
+        var _context = new UniverseContext(InitConfiguration());
         using (var nameRepo = new Repository<Naming>(_context))
         {
             var entityList = nameRepo.Search(n => n.NameType == "MaleName").ToList();
@@ -50,6 +43,7 @@ public class NameGenerationTests
     [TestMethod, TestCategory("UnitTest")]
     public void TestGenerateName()
     {
+        var _context = new UniverseContext(InitConfiguration());
         using (var nameRepo = new Repository<Naming>(_context))
         {
             var entityList = nameRepo.Search(n => n.NameType == "MaleName").ToList();
@@ -71,6 +65,7 @@ public class NameGenerationTests
     [DataRow ("Z", "^(Z)[a-zA-Z]*$")]
     public void TestGenerateNameFirstCharSame(string search, string expected)
     {
+        var _context = new UniverseContext(InitConfiguration());
         using (var nameRepo = new Repository<Naming>(_context))
         {
             var entityList = nameRepo.Search(n => n.NameType == "MaleName" && n.Name.StartsWith(search)).ToList();

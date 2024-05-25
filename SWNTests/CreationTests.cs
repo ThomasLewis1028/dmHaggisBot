@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SWNUniverseGenerator.CreationTools;
 using SWNUniverseGenerator.Database;
@@ -15,24 +16,14 @@ namespace SWNTests;
 [TestClass]
 public class CreationTests
 {
-    protected UniverseContext _context;
 
-    /// <summary>
-    /// Runs 1 time prior to all tests for setup 
-    /// </summary>
-    /// <param name="testContext"></param>
-    [ClassInitialize]
-    public void ClassInitialize(TestContext testContext)
+    private IConfiguration InitConfiguration()
     {
-        _context = new UniverseContext();
-    }
-
-    /// <summary>
-    /// Runs 1 time when tests are all complete and used for cleanup tasks
-    /// </summary>
-    [ClassCleanup]
-    public void ClassCleanup()
-    {
+        IConfiguration config = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.Development.json")
+            .Build();
+        return config;
     }
     
     /// <summary>
@@ -45,6 +36,7 @@ public class CreationTests
     [DataRow("Test Grid Creation", true)]
     public void TestGridCreation(String universeName, Boolean cleanup)
     {
+        var _context = new UniverseContext(InitConfiguration());
         Creation creation = new Creation(_context);
         UniverseDefaultSettings uds = new UniverseDefaultSettings(
             name: universeName,
@@ -84,6 +76,7 @@ public class CreationTests
     [DataRow("Test Wide Grid Creation", true)]
     public void TestWideGridCreation(String universeName, Boolean cleanup)
     {
+        var _context = new UniverseContext(InitConfiguration());
         Creation creation = new Creation(_context);
         UniverseDefaultSettings uds = new UniverseDefaultSettings
         {
@@ -126,6 +119,7 @@ public class CreationTests
     [DataRow("Test Star Class Creation", true)]
     public void TestStarClassCreation(String universeName, Boolean cleanup)
     {
+        var _context = new UniverseContext(InitConfiguration());
         Creation creation = new Creation(_context);
 
         UniverseDefaultSettings uds = new UniverseDefaultSettings
@@ -244,6 +238,7 @@ public class CreationTests
     [DataRow("Test Planet Class Creation", true)]
     public void TestPlanetClassCreation(String universeName, Boolean cleanup)
     {
+        var _context = new UniverseContext(InitConfiguration());
         Creation creation = new Creation(_context);
 
         UniverseDefaultSettings uds = new UniverseDefaultSettings
@@ -300,6 +295,7 @@ public class CreationTests
     [DataRow("Test Character Creation", true)]
     public void TestCharacterCreation(String universeName, Boolean cleanup)
     {
+        var _context = new UniverseContext(InitConfiguration());
         Creation creation = new Creation(_context);
 
         UniverseDefaultSettings uds = new UniverseDefaultSettings
@@ -411,6 +407,7 @@ public class CreationTests
     [DataRow("Test Ship Creation", true)]
     public void TestShipCreation(String universeName, Boolean cleanup)
     {
+        var _context = new UniverseContext(InitConfiguration());
         Creation creation = new Creation(_context);
         UniverseDefaultSettings uds = new UniverseDefaultSettings
         {
@@ -464,6 +461,7 @@ public class CreationTests
     [DataRow("Test Full Creation", true)]
     public void TestFullCreation(String universeName, Boolean cleanup)
     {
+        var _context = new UniverseContext(InitConfiguration());
         Creation creation = new Creation(_context);
         UniverseDefaultSettings uds = new UniverseDefaultSettings
         {

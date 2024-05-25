@@ -55,7 +55,7 @@ namespace SWNUniverseGenerator.Database
         public DbSet<Zone> Zones { get; set; }
 
         public string DbPath { get; }
-
+        
         public UniverseContext(IConfiguration configuration)
         {
             Configuration = configuration;

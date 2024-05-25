@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.Models;
@@ -10,26 +11,7 @@ namespace SWNTests;
 [TestClass]
 public class DatabaseTests
 {
-    
-    protected UniverseContext _context;
 
-    /// <summary>
-    /// Runs 1 time prior to all tests for setup 
-    /// </summary>
-    /// <param name="testContext"></param>
-    [ClassInitialize]
-    public void ClassInitialize(TestContext testContext)
-    {
-        _context = new UniverseContext();
-    }
-
-    /// <summary>
-    /// Runs 1 time when tests are all complete and used for cleanup tasks
-    /// </summary>
-    [ClassCleanup]
-    public void ClassCleanup()
-    {
-    }
     
     private static readonly Random Rand = new ();
 
@@ -49,6 +31,15 @@ public class DatabaseTests
     // public static async Task ClassCleanup()
     // {
     // }
+    
+    private IConfiguration InitConfiguration()
+    {
+        IConfiguration config = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.Development.json")
+            .Build();
+        return config;
+    }
 
 
     [TestMethod, TestCategory("DatabaseTest")]
@@ -57,52 +48,55 @@ public class DatabaseTests
     public void TestCreate(String universeName, bool cleanup)
     {
 
-            var universeId = TestAddUniverse(universeName, _context, out var ucGet);
-            //Select stuff
-            var query1 = from ucUniverse in _context.Universes where ucUniverse.Id == ucGet.Id select ucUniverse.Name;
-            Assert.AreEqual(query1.First(), universeName);
 
-            var query = from ucUniverse in _context.Universes where ucUniverse.Id == ucGet.Id select ucUniverse;
-            Assert.AreEqual(query.First().Id, universeId);
-            Assert.AreEqual(query.First().Name, universeName);
+        var _context = new UniverseContext(InitConfiguration());
+    
+        var universeId = TestAddUniverse(universeName, _context, out var ucGet);
+        //Select stuff
+        var query1 = from ucUniverse in _context.Universes where ucUniverse.Id == ucGet.Id select ucUniverse.Name;
+        Assert.AreEqual(query1.First(), universeName);
 
-            TestAddZones(universeId, _context);
-            TestAddPlanets(universeId, _context);
-            TestAddCharacter(universeId, _context);
+        var query = from ucUniverse in _context.Universes where ucUniverse.Id == ucGet.Id select ucUniverse;
+        Assert.AreEqual(query.First().Id, universeId);
+        Assert.AreEqual(query.First().Name, universeName);
 
-            //Join Query
-            var joinQuery =
-                from u in _context.Universes
-                join c in _context.Characters on u.Id equals c.UniverseId
-                where u.Id == ucGet.Id
-                select new {u.Name, c.First, c.Last};
-            var result = joinQuery.First();
-            Assert.AreEqual(result.Name, universeName);
-            Assert.IsNotNull(result.First);
-            Assert.IsNotNull(result.Last);
+        TestAddZones(universeId, _context);
+        TestAddPlanets(universeId, _context);
+        TestAddCharacter(universeId, _context);
 
+        //Join Query
+        var joinQuery =
+            from u in _context.Universes
+            join c in _context.Characters on u.Id equals c.UniverseId
+            where u.Id == ucGet.Id
+            select new {u.Name, c.First, c.Last};
+        var result = joinQuery.First();
+        Assert.AreEqual(result.Name, universeName);
+        Assert.IsNotNull(result.First);
+        Assert.IsNotNull(result.Last);
+
+        
+        
+        if (cleanup)
+        {
+            //Cleanup
+            foreach (var character in _context.Characters.Where(c => c.UniverseId == universeId))
+                _context.Characters.Remove(character);
             
+            foreach (var planet in _context.Planets.Where(c => c.UniverseId == universeId))
+                _context.Planets.Remove(planet);
             
-            if (cleanup)
-            {
-                //Cleanup
-                foreach (var character in _context.Characters.Where(c => c.UniverseId == universeId))
-                    _context.Characters.Remove(character);
-                
-                foreach (var planet in _context.Planets.Where(c => c.UniverseId == universeId))
-                    _context.Planets.Remove(planet);
-                
-                foreach (var zone in _context.Zones.Where(c => c.UniverseId == universeId))
-                    _context.Zones.Remove(zone);
+            foreach (var zone in _context.Zones.Where(c => c.UniverseId == universeId))
+                _context.Zones.Remove(zone);
 
-                _context.Universes.Remove(_context.Universes.First(c => c.Id == universeId));
+            _context.Universes.Remove(_context.Universes.First(c => c.Id == universeId));
 
-                _context.SaveChanges();
+            _context.SaveChanges();
 
-                //Check Cleanup
-                Assert.AreEqual(0, _context.Universes.Count(u => u.Id == universeId));
-                Assert.AreEqual(0, _context.Characters.Count(u => u.UniverseId == universeId));
-            }
+            //Check Cleanup
+            Assert.AreEqual(0, _context.Universes.Count(u => u.Id == universeId));
+            Assert.AreEqual(0, _context.Characters.Count(u => u.UniverseId == universeId));
+        }
     }
 
     private static string TestAddUniverse(string universeName, UniverseContext context, out Universe ucGet)
@@ -218,6 +212,7 @@ public class DatabaseTests
     [TestMethod, TestCategory("DatabaseTest")]
     public void TestRepositoryCreate()
     {
+        var _context = new UniverseContext(InitConfiguration());
         using (var uc = new Repository<Universe>(_context))
         {
             Dictionary<string, string> addIds = new Dictionary<string, string>();

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using SWNUniverseGenerator.Database;
 using SWNUniverseGenerator.DefaultSettings;
 using SWNUniverseGenerator.Models;
@@ -21,6 +22,14 @@ namespace SWNUniverseGenerator.CreationTools
     /// </summary>
     public class Creation
     {
+        protected readonly ILogger<Creation> _logger;
+
+        public Creation()
+        {
+            var loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
+            _logger = loggerFactory.CreateLogger<Creation>();
+        }
+        
         /// <summary>
         /// This requires a set of UniverseDefaultSettings to create a Universe
         /// 
@@ -31,6 +40,7 @@ namespace SWNUniverseGenerator.CreationTools
         /// <exception cref="IOException"></exception>
         public async Task<bool> CreateFullUniverse(UniverseDefaultSettings universeDefaultSettings)
         {
+            _logger.LogInformation("Full Creation Begin: " + DateTime.Now);
             universeDefaultSettings.StarDefaultSettings.UniverseId = universeDefaultSettings.UniverseId;
             universeDefaultSettings.PlanetDefaultSettings.UniverseId = universeDefaultSettings.UniverseId;
             universeDefaultSettings.ShipDefaultSettings.UniverseId = universeDefaultSettings.UniverseId;
@@ -48,6 +58,7 @@ namespace SWNUniverseGenerator.CreationTools
             await CreateShips(universeDefaultSettings.ShipDefaultSettings);
             await CreatePoi(universeDefaultSettings.PoiDefaultSettings);
 
+            _logger.LogInformation("Full Creation End: " + DateTime.Now);
             return true;
         }
 

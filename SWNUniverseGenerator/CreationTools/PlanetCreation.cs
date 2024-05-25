@@ -122,13 +122,21 @@ namespace SWNUniverseGenerator.CreationTools
             using (var repo = new Repository<Biosphere>(context))
                 planet.Biosphere = repo.Random().Id;
 
-            using (var repo = new Repository<Population>(context))
+            if(planetDefaultSettings.Population < 0)
             {
-                var popRoll = Rand.Next(1, 7) + Rand.Next(1, 7);
+                using (var repo = new Repository<Population>(context))
+                {
+                    var popRoll = Rand.Next(1, 7) + Rand.Next(1, 7);
 
-                Population pop = repo.Search(p => p.MinRoll <= popRoll && p.MaxRoll >= popRoll).Cast<Population>().First();
-                
-                planet.Population = Rand.NextInt64(pop.MinPop, pop.MaxPop);
+                    Population pop = repo.Search(p => p.MinRoll <= popRoll && p.MaxRoll >= popRoll).Cast<Population>()
+                        .First();
+
+                    planet.Population = Rand.NextInt64(pop.MinPop, pop.MaxPop);
+                }
+            }
+            else
+            {
+                planet.Population = planetDefaultSettings.Population;
             }
 
             using (var repo = new Repository<TechLevel>(context))

@@ -37,6 +37,11 @@ public class CityCreation
         using (var cityRepo = new Repository<City>(context))
         {
             List<City> cities = new();
+
+            foreach (var planet in cityDefaultSettings.PlanetList)
+            {
+                
+            }
         }
 
         return true;

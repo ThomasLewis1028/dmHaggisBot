@@ -1,0 +1,141 @@
+﻿@page "/pointofinterests"
+
+<PageTitle>Points Of Interest</PageTitle>
+
+@using SWNBlazorApp.Data
+@using SWNUniverseGenerator.DefaultSettings
+@using SWNUniverseGenerator.Models
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using SWNUniverseGenerator.CreationTools
+
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject PointOfInterestService PointOfInterestService
+@inject UniverseService UniverseService
+@inject IMenuService MenuService
+
+<h1>Point Of Interest Data</h1>
+
+<p>All points of interest in @universeName</p>
+
+
+@if (points == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <MudGrid>
+    @* POI List *@
+    <MudItem xs="8">
+        <MudTable Items="@points.OrderBy(c => c.Id)" Hover="true" SortLabel="Sort By" Filter="new Func<PointOfInterest, bool>(PointOfInterestFilterFunc)" @bind-SelectedItem="currentPOI">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Character List</MudText>
+                <MudSpacer/>
+                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Name)">Name</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Gender)">Gender</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Character, object>(x => x.Title)">Title</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Ship, object>(x => x.Name)">OccupiedBy</MudTableSortLabel>
+                </MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name" class="cursor-pointer">@context.Name</MudTd>
+                <MudTd DataLabel="Situation" class="cursor-pointer">@context.Situation</MudTd>
+                <MudTd DataLabel="Type" class="cursor-pointer">@context.Type</MudTd>
+                <MudTd DataLabel="OccupiedBy" class="cursor-pointer">@context.OccupiedBy</MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager PageSizeOptions="new[] { 10, 15, 20, 25, 50, 75, 100, int.MaxValue }"/>
+            </PagerContent>
+        </MudTable>
+    </MudItem>
+
+    <MudItem xs="4">
+        @*Individual Character Display*@
+        @if (currentPOI != null)
+        {
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h4">@currentPOI.Name</MudText>
+                        <MudText Typo="Typo.body2">
+                            <strong>ID: </strong>@currentPOI.Id
+                        </MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Typo="Typo.body2">
+                        <strong>Type: </strong>@currentPOI.Type
+                    </MudText>
+                    <MudText Typo="Typo.body2">
+                        <strong>Classification: </strong>@currentPOI.Situation
+                    </MudText>
+                    <MudText Typo="Typo.body2">
+                        <strong>OccupiedBy: </strong>@currentPOI.OccupiedBy
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        }
+    </MudItem>
+    </MudGrid>
+}
+
+@code {
+    private List<PointOfInterest>? points;
+    private PointOfInterest currentPOI;
+    private string searchString;
+    private bool _isAdmin = false;
+    private Universe currentUniverse;
+    private string universeName;
+    MudForm form;
+
+    String[] _errors = { };
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var universeId = await ProtectedSessionStore.GetAsync<string>("SelectedUniverse");
+        if (!string.IsNullOrEmpty(universeId.Value))
+        {
+            Task<Universe> task = UniverseService.GetUniverseAsync(universeId.Value);
+            currentUniverse = task.Result;
+            universeName = currentUniverse.Name;
+            points = await PointOfInterestService.GetPointOfInterestsAsync(universeId.Value);
+        }
+
+        StateHasChanged();
+        MenuService.NotifyChanged();
+    }
+
+    private String GetLocationName(String charId)
+    {
+
+        return "";
+    }
+
+    private bool PointOfInterestFilterFunc(PointOfInterest pointOfInterest) => PointOfInterestFilter(pointOfInterest, searchString);
+
+    private bool PointOfInterestFilter(PointOfInterest character, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (character.Name.Contains(this.searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (character.Id.Contains(this.searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+}

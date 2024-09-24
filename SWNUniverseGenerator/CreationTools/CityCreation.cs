@@ -29,7 +29,7 @@ public class CityCreation
         {
             throw new Exception("Cannot provide Population without specifying a planet");
         }
-        
+
         if (cityDefaultSettings.PlanetList == null)
         {
             using (var planetRepo = new Repository<Planet>(context))
@@ -46,7 +46,7 @@ public class CityCreation
             foreach (var planet in cityDefaultSettings.PlanetList)
             {
                 var popLeft = planet.Population;
-
+                
                 while (popLeft > 0)
                 {
                     if (popLeft <= 10000)
@@ -56,7 +56,7 @@ public class CityCreation
                     }
                     else
                     {
-                        var percentage = Rand.Next(10,100) * .01;
+                        var percentage = Rand.Next(10, 100) * .01;
                         var popTaken = (long)(popLeft * percentage);
                         CreateCity(cityDefaultSettings, context, cityRepo, planet, popTaken, cities);
                         popLeft -= popTaken;
@@ -80,22 +80,24 @@ public class CityCreation
             PlanetId = planet.Id,
             UniverseId = cityDefaultSettings.UniverseId
         };
-        
-        while (true)
-        {
-            // Pick a random name out of the list of cities
-            using (var repo = new Repository<Naming>(context))
-            {
-                city.Name = string.IsNullOrEmpty(cityDefaultSettings.Name)
-                    ? "New " + ((Naming)repo.Random(n => n.NameType == "City")).Name
-                    : cityDefaultSettings.Name;
-            }
 
-            // No cities can share a name
-            if (!cityRepo.Any(a => a.UniverseId == cityDefaultSettings.UniverseId && a.Name == city.Name))
-                break;
+        if (cityDefaultSettings.Name != null)
+        {
+            // No cities on a Planet can share a name
+            if (cityRepo.Any(a => a.PlanetId == planet.Id && a.Name == city.Name))
+                throw new Exception($"Name {city.Name} already exists");
         }
-        
+        else
+        {
+            while (string.IsNullOrEmpty(city.Name) ||
+                   cityRepo.Any(a => a.UniverseId == cityDefaultSettings.UniverseId && a.Name == city.Name))
+            {
+                // Pick a random name out of the list of cities
+                using var repo = new Repository<Naming>(context);
+                city.Name = ((Naming)repo.Random(n => n.NameType == "City")).Name;
+            }
+        }
+
         cities.Add(city);
 
         return true;

@@ -330,6 +330,9 @@ namespace SWNUniverseGenerator.CreationTools
                 using (var poiRepo = new Repository<PointOfInterest>(context))
                     poiRepo.DeleteRange(context.PointsOfInterest.Where(c => c.UniverseId == universeId).ToList());
 
+                using (var cityRepo = new Repository<City>(context))
+                    cityRepo.DeleteRange(context.Cities.Where(c => c.UniverseId == universeId).ToList());
+                
                 using (var planRepo = new Repository<Planet>(context))
                     planRepo.DeleteRange(context.Planets.Where(c => c.UniverseId == universeId).ToList());
 

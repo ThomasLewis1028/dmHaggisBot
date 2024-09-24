@@ -51,11 +51,18 @@ namespace SWNUniverseGenerator.CreationTools
                 {
                     int pMax = 1;
 
-                    pMax += Rand.NextDouble() < 0.05
-                        ? Rand.NextDouble() < 0.5 
-                            ? 1 
-                            : -1
-                        : 0;
+                    if (planetDefaultSettings.Count < 0)
+                    {
+                        pMax += Rand.NextDouble() < 0.05
+                            ? Rand.NextDouble() < 0.5
+                                ? 1
+                                : -1
+                            : 0;
+                    }
+                    else
+                    {
+                        pMax = planetDefaultSettings.Count;
+                    }
 
                     var pCount = 0;
 
@@ -77,24 +84,28 @@ namespace SWNUniverseGenerator.CreationTools
         {
             var planet = new Planet
             {
-                UniverseId = planetDefaultSettings.UniverseId
+                UniverseId = planetDefaultSettings.UniverseId,
+                Name = planetDefaultSettings.Name,
                 // Society = new Society(), Ruler = new Ruler(), Ruled = new Ruled(), Flavor = new Flavor()
             };
 
             // Name the Planet
-            while (true)
+            if (planetDefaultSettings.Name != null)
             {
-                // Pick a random name out of the list of Planets
-                using (var repo = new Repository<Naming>(context))
-                {
-                    planet.Name = string.IsNullOrEmpty(planetDefaultSettings.Name)
-                        ? ((Naming)repo.Random(n => n.NameType == "Planet")).Name
-                        : planetDefaultSettings.Name;
-                }
+                if (planetRepo.Any(a => a.UniverseId == planetDefaultSettings.UniverseId && a.Name == planet.Name))
+                    throw new Exception($"Planet {planet.Name} already exists");
 
-                // No planets can share a name
-                if (!planetRepo.Any(a => a.UniverseId == planetDefaultSettings.UniverseId && a.Name == planet.Name))
-                    break;
+                planet.Name = planetDefaultSettings.Name;
+            }
+            else
+            {
+                while (string.IsNullOrEmpty(planet.Name) ||
+                       planetRepo.Any(a => a.UniverseId == planetDefaultSettings.UniverseId && a.Name == planet.Name))
+                {
+                    // Pick a random name out of the list of Planets
+                    using var repo = new Repository<Naming>(context);
+                    planet.Name = ((Naming)repo.Random(n => n.NameType == "Planet")).Name;
+                }
             }
 
             // Set the Planet information from either a randomized value or specified information
@@ -122,7 +133,7 @@ namespace SWNUniverseGenerator.CreationTools
             using (var repo = new Repository<Biosphere>(context))
                 planet.Biosphere = repo.Random().Id;
 
-            if(planetDefaultSettings.Population < 0)
+            if (planetDefaultSettings.Population < 0)
             {
                 using (var repo = new Repository<Population>(context))
                 {

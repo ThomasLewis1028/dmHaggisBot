@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SWNUniverseGenerator.CreationTools;
 using SWNUniverseGenerator.Database;
@@ -13,6 +14,33 @@ namespace SWNTests;
 [TestClass]
 public class CreationTests
 {
+    /// <summary>
+    /// Test for Roman Numerals
+    /// </summary>
+    [TestMethod, TestCategory("DatabaseTest")]
+    public void TestRomanNumerals()
+    {
+        Assert.AreEqual(RomanNumerals.ToRoman(3999), "MMMCMXCIX");
+        Assert.AreEqual(RomanNumerals.ToRoman(1000), "M");
+        Assert.AreEqual(RomanNumerals.ToRoman(900), "CM");
+        Assert.AreEqual(RomanNumerals.ToRoman(500), "D");
+        Assert.AreEqual(RomanNumerals.ToRoman(400), "CD");
+        Assert.AreEqual(RomanNumerals.ToRoman(100), "C");
+        Assert.AreEqual(RomanNumerals.ToRoman(90), "XC");
+        Assert.AreEqual(RomanNumerals.ToRoman(50), "L");
+        Assert.AreEqual(RomanNumerals.ToRoman(40), "XL");
+        Assert.AreEqual(RomanNumerals.ToRoman(10), "X");
+        Assert.AreEqual(RomanNumerals.ToRoman(9), "IX");
+        Assert.AreEqual(RomanNumerals.ToRoman(5), "V");
+        Assert.AreEqual(RomanNumerals.ToRoman(4), "IV");
+        Assert.AreEqual(RomanNumerals.ToRoman(1), "I");
+        Assert.AreEqual(RomanNumerals.ToRoman(1248), "MCCXLVIII");
+        Assert.AreEqual(RomanNumerals.ToRoman(999), "CMXCIX");
+        Assert.AreEqual(RomanNumerals.ToRoman(0), string.Empty);
+        Assert.ThrowsException<ArgumentOutOfRangeException>(() => RomanNumerals.ToRoman(4000));
+        Assert.ThrowsException<ArgumentOutOfRangeException>(() => RomanNumerals.ToRoman(-1));
+    }
+
     /// <summary>
     /// Test the creation of a grid with a width of 20x20
     /// </summary>
@@ -91,6 +119,65 @@ public class CreationTests
             Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
             Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
             Assert.IsFalse(File.Exists(starMapPath));
+        }
+    }
+
+    /// <summary>
+    /// Test the creation of points of interest
+    /// </summary>
+    /// <param name="universeName"></param>
+    /// <param name="cleanup"></param>
+    /// 
+    [TestMethod, TestCategory("DatabaseTest")]
+    // [DataRow("Test Wide Grid Creation", false)] // Used for testing
+    [DataRow("Test POI Creation", true)]
+    public void TestPoiCreation(String universeName, Boolean cleanup)
+    {
+        using var context = new UniverseContext();
+        Creation creation = new Creation();
+
+        UniverseDefaultSettings uds = new UniverseDefaultSettings()
+        {
+            Name = universeName,
+            UniverseId = new Universe().Id,
+        };
+
+        creation.CreateUniverse(universeDefaultSettings: uds);
+        creation.CreateZones(universeDefaultSettings: uds);
+
+        creation.CreateStars(new StarDefaultSettings
+        {
+            UniverseId = uds.UniverseId,
+            StarCount = 3
+        });
+
+        creation.CreatePlanets(new PlanetDefaultSettings
+        {
+            UniverseId = uds.UniverseId,
+        });
+
+        // Create Star POIs
+        creation.CreatePoi(new PoiDefaultSettings
+        {
+            UniverseId = uds.UniverseId,
+            LocationId = context.Stars.Where(s => s.UniverseId == uds.UniverseId).Select(s => s.Id).ToList()
+        });
+
+        // Create Planet POIs
+        creation.CreatePoi(new PoiDefaultSettings
+        {
+            UniverseId = uds.UniverseId,
+            LocationId = context.Planets.Where(p => p.UniverseId == uds.UniverseId).Select(p => p.Id).ToList()
+        });
+
+        if (cleanup)
+        {
+            creation.DeleteUniverse(uds.UniverseId);
+
+            Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
+            Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(context.Stars.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(context.Planets.Count(s => s.UniverseId == uds.UniverseId) == 0);
         }
     }
 
@@ -240,8 +327,31 @@ public class CreationTests
             UniverseId = uds.UniverseId,
             Name = "Planet McPlanetface",
             Population = 1234,
+            Count = 1,
             StarList = new List<Star> { context.Stars.First(s => s.UniverseId == uds.UniverseId), }
         });
+        creation.CreatePlanets(planetDefaultSettings: new PlanetDefaultSettings
+        {
+            UniverseId = uds.UniverseId,
+            Count = 2,
+            StarList = new List<Star> { context.Stars.First(s => s.UniverseId == uds.UniverseId), }
+        });
+
+        Assert.ThrowsException<Exception>(() =>
+            creation.CreatePlanets(planetDefaultSettings: new PlanetDefaultSettings
+            {
+                UniverseId = uds.UniverseId,
+                Name = "Planet McPlanetface",
+                Count = 1,
+                StarList = new List<Star> { context.Stars.First(s => s.UniverseId == uds.UniverseId), }
+            }));
+
+        Assert.ThrowsException<Exception>(() => creation.CreatePlanets(planetDefaultSettings: new PlanetDefaultSettings
+        {
+            UniverseId = uds.UniverseId,
+            Name = "Planet McPlanetface 2",
+            StarList = context.Stars.Where(s => s.UniverseId == uds.UniverseId).ToList()
+        }));
 
         Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
         Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) > 0);
@@ -265,6 +375,92 @@ public class CreationTests
             Assert.IsTrue(context.Stars.Count(s => s.UniverseId == uds.UniverseId) == 0);
             Assert.IsTrue(context.Planets.Count(s => s.UniverseId == uds.UniverseId) == 0);
             Assert.IsFalse(File.Exists(starMapPath));
+        }
+    }
+    
+    /// <summary>
+    /// Test the creation of Cities and all the values they can have
+    /// </summary>
+    /// <param name="universeName"></param>
+    /// <param name="cleanup"></param>
+    [TestMethod, TestCategory("DatabaseTest")]
+    // [DataRow("Test Planet Class Creation", false)] // Used for testing
+    [DataRow("Test City Creation", true)]
+    public void TestCityCreation(String universeName, Boolean cleanup)
+    {
+        using var context = new UniverseContext();
+        Creation creation = new Creation();
+        
+        UniverseDefaultSettings uds = new UniverseDefaultSettings
+        {
+            Name = universeName,
+            UniverseId = new Universe().Id,
+        };
+        
+        creation.CreateUniverse(universeDefaultSettings: uds);
+        creation.CreateZones(universeDefaultSettings: uds);
+        
+        
+        creation.CreateStars(starDefaultSettings: new StarDefaultSettings
+        {
+            UniverseId = uds.UniverseId,
+            StarCount = 1
+        });
+        
+        creation.CreatePlanets(planetDefaultSettings: new PlanetDefaultSettings
+        {
+            UniverseId = uds.UniverseId,
+            Count = 2,
+        });
+        
+        Assert.ThrowsException<Exception>(() => creation.CreateCities(cityDefaultSettings: new CityDefaultSettings
+        {
+            UniverseId = uds.UniverseId,
+            Name = "City McCityface",
+            PlanetList =  context.Planets.Where(s => s.UniverseId == uds.UniverseId).ToList()
+        }));
+        
+        Assert.ThrowsException<Exception>(() => creation.CreateCities(cityDefaultSettings: new CityDefaultSettings
+        {
+            UniverseId = uds.UniverseId,
+            Population = 1,
+            PlanetList = null
+        }));
+
+        creation.CreateCities(new CityDefaultSettings
+        {
+            UniverseId = uds.UniverseId,
+            Name = "City McCityface 2",
+            Count = 1,
+            PlanetList = new List<Planet>{context.Planets.First(p => p.UniverseId == uds.UniverseId),}
+        });
+        Assert.IsTrue(context.Cities.Count(c => c.Id == uds.UniverseId && c.Name == "City McCityface 2") == 1);
+        
+        Assert.ThrowsException<Exception>(() => creation.CreateCities(new CityDefaultSettings
+        {
+            UniverseId = uds.UniverseId,
+            Name = "City McCityface 2",
+            Count = 1,
+            PlanetList = new List<Planet>{context.Planets.First(p => p.UniverseId == uds.UniverseId),}
+        }));
+
+        creation.CreateCities(new CityDefaultSettings
+        {
+            UniverseId = uds.UniverseId,
+            Name = "City McCityface 3",
+            Population = 1000,
+        });
+        Assert.IsTrue(context.Cities.First(c => c.UniverseId == uds.UniverseId && c.Name == "City McCityface 3").Population == 1000);
+        
+        if (cleanup)
+        {
+            creation.DeleteUniverse(uds.UniverseId);
+
+            Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) == 0);
+            Assert.IsTrue(context.Zones.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(context.Stars.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(context.Planets.Count(s => s.UniverseId == uds.UniverseId) == 0);
+            Assert.IsTrue(context.Cities.Count(s => s.UniverseId == uds.UniverseId) == 0);
         }
     }
 
@@ -303,6 +499,7 @@ public class CreationTests
         {
             UniverseId = uds.UniverseId,
             Count = 1,
+            Balanced = (false, 0),
             Gender = Character.GenderEnum.Male,
             First = "John",
             Last = "Doe",
@@ -323,6 +520,7 @@ public class CreationTests
         {
             UniverseId = uds.UniverseId,
             Count = 1,
+            Balanced = (false, 0),
             Gender = Character.GenderEnum.Female,
             First = "Jane",
             Last = "Doe",
@@ -332,6 +530,7 @@ public class CreationTests
         creation.CreateCharacter(new CharacterDefaultSettings
         {
             UniverseId = uds.UniverseId,
+            Balanced = (false, 0),
             Count = 13
         });
 

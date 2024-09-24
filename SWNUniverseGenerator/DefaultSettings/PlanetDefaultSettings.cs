@@ -12,12 +12,14 @@ namespace SWNUniverseGenerator.DefaultSettings
         public PlanetDefaultSettings(
             string universeId = null,
             List<Star> starList = null,
-            Int64 population = -1)
+            Int64 population = -1,
+            int count = -1)
         {
             UniverseId = universeId;
             Name = null;
             StarList = starList;
             Population = population;
+            Count = count;
         }
 
         /// <summary>
@@ -25,15 +27,20 @@ namespace SWNUniverseGenerator.DefaultSettings
         /// Not to be used with PlanetRange
         /// </summary>
         public String Name { get; set; }
-        
+
+        /// <summary>
+        /// Store the number of planets to create on each Star.
+        /// </summary>
+        public int Count { get; set; }
+
         /// <summary>
         /// Store a list of StarIDs if you want to create a planet on a specific Star or set of Stars
         /// By default, it will generate planets for each star
         /// </summary>
         public List<Star> StarList { get; set; }
-        
+
         public string UniverseId { get; set; }
-        
+
         public Int64 Population { get; set; }
     }
 }

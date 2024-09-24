@@ -161,6 +161,7 @@
       <EmbeddedResource Include="Migrations\SeedData\CityNames.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
+      <None Remove="Migrations\SeedData\FAIL.json" />
     </ItemGroup>
 
     <ItemGroup>

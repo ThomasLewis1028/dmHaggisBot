@@ -4,7 +4,7 @@ namespace SWNUniverseGenerator.CreationTools
 {
     internal class AlienCreation
     {
-        private static readonly Random Rand = new ();
+        // private static readonly Random Rand = new ();
 
         // public Universe AddAliens(Universe universe, AlienDefaultSettings alienDefaultSettings, AlienData alienData)
         // {

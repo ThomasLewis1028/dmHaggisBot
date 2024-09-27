@@ -181,7 +181,9 @@
         UniverseDefaultSettings uds = new UniverseDefaultSettings()
         {
             UniverseId = new Universe().Id,
-            Name = _newUniverseName
+            Name = _newUniverseName,
+            GridX = _newGridX,
+            GridY = _newGridY
         };
         
         var result = await creation.CreateFullUniverse(universeDefaultSettings: uds);

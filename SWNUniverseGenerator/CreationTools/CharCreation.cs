@@ -18,15 +18,15 @@ namespace SWNUniverseGenerator.CreationTools
         /// This function handles all Character creation. Should receive a Universe to edit and a set of
         /// CharacterDefaultSettings that will be used to set defaults.
         /// </summary>
-        /// <param name="characterDefaultSettings"></param>
-        public void AddCharacters(CharacterDefaultSettings characterDefaultSettings)
+        /// <param name="cds"></param>
+        public void AddCharacters(CharacterDefaultSettings cds)
         {
-            var maleNameGenerations = new NameGeneration();
-            var femaleNameGenerations = new NameGeneration();
-            var lastNameGenerations = new NameGeneration();
+            var maleNameGens = new NameGeneration();
+            var femaleNameGens = new NameGeneration();
+            var lastNameGens = new NameGeneration();
 
-            if (characterDefaultSettings.Balanced.Balanced &&
-                !string.IsNullOrEmpty(characterDefaultSettings.BirthPlanetId))
+            if (cds.Balanced.Balanced &&
+                !string.IsNullOrEmpty(cds.BirthPlanetId))
                 throw new Exception("Cannot combine balanced character creation with a specified planet ID");
             //
             // if (characterDefaultSettings.Balanced.Balanced && characterDefaultSettings.Count > 0)
@@ -55,14 +55,14 @@ namespace SWNUniverseGenerator.CreationTools
                 {
                     List<Character> characters = new();
 
-                    if (characterDefaultSettings.Balanced.Balanced)
+                    if (cds.Balanced.Balanced)
                     {
                         using (var planetRepo = new Repository<Planet>(context))
                         {
-                            var totalPop = planetRepo.Search(e => e.UniverseId == characterDefaultSettings.UniverseId).Cast<Planet>().Sum(e => e.Population);
-                            var percentage = (double)characterDefaultSettings.Count / totalPop;
+                            var totalPop = planetRepo.Search(e => e.UniverseId == cds.UniverseId).Cast<Planet>().Sum(e => e.Population);
+                            var percentage = (double)cds.Count / totalPop;
 
-                            foreach (var planet in planetRepo.Search(e => e.UniverseId == characterDefaultSettings.UniverseId).Cast<Planet>())
+                            foreach (var planet in planetRepo.Search(e => e.UniverseId == cds.UniverseId).Cast<Planet>())
                             {
                                 var cCount = 0;
                                 var max = planet.Population * percentage > 10
@@ -71,9 +71,9 @@ namespace SWNUniverseGenerator.CreationTools
 
                                 while (cCount < max)
                                 {
-                                    characterDefaultSettings.BirthPlanetId = planet.Id;
-                                    cCount = CreateCharacter(characterDefaultSettings, context, maleNameGenerations,
-                                        femaleNameGenerations, lastNameGenerations, charRepo, characters, cCount);
+                                    cds.BirthPlanetId = planet.Id;
+                                    cCount = CreateCharacter(cds, context, maleNameGens,
+                                        femaleNameGens, lastNameGens, charRepo, characters, cCount);
 
                                     if (cCount % 100 != 0) continue;
                                     charRepo.UpdateRange(characters);
@@ -85,10 +85,10 @@ namespace SWNUniverseGenerator.CreationTools
                     else
                     {
                         var cCount = 0;
-                        while (cCount < characterDefaultSettings.Count)
+                        while (cCount < cds.Count)
                         {
-                            cCount = CreateCharacter(characterDefaultSettings, context, maleNameGenerations,
-                                femaleNameGenerations, lastNameGenerations, charRepo, characters, cCount);
+                            cCount = CreateCharacter(cds, context, maleNameGens,
+                                femaleNameGens, lastNameGens, charRepo, characters, cCount);
                             
                             if (cCount % 100 == 0)
                             {
@@ -104,22 +104,22 @@ namespace SWNUniverseGenerator.CreationTools
             }
         }
 
-        private static int CreateCharacter(CharacterDefaultSettings characterDefaultSettings, UniverseContext context,
-            NameGeneration maleNameGenerations, NameGeneration femaleNameGenerations,
-            NameGeneration lastNameGenerations,
+        private static int CreateCharacter(CharacterDefaultSettings cds, UniverseContext context,
+            NameGeneration maleNameGens, NameGeneration femaleNameGens,
+            NameGeneration lastNameGens,
             Repository<Character> charRepo, List<Character> characters, int cCount)
         {
             // Create the character with the specified first and last name
             var character = new Character()
             {
-                UniverseId = characterDefaultSettings.UniverseId
+                UniverseId = cds.UniverseId
             };
 
             // Set sheet bounds including sheet# and row count.
             // Must be done here to randomly select the sheet
-            var gender = characterDefaultSettings.Gender == Character.GenderEnum.Undefined
+            var gender = cds.Gender == Character.GenderEnum.Undefined
                 ? Rand.Next(0, 2)
-                : (int)characterDefaultSettings.Gender;
+                : (int)cds.Gender;
 
             // var nameGeneration = gender == 0 ? nameGenerations[0] : nameGenerations[1];
             // var lastNameGeneration = nameGenerations[2];
@@ -128,7 +128,7 @@ namespace SWNUniverseGenerator.CreationTools
             // First name
             using (var repo = new Repository<Naming>(context))
             {
-                if (string.IsNullOrEmpty(characterDefaultSettings.First))
+                if (string.IsNullOrEmpty(cds.First))
                 {
                     var nameRand = Rand.Next(0, 10);
                     nameRand = 4;
@@ -142,12 +142,12 @@ namespace SWNUniverseGenerator.CreationTools
                     else
                     {
                         character.First = character.Gender == Character.GenderEnum.Male
-                            ? maleNameGenerations.GenerateName()
-                            : femaleNameGenerations.GenerateName();
+                            ? maleNameGens.GenerateName()
+                            : femaleNameGens.GenerateName();
                     }
                 }
                 else
-                    character.First = characterDefaultSettings.First;
+                    character.First = cds.First;
             }
 
             // Last name
@@ -155,105 +155,105 @@ namespace SWNUniverseGenerator.CreationTools
             {
                 var nameRand = Rand.Next(0, 10);
 
-                if (string.IsNullOrEmpty(characterDefaultSettings.Last))
+                if (string.IsNullOrEmpty(cds.Last))
                 {
                     nameRand = 4;
                     if (nameRand > 3)
                         character.Last = ((Naming)repo.Random(n => n.NameType == "LastName")).Name;
                     else
-                        character.Last = lastNameGenerations.GenerateName();
+                        character.Last = lastNameGens.GenerateName();
                 }
                 else
-                    character.Last = characterDefaultSettings.Last;
+                    character.Last = cds.Last;
             }
 
             // Character age
-            character.Age = characterDefaultSettings.Age < 0
-                ? characterDefaultSettings.AgeRange == null ||
-                  characterDefaultSettings.AgeRange.Length == 0 ||
-                  characterDefaultSettings.AgeRange[0] == -1 || characterDefaultSettings.AgeRange[1] == -1
+            character.Age = cds.Age < 0
+                ? cds.AgeRange == null ||
+                  cds.AgeRange.Length == 0 ||
+                  cds.AgeRange[0] == -1 || cds.AgeRange[1] == -1
                     // This creates Ages on a bell-curve where it's more likely to land somewhere around 30-45
                     // with a minimum of 15
                     ? Rand.Next(5, 22) + Rand.Next(5, 23) + Rand.Next(5, 23)
-                    : Rand.Next(characterDefaultSettings.AgeRange[0], characterDefaultSettings.AgeRange[1])
-                : characterDefaultSettings.Age;
+                    : Rand.Next(cds.AgeRange[0], cds.AgeRange[1])
+                : cds.Age;
             character.Gender = (Character.GenderEnum)gender;
 
             using (var repo = new Repository<Naming>(context))
             {
                 // Hair color
-                character.HairCol = string.IsNullOrEmpty(characterDefaultSettings.HairCol)
+                character.HairCol = string.IsNullOrEmpty(cds.HairCol)
                     ? ((Naming)repo.Random(n => n.NameType == "HairColor")).Name
-                    : characterDefaultSettings.HairCol;
+                    : cds.HairCol;
 
                 // Hairstyle
-                character.HairStyle = string.IsNullOrEmpty(characterDefaultSettings.HairStyle)
+                character.HairStyle = string.IsNullOrEmpty(cds.HairStyle)
                     ? ((Naming)repo.Random(n => n.NameType == "HairStyle")).Name
-                    : characterDefaultSettings.HairStyle;
+                    : cds.HairStyle;
 
                 // Eye color
-                character.EyeCol = string.IsNullOrEmpty(characterDefaultSettings.EyeCol)
+                character.EyeCol = string.IsNullOrEmpty(cds.EyeCol)
                     ? ((Naming)repo.Random(n => n.NameType == "EyeColor")).Name
-                    : characterDefaultSettings.EyeCol;
+                    : cds.EyeCol;
 
                 // Skin color
-                character.SkinCol = string.IsNullOrEmpty(characterDefaultSettings.SkinCol)
+                character.SkinCol = string.IsNullOrEmpty(cds.SkinCol)
                     ? null
-                    : characterDefaultSettings.SkinCol;
+                    : cds.SkinCol;
                 // Height
-                character.Height = characterDefaultSettings.Height < 0
+                character.Height = cds.Height < 0
                         ? Rand.Next(150, 200)
-                        : characterDefaultSettings.Height
+                        : cds.Height
                     //Rand.Next(characterDefaultSettings.Height[0], characterDefaultSettings.Height[1])
                     ;
             }
 
             // Character title
-            character.Title = string.IsNullOrEmpty(characterDefaultSettings.Title)
+            character.Title = string.IsNullOrEmpty(cds.Title)
                 ? null
-                : characterDefaultSettings.Title;
+                : cds.Title;
 
             using (var repo = new Repository<Planet>(context))
             {
                 // Character birth planet
-                character.BirthPlanetId = characterDefaultSettings.BirthPlanetId
+                character.BirthPlanetId = cds.BirthPlanetId
                                           ?? repo.Random(p =>
-                                              p.UniverseId == characterDefaultSettings.UniverseId).Id;
+                                              p.UniverseId == cds.UniverseId).Id;
 
                 // Character current planet
-                character.CurrentLocationId = characterDefaultSettings.CurrentPlanetId
+                character.CurrentLocationId = cds.CurrentPlanetId
                                               ?? (Rand.Next(0, 100) < 5
                                                   ? repo.Random(p =>
-                                                          p.UniverseId == characterDefaultSettings
+                                                          p.UniverseId == cds
                                                               .UniverseId)
                                                       .Id
                                                   : character.BirthPlanetId);
             }
 
             // Character crime chance
-            character.CrimeChance = characterDefaultSettings.CrimeChance == null ||
-                                    characterDefaultSettings.CrimeChance.Length == 0 ||
-                                    characterDefaultSettings.CrimeChance[0] == -1 ||
-                                    characterDefaultSettings.CrimeChance[1] == -1
+            character.CrimeChance = cds.CrimeChance == null ||
+                                    cds.CrimeChance.Length == 0 ||
+                                    cds.CrimeChance[0] == -1 ||
+                                    cds.CrimeChance[1] == -1
                 ? Rand.Next(1, 26) + Rand.Next(0, 25) + // Default chance up to 50%
                   (Rand.Next(0, 4) != 1
                       ? 0
                       : Rand.Next(1, 26) + Rand.Next(0, 25)) // 25% Additional crime roll chance
-                : Rand.Next(characterDefaultSettings.CrimeChance[0],
-                    characterDefaultSettings.CrimeChance[1] + 1);
+                : Rand.Next(cds.CrimeChance[0],
+                    cds.CrimeChance[1] + 1);
 
             charRepo.Add(character);
 
             // Character ship ID
-            if (!String.IsNullOrEmpty(characterDefaultSettings.ShipId))
+            if (!String.IsNullOrEmpty(cds.ShipId))
             {
                 using (var crewRepo = new Repository<CrewMember>(context))
                 {
                     var crewMember = new CrewMember()
                     {
-                        ShipId = characterDefaultSettings.ShipId,
+                        ShipId = cds.ShipId,
                         CharacterId = character.Id,
-                        UniverseId = characterDefaultSettings.UniverseId
+                        UniverseId = cds.UniverseId
                     };
 
                     crewRepo.Add(crewMember);
@@ -265,10 +265,10 @@ namespace SWNUniverseGenerator.CreationTools
 
             using (var repo = new Repository<Naming>(context))
             {
-                character.InitialReaction = string.IsNullOrEmpty(characterDefaultSettings.InitialReaction)
+                character.InitialReaction = string.IsNullOrEmpty(cds.InitialReaction)
                     ? character.InitialReaction =
                         ((Naming)repo.Random(n => n.NameType == "InitialReaction")).Name
-                    : characterDefaultSettings.InitialReaction;
+                    : cds.InitialReaction;
             }
 
 

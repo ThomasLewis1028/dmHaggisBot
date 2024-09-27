@@ -656,7 +656,7 @@ public class CreationTests
             PoiDefaultSettings = new PoiDefaultSettings()
         };
 
-        creation.CreateFullUniverse(universeDefaultSettings: uds);
+        _ = creation.CreateFullUniverse(universeDefaultSettings: uds);
 
         Assert.IsTrue(context.Universes.Count(u => u.Id == uds.UniverseId) > 0);
         Assert.IsTrue(context.Universes.Single(u => u.Id == uds.UniverseId).GridX == 8);
